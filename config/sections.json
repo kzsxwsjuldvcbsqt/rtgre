@@ -1,0 +1,11 @@
+{
+  "sections": [
+    { "id": "home", "label": "Accueil", "file": "index.html", "kind": "internal" },
+    { "id": "resources", "label": "Modules", "file": "ressources.html", "kind": "internal" },
+    { "id": "calendar", "label": "Emploi du temps", "file": "calendar.html", "kind": "internal" },
+    { "id": "evaluations", "label": "Évaluations", "file": "evaluations.html", "kind": "internal" },
+    { "id": "grades", "label": "Notes", "file": "notes.html", "kind": "internal" },
+    { "id": "webmail", "label": "Messagerie", "kind": "external", "url": "https://webmail.etu.univ-grenoble-alpes.fr/" },
+    { "id": "notice", "label": "À savoir", "file": "a-savoir.html", "kind": "global" }
+  ]
+}

@@ -1,0 +1,29 @@
+{% extends "base.html.j2" %}
+{% from "_nav.html.j2" import section_nav %}
+{% block title %}{{ class_config.label }} - {{ site.title }}{% endblock %}
+{% block content %}
+<div class="page-container">
+{{ section_nav(sections, 'home', class_config, url_for, labels) }}
+
+<div class="back-navigation">
+<a href="{{ url_for('index.html') }}">{{ labels.class_page.back_link }}</a>
+</div>
+
+<h1>{{ class_config.label }}</h1>
+
+<ul class="class-sections-list">
+{% for sec in sections %}
+  {% if sec.id != 'home' and sec.kind != 'global' %}
+    <li class="section-item">
+      {% if sec.kind == 'internal' %}
+        {% set sec_target = 'classes/' ~ class_config.id ~ '/' ~ sec.file %}
+        <a href="{{ url_for(sec_target) }}"><strong>{{ sec.label }}</strong></a> - <span class="section-desc">{{ labels.class_home.descriptions[sec.id] }}</span>
+      {% elif sec.kind == 'external' %}
+        <a href="{{ sec.url }}" target="_blank" rel="noopener noreferrer" class="nav-external"><strong>{{ sec.label }}</strong></a> - <span class="section-desc">{{ labels.class_home.descriptions[sec.id] }}</span>
+      {% endif %}
+    </li>
+  {% endif %}
+{% endfor %}
+</ul>
+</div>
+{% endblock %}

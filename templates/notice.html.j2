@@ -1,0 +1,19 @@
+{% extends "base.html.j2" %}
+{% block title %}{{ labels.notice.title }} - {{ site.title }}{% endblock %}
+{% block content %}
+<div class="page-container">
+<div class="back-navigation">
+<a href="{{ url_for('index.html') }}">{{ labels.class_page.back_link }}</a>
+</div>
+
+<h1>{{ labels.notice.title }}</h1>
+
+<p>{{ labels.notice.p1 }}</p>
+<p>{{ labels.notice.p2 }}</p>
+<p>{{ labels.notice.p3 }}</p>
+<p>{{ labels.notice.p4 }}</p>
+<p>{{ labels.notice.p5 }}</p>
+<p>{{ labels.notice.p6 }}</p>
+<p>{{ labels.notice.p7 }} <a href="{{ site.github_url }}" target="_blank" rel="noopener noreferrer">{{ site.github_profile }}</a>.</p>
+</div>
+{% endblock %}

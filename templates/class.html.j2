@@ -1,0 +1,62 @@
+{% extends "base.html.j2" %}
+{% from "_nav.html.j2" import section_nav %}
+{% from "_evaluation_table.html.j2" import evaluation_table_header, evaluation_row %}
+{% block title %}{% for s in sections %}{% if s.id == 'evaluations' %}{{ s.label }}{% endif %}{% endfor %} - {{ class_config.label }} - {{ site.title }}{% endblock %}
+{% block content %}
+<div class="page-container">
+{{ section_nav(sections, 'evaluations', class_config, url_for, labels) }}
+
+<div class="back-navigation">
+<a href="{{ url_for('index.html') }}">{{ labels.class_page.back_link }}</a>
+</div>
+
+<h1>{{ class_config.label }}</h1>
+
+<h2 class="collapsible-heading">
+<span>{% for s in sections %}{% if s.id == 'evaluations' %}{{ s.label }}{% endif %}{% endfor %}</span>
+<button type="button" class="heading-toggle-btn" aria-expanded="true" aria-controls="filters-container" aria-label="{{ labels.calendar.toggle_controls }}"><span class="toggle-arrow"></span></button>
+</h2>
+
+<div id="filters-container"
+  data-label-filters-heading="{{ labels.class_page.filters_heading }}"
+  data-label-category="{{ labels.class_page.category_filter }}"
+  data-label-module="{{ labels.class_page.module_filter }}"
+  data-label-period="{{ labels.class_page.period_filter }}"
+  data-label-reset="{{ labels.class_page.reset_filters }}"
+  data-label-singular="{{ labels.class_page.results_count_singular }}"
+  data-label-plural="{{ labels.class_page.results_count_plural }}"
+  data-label-empty="{{ labels.class_page.empty_state }}"
+  data-label-upcoming="{{ labels.periods.upcoming }}"
+  data-label-past="{{ labels.periods.past }}"
+  data-label-all="{{ labels.periods.all }}"
+  data-categories='[
+    {% for cat in active_categories %}
+      {"id": "{{ cat.id }}", "label": "{{ cat.label }}"}{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]'
+  data-modules='[
+    {% for mod in active_modules %}
+      "{{ mod }}"{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]'
+></div>
+
+<div id="empty-state-message" class="empty-state-message" hidden>
+{{ labels.class_page.empty_state }}
+</div>
+
+<table id="evaluations-table" class="evaluations-table">
+{{ evaluation_table_header(site, labels, show_action=true) }}
+<tbody>
+{% for month_key, month_label, month_evals in months_grouped %}
+<tr class="month-row" data-month="{{ month_key }}">
+<th colspan="{% if site.teachers.display_mode != 'hidden' %}8{% else %}7{% endif %}" scope="colgroup">{{ month_label }}</th>
+</tr>
+{% for ev in month_evals %}
+{{ evaluation_row(ev, site, labels, url_for, show_action=true, format_groups=format_groups) }}
+{% endfor %}
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% endblock %}

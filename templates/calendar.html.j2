@@ -1,0 +1,160 @@
+{% set page_wide = true %}
+{% extends "base.html.j2" %}
+{% from "_nav.html.j2" import section_nav %}
+{% block title %}{% for s in sections %}{% if s.id == 'calendar' %}{{ s.label }}{% endif %}{% endfor %} - {{ class_config.label }} - {{ site.title }}{% endblock %}
+{% block content %}
+<div class="page-container page-container-wide">
+{{ section_nav(sections, 'calendar', class_config, url_for, labels) }}
+
+<div class="back-navigation">
+<a href="{{ url_for('index.html') }}">{{ labels.class_page.back_link }}</a>
+</div>
+
+<h1>{{ class_config.label }}</h1>
+
+<h2 class="collapsible-heading">
+<span>{% for s in sections %}{% if s.id == 'calendar' %}{{ s.label }}{% endif %}{% endfor %}</span>
+<button type="button" class="heading-toggle-btn" aria-expanded="true" aria-controls="calendar-controls" aria-label="{{ labels.calendar.toggle_controls }}"><span class="toggle-arrow"></span></button>
+</h2>
+
+<noscript>
+<p class="noscript-notice">{{ labels.calendar.noscript_notice }}</p>
+</noscript>
+
+<div id="calendar-controls" class="filter-form" hidden>
+<div class="filter-group filter-group-scroll" id="cal-filters-scroll">
+<div class="filter-group-item" id="cal-view-select-group">
+<label for="cal-view-select" class="visually-hidden">{{ labels.calendar.view_label }}</label>
+<select id="cal-view-select" aria-label="{{ labels.calendar.view_label }}">
+<optgroup label="{{ labels.calendar.view_label }}">
+<option value="week">{{ labels.calendar.view_week }}</option>
+<option value="day">{{ labels.calendar.view_day }}</option>
+<option value="year">{{ labels.calendar.view_year }}</option>
+</optgroup>
+</select>
+</div>
+
+<div class="filter-group-item" id="cal-date-input-group">
+<label for="cal-date-input" class="visually-hidden">{{ labels.fields.date }}</label>
+<input type="date" id="cal-date-input" min="{{ site.school_year.first_date }}" max="{{ site.school_year.last_date }}">
+</div>
+
+<div class="filter-group-item" id="cal-compare-select-group">
+<label for="cal-compare-select" class="visually-hidden">{{ labels.calendar.compare_label }}</label>
+<select id="cal-compare-select" aria-label="{{ labels.calendar.compare_label }}">
+<optgroup label="{{ labels.calendar.compare_label }}">
+<option value="">{{ labels.calendar.compare_none }}</option>
+</optgroup>
+{% for prog in programs %}
+<optgroup label="{{ prog.label }}">
+{% for cls in prog.classes %}
+{% if cls.id != class_config.id %}
+<option value="{{ cls.id }}">{{ cls.label }}</option>
+{% endif %}
+{% endfor %}
+</optgroup>
+{% endfor %}
+</select>
+</div>
+<div class="cal-comp-checkboxes" id="cal-comp-checkboxes"></div>
+<label for="cal-evals-only"><input type="checkbox" id="cal-evals-only"> {{ labels.calendar.evals_only }}</label>
+<label for="cal-teacherless-only"><input type="checkbox" id="cal-teacherless-only"> {{ labels.calendar.teacherless_filter }}</label>
+</div>
+
+<div class="filter-group filter-group-last">
+<label for="cal-search-input" class="visually-hidden">{{ labels.calendar.search_label }}</label>
+<input type="text" id="cal-search-input" placeholder="{{ labels.calendar.search_placeholder }}" aria-label="{{ labels.calendar.search_label }}">
+</div>
+
+<div class="filter-group filter-group-reset">
+<button type="button" id="cal-reset-btn">{{ labels.calendar.reset_btn }}</button>
+</div>
+
+<div class="results-count" id="cal-results-count"></div>
+</div>
+
+<div id="calendar-nav-bar" class="calendar-nav-bar" hidden>
+<button type="button" id="cal-today-btn">{{ labels.calendar.today_btn }}</button>
+<div class="cal-nav-center">
+<button type="button" id="cal-prev-btn" aria-label="{{ labels.calendar.prev_btn }}"><span class="btn-text">{{ labels.calendar.prev_btn }}</span><span class="btn-symbol">&lt;</span></button>
+<button type="button" id="cal-next-btn" aria-label="{{ labels.calendar.next_btn }}"><span class="btn-text">{{ labels.calendar.next_btn }}</span><span class="btn-symbol">&gt;</span></button>
+<div id="cal-period-heading" class="cal-period-heading"></div>
+</div>
+</div>
+
+<div id="calendar-message" class="empty-state-message" hidden></div>
+
+<div id="calendar-view-container" class="calendar-view-container">
+{% set total_initial_events = [] %}
+{% for day_data in initial_week_days %}
+{% for ev in day_data.events %}
+{% set _ = total_initial_events.append(1) %}
+{% endfor %}
+{% endfor %}
+{% if initial_week_days and total_initial_events|length == 0 %}
+<p class="empty-state-message">{{ labels.calendar.no_courses_week }}</p>
+{% else %}
+{% for day_data in initial_week_days %}
+<section class="day-section" id="day-section-{{ day_data.iso_date }}" data-day="{{ day_data.day_of_week }}">
+<h3>{{ day_data.heading }}</h3>
+{% if day_data.events %}
+<ul class="calendar-events-list">
+{% for ev in day_data.events %}
+<li class="calendar-event-item" data-start="{{ ev.start_time }}" data-end="{{ ev.end_time }}">
+<div class="event-time"><span class="event-time-start{% if loop.first %} is-day-start{% endif %}">{{ ev.start_time }}</span> - <span class="event-time-end{% if loop.last %} is-day-end{% endif %}">{{ ev.end_time }}</span></div>
+<div class="event-info">
+<div class="event-title">{{ ev.summary }}{% if ev.category_id %} <span class="category-badge cat-{{ ev.category_id }}">{{ ev.category_label }}</span>{% endif %}</div>
+{% set t_items = [] %}
+{% for t in ev.teachers %}{% set _ = t_items.append(t) %}{% endfor %}
+{% for m in ev.staff_markers %}{% set _ = t_items.append(m) %}{% endfor %}
+{% if t_items %}
+<div class="event-teachers">
+{% for t in t_items %}<span class="room-tag">{{ t }}</span>{% if not loop.last %}{{ labels.list_separator }}{% endif %}{% endfor %}
+</div>
+{% endif %}
+{% if ev.rooms %}
+<div class="event-rooms">
+{% for r in ev.rooms %}<span class="room-tag">{{ r }}</span>{% if not loop.last %}{{ labels.list_separator }}{% endif %}{% endfor %}
+</div>
+{% endif %}
+{% if ev.groups %}
+{% set other_groups = [] %}
+{% for g in ev.groups %}
+{% if g|lower != class_config.label|lower and g|lower != class_config.ade_group_code|lower and g|lower != class_config.id|lower %}
+{% set _ = other_groups.append(g) %}
+{% endif %}
+{% endfor %}
+{% if other_groups %}
+<div class="event-groups">
+{% for g in other_groups %}<span class="room-tag">{{ g }}</span>{% if not loop.last %}{{ labels.list_separator }}{% endif %}{% endfor %}
+</div>
+{% endif %}
+{% endif %}
+</div>
+</li>
+{% endfor %}
+</ul>
+{% else %}
+<p class="empty-state-message">{{ labels.calendar.no_courses }}</p>
+{% endif %}
+</section>
+{% endfor %}
+{% endif %}
+</div>
+</div>
+
+<script type="application/json" id="class-events-data">
+{{ initial_events_json | safe }}
+</script>
+
+<script src="{{ url_for('static/calendar.js') }}"
+  data-class-id="{{ class_config.id }}"
+  data-first-date="{{ site.school_year.first_date }}"
+  data-last-date="{{ site.school_year.last_date }}"
+  data-school-year-label="Année {{ site.school_year.label }}"
+  data-display-mode="{{ site.teachers.display_mode }}"
+  data-categories-json='{{ categories_json | tojson }}'
+  data-labels-json='{{ calendar_labels | tojson }}'
+  data-class-labels-json='{{ class_labels_json | tojson }}'
+></script>
+{% endblock %}

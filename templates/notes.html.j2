@@ -1,0 +1,132 @@
+{% extends "base.html.j2" %}
+{% from "_nav.html.j2" import section_nav %}
+{% block title %}{% for s in sections %}{% if s.id == 'grades' %}{{ s.label }}{% endif %}{% endfor %} - {{ class_config.label }} - {{ site.title }}{% endblock %}
+{% block content %}
+<div class="page-container">
+{{ section_nav(sections, 'grades', class_config, url_for, labels) }}
+
+<div class="back-navigation">
+<a href="{{ url_for('index.html') }}">{{ labels.class_page.back_link }}</a>
+</div>
+
+<h1>{{ class_config.label }}</h1>
+
+<h2>{% for s in sections %}{% if s.id == 'grades' %}{{ s.label }}{% endif %}{% endfor %}</h2>
+
+<p class="privacy-notice">{{ labels.grades.privacy_notice }}</p>
+
+<div id="grades-actions" class="grades-actions">
+<button type="button" id="grades-export-btn">{{ labels.grades.export_btn }}</button>
+<button type="button" id="grades-import-btn">{{ labels.grades.import_btn }}</button>
+<button type="button" id="grades-reset-btn">{{ labels.grades.reset_btn }}</button>
+<input type="file" id="grades-import-file" accept=".json" hidden>
+</div>
+
+<noscript>
+<p class="noscript-notice">{{ labels.grades.noscript_notice }}</p>
+</noscript>
+
+<div id="grades-message" class="grades-message" hidden></div>
+
+<div id="notes-content">
+{% for sem in grades_data.semesters %}
+<section class="semester-section" id="semester-section-{{ sem.id }}">
+<h3 class="collapsible-heading">
+  <span>{{ sem.label }}</span>
+  <button type="button" class="heading-toggle-btn" id="sem-toggle-{{ sem.id }}" aria-expanded="true" aria-label="Masquer {{ sem.label }}">
+    <span class="toggle-arrow"></span>
+  </button>
+</h3>
+<table class="grades-table" data-semester="{{ sem.id }}">
+<thead>
+<tr>
+<th class="col-code">{{ labels.grades.subject_code }}</th>
+<th class="col-subject">{{ labels.grades.subject_label }}</th>
+{% for u in sem.units %}
+<th class="col-ue-header">{{ u.label }}</th>
+{% endfor %}
+<th class="col-grade-input">{{ labels.grades.grade_input_column }}</th>
+</tr>
+</thead>
+<tbody>
+{% for subj in sem.subjects %}
+<tr class="subject-row" data-module-code="{{ subj.code }}">
+<td class="col-code" data-label="{{ labels.grades.subject_code }}"><strong>{{ subj.code }}</strong></td>
+<td class="col-subject" data-label="{{ labels.grades.subject_label }}">{{ subj.label }}</td>
+{% for u in sem.units %}
+{% set coeff = subj.coeffs.get(u.id) %}
+<td class="col-ue-cell" data-label="{{ u.label }}"{% if not coeff %} data-empty="true"{% endif %}>
+{% if coeff %}{{ coeff }}{% endif %}
+</td>
+{% endfor %}
+<td class="col-grade-input" data-label="{{ labels.grades.grade_input_column }}">
+<input type="text"
+       class="grade-input"
+       data-module="{{ subj.code }}"
+       placeholder="-- / 20"
+       inputmode="decimal"
+       aria-label="{{ labels.grades.grade_input_column }} - {{ subj.code }}"
+>
+</td>
+</tr>
+{% endfor %}
+<tr class="semester-average-row">
+<td colspan="{{ 2 + sem.units|length }}" class="average-label"><strong>{{ labels.grades.overall_semester_average }}</strong></td>
+<td class="col-grade-input"><strong id="avg-{{ sem.id }}">-- / 20</strong></td>
+</tr>
+</tbody>
+</table>
+</section>
+{% endfor %}
+
+{% if grades_data.annual_units %}
+<section class="annual-synthesis-section">
+<h3>{{ labels.grades.annual_synthesis }}</h3>
+<table class="annual-synthesis-table">
+<thead>
+<tr>
+<th class="col-ue-name">{{ labels.grades.annual_header_ue }}</th>
+<th class="col-s5-avg">{{ labels.grades.annual_header_s5 }}</th>
+<th class="col-s6-avg">{{ labels.grades.annual_header_s6 }}</th>
+<th class="col-annual-avg">{{ labels.grades.annual_header_annual }}</th>
+</tr>
+</thead>
+<tbody>
+{% for au in grades_data.annual_units %}
+<tr class="annual-ue-row" data-ue-id="{{ au.id }}">
+<td class="col-ue-name" data-label="{{ labels.grades.annual_header_ue }}"><strong>{{ au.label }}</strong></td>
+<td class="col-s5-avg" data-label="{{ labels.grades.annual_header_s5 }}" id="synth-s5-{{ au.id }}">-- / 20</td>
+<td class="col-s6-avg" data-label="{{ labels.grades.annual_header_s6 }}" id="synth-s6-{{ au.id }}">-- / 20</td>
+<td class="col-annual-avg" data-label="{{ labels.grades.annual_header_annual }}" id="synth-annual-{{ au.id }}"><strong>-- / 20</strong></td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+<div class="annual-global-container">
+<span>{{ labels.grades.global_annual_average }} : </span>
+<strong id="global-annual-avg">-- / 20</strong>
+</div>
+</section>
+{% endif %}
+</div>
+</div>
+
+<script src="{{ url_for('static/grades.js') }}"
+  data-class-id="{{ class_config.id }}"
+  data-min="0"
+  data-max="20"
+  data-decimals="2"
+  data-storage-prefix="grades"
+  data-format-version="1"
+  data-empty-value="-- / 20"
+  data-reset-confirm="{{ labels.grades.reset_confirm }}"
+  data-confirm-other-class="{{ labels.grades.confirm_other_class }}"
+  data-err-invalid-json="{{ labels.grades.err_invalid_json }}"
+  data-err-bad-format="{{ labels.grades.err_bad_format }}"
+  data-err-newer-version="{{ labels.grades.err_newer_version }}"
+  data-import-success="{{ labels.grades.import_success }}"
+  data-entries-ignored="{{ labels.grades.entries_ignored }}"
+  data-grades-config='{{ grades_data | tojson }}'
+></script>
+{% endblock %}

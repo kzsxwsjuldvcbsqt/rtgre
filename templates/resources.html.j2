@@ -1,0 +1,38 @@
+{% extends "base.html.j2" %}
+{% from "_nav.html.j2" import section_nav %}
+{% block title %}{% for s in sections %}{% if s.id == 'resources' %}{{ s.label }}{% endif %}{% endfor %} - {{ class_config.label }} - {{ site.title }}{% endblock %}
+{% block content %}
+<div class="page-container">
+{{ section_nav(sections, 'resources', class_config, url_for, labels) }}
+
+<div class="back-navigation">
+<a href="{{ url_for('index.html') }}">{{ labels.class_page.back_link }}</a>
+</div>
+
+<h1>{{ class_config.label }}</h1>
+
+<div class="main-chamilo-link">
+<a href="{{ site.chamilo.space_url }}" target="_blank" rel="noopener noreferrer">{{ labels.resources.chamilo_main_link }}</a>
+</div>
+
+{% for sem_info, kinds_grouped in resource_groups %}
+<h2>{{ sem_info.label }}</h2>
+{% for kind_info, modules in kinds_grouped %}
+{% if kind_info.label %}
+<h3>{{ kind_info.label }}</h3>
+{% endif %}
+<ul class="resource-list">
+{% for mod in modules %}
+<li>
+{% if mod.chamilo_url %}
+<a href="{{ mod.chamilo_url }}" target="_blank" rel="noopener noreferrer">{% if mod.code == mod.label or mod.code in ['SAE6Stage', 'SAE5Entreprise', 'SAE6Entreprise', 'DIRECTIONETUDES', 'POURSUITESETUDES'] %}<strong>{{ mod.label }}</strong>{% else %}<strong>{{ mod.code }}</strong> - {{ mod.label }}{% endif %}</a>
+{% else %}
+{% if mod.code == mod.label or mod.code in ['SAE6Stage', 'SAE5Entreprise', 'SAE6Entreprise', 'DIRECTIONETUDES', 'POURSUITESETUDES'] %}<strong>{{ mod.label }}</strong>{% else %}<strong>{{ mod.code }}</strong> - {{ mod.label }}{% endif %}
+{% endif %}
+</li>
+{% endfor %}
+</ul>
+{% endfor %}
+{% endfor %}
+</div>
+{% endblock %}

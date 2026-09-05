@@ -1,0 +1,15 @@
+{% macro section_nav(sections, current_id, class_config, url_for, labels) %}
+<nav class="section-nav" aria-label="Sections">
+<div id="section-nav-menu" class="nav-menu">
+{% for sec in sections %}
+{% if sec.kind == 'internal' %}
+{% set sec_target = 'classes/' ~ class_config.id ~ '/' ~ sec.file %}
+{% set is_active = (sec.id == current_id) %}
+<a href="{{ url_for(sec_target) }}"{% if is_active %} aria-current="page" class="nav-active"{% endif %}>{{ sec.label }}</a>
+{% elif sec.kind == 'external' %}
+<a href="{{ sec.url }}" target="_blank" rel="noopener noreferrer" class="nav-external">{{ sec.label }}</a>
+{% endif %}
+{% endfor %}
+</div>
+</nav>
+{% endmacro %}

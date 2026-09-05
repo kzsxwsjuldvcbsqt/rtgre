@@ -1,0 +1,101 @@
+{% extends "base.html.j2" %}
+{% from "_nav.html.j2" import section_nav %}
+{% from "_evaluation_table.html.j2" import evaluation_table_header, evaluation_row %}
+{% block title %}{{ evaluation.summary }} - {{ class_config.label }} - {{ site.title }}{% endblock %}
+{% block content %}
+<div class="page-container">
+{{ section_nav(sections, 'evaluations', class_config, url_for, labels) }}
+
+<div class="back-navigation">
+{% set back_target = 'classes/' ~ class_config.id ~ '/evaluations.html' %}
+<a href="{{ url_for(back_target) }}">{{ labels.evaluation_page.back_link }}</a>
+</div>
+
+<h1>{{ evaluation.summary }}</h1>
+
+<table class="evaluations-table">
+{{ evaluation_table_header(site, labels, show_action=false) }}
+<tbody>
+{{ evaluation_row(evaluation, site, labels, url_for, show_action=false, format_groups=format_groups) }}
+</tbody>
+</table>
+
+<h2>{{ labels.evaluation_page.comparison_heading }}</h2>
+
+{% if match_states_by_program %}
+<table class="comparison-table">
+<colgroup>
+<col class="col-class">
+<col class="col-state">
+{% if diff_cols.date %}<col class="col-date">{% endif %}
+{% if diff_cols.time %}<col class="col-time">{% endif %}
+{% if diff_cols.rooms %}<col class="col-rooms">{% endif %}
+{% if diff_cols.teachers %}<col class="col-teachers">{% endif %}
+</colgroup>
+<thead>
+<tr>
+<th class="col-class">{{ labels.fields.class }}</th>
+<th class="col-state">{{ labels.fields.state }}</th>
+{% if diff_cols.date %}<th class="col-date">{{ labels.fields.date }}</th>{% endif %}
+{% if diff_cols.time %}<th class="col-time">{{ labels.fields.time }}</th>{% endif %}
+{% if diff_cols.rooms %}<th class="col-rooms">{{ labels.fields.rooms }}</th>{% endif %}
+{% if diff_cols.teachers %}<th class="col-teachers">{{ labels.fields.teachers }}</th>{% endif %}
+</tr>
+</thead>
+<tbody>
+{% for prog, item_states in match_states_by_program %}
+<tr class="program-row">
+<th colspan="{{ total_cols }}" scope="colgroup">{{ prog.label }}</th>
+</tr>
+{% for item in item_states %}
+{% set st = item.state_obj %}
+<tr class="state-row">
+<td class="col-class" data-label="{{ labels.fields.class }}"><strong>{{ st.class_config.label }}</strong></td>
+<td class="col-state" data-label="{{ labels.fields.state }}">
+<span class="match-badge">{{ item.state_label }}</span>
+</td>
+{% if diff_cols.date %}
+<td class="col-date" data-label="{{ labels.fields.date }}">
+{% if item.d_date %}
+{% set alt_target = 'classes/' ~ st.class_config.id ~ '/evaluations/' ~ st.evaluation.occurrence_id ~ '.html' %}
+<a href="{{ url_for(alt_target) }}">{{ st.alternate_date_formatted }}</a>
+{% endif %}
+</td>
+{% endif %}
+{% if diff_cols.time %}
+<td class="col-time" data-label="{{ labels.fields.time }}">
+{% if item.d_time %}{{ st.evaluation.time_range }}{% endif %}
+</td>
+{% endif %}
+{% if diff_cols.rooms %}
+<td class="col-rooms" data-label="{{ labels.fields.rooms }}">
+{% if item.d_rooms %}
+{% for room in st.evaluation.rooms %}<span class="room-tag">{{ room }}</span>{% if not loop.last %}{{ labels.list_separator }}{% endif %}{% endfor %}
+{% endif %}
+</td>
+{% endif %}
+{% if diff_cols.teachers %}
+<td class="col-teachers" data-label="{{ labels.fields.teachers }}">
+{% if item.d_teachers %}
+{% set t_list = st.evaluation.teachers or st.evaluation.staff_markers %}
+{% if t_list %}
+{% for teacher in t_list %}<span class="room-tag">{{ teacher }}</span>{% if not loop.last %}{{ labels.list_separator }}{% endif %}{% endfor %}
+{% else %}
+<span>{{ labels.empty_value }}</span>
+{% endif %}
+{% endif %}
+</td>
+{% endif %}
+</tr>
+{% endfor %}
+{% endfor %}
+</tbody>
+</table>
+{% if diff_cols.date or diff_cols.time or diff_cols.rooms or diff_cols.teachers %}
+<p class="comparison-note">{{ labels.evaluation_page.comparison_note }}</p>
+{% endif %}
+{% else %}
+<div class="empty-state-message">{{ labels.evaluation_page.no_other_class }}</div>
+{% endif %}
+</div>
+{% endblock %}

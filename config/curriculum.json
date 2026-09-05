@@ -1,0 +1,187 @@
+{
+  "tracks": [
+    { "id": "cy", "label": "Cybersécurité" },
+    { "id": "dc", "label": "DevCloud" }
+  ],
+  "statuses": [
+    { "id": "fi", "label": "Formation initiale" },
+    { "id": "fa", "label": "Alternance" }
+  ],
+  "semesters": [
+    { "id": "s5", "label": "Semestre 5" },
+    { "id": "s6", "label": "Semestre 6" }
+  ],
+  "kinds": [
+    { "id": "resource", "label": "Ressources" },
+    { "id": "sae", "label": "SAÉ" },
+    { "id": "complementary", "label": "Complémentaires" }
+  ],
+  "units": [
+    { "id": "ue5.1", "label": "UE5.1", "semester": "s5", "tracks": ["cy", "dc"], "annual": "ue1", "weight": 1 },
+    { "id": "ue5.2", "label": "UE5.2", "semester": "s5", "tracks": ["cy", "dc"], "annual": "ue2", "weight": 1 },
+    { "id": "ue5.3", "label": "UE5.3", "semester": "s5", "tracks": ["cy", "dc"], "annual": "ue3", "weight": 1 },
+    { "id": "ue5.cy.4", "label": "UE5.cy.4", "semester": "s5", "tracks": ["cy"], "annual": "ue4", "weight": 1 },
+    { "id": "ue5.cy.5", "label": "UE5.cy.5", "semester": "s5", "tracks": ["cy"], "annual": "ue5", "weight": 1 },
+    { "id": "ue5.dc.4", "label": "UE5.dc.4", "semester": "s5", "tracks": ["dc"], "annual": "ue4_dc", "weight": 1 },
+    { "id": "ue5.dc.5", "label": "UE5.dc.5", "semester": "s5", "tracks": ["dc"], "annual": "ue5_dc", "weight": 1 },
+    { "id": "ue6.1", "label": "UE6.1", "semester": "s6", "tracks": ["cy", "dc"], "annual": "ue1", "weight": 1 },
+    { "id": "ue6.2", "label": "UE6.2", "semester": "s6", "tracks": ["cy", "dc"], "annual": "ue2", "weight": 1 },
+    { "id": "ue6.3", "label": "UE6.3", "semester": "s6", "tracks": ["cy", "dc"], "annual": "ue3", "weight": 1 },
+    { "id": "ue6.cy.4", "label": "UE6.cy.4", "semester": "s6", "tracks": ["cy"], "annual": "ue4", "weight": 1 },
+    { "id": "ue6.cy.5", "label": "UE6.cy.5", "semester": "s6", "tracks": ["cy"], "annual": "ue5", "weight": 1 },
+    { "id": "ue6.dc.4", "label": "UE6.dc.4", "semester": "s6", "tracks": ["dc"], "annual": "ue4_dc", "weight": 1 },
+    { "id": "ue6.dc.5", "label": "UE6.dc.5", "semester": "s6", "tracks": ["dc"], "annual": "ue5_dc", "weight": 1 }
+  ],
+  "annual_units": [
+    { "id": "ue1", "label": "UE1 Administrer", "s5_unit_id": "ue5.1", "s6_unit_id": "ue6.1", "s5_weight": 1, "s6_weight": 1 },
+    { "id": "ue2", "label": "UE2 Connecter", "s5_unit_id": "ue5.2", "s6_unit_id": "ue6.2", "s5_weight": 1, "s6_weight": 1 },
+    { "id": "ue3", "label": "UE3 Programmer", "s5_unit_id": "ue5.3", "s6_unit_id": "ue6.3", "s5_weight": 1, "s6_weight": 1 },
+    { "id": "ue4", "label": "UE4 Sécuriser / Piloter", "s5_unit_id": "ue5.cy.4", "s6_unit_id": "ue6.cy.4", "s5_weight": 1, "s6_weight": 1, "tracks": ["cy"] },
+    { "id": "ue5", "label": "UE5 Lancer / Automatiser", "s5_unit_id": "ue5.cy.5", "s6_unit_id": "ue6.cy.5", "s5_weight": 1, "s6_weight": 1, "tracks": ["cy"] },
+    { "id": "ue4_dc", "label": "UE4 Sécuriser / Piloter", "s5_unit_id": "ue5.dc.4", "s6_unit_id": "ue6.dc.4", "s5_weight": 1, "s6_weight": 1, "tracks": ["dc"] },
+    { "id": "ue5_dc", "label": "UE5 Lancer / Automatiser", "s5_unit_id": "ue5.dc.5", "s6_unit_id": "ue6.dc.5", "s5_weight": 1, "s6_weight": 1, "tracks": ["dc"] }
+  ],
+  "modules": [
+    { "code": "R501", "label": "Wifi Avancé", "semester": "s5", "kind": "resource", "graded": true, "tracks": ["cy", "dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3R501" },
+    { "code": "R502", "label": "Supervision des réseaux", "semester": "s5", "kind": "resource", "graded": true, "tracks": ["cy", "dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3R502" },
+    { "code": "R503", "label": "Ingénierie des systèmes télécoms", "semester": "s5", "kind": "resource", "graded": true, "tracks": ["cy", "dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3R503" },
+    { "code": "R504", "label": "Cycle de vie d’un projet informatique", "semester": "s5", "kind": "resource", "graded": true, "tracks": ["cy", "dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3R504" },
+    { "code": "R505", "label": "Anglais : Insertion professionnelle 1", "semester": "s5", "kind": "resource", "graded": true, "tracks": ["cy", "dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3R505" },
+    { "code": "R506", "label": "EC-Communication professionnelle : S'insérer dans une organisation", "semester": "s5", "kind": "resource", "graded": true, "tracks": ["cy", "dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3R506" },
+    { "code": "R508", "label": "Gestion de projets : Mener un projet professionnel", "semester": "s5", "kind": "resource", "graded": true, "tracks": ["cy", "dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3R508" },
+    { "code": "R513", "label": "Analyse de réseaux par scripting", "semester": "s5", "kind": "resource", "graded": true, "tracks": ["cy", "dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3R513" },
+
+    { "code": "R5cy09", "label": "Architectures sécurisées", "semester": "s5", "kind": "resource", "graded": true, "tracks": ["cy"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3R5CY09" },
+    { "code": "R5cy10", "label": "Audits de sécurité", "semester": "s5", "kind": "resource", "graded": true, "tracks": ["cy"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3R5CY10" },
+    { "code": "R5cy11", "label": "Supervision de la sécurité", "semester": "s5", "kind": "resource", "graded": true, "tracks": ["cy"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3R5CY11" },
+    { "code": "R5cy12", "label": "Normes, standards et analyse de risque", "semester": "s5", "kind": "resource", "graded": true, "tracks": ["cy"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3R5CY12" },
+
+    { "code": "R5dc09", "label": "Outils et méthodes du DevOps", "semester": "s5", "kind": "resource", "graded": true, "tracks": ["dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3R5DC09" },
+    { "code": "R5dc10", "label": "Infrastructures conteneurisées", "semester": "s5", "kind": "resource", "graded": true, "tracks": ["dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3R5DC10" },
+    { "code": "R5dc11", "label": "Programmer son infrastructure", "semester": "s5", "kind": "resource", "graded": true, "tracks": ["dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3R5DC11" },
+
+    { "code": "SAE501", "label": "Concevoir, réaliser et présenter une solution technique pour la télécommunication", "semester": "s5", "kind": "sae", "graded": true, "tracks": ["cy", "dc"], "statuses": ["fi"], "chamilo_course": "IUT1RT3SAE501" },
+    { "code": "SAE502", "label": "Piloter un projet informatique", "semester": "s5", "kind": "sae", "graded": true, "tracks": ["cy", "dc"], "statuses": ["fi"], "chamilo_course": "IUT1RT3SAE502" },
+    { "code": "SAE5", "label": "Portfolio", "semester": "s5", "kind": "sae", "graded": false, "tracks": ["cy", "dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3SAEPORTFOLIO" },
+    { "code": "SAE5cy03", "label": "Assurer la sécurisation et la supervision avancées d'un système d'information", "semester": "s5", "kind": "sae", "graded": true, "tracks": ["cy"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3SAE5CY03" },
+    { "code": "SAE5dc03", "label": "Orchestrer la conteneurisation d'une application", "semester": "s5", "kind": "sae", "graded": true, "tracks": ["dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3SAE5DC03" },
+    { "code": "SAE5Entreprise", "label": "Alternance 3ᵐᵉ année", "semester": "s5", "kind": "sae", "graded": true, "tracks": ["cy", "dc"], "statuses": ["fa"], "chamilo_course": "IUT1RT3ALT" },
+
+    { "code": "R601", "label": "Anglais : Insertion professionnelle 2", "semester": "s6", "kind": "resource", "graded": true, "tracks": ["cy", "dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3R601" },
+    { "code": "R602", "label": "Enjeux Societaux et Environnementaux", "semester": "s6", "kind": "resource", "graded": true, "tracks": ["cy", "dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3R602" },
+    { "code": "R603", "label": "Connaissance de l'entreprise", "semester": "s6", "kind": "resource", "graded": true, "tracks": ["cy", "dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3R603" },
+    { "code": "R6cy04", "label": "Réponse à incidents", "semester": "s6", "kind": "resource", "graded": true, "tracks": ["cy"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3R6CY04" },
+    { "code": "R6dc04", "label": "Pilotage de solutions Cloud pour l'entreprise", "semester": "s6", "kind": "resource", "graded": true, "tracks": ["dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3R6DC04" },
+
+    { "code": "SAE6", "label": "Portfolio", "semester": "s6", "kind": "sae", "graded": true, "tracks": ["cy", "dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3SAEPORTFOLIO" },
+    { "code": "SAE6Stage", "label": "Stage 3ᵐᵉ année", "semester": "s6", "kind": "sae", "graded": true, "tracks": ["cy", "dc"], "statuses": ["fi"], "chamilo_course": "IUT1RT3STAGE" },
+    { "code": "SAE6Entreprise", "label": "Alternance 3ᵐᵉ année", "semester": "s6", "kind": "sae", "graded": true, "tracks": ["cy", "dc"], "statuses": ["fa"], "chamilo_course": "IUT1RT3ALT" },
+    { "code": "SAE6cy01", "label": "Réagir face à une cyber attaque", "semester": "s6", "kind": "sae", "graded": true, "tracks": ["cy"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3SAE6CY01" },
+    { "code": "SAE6dc01", "label": "Gérer le pipeline d'une application orientée Cloud", "semester": "s6", "kind": "sae", "graded": true, "tracks": ["dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3SAE6DC01" },
+
+    { "code": "MATHPE", "label": "Maths pour les poursuites d'études", "semester": "s5", "kind": "complementary", "graded": false, "tracks": ["cy", "dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3MATHPE" },
+    { "code": "GIT", "label": "GIT", "semester": null, "kind": "complementary", "graded": false, "tracks": ["cy", "dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RTGIT" },
+    { "code": "TPTELECOM", "label": "TP Télécom", "semester": null, "kind": "complementary", "graded": false, "tracks": ["cy", "dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RTTPTELECOM" },
+    { "code": "DIRECTIONETUDES", "label": "DIRECTION DES ÉTUDES BUT3", "semester": null, "kind": "complementary", "graded": false, "tracks": ["cy", "dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RTDE" },
+    { "code": "POURSUITESETUDES", "label": "Poursuites d'études", "semester": null, "kind": "complementary", "graded": false, "tracks": ["cy", "dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RTPE" },
+    { "code": "BDE", "label": "BDE", "semester": null, "kind": "complementary", "graded": false, "tracks": ["cy", "dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RTBDE/index.php" }
+  ],
+  "coefficients": {
+    "cy": {
+      "fi": {
+        "R501": { "ue5.1": 6, "ue5.2": 8 },
+        "R502": { "ue5.1": 8, "ue5.3": 7 },
+        "R503": { "ue5.1": 8, "ue5.2": 10 },
+        "R504": { "ue5.1": 5, "ue5.3": 6 },
+        "R505": { "ue5.1": 3, "ue5.2": 3, "ue5.3": 2, "ue5.cy.4": 2, "ue5.cy.5": 2 },
+        "R506": { "ue5.1": 3, "ue5.2": 3, "ue5.3": 2, "ue5.cy.4": 2, "ue5.cy.5": 2 },
+        "R508": { "ue5.1": 3, "ue5.2": 3, "ue5.3": 2, "ue5.cy.4": 2, "ue5.cy.5": 2 },
+        "R513": { "ue5.3": 7, "ue5.cy.4": 2, "ue5.cy.5": 2 },
+        "R5cy09": { "ue5.cy.4": 14, "ue5.cy.5": 2 },
+        "R5cy10": { "ue5.cy.4": 2, "ue5.cy.5": 14 },
+        "R5cy11": { "ue5.cy.4": 5, "ue5.cy.5": 9 },
+        "R5cy12": { "ue5.cy.4": 10, "ue5.cy.5": 4 },
+        "SAE501": { "ue5.1": 18, "ue5.2": 16, "ue5.3": 6 },
+        "SAE502": { "ue5.1": 10, "ue5.2": 5, "ue5.3": 25 },
+        "SAE5cy03": { "ue5.cy.4": 28, "ue5.cy.5": 27 },
+        "R601": { "ue6.1": 6, "ue6.2": 5, "ue6.3": 7, "ue6.cy.4": 2, "ue6.cy.5": 2 },
+        "R602": { "ue6.1": 9, "ue6.2": 9, "ue6.3": 9, "ue6.cy.4": 3, "ue6.cy.5": 4 },
+        "R603": { "ue6.1": 7, "ue6.2": 6, "ue6.3": 7, "ue6.cy.4": 2, "ue6.cy.5": 2 },
+        "R6cy04": { "ue6.cy.4": 25, "ue6.cy.5": 25 },
+        "SAE6": { "ue6.1": 4, "ue6.2": 4, "ue6.3": 4, "ue6.cy.4": 4, "ue6.cy.5": 4 },
+        "SAE6Stage": { "ue6.1": 24, "ue6.2": 24, "ue6.3": 22, "ue6.cy.4": 15, "ue6.cy.5": 15 },
+        "SAE6cy01": { "ue6.1": 4, "ue6.2": 2, "ue6.3": 4, "ue6.cy.4": 20, "ue6.cy.5": 20 }
+      },
+      "fa": {
+        "R501": { "ue5.1": 5, "ue5.2": 8 },
+        "R502": { "ue5.1": 7, "ue5.3": 6 },
+        "R503": { "ue5.1": 8, "ue5.2": 9 },
+        "R504": { "ue5.1": 5, "ue5.3": 6 },
+        "R505": { "ue5.1": 3, "ue5.2": 2, "ue5.3": 3, "ue5.cy.4": 2, "ue5.cy.5": 3 },
+        "R506": { "ue5.1": 3, "ue5.2": 3, "ue5.3": 2, "ue5.cy.4": 2, "ue5.cy.5": 2 },
+        "R508": { "ue5.1": 3, "ue5.2": 3, "ue5.3": 2, "ue5.cy.4": 2, "ue5.cy.5": 2 },
+        "R513": { "ue5.3": 7, "ue5.cy.4": 2, "ue5.cy.5": 2 },
+        "R5cy09": { "ue5.cy.4": 14, "ue5.cy.5": 2 },
+        "R5cy10": { "ue5.cy.4": 2, "ue5.cy.5": 14 },
+        "R5cy11": { "ue5.cy.4": 5, "ue5.cy.5": 9 },
+        "R5cy12": { "ue5.cy.4": 10, "ue5.cy.5": 4 },
+        "SAE5cy03": { "ue5.1": 13, "ue5.2": 6, "ue5.3": 6, "ue5.cy.4": 25, "ue5.cy.5": 25 },
+        "SAE5Entreprise": { "ue5.1": 22, "ue5.2": 15, "ue5.3": 18, "ue5.cy.4": 10, "ue5.cy.5": 10 },
+        "R601": { "ue6.1": 6, "ue6.2": 5, "ue6.3": 7, "ue6.cy.4": 2, "ue6.cy.5": 2 },
+        "R602": { "ue6.1": 9, "ue6.2": 9, "ue6.3": 9, "ue6.cy.4": 3, "ue6.cy.5": 4 },
+        "R603": { "ue6.1": 7, "ue6.2": 6, "ue6.3": 7, "ue6.cy.4": 2, "ue6.cy.5": 2 },
+        "R6cy04": { "ue6.cy.4": 25, "ue6.cy.5": 25 },
+        "SAE6": { "ue6.1": 4, "ue6.2": 4, "ue6.3": 4, "ue6.cy.4": 4, "ue6.cy.5": 4 },
+        "SAE6Entreprise": { "ue6.1": 24, "ue6.2": 24, "ue6.3": 22, "ue6.cy.4": 15, "ue6.cy.5": 15 },
+        "SAE6cy01": { "ue6.1": 4, "ue6.2": 2, "ue6.3": 4, "ue6.cy.4": 20, "ue6.cy.5": 20 }
+      }
+    },
+    "dc": {
+      "fi": {
+        "R501": { "ue5.1": 6, "ue5.2": 8 },
+        "R502": { "ue5.1": 8, "ue5.3": 7 },
+        "R503": { "ue5.1": 8, "ue5.2": 10 },
+        "R504": { "ue5.1": 5, "ue5.3": 6 },
+        "R505": { "ue5.1": 3, "ue5.2": 3, "ue5.3": 2, "ue5.dc.4": 2, "ue5.dc.5": 2 },
+        "R506": { "ue5.1": 3, "ue5.2": 3, "ue5.3": 2, "ue5.dc.4": 2, "ue5.dc.5": 2 },
+        "R508": { "ue5.1": 3, "ue5.2": 3, "ue5.3": 2, "ue5.dc.4": 2, "ue5.dc.5": 2 },
+        "R513": { "ue5.3": 7, "ue5.dc.4": 2, "ue5.dc.5": 2 },
+        "R5dc09": { "ue5.dc.4": 8, "ue5.dc.5": 12 },
+        "R5dc10": { "ue5.dc.4": 18, "ue5.dc.5": 2 },
+        "R5dc11": { "ue5.dc.4": 10, "ue5.dc.5": 10 },
+        "SAE501": { "ue5.1": 18, "ue5.2": 16, "ue5.3": 6 },
+        "SAE502": { "ue5.1": 10, "ue5.2": 5, "ue5.3": 25 },
+        "SAE5dc03": { "ue5.dc.4": 30, "ue5.dc.5": 25 },
+        "R601": { "ue6.1": 6, "ue6.2": 5, "ue6.3": 7, "ue6.dc.4": 2, "ue6.dc.5": 2 },
+        "R602": { "ue6.1": 9, "ue6.2": 9, "ue6.3": 9, "ue6.dc.4": 3, "ue6.dc.5": 4 },
+        "R603": { "ue6.1": 7, "ue6.2": 6, "ue6.3": 7, "ue6.dc.4": 2, "ue6.dc.5": 2 },
+        "R6dc04": { "ue6.dc.4": 25, "ue6.dc.5": 25 },
+        "SAE6": { "ue6.1": 4, "ue6.2": 4, "ue6.3": 4, "ue6.dc.4": 4, "ue6.dc.5": 4 },
+        "SAE6Stage": { "ue6.1": 24, "ue6.2": 24, "ue6.3": 22, "ue6.dc.4": 15, "ue6.dc.5": 15 },
+        "SAE6dc01": { "ue6.1": 4, "ue6.2": 2, "ue6.3": 4, "ue6.dc.4": 20, "ue6.dc.5": 20 }
+      },
+      "fa": {
+        "R501": { "ue5.1": 5, "ue5.2": 8 },
+        "R502": { "ue5.1": 7, "ue5.3": 6 },
+        "R503": { "ue5.1": 8, "ue5.2": 9 },
+        "R504": { "ue5.1": 5, "ue5.3": 6 },
+        "R505": { "ue5.1": 3, "ue5.2": 2, "ue5.3": 3, "ue5.dc.4": 2, "ue5.dc.5": 3 },
+        "R506": { "ue5.1": 3, "ue5.2": 3, "ue5.3": 2, "ue5.dc.4": 2, "ue5.dc.5": 2 },
+        "R508": { "ue5.1": 3, "ue5.2": 3, "ue5.3": 2, "ue5.dc.4": 2, "ue5.dc.5": 2 },
+        "R513": { "ue5.3": 7, "ue5.dc.4": 2, "ue5.dc.5": 2 },
+        "R5dc09": { "ue5.dc.4": 8 },
+        "R5dc10": { "ue5.dc.4": 18, "ue5.dc.5": 2 },
+        "R5dc11": { "ue5.dc.4": 10, "ue5.dc.5": 10 },
+        "SAE5dc03": { "ue5.1": 13, "ue5.2": 6, "ue5.3": 6, "ue5.dc.4": 30, "ue5.dc.5": 20 },
+        "SAE5Entreprise": { "ue5.1": 22, "ue5.2": 15, "ue5.3": 18, "ue5.dc.4": 10, "ue5.dc.5": 10 },
+        "R601": { "ue6.1": 6, "ue6.2": 5, "ue6.3": 7, "ue6.dc.4": 2, "ue6.dc.5": 2 },
+        "R602": { "ue6.1": 9, "ue6.2": 9, "ue6.3": 9, "ue6.dc.4": 3, "ue6.dc.5": 4 },
+        "R603": { "ue6.1": 7, "ue6.2": 6, "ue6.3": 7, "ue6.dc.4": 2, "ue6.dc.5": 2 },
+        "R6dc04": { "ue6.dc.4": 25, "ue6.dc.5": 25 },
+        "SAE6": { "ue6.1": 4, "ue6.2": 4, "ue6.3": 4, "ue6.dc.4": 4, "ue6.dc.5": 4 },
+        "SAE6Entreprise": { "ue6.1": 24, "ue6.2": 24, "ue6.3": 22, "ue6.dc.4": 15, "ue6.dc.5": 15 },
+        "SAE6dc01": { "ue6.1": 4, "ue6.2": 2, "ue6.3": 4, "ue6.dc.4": 20, "ue6.dc.5": 20 }
+      }
+    }
+  }
+}

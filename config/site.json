@@ -1,0 +1,74 @@
+{
+  "title": "BUT3 RT",
+  "subtitle": "IUT1 Grenoble Année 2026-2027",
+  "language": "fr",
+  "timezone": "Europe/Paris",
+  "output_directory": "dist",
+  "static_directory": "static",
+  "base_path": "/",
+  "custom_domain": "rtgre.fr",
+  "github_url": "https://github.com/kzsxwsjuldvcbsqt",
+  "github_profile": "kzsxwsjuldvcbsqt",
+  "robots_txt": "User-agent: *\nDisallow:\n",
+  "favicons": [
+    {
+      "rel": "icon",
+      "filename": "favicon.ico"
+    },
+    {
+      "rel": "icon",
+      "type": "image/png",
+      "filename": "favicon.png"
+    }
+  ],
+  "school_year": {
+    "label": "2026-2027",
+    "first_date": "2026-09-01",
+    "last_date": "2027-07-31"
+  },
+  "ade": {
+    "base_url": "https://ade-uga-ro-vs.grenet.fr/jsp/custom/modules/plannings/anonymous_cal.jsp",
+    "project_id": 2,
+    "calendar_type": "ical",
+    "request_timeout_seconds": 30,
+    "user_agent": "but3-evaluations/1.0",
+    "retry_attempts": 3,
+    "retry_delay_seconds": 5
+  },
+  "chamilo": {
+    "space_url": "https://chamilo.univ-grenoble-alpes.fr/courses/IUT1RT3",
+    "course_base_url": "https://chamilo.univ-grenoble-alpes.fr/courses/",
+    "course_prefix": "IUT1RT3"
+  },
+  "grades": {
+    "minimum": 0,
+    "maximum": 20,
+    "step": 0.01,
+    "decimals": 2,
+    "storage_key_prefix": "grades",
+    "export_format_version": 1
+  },
+  "rooms": {
+    "strip_prefixes": [
+      "IUT1_"
+    ],
+    "drop_lowercase_suffix": true
+  },
+  "teachers": {
+    "display_mode": "given_name_initial",
+    "unknown_marker": "prof manquant",
+    "name_overrides": {}
+  },
+  "matching": {
+    "alternate_date_window_days": 7
+  },
+  "formats": {
+    "date_absolute": "%d/%m/%Y",
+    "time": "%H:%M",
+    "time_range": "{start} - {end}",
+    "footer_timestamp": "{date} {connector} {time}",
+    "day_title": "{day_name} {day_num} {month_name} {year}",
+    "month_title": "{month_name} {year}",
+    "evaluation_date_col": "{day_num}"
+  }
+}

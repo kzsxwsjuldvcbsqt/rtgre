@@ -1,0 +1,174 @@
+{
+  "index": {
+    "heading": "Choisir une classe",
+    "programs_heading": "Formations"
+  },
+  "sections": {
+    "external_suffix": "",
+    "menu_toggle": "Menu"
+  },
+  "class_home": {
+    "descriptions": {
+      "home": "Vue d'ensemble de la classe.",
+      "resources": "Accès aux espaces Chamilo des modules.",
+      "calendar": "Emploi du temps complet et comparaison des cours.",
+      "evaluations": "Planning et suivi des évaluations.",
+      "grades": "Saisie des notes et calcul automatique des moyennes.",
+      "webmail": "Messagerie étudiante universitaire."
+    }
+  },
+  "resources": {
+    "title": "Modules",
+    "chamilo_main_link": "Accéder à l'espace Chamilo de la formation",
+    "no_link": "Pas d'espace de cours",
+    "no_semester": "Complémentaires"
+  },
+  "grades": {
+    "title": "Suivi des notes et calcul des moyennes",
+    "privacy_notice": "Vos notes restent strictement dans votre navigateur. Aucune donnée n'est envoyée sur un serveur.",
+    "noscript_notice": "Activez JavaScript pour calculer vos moyennes, sauvegarder vos notes et exporter vos données.",
+    "annual_synthesis": "Synthèse annuelle",
+    "global_annual_average": "Moyenne annuelle globale",
+    "export_btn": "Exporter",
+    "import_btn": "Importer",
+    "reset_btn": "Effacer",
+    "reset_confirm": "Voulez-vous vraiment effacer toutes vos notes ?",
+    "confirm_other_class": "Ce fichier provient d'une autre classe. Voulez-vous quand même importer les notes correspondantes ?",
+    "err_invalid_json": "Fichier illisible ou format JSON invalide.",
+    "err_bad_format": "Format de fichier non reconnu.",
+    "err_newer_version": "Ce fichier a été créé avec une version plus récente du site.",
+    "import_success": "Notes importées avec succès.",
+    "entries_ignored": "entrée(s) ignorée(s).",
+    "overall_semester_average": "Moyenne du semestre",
+    "average_heading": "Moyennes",
+    "subject_code": "Module",
+    "subject_label": "Nom complet",
+    "grade_input_column": "Note / 20",
+    "annual_header_ue": "UE",
+    "annual_header_s5": "S5",
+    "annual_header_s6": "S6",
+    "annual_header_annual": "Annuel"
+  },
+  "calendar": {
+    "title": "Emploi du temps",
+    "view_label": "Vue",
+    "view_week": "Semaine",
+    "view_day": "Jour",
+    "view_year": "Année",
+    "compare_label": "Comparer avec",
+    "compare_none": "Aucune classe",
+    "same_only": "Cours communs uniquement",
+    "show_compared": "Afficher aussi les cours de l'autre classe",
+    "teacherless_filter": "Sans enseignant",
+    "search_label": "Rechercher",
+    "search_placeholder": "Cours, salle, prof...",
+    "reset_btn": "Réinitialiser",
+    "today_btn": "Aujourd'hui",
+    "prev_btn": "Précédent",
+    "next_btn": "Suivant",
+    "symbol_prev": "<",
+    "symbol_next": ">",
+    "toggle_controls": "Afficher ou masquer les filtres",
+    "no_courses": "Aucun cours ce jour-là.",
+    "no_courses_compared": "Aucun cours ce jour-là",
+    "no_courses_week": "Aucun cours cette semaine.",
+    "shared_slot_prefix": "Aussi en",
+    "bound_start": "début",
+    "bound_end": "fin",
+    "status_same": "identique",
+    "status_different": "différent",
+    "status_ongoing": "[En cours]",
+    "evals_only": "Évaluations uniquement",
+    "load_error": "Erreur lors du chargement des données de la classe sélectionnée.",
+    "week_prefix": "Semaine",
+    "results_count_singular": "cours",
+    "results_count_plural": "cours",
+    "noscript_notice": "Activez JavaScript pour naviguer dans le calendrier, filtrer et comparer les emplois du temps."
+  },
+  "class_page": {
+    "back_link": "Retour au choix de la classe",
+    "filters_heading": "Filtrer",
+    "category_filter": "Catégorie",
+    "module_filter": "Module",
+    "period_filter": "Période",
+    "reset_filters": "Réinitialiser",
+    "results_count_singular": "évaluation",
+    "results_count_plural": "évaluations",
+    "empty_state": "Aucune évaluation ne correspond aux filtres.",
+    "detail_link": "Comparer",
+    "past_badge": "Passée"
+  },
+  "evaluation_page": {
+    "back_link": "Retour aux évaluations de la classe",
+    "comparison_heading": "Dans les autres classes",
+    "absent": "Absent de l'ADE",
+    "alternate_date": "Programmé à une autre date",
+    "same_date": "Même date",
+    "same_all": "Tout est identique",
+    "comparison_note": "Seules les différences avec la classe consultée sont affichées dans les colonnes.",
+    "no_other_class": "Aucune autre classe n'a cette évaluation."
+  },
+  "notice": {
+    "title": "À savoir",
+    "p1": "Ce site est fait par un étudiant. Ce n'est pas un site officiel de l'IUT.",
+    "p2": "Les horaires viennent de l'ADE et sont recopiés automatiquement plusieurs fois par jour. Une modification de dernière minute peut ne pas encore apparaître ici. En cas de doute, vérifiez sur l'ADE. Je ne peux pas être tenu responsable d'un retard ou d'une absence.",
+    "p3": "Les enseignants sont désignés par leur prénom et l'initiale de leur nom.",
+    "p4": "Le site n'est pas indexé par les moteurs de recherche. Il n'apparaît pas dans leurs résultats, et on y accède en connaissant son adresse.",
+    "p5": "Les modules, les coefficients et l'emploi du temps sont des informations publiques, diffusées par l'IUT.",
+    "p6": "Les notes que vous saisissez restent dans votre navigateur. Elles ne sont envoyées nulle part. Il n'y a pas de serveur, pas de compte, pas de base de données. Si vous videz les données de votre navigateur, elles sont perdues : pensez à les exporter.",
+    "p7": "Le code du site est ouvert."
+  },
+  "page_404": {
+    "title": "Page non trouvée",
+    "description": "La page demandée n'existe pas ou a été déplacée.",
+    "home_link": "Retour à l'accueil"
+  },
+  "periods": {
+    "upcoming": "À venir",
+    "past": "Passées",
+    "all": "Toutes"
+  },
+  "fields": {
+    "date": "Date",
+    "time": "Horaire",
+    "module": "Module",
+    "category": "Catégorie",
+    "rooms": "Salle",
+    "teachers": "Enseignants",
+    "groups": "Groupes",
+    "class": "Classe",
+    "state": "État",
+    "compare": "Comparer"
+  },
+  "groups_all": "Toutes les classes",
+  "list_separator": ", ",
+  "unofficial_notice": "Site non officiel",
+  "empty_value": "Non renseigné",
+  "footer": {
+    "generated_at": "Données mises à jour le",
+    "time_connector": "à"
+  },
+  "days": [
+    "Lundi",
+    "Mardi",
+    "Mercredi",
+    "Jeudi",
+    "Vendredi",
+    "Samedi",
+    "Dimanche"
+  ],
+  "months": [
+    "janvier",
+    "février",
+    "mars",
+    "avril",
+    "mai",
+    "juin",
+    "juillet",
+    "août",
+    "septembre",
+    "octobre",
+    "novembre",
+    "décembre"
+  ]
+}

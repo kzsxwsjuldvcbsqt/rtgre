@@ -1,0 +1,73 @@
+{% macro evaluation_table_header(site, labels, show_action=true) %}
+<colgroup>
+<col class="col-date">
+<col class="col-time">
+<col class="col-category">
+<col class="col-module">
+<col class="col-rooms">
+<col class="col-teachers">
+<col class="col-groups">
+{% if show_action %}
+<col class="col-action">
+{% endif %}
+</colgroup>
+<thead>
+<tr>
+<th class="col-date">{{ labels.fields.date }}</th>
+<th class="col-time">{{ labels.fields.time }}</th>
+<th class="col-category">{{ labels.fields.category }}</th>
+<th class="col-module">{{ labels.fields.module }}</th>
+<th class="col-rooms">{{ labels.fields.rooms }}</th>
+<th class="col-teachers">{{ labels.fields.teachers }}</th>
+<th class="col-groups">{{ labels.fields.groups }}</th>
+{% if show_action %}
+<th class="col-action">{{ labels.fields.compare }}</th>
+{% endif %}
+</tr>
+</thead>
+{% endmacro %}
+
+{% macro evaluation_row(ev, site, labels, url_for, show_action=true, format_groups=None) %}
+<tr class="eval-row"
+    data-category="{{ ev.category_id }}"
+    data-module="{{ ev.module_code }}"
+    data-timestamp="{{ ev.start_dt.timestamp() | int }}"
+    data-past="{{ 'true' if ev.is_past else 'false' }}"
+>
+<td class="col-date" data-label="{{ labels.fields.date }}">
+{{ ev.date_formatted }}
+</td>
+<td class="col-time" data-label="{{ labels.fields.time }}">
+{{ ev.time_range }}
+{% if ev.is_past %}
+<span class="badge-past">{{ labels.class_page.past_badge }}</span>
+{% endif %}
+</td>
+<td class="col-category" data-label="{{ labels.fields.category }}">
+<span class="category-badge cat-{{ ev.category_id }}">{{ ev.category_label }}</span>
+</td>
+<td class="col-module" data-label="{{ labels.fields.module }}">{{ ev.module_code }}</td>
+<td class="col-rooms" data-label="{{ labels.fields.rooms }}">
+{% for room in ev.rooms %}<span class="room-tag">{{ room }}</span>{% if not loop.last %}{{ labels.list_separator }}{% endif %}{% endfor %}
+</td>
+<td class="col-teachers" data-label="{{ labels.fields.teachers }}">
+{% if ev.teachers %}
+{% for teacher in ev.teachers %}<span class="room-tag">{{ teacher }}</span>{% if not loop.last %}{{ labels.list_separator }}{% endif %}{% endfor %}
+{% elif ev.staff_markers %}
+{% for marker in ev.staff_markers %}<span class="room-tag">{{ marker }}</span>{% if not loop.last %}{{ labels.list_separator }}{% endif %}{% endfor %}
+{% else %}
+<span>{{ labels.empty_value }}</span>
+{% endif %}
+</td>
+<td class="col-groups" data-label="{{ labels.fields.groups }}">
+{% set grp_list = format_groups(ev.groups) if format_groups else ev.groups %}
+{% for group in grp_list %}<span class="room-tag">{{ group }}</span>{% if not loop.last %}{{ labels.list_separator }}{% endif %}{% endfor %}
+</td>
+{% if show_action %}
+<td class="col-action" data-label="">
+{% set detail_target = 'classes/' ~ ev.class_id ~ '/evaluations/' ~ ev.occurrence_id ~ '.html' %}
+<a href="{{ url_for(detail_target) }}" class="detail-link">{{ labels.class_page.detail_link }}</a>
+</td>
+{% endif %}
+</tr>
+{% endmacro %}

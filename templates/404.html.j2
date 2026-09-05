@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="{{ site.language }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+{% for icon in favicons %}
+<link rel="{{ icon.rel }}"{% if icon.type %} type="{{ icon.type }}"{% endif %} href="{{ get_404_url('static/' ~ icon.filename) }}">
+{% endfor %}
+<title>{{ labels.page_404.title }} - {{ site.title }}</title>
+<link rel="stylesheet" href="{{ get_404_url('static/style.css') }}">
+</head>
+<body>
+<header class="site-header">
+<div class="header-container">
+<div class="header-titles">
+<div class="site-title">{{ site.title }}</div>
+<div class="site-subtitle"><span class="subtitle-text">{{ site.subtitle }}</span><span class="subtitle-sep">{{ labels.list_separator }}</span><span class="subtitle-unofficial">{{ labels.unofficial_notice }}</span></div>
+</div>
+</div>
+</header>
+<main class="site-main">
+<div class="page-container">
+<h1>{{ labels.page_404.title }}</h1>
+<p>{{ labels.page_404.description }}</p>
+<p><a href="{{ get_404_url('index.html') }}">{{ labels.page_404.home_link }}</a></p>
+</div>
+</main>
+<footer class="site-footer">
+<div class="footer-container">
+<span>{{ labels.footer.generated_at }} {{ generated_at }}</span>
+</div>
+</footer>
+<script src="{{ get_404_url('static/filters.js') }}"></script>
+</body>
+</html>
