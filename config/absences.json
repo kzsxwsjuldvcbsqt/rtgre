@@ -1,0 +1,58 @@
+{
+  "afternoon_start": "12:00",
+  "default_mode": "day",
+  "default_period": "morning",
+  "storage_key_prefix": "absences",
+  "export_format": "schedule-absences",
+  "export_format_version": 2,
+  "legacy_export_format_versions": [
+    1
+  ],
+  "export_filename": "absences-{class}-{year}-{date}.json",
+  "max_import_bytes": 2000000,
+  "max_records": 1000,
+  "max_courses_per_record": 5000,
+  "max_id_length": 200,
+  "max_text_length": 5000,
+  "max_name_length": 100,
+  "max_total_text_length": 1000000,
+  "sheet": {
+    "program_label": "BUT 3e année",
+    "signature_place": "Saint-Martin-d’Hères",
+    "logo_path": "static/images/IUT1-UGA.png",
+    "pdf_filename": "fiche-absence-{class}-{date}.pdf",
+    "blob_revoke_delay_ms": 60000,
+    "pdf_assets": {
+      "library": "static/vendor/pdf-lib-1.17.1.min.js",
+      "fontkit": "static/vendor/pdf-lib-fontkit-1.1.1.min.js",
+      "font_regular": "static/fonts/DejaVuSans.ttf",
+      "font_bold": "static/fonts/DejaVuSans-Bold.ttf"
+    },
+    "pdf_layout": {
+      "page_width": 595.28,
+      "page_height": 841.89,
+      "margin": 42,
+      "body_font_size": 9.5,
+      "body_line_height": 13,
+      "title_font_size": 17,
+      "notice_font_size": 12,
+      "notice_line_height": 16,
+      "section_heading_font_size": 10,
+      "annex_heading_font_size": 15,
+      "header_height": 60,
+      "logo_max_width": 92,
+      "logo_max_height": 58,
+      "header_gap": 14,
+      "section_gap": 10,
+      "paragraph_gap": 7,
+      "notice_padding": 8,
+      "cell_padding": 6,
+      "label_column_width": 138,
+      "rule_width": 0.8,
+      "bullet_indent": 14,
+      "signature_height": 68,
+      "footer_gap": 18,
+      "annex_section_gap": 10
+    }
+  }
+}

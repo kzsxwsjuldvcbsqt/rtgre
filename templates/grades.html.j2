@@ -1,0 +1,151 @@
+{% extends "base.html.j2" %}
+{% from "_nav.html.j2" import section_nav %}
+{% from "_icons.html.j2" import icon %}
+{% block title %}{% for s in sections %}{% if s.id == 'grades' %}{{ s.label }}{% endif %}{% endfor %} - {{ class_config.label }} - {{ site.title }}{% endblock %}
+{% block subnav %}{{ section_nav(sections, 'grades', class_config, url_for, labels, site.icons) }}{% endblock %}
+{% block content %}
+<div class="page-container">
+<div class="back-navigation">
+<a href="{{ url_for('index.html') }}">{{ labels.class_page.back_link }}</a>
+</div>
+
+<div class="page-heading section-head">
+<div>
+<p class="page-context">{{ class_config.label }}</p>
+<h1>{% for s in sections %}{% if s.id == 'grades' %}{{ s.label }}{% endif %}{% endfor %}</h1>
+</div>
+<details class="menu grades-menu" id="grades-actions" hidden>
+<summary aria-label="{{ labels.grades.actions }}">{{ icon('kebab-horizontal', url_for, site.icons) }}</summary>
+<div class="menu-list">
+<button type="button" id="grades-export-btn">{{ icon('download', url_for, site.icons) }}{{ labels.grades.export_btn }}</button>
+<button type="button" id="grades-import-btn">{{ icon('upload', url_for, site.icons) }}{{ labels.grades.import_btn }}</button>
+<button type="button" id="grades-reset-btn" class="menu-item-danger">{{ icon('trash', url_for, site.icons) }}{{ labels.grades.reset_btn }}</button>
+<input type="file" id="grades-import-file" accept=".json" hidden>
+</div>
+</details>
+</div>
+
+<p class="privacy-notice">{{ icon('info', url_for, site.icons, 'icon-sm') }}<span>{{ labels.grades.privacy_notice }}</span></p>
+
+<noscript>
+<p class="noscript-notice">{{ icon('alert', url_for, site.icons, 'icon-sm') }}<span>{{ labels.grades.noscript_notice }}</span></p>
+</noscript>
+
+<div id="grades-message" class="grades-message" role="status" aria-live="polite" hidden></div>
+
+<div id="notes-content">
+{% for sem in grades_data.semesters %}
+<section class="semester-section" id="semester-section-{{ sem.id }}">
+<h3 class="collapsible-heading">
+  <span>{{ sem.label }}</span>
+  <button type="button" class="heading-toggle-btn semester-toggle-btn" id="sem-toggle-{{ sem.id }}" aria-expanded="true" aria-label="{{ labels.grades.toggle_semester.format(semester=sem.label) }}" aria-controls="semester-table-{{ sem.id }}">
+    <span class="toggle-arrow">{{ icon('chevron-down', url_for, site.icons) }}</span>
+  </button>
+</h3>
+<table id="semester-table-{{ sem.id }}" class="grades-table" data-semester="{{ sem.id }}">
+<thead>
+<tr>
+<th class="col-code">{{ labels.grades.subject_code }}</th>
+<th class="col-subject">{{ labels.grades.subject_label }}</th>
+{% for u in sem.units %}
+<th class="col-ue-header">{{ u.label }}</th>
+{% endfor %}
+<th class="col-grade-input">{{ grade_label }}</th>
+</tr>
+</thead>
+<tbody>
+{% for subj in sem.subjects %}
+<tr class="subject-row" data-module-code="{{ subj.code }}">
+<td class="col-code" data-label="{{ labels.grades.subject_code }}"><strong>{{ subj.code }}</strong></td>
+<td class="col-subject" data-label="{{ labels.grades.subject_label }}">{{ subj.label }}</td>
+{% for u in sem.units %}
+{% set coeff = subj.coeffs.get(u.id) %}
+<td class="col-ue-cell" data-label="{{ u.label }}"{% if not coeff %} data-empty="true"{% endif %}>
+{% if coeff %}{{ coeff }}{% endif %}
+</td>
+{% endfor %}
+<td class="col-grade-input" data-label="{{ grade_label }}">
+<input type="text"
+       class="grade-input"
+       data-module="{{ subj.code }}"
+       placeholder="{{ grade_empty }}"
+       inputmode="decimal"
+       aria-label="{{ grade_label }} - {{ subj.code }}"
+>
+</td>
+</tr>
+{% endfor %}
+<tr class="semester-average-row">
+<td colspan="{{ 2 + sem.units|length }}" class="average-label"><strong>{{ labels.grades.overall_semester_average }}</strong></td>
+<td class="col-grade-input"><strong id="avg-{{ sem.id }}">{{ grade_empty }}</strong></td>
+</tr>
+</tbody>
+</table>
+</section>
+{% endfor %}
+
+{% if grades_data.annual_units %}
+<section class="annual-synthesis-section">
+<h3>{{ labels.grades.annual_synthesis }}</h3>
+<table class="annual-synthesis-table">
+<thead>
+<tr>
+<th class="col-ue-name">{{ labels.grades.annual_header_ue }}</th>
+{% for sem in grades_data.semesters %}
+<th class="col-semester-avg">{{ sem.short_label }}</th>
+{% endfor %}
+<th class="col-annual-avg">{{ labels.grades.annual_header_annual }}</th>
+</tr>
+</thead>
+<tbody>
+{% for au in grades_data.annual_units %}
+<tr class="annual-ue-row" data-ue-id="{{ au.id }}">
+<td class="col-ue-name" data-label="{{ labels.grades.annual_header_ue }}"><strong>{{ au.label }}</strong></td>
+{% for sem in grades_data.semesters %}
+<td class="col-semester-avg" data-label="{{ sem.short_label }}" id="synth-{{ sem.id }}-{{ au.id }}">{{ grade_empty }}</td>
+{% endfor %}
+<td class="col-annual-avg" data-label="{{ labels.grades.annual_header_annual }}" id="synth-annual-{{ au.id }}"><strong>{{ grade_empty }}</strong></td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+<div class="annual-global-container">
+<span>{{ labels.grades.global_annual_average }} : </span>
+<strong id="global-annual-avg">{{ grade_empty }}</strong>
+</div>
+</section>
+{% endif %}
+</div>
+</div>
+
+<script defer src="{{ url_for('static/js/write-access.js') }}"></script>
+<script defer src="{{ url_for('static/js/grades-model.js') }}"></script>
+<script defer src="{{ url_for('static/js/grades.js') }}"
+  data-class-id="{{ class_config.id }}"
+  data-min="{{ site.grades.minimum }}"
+  data-max="{{ site.grades.maximum }}"
+  data-decimals="{{ site.grades.decimals }}"
+  data-storage-prefix="{{ site.grades.storage_key_prefix }}"
+  data-format-version="{{ site.grades.export_format_version }}"
+  data-empty-value="{{ grade_empty }}"
+  data-export-format="{{ site.grades.export_format }}"
+  data-export-filename="{{ site.grades.export_filename }}"
+  data-max-import-bytes="{{ site.grades.max_import_bytes }}"
+  data-max-entries="{{ site.grades.max_entries }}"
+  data-import-replace-confirm="{{ labels.grades.import_replace_confirm }}"
+  data-err-empty-import="{{ labels.grades.err_empty_import }}"
+  data-err-storage="{{ labels.grades.err_storage }}"
+  data-err-restore="{{ labels.grades.err_restore }}"
+  data-err-file-size="{{ labels.grades.err_file_size }}"
+  data-reset-confirm="{{ labels.grades.reset_confirm }}"
+  data-confirm-other-class="{{ labels.grades.confirm_other_class }}"
+  data-err-invalid-json="{{ labels.grades.err_invalid_json }}"
+  data-err-bad-format="{{ labels.grades.err_bad_format }}"
+  data-err-newer-version="{{ labels.grades.err_newer_version }}"
+  data-err-conflict="{{ labels.grades.err_conflict }}"
+  data-import-success="{{ labels.grades.import_success }}"
+  data-entries-ignored="{{ labels.grades.entries_ignored }}"
+  data-grades-config='{{ grades_data | tojson }}'
+></script>
+{% endblock %}

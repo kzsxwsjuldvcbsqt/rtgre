@@ -1,0 +1,17 @@
+{
+  "default_view": "week",
+  "days_of_week": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "comparison_options": [
+    "same_only",
+    "show_compared"
+  ],
+  "search_delay_ms": 250,
+  "time_marker_interval_ms": 60000,
+  "max_comparison_events": 10000
+}

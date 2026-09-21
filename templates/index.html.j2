@@ -1,0 +1,34 @@
+{% extends "base.html.j2" %}
+{% from "_icons.html.j2" import icon %}
+{% block title %}{{ labels.index.heading }} - {{ site.title }}{% endblock %}
+{% block content %}
+<div class="page-container">
+<h1>{{ labels.index.heading }}</h1>
+{% for prog in programs %}
+<section class="program-section">
+<h2>{{ prog.label }}</h2>
+<ul class="class-list">
+{% for cls in prog.classes %}
+{% set cls_target = 'classes/' ~ cls.id ~ '/' ~ section_files.home %}
+<li><a href="{{ url_for(cls_target) }}"><span>{{ cls.label }}</span>{{ icon('chevron-right', url_for, site.icons, 'list-chevron') }}</a></li>
+{% endfor %}
+</ul>
+</section>
+{% endfor %}
+
+{% set global_secs = [] %}
+{% for sec in sections %}
+  {% if sec.kind == 'global' %}
+    {% set _ = global_secs.append(sec) %}
+  {% endif %}
+{% endfor %}
+
+{% if global_secs %}
+<nav class="global-sections-nav" aria-label="{{ labels.sections.global_navigation }}">
+{% for sec in global_secs %}
+<p><a href="{{ url_for(sec.file) }}"><span>{{ sec.label }}</span>{{ icon('chevron-right', url_for, site.icons, 'list-chevron') }}</a></p>
+{% endfor %}
+</nav>
+{% endif %}
+</div>
+{% endblock %}

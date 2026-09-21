@@ -1,0 +1,198 @@
+{% extends "base.html.j2" %}
+{% from "_nav.html.j2" import section_nav %}
+{% from "_icons.html.j2" import icon %}
+{% block title %}{{ labels.absences.title }} - {{ class_config.label }} - {{ site.title }}{% endblock %}
+{% block subnav %}{{ section_nav(sections, 'absences', class_config, url_for, labels, site.icons) }}{% endblock %}
+{% block content %}
+{% set text = labels.absences %}
+<div class="page-container absence-page">
+  <div class="back-navigation">
+    <a href="{{ url_for('index.html') }}">{{ labels.class_page.back_link }}</a>
+  </div>
+  <div class="page-heading section-head">
+    <div>
+      <p class="page-context">{{ class_config.label }}</p>
+      <h1>{{ text.title }}</h1>
+    </div>
+    <details class="menu" id="absence-history-menu" hidden>
+      <summary aria-label="{{ text.actions }}">{{ icon('kebab-horizontal', url_for, site.icons) }}</summary>
+      <div class="menu-list">
+        <button type="button" id="absence-export">{{ icon('download', url_for, site.icons) }}{{ text.export }}</button>
+        <button type="button" id="absence-import">{{ icon('upload', url_for, site.icons) }}{{ text.import }}</button>
+        <button type="button" id="absence-clear" class="menu-item-danger">{{ icon('trash', url_for, site.icons) }}{{ text['clear'] }}</button>
+        <input type="file" id="absence-import-file" accept=".json,application/json" hidden>
+      </div>
+    </details>
+  </div>
+  <p>{{ text.intro }}</p>
+  <p class="privacy-notice">{{ icon('info', url_for, site.icons, 'icon-sm') }}<span>{{ text.privacy }}</span></p>
+  <noscript><p class="noscript-notice">{{ icon('alert', url_for, site.icons, 'icon-sm') }}<span>{{ text.noscript }}</span></p></noscript>
+
+  <div id="absence-app" hidden>
+    <div id="absence-message" class="grades-message" role="status" aria-live="polite" hidden></div>
+
+    <section class="absence-summary" aria-labelledby="absence-summary-heading">
+      <h3 id="absence-summary-heading">{{ text.summary_heading }}</h3>
+      <div id="absence-summary"></div>
+    </section>
+
+    <div class="absence-launch">
+      <button type="button" id="absence-add" class="btn btn-primary">{{ icon('plus', url_for, site.icons, 'icon-sm') }}{{ text.new_heading }}</button>
+    </div>
+
+    <dialog id="absence-dialog" class="app-dialog" aria-labelledby="absence-editor-heading">
+      <form id="absence-form" class="app-dialog-body" novalidate>
+        <div class="app-dialog-header">
+          <h3 id="absence-editor-heading">{{ text.new_heading }}</h3>
+          <button type="button" id="absence-dialog-close" class="app-dialog-close" aria-label="{{ text.cancel }}">{{ icon('x', url_for, site.icons) }}</button>
+        </div>
+        <p id="absence-editing-hint" class="absence-hint" hidden>{{ text.editing_hint }}</p>
+        <p id="absence-converting-hint" class="absence-hint" hidden>{{ text.convert_hint }}</p>
+        <div class="absence-selection">
+          <div class="absence-field">
+            <label for="absence-mode">{{ text.mode }}</label>
+            <select id="absence-mode" aria-label="{{ text.mode }}">
+              <optgroup label="{{ text.mode }}">
+                {% for value, label in text.modes.items() %}
+                <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+              </optgroup>
+            </select>
+          </div>
+
+          <div id="absence-day-fields" class="absence-fields">
+            <div class="absence-field">
+              <label for="absence-date">{{ text.date }}</label>
+              <input id="absence-date" type="date" min="{{ site.school_year.first_date }}" max="{{ site.school_year.last_date }}" aria-label="{{ text.date }}" required>
+            </div>
+          </div>
+
+          <div id="absence-half-day-fields" class="absence-fields" hidden>
+            <div class="absence-field">
+              <label for="absence-half-date">{{ text.date }}</label>
+              <input id="absence-half-date" type="date" min="{{ site.school_year.first_date }}" max="{{ site.school_year.last_date }}" aria-label="{{ text.date }}" required>
+            </div>
+            <div class="absence-field">
+              <label for="absence-period">{{ text.period }}</label>
+              <select id="absence-period" aria-label="{{ text.period }}">
+                <optgroup label="{{ text.period }}">
+                  {% for value, label in text.periods.items() if value != 'day' %}
+                  <option value="{{ value }}">{{ label }}</option>
+                  {% endfor %}
+                </optgroup>
+              </select>
+            </div>
+          </div>
+
+          <div id="absence-course-fields" class="absence-fields" hidden>
+            <div class="absence-field">
+              <label for="absence-course-date">{{ text.date }}</label>
+              <input id="absence-course-date" type="date" min="{{ site.school_year.first_date }}" max="{{ site.school_year.last_date }}" aria-label="{{ text.date }}" required>
+            </div>
+            <div class="absence-field">
+              <label for="absence-course-select">{{ text.course }}</label>
+              <select id="absence-course-select" aria-label="{{ text.course }}">
+                <optgroup label="{{ text.course }}"></optgroup>
+              </select>
+            </div>
+          </div>
+
+          <div id="absence-range-fields" class="absence-range-fields" hidden>
+            <div class="absence-field">
+              <label for="absence-start-date">{{ text.start_date }}</label>
+              <input id="absence-start-date" type="date" min="{{ site.school_year.first_date }}" max="{{ site.school_year.last_date }}" aria-label="{{ text.start_date }}" required>
+            </div>
+            <div class="absence-field">
+              <label for="absence-start-period">{{ text.start_period }}</label>
+              <select id="absence-start-period" aria-label="{{ text.start_period }}">
+                <optgroup label="{{ text.start_period }}">
+                  {% for value, label in text.range_start_periods.items() %}
+                  <option value="{{ value }}">{{ label }}</option>
+                  {% endfor %}
+                </optgroup>
+              </select>
+            </div>
+            <div class="absence-field">
+              <label for="absence-end-date">{{ text.end_date }}</label>
+              <input id="absence-end-date" type="date" min="{{ site.school_year.first_date }}" max="{{ site.school_year.last_date }}" aria-label="{{ text.end_date }}" required>
+            </div>
+            <div class="absence-field">
+              <label for="absence-end-period">{{ text.end_period }}</label>
+              <select id="absence-end-period" aria-label="{{ text.end_period }}">
+                <optgroup label="{{ text.end_period }}">
+                  {% for value, label in text.range_end_periods.items() %}
+                  <option value="{{ value }}">{{ label }}</option>
+                  {% endfor %}
+                </optgroup>
+              </select>
+            </div>
+          </div>
+
+          <fieldset class="absence-status-fields">
+            <label class="absence-toggle"><input id="absence-justification" type="checkbox"> {{ text.justification }}</label>
+            <label class="absence-toggle"><input id="absence-submitted" type="checkbox"> {{ text.submitted }}</label>
+          </fieldset>
+        </div>
+        <div id="absence-form-error" class="grades-message absence-error" role="alert" hidden></div>
+        <section class="absence-practical" aria-labelledby="absence-practical-heading">
+          <h4 id="absence-practical-heading">{{ text.practical_heading }}</h4>
+          <div id="absence-practical"></div>
+        </section>
+        <div class="absence-actions">
+          <button type="submit" id="absence-save" class="btn btn-primary">{{ text.save }}</button>
+          <button type="button" id="absence-cancel" class="btn" hidden>{{ text.cancel }}</button>
+        </div>
+      </form>
+    </dialog>
+
+    <section class="absence-history" aria-labelledby="absence-history-heading">
+      <h3 id="absence-history-heading">{{ text.saved_heading }}</h3>
+      <div id="absence-records"></div>
+    </section>
+    <template id="absence-record-menu-icon">{{ icon('kebab-horizontal', url_for, site.icons) }}</template>
+
+    <section id="absence-sheet-preparation" class="absence-editor" aria-labelledby="absence-sheet-preparation-heading" hidden>
+      <h3 id="absence-sheet-preparation-heading">{{ text.sheet_preparation }}</h3>
+      <div id="absence-sheet-message" class="grades-message" role="status" aria-live="polite" hidden></div>
+      <div class="absence-fields">
+        <div class="absence-field">
+          <label for="absence-sheet-last-name" class="visually-hidden">{{ text.sheet_last_name }}</label>
+          <input id="absence-sheet-last-name" type="text" placeholder="{{ text.sheet_last_name }}" aria-label="{{ text.sheet_last_name }}" autocomplete="family-name" maxlength="{{ absence_payload.config.max_name_length }}" aria-describedby="absence-sheet-last-name-error" required>
+          <p id="absence-sheet-last-name-error" class="absence-field-error" hidden></p>
+        </div>
+        <div class="absence-field">
+          <label for="absence-sheet-first-name" class="visually-hidden">{{ text.sheet_first_name }}</label>
+          <input id="absence-sheet-first-name" type="text" placeholder="{{ text.sheet_first_name }}" aria-label="{{ text.sheet_first_name }}" autocomplete="given-name" maxlength="{{ absence_payload.config.max_name_length }}" aria-describedby="absence-sheet-first-name-error" required>
+          <p id="absence-sheet-first-name-error" class="absence-field-error" hidden></p>
+        </div>
+        <div class="absence-field">
+          <label for="absence-sheet-reason" class="visually-hidden">{{ text.sheet_reason }}</label>
+          <textarea id="absence-sheet-reason" rows="3" placeholder="{{ text.sheet_reason }}" aria-label="{{ text.sheet_reason }}" maxlength="{{ absence_payload.config.max_text_length }}" aria-describedby="absence-sheet-reason-error" required></textarea>
+          <p id="absence-sheet-reason-error" class="absence-field-error" hidden></p>
+        </div>
+        <div class="absence-field">
+          <label for="absence-sheet-signing-date" class="visually-hidden">{{ text.sheet_signing_date }}</label>
+          <input id="absence-sheet-signing-date" type="date" aria-label="{{ text.sheet_signing_date }}" aria-describedby="absence-sheet-signing-date-error" required>
+          <p id="absence-sheet-signing-date-error" class="absence-field-error" hidden></p>
+        </div>
+      </div>
+      <div class="absence-actions">
+        <button type="button" id="absence-pdf-download" class="btn btn-primary">{{ icon('download', url_for, site.icons, 'icon-sm') }}{{ text.download_pdf }}</button>
+        <button type="button" id="absence-pdf-open" class="btn">{{ text.open_pdf }}</button>
+        <button type="button" id="absence-sheet-close" class="btn">{{ text.sheet_close }}</button>
+      </div>
+    </section>
+  </div>
+</div>
+<script type="application/json" id="absence-data">{{ absence_payload | tojson }}</script>
+{% endblock %}
+{% block scripts %}
+<script defer src="{{ url_for('static/js/write-access.js') }}"></script>
+<script defer src="{{ url_for('static/js/absence-model.js') }}"></script>
+<script defer src="{{ url_for('static/js/absence-records.js') }}"></script>
+<script defer src="{{ url_for('static/js/absence-store.js') }}"></script>
+<script defer src="{{ url_for('static/js/absence-personal.js') }}"></script>
+<script defer src="{{ url_for('static/js/absence-pdf.js') }}"></script>
+<script defer src="{{ url_for('static/js/absence-sheet.js') }}"></script>
+<script defer src="{{ url_for('static/js/absences.js') }}"></script>
+{% endblock %}

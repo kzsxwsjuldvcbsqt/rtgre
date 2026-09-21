@@ -1,0 +1,22 @@
+{
+  "programs": [
+    {
+      "id": "rt3-fa",
+      "label": "RT3 Alternance",
+      "classes": [
+        { "id": "b3cya", "label": "B3cyA", "ade_group_code": "B3cyA", "resource_id": 40347, "track": "cy", "status": "fa" },
+        { "id": "b3cyb", "label": "B3cyB", "ade_group_code": "B3cyB", "resource_id": 31885, "track": "cy", "status": "fa" },
+        { "id": "b3dcc", "label": "B3dcC", "ade_group_code": "B3dcC", "resource_id": 40382, "track": "dc", "status": "fa" }
+      ]
+    },
+    {
+      "id": "rt3-fi",
+      "label": "RT3 Formation initiale",
+      "classes": [
+        { "id": "b3cy1", "label": "B3cy1", "ade_group_code": "B3cy1", "resource_id": 40218, "track": "cy", "status": "fi" },
+        { "id": "b3cy2", "label": "B3cy2", "ade_group_code": "B3cy2", "resource_id": 4955, "track": "cy", "status": "fi" },
+        { "id": "b3dc3", "label": "B3dc3", "ade_group_code": "B3dc3", "resource_id": 40259, "track": "dc", "status": "fi" }
+      ]
+    }
+  ]
+}

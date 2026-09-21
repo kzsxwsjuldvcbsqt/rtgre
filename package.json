@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "scripts": {
+    "format": "prettier --write \"static/js/*.js\" \"tests/**/*.js\"",
+    "format:check": "prettier --check \"static/js/*.js\" \"tests/**/*.js\"",
+    "test": "node --test tests/javascript/*.test.js",
+    "check": "npm run format:check && npm test && for script in static/js/*.js; do node --check \"$script\"; done",
+    "audit": "npm audit"
+  },
+  "devDependencies": {
+    "@pdf-lib/fontkit": "1.1.1",
+    "pdf-lib": "1.17.1",
+    "prettier": "3.9.6"
+  }
+}

@@ -1,0 +1,41 @@
+@media print {
+  :root {
+    color-scheme: light;
+    --color-canvas: var(--paper);
+    --color-surface: var(--paper);
+    --color-surface-hover: var(--paper);
+    --color-inset: var(--paper);
+    --color-text: var(--paper-ink);
+    --color-text-muted: var(--paper-muted);
+    --color-text-faint: var(--paper-muted);
+    --color-border: var(--paper-rule);
+    --color-border-muted: var(--paper-rule);
+    --color-field-border: var(--paper-rule);
+  }
+  .site-header,
+  .section-nav,
+  .back-navigation,
+  .site-footer,
+  .filter-form,
+  .calendar-nav-bar,
+  .heading-toggle-btn,
+  .menu,
+  .absence-launch {
+    display: none !important;
+  }
+  body,
+  .site-main,
+  .page-container {
+    width: 100%;
+    max-width: none;
+    padding: 0;
+    background: var(--paper);
+    color: var(--paper-ink);
+  }
+  table,
+  tr,
+  th,
+  td {
+    break-inside: avoid;
+  }
+}

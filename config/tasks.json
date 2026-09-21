@@ -1,0 +1,10 @@
+{
+  "storage_key_prefix": "tasks",
+  "export_format": "but3-tasks",
+  "export_format_version": 1,
+  "export_filename": "tasks-{class}-{year}-{date}.json",
+  "max_import_bytes": 200000,
+  "max_items": 500,
+  "max_text_length": 2000,
+  "max_total_text_length": 200000
+}

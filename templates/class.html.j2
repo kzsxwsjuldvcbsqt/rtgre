@@ -1,0 +1,64 @@
+{% extends "base.html.j2" %}
+{% from "_nav.html.j2" import section_nav %}
+{% from "_evaluation_table.html.j2" import evaluation_table_header, evaluation_row %}
+{% from "_icons.html.j2" import icon %}
+{% block title %}{% for s in sections %}{% if s.id == 'evaluations' %}{{ s.label }}{% endif %}{% endfor %} - {{ class_config.label }} - {{ site.title }}{% endblock %}
+{% block subnav %}{{ section_nav(sections, 'evaluations', class_config, url_for, labels, site.icons) }}{% endblock %}
+{% block content %}
+<div class="page-container">
+<div class="back-navigation">
+<a href="{{ url_for('index.html') }}">{{ labels.class_page.back_link }}</a>
+</div>
+
+<div class="page-heading">
+<p class="page-context">{{ class_config.label }}</p>
+<h1 class="collapsible-heading">
+<span>{% for s in sections %}{% if s.id == 'evaluations' %}{{ s.label }}{% endif %}{% endfor %}</span>
+<button type="button" class="heading-toggle-btn" aria-expanded="true" aria-controls="filters-container" aria-label="{{ labels.calendar.toggle_controls }}"><span class="toggle-arrow">{{ icon('chevron-down', url_for, site.icons) }}</span></button>
+</h1>
+</div>
+
+<div id="filters-container"
+  data-label-filters-heading="{{ labels.class_page.filters_heading }}"
+  data-label-category="{{ labels.class_page.category_filter }}"
+  data-label-module="{{ labels.class_page.module_filter }}"
+  data-label-period="{{ labels.class_page.period_filter }}"
+  data-label-reset="{{ labels.class_page.reset_filters }}"
+  data-label-singular="{{ labels.class_page.results_count_singular }}"
+  data-label-plural="{{ labels.class_page.results_count_plural }}"
+  data-label-empty="{{ labels.class_page.empty_state }}"
+  data-label-upcoming="{{ labels.periods.upcoming }}"
+  data-label-past="{{ labels.periods.past }}"
+  data-label-all="{{ labels.periods.all }}"
+  data-categories='{{ active_categories | tojson }}'
+  data-modules='{{ active_modules | tojson }}'
+  data-label-past-badge="{{ labels.class_page.past_badge }}"
+></div>
+
+<div id="evaluations-list">
+{% for month_key, month_label, month_evals in months_grouped %}
+<section class="month-card" data-month="{{ month_key }}">
+<h3 class="month-card-title">{{ month_label }}</h3>
+<div class="table-card">
+<table class="evaluations-table">
+{{ evaluation_table_header(site, labels, show_action=true) }}
+<tbody>
+{% for ev in month_evals %}
+{{ evaluation_row(ev, site, labels, url_for, show_action=true, format_groups=format_groups, module_labels=module_labels) }}
+{% endfor %}
+</tbody>
+</table>
+</div>
+</section>
+{% endfor %}
+</div>
+
+<div id="empty-state-message" class="empty-state-message" hidden>
+{{ labels.class_page.empty_state }}
+</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script defer src="{{ url_for('static/js/filters.js') }}"></script>
+{% endblock %}

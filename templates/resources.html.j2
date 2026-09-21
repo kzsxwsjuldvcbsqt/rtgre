@@ -1,0 +1,41 @@
+{% extends "base.html.j2" %}
+{% from "_nav.html.j2" import section_nav %}
+{% from "_icons.html.j2" import icon %}
+{% block title %}{% for s in sections %}{% if s.id == 'resources' %}{{ s.label }}{% endif %}{% endfor %} - {{ class_config.label }} - {{ site.title }}{% endblock %}
+{% block subnav %}{{ section_nav(sections, 'resources', class_config, url_for, labels, site.icons) }}{% endblock %}
+{% block content %}
+<div class="page-container">
+<div class="back-navigation">
+<a href="{{ url_for('index.html') }}">{{ labels.class_page.back_link }}</a>
+</div>
+
+<div class="page-heading">
+<p class="page-context">{{ class_config.label }}</p>
+<h1>{% for s in sections %}{% if s.id == 'resources' %}{{ s.label }}{% endif %}{% endfor %}</h1>
+</div>
+
+<div class="main-chamilo-link">
+<a href="{{ site.chamilo.space_url }}" target="_blank" rel="noopener noreferrer">{{ labels.resources.chamilo_main_link }}{{ icon('link-external', url_for, site.icons, 'icon-sm') }}</a>
+</div>
+
+{% for sem_info, kinds_grouped in resource_groups %}
+<h2>{{ sem_info.label }}</h2>
+{% for kind_info, modules in kinds_grouped %}
+{% if kind_info.label %}
+<h3>{{ kind_info.label }}</h3>
+{% endif %}
+<ul class="resource-list">
+{% for mod in modules %}
+<li>
+{% if mod.chamilo_url %}
+<a href="{{ mod.chamilo_url }}" target="_blank" rel="noopener noreferrer">{% if mod.code == mod.label or not mod.get("show_code", true) %}<strong>{{ mod.label }}</strong>{% else %}<strong>{{ mod.code }}</strong> - {{ mod.label }}{% endif %}</a>{{ icon('link-external', url_for, site.icons, 'list-chevron') }}
+{% else %}
+<span>{% if mod.code == mod.label or not mod.get("show_code", true) %}<strong>{{ mod.label }}</strong>{% else %}<strong>{{ mod.code }}</strong> - {{ mod.label }}{% endif %}</span>
+{% endif %}
+</li>
+{% endfor %}
+</ul>
+{% endfor %}
+{% endfor %}
+</div>
+{% endblock %}

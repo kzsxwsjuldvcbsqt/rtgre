@@ -1,0 +1,19 @@
+.header-container,
+.page-container,
+.footer-container {
+  width: 100%;
+  max-width: var(--page-max-width);
+  margin-inline: auto;
+  padding-inline: var(--page-gutter);
+}
+.site-main {
+  flex: 1;
+  min-width: 0;
+}
+.page-container {
+  min-width: 0;
+  padding-block: var(--space-lg) var(--space-3xl);
+}
+.site-main p {
+  max-width: var(--measure);
+}

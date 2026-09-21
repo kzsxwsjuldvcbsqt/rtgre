@@ -1,0 +1,25 @@
+.badge-past,
+.room-tag,
+.ongoing-badge {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+}
+.match-badge {
+  color: var(--color-text-muted);
+}
+.category-badge {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+.badge-past,
+.ongoing-badge {
+  margin-inline-start: var(--space-xs);
+}
+.ongoing-badge {
+  color: var(--color-now);
+  font-weight: var(--weight-semibold);
+}

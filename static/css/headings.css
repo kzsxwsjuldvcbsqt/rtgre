@@ -1,0 +1,77 @@
+.back-navigation {
+  margin-block: 0 var(--space-sm);
+}
+.back-navigation a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+.page-heading {
+  margin-block-end: var(--space-lg);
+}
+.page-container > h1:first-child {
+  margin-block-start: 0;
+}
+.page-heading.section-head {
+  align-items: flex-start;
+}
+.page-heading h1,
+.page-heading .collapsible-heading {
+  margin: 0;
+}
+.page-context {
+  margin-block-end: var(--space-2xs);
+  color: var(--color-text-faint);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+}
+.page-container > h1 {
+  margin-block-end: var(--space-xs);
+}
+.page-container > h1 + h2,
+.page-container > h1 + .collapsible-heading {
+  margin-block: 0 var(--space-lg);
+  color: var(--color-text-muted);
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  letter-spacing: 0;
+}
+.page-container > h2:not(.collapsible-heading),
+.program-section > h2,
+.resource-list + h2 {
+  margin-block: var(--space-xl) var(--space-sm);
+}
+.page-container > h3 {
+  margin-block: var(--space-lg) var(--space-sm);
+}
+.collapsible-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-block: var(--space-xl) var(--space-sm);
+}
+.heading-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--touch-target);
+  height: var(--touch-target);
+  margin: calc((var(--touch-target) - 1.5rem) / -2);
+  border: 0;
+  background: transparent;
+  color: var(--color-text-muted);
+}
+.toggle-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition-fast);
+}
+.toggle-arrow.is-collapsed {
+  transform: rotate(-90deg);
+}
