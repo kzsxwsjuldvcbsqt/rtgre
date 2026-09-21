@@ -1,0 +1,150 @@
+.calendar-view-week {
+  display: grid;
+  grid-template-columns: repeat(var(--calendar-day-count), minmax(0, 1fr));
+  gap: var(--space-md);
+  align-items: start;
+}
+.calendar-view-week:has(> .empty-state-message) {
+  display: block;
+}
+.day-section {
+  min-width: 0;
+  margin-block-end: var(--space-xl);
+}
+.day-section > h3 {
+  margin-block-end: var(--space-sm);
+  color: var(--color-text);
+}
+.calendar-view-week .day-section > h3 {
+  min-height: 2.5rem;
+  margin-block-end: var(--space-sm);
+  padding-block-end: var(--space-xs);
+  border-block-end: var(--rule-width) solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+.calendar-events-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+.calendar-event-item {
+  display: grid;
+  grid-template-columns: var(--width-event-time) minmax(0, 1fr);
+  gap: var(--space-sm);
+  min-width: 0;
+  padding: var(--space-sm);
+  border: var(--rule-width) solid var(--color-border-muted);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+}
+.calendar-view-week .calendar-event-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+.event-time {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.event-time-start.is-day-start,
+.event-time-end.is-day-end {
+  color: var(--color-bound);
+  font-weight: var(--weight-semibold);
+}
+.event-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  min-width: 0;
+}
+.event-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  overflow-wrap: anywhere;
+}
+.event-teachers,
+.event-rooms,
+.event-groups {
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  overflow-wrap: anywhere;
+}
+.current-time-marker {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  width: 100%;
+  margin-block: var(--space-xs);
+  color: var(--color-now);
+  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--weight-semibold);
+}
+.current-time-line {
+  flex: 1;
+  border: 0;
+  border-block-start: var(--rule-width) solid currentColor;
+}
+.calendar-event-item.is-ongoing {
+  position: relative;
+  padding-inline-start: var(--width-progress-lane);
+}
+.course-progress {
+  position: absolute;
+  inset-block: var(--space-sm);
+  inset-inline-start: var(--space-sm);
+  width: var(--rule-accent-width);
+  border-radius: var(--radius-pill);
+  background: var(--color-border);
+}
+.course-progress-fill {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 0;
+  height: calc(var(--course-progress) * 100%);
+  border-radius: var(--radius-pill);
+  background: var(--color-now);
+}
+.course-progress-dot {
+  position: absolute;
+  inset-inline-start: 50%;
+  inset-block-start: calc(var(--course-progress) * 100%);
+  width: var(--size-progress-dot);
+  height: var(--size-progress-dot);
+  border-radius: var(--radius-pill);
+  background: var(--color-now);
+  transform: translate(-50%, -50%);
+}
+.cal-day-summary,
+.cal-class-subheading {
+  margin-block-end: var(--space-xs);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+.cal-class-subheading {
+  margin-block-start: var(--space-sm);
+}
+.cal-summary-primary,
+.cal-summary-compared {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+.cal-summary-compared {
+  color: var(--color-text-faint);
+}
+.year-month-title {
+  margin-block: var(--space-2xl) var(--space-md);
+  font-size: var(--text-lg);
+}

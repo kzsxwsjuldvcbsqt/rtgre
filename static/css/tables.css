@@ -1,0 +1,148 @@
+table {
+  width: 100%;
+  margin-block-end: var(--space-xl);
+  border-collapse: separate;
+  border-spacing: 0;
+  background: transparent;
+}
+th,
+td {
+  padding: var(--space-sm) var(--space-md);
+  border-block-end: var(--rule-width) solid var(--color-border-muted);
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  text-align: start;
+  vertical-align: middle;
+}
+th:first-child,
+td:first-child {
+  padding-inline-start: 0;
+}
+th:last-child,
+td:last-child {
+  padding-inline-end: 0;
+}
+thead th {
+  color: var(--color-text-faint);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+tbody tr:last-child > * {
+  border-block-end: 0;
+}
+.month-row th,
+.program-row th {
+  padding-block: var(--space-lg) var(--space-xs);
+  border-block-end: 0;
+  color: var(--color-text-faint);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.col-date,
+.col-time,
+.grade-input {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.col-grade-input,
+.col-semester-avg,
+.col-annual-avg {
+  text-align: end;
+}
+.col-ue-header,
+.col-ue-cell {
+  text-align: center;
+}
+.col-grade-input strong,
+.col-semester-avg,
+.col-annual-avg {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+.semester-average-row td {
+  border-block-start: var(--rule-width) solid var(--color-border);
+  color: var(--color-text);
+  font-weight: var(--weight-semibold);
+}
+.grade-input {
+  width: var(--width-grade-input);
+  text-align: end;
+}
+.semester-section,
+.annual-synthesis-section,
+.table-card {
+  padding: var(--space-md) var(--space-lg);
+  border: var(--rule-width) solid var(--color-border-muted);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface);
+}
+.semester-section,
+.table-card {
+  overflow: hidden;
+}
+#evaluations-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+#evaluations-list .evaluations-table {
+  table-layout: fixed;
+}
+.month-card-title {
+  margin-block: 0 var(--space-sm);
+}
+.semester-section,
+.annual-synthesis-section {
+  margin-block-start: var(--space-lg);
+}
+.semester-section .collapsible-heading {
+  margin: 0;
+}
+.annual-synthesis-section > h3 {
+  margin-block-start: 0;
+}
+.semester-section table {
+  margin-block: var(--space-md) calc(-1 * var(--space-md));
+}
+.annual-synthesis-section table {
+  margin-block: var(--space-md) 0;
+}
+.table-card table {
+  margin-block-end: calc(-1 * var(--space-md));
+}
+.annual-global-container {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-block-start: var(--space-md);
+  padding-block-start: var(--space-md);
+  border-block-start: var(--rule-width) solid var(--color-border);
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+}
+.annual-global-container strong {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+@media (min-width: 60em) {
+  .table-card table,
+  .semester-section table,
+  .annual-synthesis-section table {
+    width: calc(100% + 2 * var(--space-lg));
+    margin-inline: calc(-1 * var(--space-lg));
+  }
+  th:first-child,
+  td:first-child {
+    padding-inline-start: var(--space-lg);
+  }
+  th:last-child,
+  td:last-child {
+    padding-inline-end: var(--space-lg);
+  }
+}

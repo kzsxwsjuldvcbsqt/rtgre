@@ -1,0 +1,18 @@
+{% extends "base.html.j2" %}
+{% from "_icons.html.j2" import icon %}
+{% block title %}{{ slots[0].summary }} - {{ site.title }}{% endblock %}
+{% block content %}
+<div class="page-container">
+<div class="page-heading">
+<p class="page-context">{{ class_config.label }}</p>
+<h1>{{ slots[0].summary }}</h1>
+</div>
+<p>{{ labels.evaluation_page.choose_slot }}</p>
+<ul class="resource-list">
+{% for ev in slots %}
+<li><a href="{{ url_for('classes/' ~ class_config.id ~ '/evaluations/' ~ ev.occurrence_id ~ '.html') }}">{{ ev.date_formatted }} — {{ ev.time_range }}</a>{{ icon('chevron-right', url_for, site.icons, 'list-chevron') }}</li>
+{% endfor %}
+</ul>
+<p><a href="{{ url_for('classes/' ~ class_config.id ~ '/' ~ section_files.evaluations) }}">{{ labels.evaluation_page.back_link }}</a></p>
+</div>
+{% endblock %}

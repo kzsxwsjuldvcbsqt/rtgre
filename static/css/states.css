@@ -1,0 +1,74 @@
+*:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-accent);
+  outline-offset: var(--focus-ring-width);
+  border-radius: var(--radius-control);
+}
+button:disabled,
+input:disabled,
+select:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+[aria-invalid="true"] {
+  border-color: var(--color-danger);
+}
+@media (hover: hover) and (pointer: fine) {
+  a:hover {
+    text-decoration: underline;
+    text-underline-offset: var(--space-3xs);
+  }
+  .section-nav a:hover {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+  .section-nav a:hover::after {
+    background: var(--color-now);
+  }
+  .class-list a:hover,
+  .section-item a:hover,
+  .global-sections-nav a:hover,
+  .resource-list li:hover {
+    background: var(--color-surface-hover);
+    text-decoration: none;
+  }
+  tbody tr:not(.month-row):not(.program-row):hover {
+    background: var(--color-surface-hover);
+  }
+  .class-list a:hover .list-chevron,
+  .section-item a:hover .list-chevron {
+    color: var(--color-text-muted);
+  }
+  button:hover:not(:disabled):not(.heading-toggle-btn):not(.app-dialog-close),
+  select:hover:not(:disabled),
+  input:hover:not(:disabled),
+  textarea:hover:not(:disabled),
+  .filter-form label:has(input):hover,
+  .absence-toggle:hover,
+  .detail-link:hover {
+    border-color: var(--color-text-faint);
+    background: var(--color-surface-hover);
+    text-decoration: none;
+  }
+  .btn-primary:hover:not(:disabled) {
+    border-color: var(--color-primary-hover);
+    background: var(--color-primary-hover);
+  }
+  .menu-list button:hover,
+  .menu-list a:hover {
+    background: var(--color-surface-hover);
+    text-decoration: none;
+  }
+  .menu-list .menu-item-danger:hover {
+    background: var(--color-danger-soft);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0s !important;
+  }
+}

@@ -1,0 +1,262 @@
+.btn,
+.detail-link,
+.filter-form select,
+.filter-form input[type="text"],
+.filter-form input[type="date"],
+.calendar-nav-bar input[type="date"],
+.filter-form button,
+.calendar-nav-bar button,
+.grade-input,
+.absence-field input,
+.absence-field select,
+.absence-field textarea {
+  min-height: var(--control-height);
+  padding-inline: var(--space-sm);
+  border: var(--rule-width) solid var(--color-field-border);
+  border-radius: var(--radius-control);
+  background: var(--color-inset);
+  color: var(--color-text);
+  font-size: var(--control-font-size);
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+.btn,
+.detail-link,
+.filter-form button,
+.calendar-nav-bar button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+}
+.btn {
+  padding-inline: var(--space-md);
+}
+.btn-primary {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-weight: var(--weight-semibold);
+}
+.btn-primary .icon {
+  color: var(--color-on-primary);
+}
+.filter-form input[type="text"] {
+  width: min(100%, 20rem);
+}
+.filter-form input::placeholder {
+  color: var(--color-text-faint);
+  opacity: 1;
+}
+
+#filters-container,
+#calendar-controls {
+  margin-block-end: var(--space-lg);
+}
+.filter-form {
+  display: grid;
+  grid-template-columns: minmax(0, 20rem) auto minmax(0, 1fr);
+  gap: var(--space-sm) var(--space-md);
+  width: 100%;
+  padding: var(--space-md);
+  border: var(--rule-width) solid var(--color-border-muted);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface);
+}
+.filter-group,
+.filter-group-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+  min-width: 0;
+}
+.filter-group-scroll {
+  grid-column: 1 / -1;
+}
+.filter-group-item {
+  display: flex;
+  min-width: 0;
+}
+.filter-group-last {
+  min-width: 12rem;
+}
+#cal-comp-checkboxes {
+  display: contents;
+}
+.filter-form label:has(input),
+.absence-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: var(--control-height);
+  padding-inline: var(--space-sm);
+  border: var(--rule-width) solid var(--color-field-border);
+  border-radius: var(--radius-control);
+  background: var(--color-inset);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  user-select: none;
+}
+.filter-form label:has(input:checked),
+.absence-toggle:has(input:checked) {
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+  color: var(--color-text);
+}
+.filter-group-reset button {
+  border-color: transparent;
+  background: transparent;
+  color: var(--color-text-muted);
+}
+.results-count {
+  grid-column: 3;
+  align-self: center;
+  justify-self: end;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+
+.calendar-nav-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-md);
+  margin-block-end: var(--space-lg);
+}
+.calendar-nav-bar #cal-date-input-group {
+  display: flex;
+  min-width: 0;
+}
+.calendar-nav-bar input[type="date"] {
+  font-variant-numeric: tabular-nums;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
+}
+.cal-nav-center {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-xs);
+}
+.cal-period-heading {
+  color: var(--color-text);
+  font-size: var(--text-md);
+  font-family: var(--font-mono);
+  font-weight: var(--weight-semibold);
+  text-align: start;
+}
+.btn-text {
+  display: none;
+}
+.btn-symbol {
+  display: inline-flex;
+}
+
+.app-dialog {
+  position: fixed;
+  inset: 0;
+  width: min(calc(100% - 2 * var(--page-gutter)), var(--dialog-width));
+  max-width: var(--dialog-width);
+  max-height: min(90dvh, 52rem);
+  margin: auto;
+  padding: 0;
+  border: var(--rule-width) solid var(--color-border);
+  border-radius: var(--radius-large);
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: var(--shadow-overlay);
+  overflow: hidden;
+}
+.app-dialog::backdrop {
+  background: var(--color-scrim);
+}
+.app-dialog-body {
+  display: flex;
+  flex-direction: column;
+  max-height: inherit;
+  padding: var(--space-lg);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.app-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-block-end: var(--space-lg);
+}
+.app-dialog-close,
+.menu > summary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--touch-target);
+  height: var(--touch-target);
+  border: 0;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--color-text-muted);
+}
+
+.menu {
+  position: relative;
+  display: inline-flex;
+}
+.menu > summary {
+  list-style: none;
+  cursor: pointer;
+}
+.menu > summary::-webkit-details-marker {
+  display: none;
+}
+.menu > summary::marker {
+  content: "";
+}
+.menu-list {
+  position: absolute;
+  z-index: var(--z-menu);
+  inset-block-start: calc(100% + var(--space-2xs));
+  inset-inline-end: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: var(--menu-min-width);
+  padding: var(--space-2xs);
+  border: var(--rule-width) solid var(--color-border);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-overlay);
+}
+.menu-list button,
+.menu-list a {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+  min-height: var(--touch-target);
+  padding-inline: var(--space-sm);
+  border: 0;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  text-align: start;
+}
+.menu-list .icon {
+  color: var(--color-text-faint);
+}
+.menu-list .menu-item-danger {
+  color: var(--color-danger);
+}
+.menu-list .menu-item-danger .icon {
+  color: var(--color-danger);
+}

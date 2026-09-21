@@ -1,0 +1,78 @@
+html {
+  background: var(--color-navbar);
+  color: var(--color-text);
+  font-family: var(--font-family);
+  scroll-behavior: smooth;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-canvas);
+  color: var(--color-text);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  overflow-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+}
+h1,
+h2,
+h3,
+h4 {
+  color: var(--color-text);
+  line-height: var(--leading-tight);
+}
+h1 {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+  letter-spacing: -0.02em;
+}
+h2 {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+}
+h3 {
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+}
+h4 {
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+}
+p {
+  margin-block-end: var(--space-md);
+}
+p:last-child {
+  margin-block-end: 0;
+}
+a {
+  color: var(--color-link);
+  text-decoration: none;
+}
+strong {
+  font-weight: var(--weight-semibold);
+}
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: var(--color-accent);
+}
+button,
+input,
+select,
+textarea {
+  border-radius: var(--radius-control);
+}
+button {
+  cursor: pointer;
+}
+.icon {
+  display: inline-block;
+  inline-size: var(--icon-size);
+  block-size: var(--icon-size);
+  flex: none;
+  fill: currentColor;
+  vertical-align: text-bottom;
+}
+.icon-sm {
+  inline-size: var(--icon-size-sm);
+  block-size: var(--icon-size-sm);
+}

@@ -1,0 +1,38 @@
+{% from "_icons.html.j2" import icon %}
+<!DOCTYPE html>
+<html lang="{{ site.language }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+{% for icon in favicons %}
+<link rel="{{ icon.rel }}"{% if icon.type %} type="{{ icon.type }}"{% endif %} href="{{ url_for('static/' ~ icon.filename) }}">
+{% endfor %}
+<title>{% block title %}{{ site.title }}{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static/css/style.css') }}">
+<script defer src="{{ url_for('static/js/utils.js') }}"></script>
+<script defer src="{{ url_for('static/js/menu.js') }}"></script>
+</head>
+<body class="{% if page_wide %}page-wide{% endif %}">
+<header class="site-header">
+<div class="header-container">
+<a class="site-brand" href="{{ url_for('index.html') }}" aria-label="{{ site.title }}">
+<div class="header-titles">
+<span class="site-title">{{ site.title }}</span>
+<span class="site-subtitle"><span class="subtitle-text">{{ site.subtitle }}</span><span class="subtitle-sep">{{ labels.list_separator }}</span><span class="subtitle-unofficial">{{ labels.unofficial_notice }}</span></span>
+</div>
+</a>
+</div>
+{% block subnav %}{% endblock %}
+</header>
+<main class="site-main">
+{% block content %}{% endblock %}
+</main>
+<footer class="site-footer">
+<div class="footer-container">
+<span>{{ labels.footer.generated_at }} {{ generated_at }}</span>
+</div>
+</footer>
+{% block scripts %}{% endblock %}
+</body>
+</html>

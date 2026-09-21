@@ -1,0 +1,55 @@
+{% extends "base.html.j2" %}
+{% from "_nav.html.j2" import section_nav %}
+{% from "_icons.html.j2" import icon %}
+{% block title %}{{ labels.tasks.title }} - {{ class_config.label }} - {{ site.title }}{% endblock %}
+{% block subnav %}{{ section_nav(sections, 'tasks', class_config, url_for, labels, site.icons) }}{% endblock %}
+{% block content %}
+<div class="page-container tasks-page">
+<div class="back-navigation">
+<a href="{{ url_for('index.html') }}">{{ labels.class_page.back_link }}</a>
+</div>
+
+<div class="page-heading section-head">
+<div>
+<p class="page-context">{{ class_config.label }}</p>
+<h1>{{ labels.tasks.title }}</h1>
+</div>
+<details class="menu" id="tasks-actions" hidden>
+<summary aria-label="{{ labels.tasks.actions }}">{{ icon('kebab-horizontal', url_for, site.icons) }}</summary>
+<div class="menu-list">
+<button type="button" id="tasks-export">{{ icon('download', url_for, site.icons) }}{{ labels.tasks.export }}</button>
+<button type="button" id="tasks-import">{{ icon('upload', url_for, site.icons) }}{{ labels.tasks.import }}</button>
+<button type="button" id="tasks-clear" class="menu-item-danger">{{ icon('trash', url_for, site.icons) }}{{ labels.tasks['clear'] }}</button>
+<input type="file" id="tasks-import-file" accept=".json,application/json" hidden>
+</div>
+</details>
+</div>
+
+<p>{{ labels.tasks.intro }}</p>
+<p class="privacy-notice">{{ icon('info', url_for, site.icons, 'icon-sm') }}<span>{{ labels.tasks.privacy }}</span></p>
+<noscript><p class="noscript-notice">{{ icon('alert', url_for, site.icons, 'icon-sm') }}<span>{{ labels.tasks.noscript }}</span></p></noscript>
+
+<div id="tasks-app" hidden>
+<div id="tasks-message" class="grades-message" role="status" aria-live="polite" hidden></div>
+<form id="tasks-form" class="tasks-form" novalidate>
+<label for="tasks-input" class="visually-hidden">{{ labels.tasks.input_label }}</label>
+<textarea id="tasks-input" rows="3" maxlength="{{ tasks_payload.config.max_text_length }}" placeholder="{{ labels.tasks.input_placeholder }}" aria-label="{{ labels.tasks.input_label }}" required></textarea>
+<button type="submit" class="btn btn-primary">{{ icon('plus', url_for, site.icons, 'icon-sm') }}{{ labels.tasks.add }}</button>
+</form>
+
+<section class="tasks-list-section" aria-labelledby="tasks-list-heading">
+<h2 id="tasks-list-heading">{{ labels.tasks.saved_heading }}</h2>
+<div id="tasks-list"></div>
+</section>
+<template id="tasks-item-menu-icon">{{ icon('kebab-horizontal', url_for, site.icons) }}</template>
+<template id="tasks-item-delete-icon">{{ icon('trash', url_for, site.icons) }}</template>
+</div>
+</div>
+<script type="application/json" id="tasks-data">{{ tasks_payload | tojson }}</script>
+{% endblock %}
+{% block scripts %}
+<script defer src="{{ url_for('static/js/write-access.js') }}"></script>
+<script defer src="{{ url_for('static/js/tasks-model.js') }}"></script>
+<script defer src="{{ url_for('static/js/tasks-store.js') }}"></script>
+<script defer src="{{ url_for('static/js/tasks.js') }}"></script>
+{% endblock %}

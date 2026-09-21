@@ -1,0 +1,50 @@
+.tasks-page > p:not(.privacy-notice) {
+  color: var(--color-text-muted);
+}
+.tasks-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: start;
+  gap: var(--space-sm);
+  margin-block: var(--space-xl);
+}
+.tasks-form textarea {
+  width: 100%;
+  min-width: 0;
+  min-height: var(--free-text-min-height);
+  padding: var(--space-sm);
+  border: var(--rule-width) solid var(--color-field-border);
+  border-radius: var(--radius-control);
+  background: var(--color-inset);
+  color: var(--color-text);
+  resize: vertical;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast);
+}
+.tasks-form textarea::placeholder {
+  color: var(--color-text-faint);
+  opacity: 1;
+}
+.tasks-list-section > h2 {
+  margin-block-end: var(--space-sm);
+}
+#tasks-list {
+  display: flex;
+  flex-direction: column;
+  border-block-start: var(--rule-width) solid var(--color-border-muted);
+}
+.task-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: var(--space-md);
+  padding-block: var(--space-md);
+  border-block-end: var(--rule-width) solid var(--color-border-muted);
+}
+.task-text {
+  max-width: none;
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

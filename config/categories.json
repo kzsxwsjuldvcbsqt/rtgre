@@ -1,0 +1,56 @@
+{
+  "unmatched_policy": "exclude",
+  "non_name_lines": [
+    "^Equipe\\b",
+    "^Etudiants\\b",
+    "^DS-Scol$",
+    "^prof manquant$"
+  ],
+  "description_flags": [
+    { "id": "scolarite", "label": "Surveillé par la scolarité", "patterns": ["^DS-Scol$"] }
+  ],
+  "categories": [
+    {
+      "id": "ds",
+      "label": "DS surveillé",
+      "enabled": true,
+      "exact_titles": [],
+      "patterns": ["(?:^|[-_ ])DS(?:[-_ ]|$)"]
+    },
+    {
+      "id": "partiel-machine",
+      "label": "Partiel machine",
+      "enabled": true,
+      "exact_titles": [],
+      "patterns": ["(?:^|[-_ ])Part(?:iel)?TP(?:[-_ ]|$)"]
+    },
+    {
+      "id": "partiel",
+      "label": "Partiel",
+      "enabled": true,
+      "exact_titles": [],
+      "patterns": ["(?:^|[-_ ])Partiel(?:[-_ ]|$)", "(?:^|[-_ ])Examen(?:[-_ ]|$)"]
+    },
+    {
+      "id": "soutenance",
+      "label": "Soutenance",
+      "enabled": true,
+      "exact_titles": [],
+      "patterns": ["Soutenance"]
+    },
+    {
+      "id": "oral",
+      "label": "Oral noté",
+      "enabled": true,
+      "exact_titles": ["R505-Discussion Test", "R601-Persuasive Speech"],
+      "patterns": []
+    },
+    {
+      "id": "revue",
+      "label": "Revue",
+      "enabled": true,
+      "exact_titles": [],
+      "patterns": ["Revue"]
+    }
+  ]
+}
