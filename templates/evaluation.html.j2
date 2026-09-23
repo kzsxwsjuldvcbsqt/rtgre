@@ -28,6 +28,9 @@
 <h2>{{ labels.evaluation_page.comparison_heading }}</h2>
 
 {% if match_states_by_program %}
+{% for prog, item_states in match_states_by_program %}
+<section class="table-group">
+<h3 class="table-group-title">{{ prog.label }}</h3>
 <div class="table-card">
 <table class="comparison-table">
 <colgroup>
@@ -49,10 +52,6 @@
 </tr>
 </thead>
 <tbody>
-{% for prog, item_states in match_states_by_program %}
-<tr class="program-row">
-<th colspan="{{ total_cols }}" scope="colgroup">{{ prog.label }}</th>
-</tr>
 {% for item in item_states %}
 {% set st = item.state_obj %}
 <tr class="state-row">
@@ -94,10 +93,11 @@
 {% endif %}
 </tr>
 {% endfor %}
-{% endfor %}
 </tbody>
 </table>
 </div>
+</section>
+{% endfor %}
 {% if diff_cols.date or diff_cols.time or diff_cols.rooms or diff_cols.teachers %}
 <p class="comparison-note">{{ labels.evaluation_page.comparison_note }}</p>
 {% endif %}

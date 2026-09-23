@@ -10,7 +10,8 @@ select:disabled {
   cursor: not-allowed;
 }
 [aria-invalid="true"] {
-  border-color: var(--color-danger);
+  outline: var(--focus-ring-width) solid var(--color-danger);
+  outline-offset: var(--focus-ring-width);
 }
 @media (hover: hover) and (pointer: fine) {
   a:hover {
@@ -39,9 +40,9 @@ select:disabled {
     color: var(--color-text-muted);
   }
   button:hover:not(:disabled):not(.heading-toggle-btn):not(.app-dialog-close),
-  select:hover:not(:disabled),
-  input:hover:not(:disabled),
-  textarea:hover:not(:disabled),
+  select:hover:not(:disabled):not(:focus):not([aria-invalid="true"]),
+  input:hover:not(:disabled):not(:focus):not([aria-invalid="true"]),
+  textarea:hover:not(:disabled):not(:focus):not([aria-invalid="true"]),
   .filter-form label:has(input):hover,
   .absence-toggle:hover,
   .detail-link:hover {

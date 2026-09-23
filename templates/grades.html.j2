@@ -42,6 +42,7 @@
     <span class="toggle-arrow">{{ icon('chevron-down', url_for, site.icons) }}</span>
   </button>
 </h3>
+<div class="table-card">
 <table id="semester-table-{{ sem.id }}" class="grades-table" data-semester="{{ sem.id }}">
 <thead>
 <tr>
@@ -81,12 +82,14 @@
 </tr>
 </tbody>
 </table>
+</div>
 </section>
 {% endfor %}
 
 {% if grades_data.annual_units %}
-<section class="annual-synthesis-section">
-<h3>{{ labels.grades.annual_synthesis }}</h3>
+<section class="table-group">
+<h3 class="table-group-title">{{ labels.grades.annual_synthesis }}</h3>
+<div class="annual-synthesis-section">
 <table class="annual-synthesis-table">
 <thead>
 <tr>
@@ -113,6 +116,7 @@
 <div class="annual-global-container">
 <span>{{ labels.grades.global_annual_average }} : </span>
 <strong id="global-annual-avg">{{ grade_empty }}</strong>
+</div>
 </div>
 </section>
 {% endif %}
