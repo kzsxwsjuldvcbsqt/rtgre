@@ -69,19 +69,20 @@ tbody tr:last-child > * {
   color: var(--color-text);
   font-weight: var(--weight-semibold);
 }
+thead[hidden] + tbody .semester-average-row td {
+  border-block-start: 0;
+}
 .grade-input {
   width: var(--width-grade-input);
   text-align: end;
 }
-.semester-section,
-.annual-synthesis-section,
-.table-card {
+.table-card,
+.annual-synthesis-section {
   padding: var(--space-md) var(--space-lg);
   border: var(--rule-width) solid var(--color-border-muted);
   border-radius: var(--radius-medium);
   background: var(--color-surface);
 }
-.semester-section,
 .table-card {
   overflow: hidden;
 }
@@ -93,27 +94,21 @@ tbody tr:last-child > * {
 #evaluations-list .evaluations-table {
   table-layout: fixed;
 }
-.month-card-title {
-  margin-block: 0 var(--space-sm);
-}
-.semester-section,
-.annual-synthesis-section {
+.table-group,
+.semester-section {
   margin-block-start: var(--space-lg);
 }
+.table-group-title {
+  margin-block: 0 var(--space-sm);
+}
 .semester-section .collapsible-heading {
-  margin: 0;
-}
-.annual-synthesis-section > h3 {
-  margin-block-start: 0;
-}
-.semester-section table {
-  margin-block: var(--space-md) calc(-1 * var(--space-md));
-}
-.annual-synthesis-section table {
-  margin-block: var(--space-md) 0;
+  margin-block: 0 var(--space-sm);
 }
 .table-card table {
   margin-block-end: calc(-1 * var(--space-md));
+}
+.annual-synthesis-section table {
+  margin-block: 0;
 }
 .annual-global-container {
   display: flex;
@@ -132,7 +127,6 @@ tbody tr:last-child > * {
 }
 @media (min-width: 60em) {
   .table-card table,
-  .semester-section table,
   .annual-synthesis-section table {
     width: calc(100% + 2 * var(--space-lg));
     margin-inline: calc(-1 * var(--space-lg));

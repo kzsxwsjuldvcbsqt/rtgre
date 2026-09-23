@@ -162,16 +162,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (state.cat !== undefined) {
-      const catVals = Array.isArray(state.cat)
+      const deselectedCats = Array.isArray(state.cat)
         ? state.cat
-        : typeof state.cat === "string"
+        : typeof state.cat === "string" && state.cat
           ? state.cat.split(",")
-          : categories.map(function (cat) {
-              return cat.id;
-            });
+          : [];
       const checkboxes = form.querySelectorAll('input[name="category"]');
       checkboxes.forEach(function (cb) {
-        cb.checked = catVals.includes(cb.value);
+        cb.checked = !deselectedCats.includes(cb.value);
       });
     }
   }
@@ -202,15 +200,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const mod = moduleSelect ? moduleSelect.value : "";
 
     const catCheckboxes = form.querySelectorAll('input[name="category"]');
-    const selectedCats = [];
+    const deselectedCats = [];
     catCheckboxes.forEach(function (cb) {
-      if (cb.checked) selectedCats.push(cb.value);
+      if (!cb.checked) deselectedCats.push(cb.value);
     });
 
     const stateObj = {
       period: period,
       mod: mod,
-      cat: selectedCats,
+      cat: deselectedCats,
     };
 
     setStoredState(stateObj);
@@ -219,11 +217,8 @@ document.addEventListener("DOMContentLoaded", function () {
     if (period && period !== "upcoming") params.set("period", period);
     if (mod) params.set("mod", mod);
 
-    if (
-      catCheckboxes.length > 0 &&
-      selectedCats.length < catCheckboxes.length
-    ) {
-      params.set("cat", selectedCats.join(","));
+    if (deselectedCats.length > 0) {
+      params.set("cat", deselectedCats.join(","));
     }
 
     const hashStr = params.toString();
