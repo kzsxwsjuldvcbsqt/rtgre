@@ -89,7 +89,7 @@
 {% if grades_data.annual_units %}
 <section class="table-group">
 <h3 class="table-group-title">{{ labels.grades.annual_synthesis }}</h3>
-<div class="annual-synthesis-section">
+<div class="table-card">
 <table class="annual-synthesis-table">
 <thead>
 <tr>
@@ -110,13 +110,12 @@
 <td class="col-annual-avg" data-label="{{ labels.grades.annual_header_annual }}" id="synth-annual-{{ au.id }}"><strong>{{ grade_empty }}</strong></td>
 </tr>
 {% endfor %}
+<tr class="annual-average-row">
+<td class="col-ue-name" colspan="{{ 1 + grades_data.semesters | length }}"><strong>{{ labels.grades.global_annual_average }}</strong></td>
+<td class="col-annual-avg"><strong id="global-annual-avg">{{ grade_empty }}</strong></td>
+</tr>
 </tbody>
 </table>
-
-<div class="annual-global-container">
-<span>{{ labels.grades.global_annual_average }} : </span>
-<strong id="global-annual-avg">{{ grade_empty }}</strong>
-</div>
 </div>
 </section>
 {% endif %}
