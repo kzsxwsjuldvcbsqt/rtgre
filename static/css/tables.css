@@ -64,7 +64,8 @@ tbody tr:last-child > * {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
 }
-.semester-average-row td {
+.semester-average-row td,
+.annual-average-row td {
   border-block-start: var(--rule-width) solid var(--color-border);
   color: var(--color-text);
   font-weight: var(--weight-semibold);
@@ -72,18 +73,18 @@ tbody tr:last-child > * {
 thead[hidden] + tbody .semester-average-row td {
   border-block-start: 0;
 }
+.table-card:has(thead[hidden]) {
+  padding-block-start: 0;
+}
 .grade-input {
   width: var(--width-grade-input);
   text-align: end;
 }
-.table-card,
-.annual-synthesis-section {
+.table-card {
   padding: var(--space-md) var(--space-lg);
   border: var(--rule-width) solid var(--color-border-muted);
   border-radius: var(--radius-medium);
   background: var(--color-surface);
-}
-.table-card {
   overflow: hidden;
 }
 #evaluations-list {
@@ -107,27 +108,8 @@ thead[hidden] + tbody .semester-average-row td {
 .table-card table {
   margin-block-end: calc(-1 * var(--space-md));
 }
-.annual-synthesis-section table {
-  margin-block: 0;
-}
-.annual-global-container {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-md);
-  margin-block-start: var(--space-md);
-  padding-block-start: var(--space-md);
-  border-block-start: var(--rule-width) solid var(--color-border);
-  font-size: var(--text-md);
-  font-weight: var(--weight-semibold);
-}
-.annual-global-container strong {
-  font-family: var(--font-mono);
-  font-variant-numeric: tabular-nums;
-}
 @media (min-width: 60em) {
-  .table-card table,
-  .annual-synthesis-section table {
+  .table-card table {
     width: calc(100% + 2 * var(--space-lg));
     margin-inline: calc(-1 * var(--space-lg));
   }
