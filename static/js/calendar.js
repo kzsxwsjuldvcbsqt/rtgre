@@ -51,6 +51,31 @@
       }
     }
 
+    var breaks = Array.isArray(calendarConfig.breaks)
+      ? calendarConfig.breaks
+      : [];
+
+    function applyBreaks(events) {
+      if (breaks.length === 0) return;
+      function remap(instant, isStart) {
+        var time = instant.substring(11, 16);
+        for (var i = 0; i < breaks.length; i++) {
+          if (breaks[i].boundary === time) {
+            return (
+              instant.substring(0, 11) +
+              (isStart ? breaks[i].after : breaks[i].before) +
+              instant.substring(16)
+            );
+          }
+        }
+        return instant;
+      }
+      events.forEach(function (ev) {
+        ev.start = remap(ev.start, true);
+        ev.end = remap(ev.end, false);
+      });
+    }
+
     function assignSeriesCounts(events) {
       var groups = Object.create(null);
       events.forEach(function (ev) {
@@ -67,6 +92,7 @@
         });
       });
     }
+    applyBreaks(currentClassEvents);
     assignSeriesCounts(currentClassEvents);
 
     var comparisonCache = Object.create(null);
@@ -548,11 +574,13 @@
             return response.json();
           })
           .then(function (data) {
-            return CalendarModel.normalizeEnvelope(
+            var events = CalendarModel.normalizeEnvelope(
               data,
               classId,
               calendarConfig.max_comparison_events,
             );
+            applyBreaks(events);
+            return events;
           })
           .catch(function (error) {
             delete comparisonCache[classId];
