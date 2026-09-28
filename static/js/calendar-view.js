@@ -620,6 +620,14 @@
       titleDiv.className = "event-title";
       titleDiv.appendChild(document.createTextNode(ev.title + " "));
 
+      if (ev.seriesTotal) {
+        var seriesSpan = document.createElement("span");
+        seriesSpan.className = "event-series";
+        seriesSpan.textContent = ev.seriesIndex + "/" + ev.seriesTotal;
+        titleDiv.appendChild(seriesSpan);
+        titleDiv.appendChild(document.createTextNode(" "));
+      }
+
       if (ev.category && categoryMap[ev.category]) {
         var cat = categoryMap[ev.category];
         var catSpan = document.createElement("span");
