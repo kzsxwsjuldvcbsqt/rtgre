@@ -13,5 +13,9 @@
   ],
   "search_delay_ms": 250,
   "time_marker_interval_ms": 60000,
-  "max_comparison_events": 10000
+  "max_comparison_events": 10000,
+  "breaks": [
+    { "boundary": "10:00", "before": "09:50", "after": "10:10" },
+    { "boundary": "15:30", "before": "15:20", "after": "15:40" }
+  ]
 }

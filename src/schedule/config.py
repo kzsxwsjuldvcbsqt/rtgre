@@ -87,6 +87,15 @@ def validate_calendar_config(calendar: dict):
         or calendar["max_comparison_events"] <= 0
     ):
         raise ValueError("Invalid calendar timers")
+    from datetime import time
+
+    for entry in calendar.get("breaks", []):
+        if not isinstance(entry, dict) or set(entry) != {"boundary", "before", "after"}:
+            raise ValueError("Invalid calendar break definition")
+        for value in entry.values():
+            if not isinstance(value, str) or len(value) != 5:
+                raise ValueError("Invalid calendar break time")
+            time.fromisoformat(value)
 
 
 def validate_absence_config(
