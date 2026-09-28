@@ -795,7 +795,10 @@
         updateControlsFromState();
         render();
         if (window.matchMedia("(max-width: 59.99em)").matches) {
-          var marker = document.getElementById("current-time-marker");
+          var marker =
+            document.getElementById("current-time-marker") ||
+            document.querySelector(".course-progress-dot") ||
+            document.querySelector(".calendar-event-item.is-ongoing");
           if (marker)
             marker.scrollIntoView({ behavior: "smooth", block: "center" });
         }
