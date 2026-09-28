@@ -72,6 +72,13 @@
   font-weight: var(--weight-semibold);
   overflow-wrap: anywhere;
 }
+.event-series {
+  color: var(--color-text-faint);
+  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--weight-medium);
+}
 .event-teachers,
 .event-rooms,
 .event-groups {

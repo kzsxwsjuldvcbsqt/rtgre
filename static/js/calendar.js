@@ -51,6 +51,24 @@
       }
     }
 
+    function assignSeriesCounts(events) {
+      var groups = Object.create(null);
+      events.forEach(function (ev) {
+        (groups[ev.title] || (groups[ev.title] = [])).push(ev);
+      });
+      Object.keys(groups).forEach(function (title) {
+        var series = groups[title];
+        series.sort(function (a, b) {
+          return Date.parse(a.start) - Date.parse(b.start);
+        });
+        series.forEach(function (ev, index) {
+          ev.seriesIndex = index + 1;
+          ev.seriesTotal = series.length;
+        });
+      });
+    }
+    assignSeriesCounts(currentClassEvents);
+
     var comparisonCache = Object.create(null);
     var renderVersion = 0;
 
