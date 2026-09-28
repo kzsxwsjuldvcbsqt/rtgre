@@ -574,13 +574,11 @@
             return response.json();
           })
           .then(function (data) {
-            var events = CalendarModel.normalizeEnvelope(
+            return CalendarModel.normalizeEnvelope(
               data,
               classId,
               calendarConfig.max_comparison_events,
             );
-            applyBreaks(events);
-            return events;
           })
           .catch(function (error) {
             delete comparisonCache[classId];
