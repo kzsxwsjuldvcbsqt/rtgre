@@ -135,8 +135,6 @@
         if (!Number.isFinite(end)) return;
         var past = end <= now;
         row.dataset.past = String(past);
-        var badge = row.querySelector(".badge-past");
-        if (badge) badge.hidden = !past;
         if (!past) nextEnd = Math.min(nextEnd, end);
       });
       document.dispatchEvent(new Event("evaluations-time-change"));

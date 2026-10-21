@@ -4,7 +4,7 @@
   try {
     for (const width of [320, 390, 768, 959, 960, 1440]) {
       for (const page of [
-        "calendar.html#date=2026-09-08",
+        "calendar.html#view=week&date=2026-09-08",
         "notes.html",
         "a-faire.html",
         "evaluations.html#period=all",
@@ -38,6 +38,19 @@
         assert(!w.injected, "Embedded event text is inert: " + page);
         f.remove();
       }
+    }
+    for (const [width, expected] of [
+      [320, "day"],
+      [960, "week"],
+    ]) {
+      sessionStorage.removeItem("calendar_settings");
+      const cal = await frame("classes/b3cya/calendar.html", width);
+      assert(
+        cal.contentDocument.getElementById("cal-view-select").value ===
+          expected,
+        "Default calendar view per viewport: " + width,
+      );
+      cal.remove();
     }
     const tasks = await frame("classes/b3cya/a-faire.html"),
       td = tasks.contentDocument,
@@ -467,7 +480,7 @@
     row.dataset.endTimestamp = String((Date.now() - 1000) / 1000);
     fd.dispatchEvent(new fw.Event("visibilitychange"));
     assert(
-      row.dataset.past === "true" && !row.querySelector(".badge-past").hidden,
+      row.dataset.past === "true",
       "Past status updates without rebuilding",
     );
     filters.remove();

@@ -170,8 +170,17 @@
 
     var defaultDateStr = formatISODate(normalizeDate(getNowDate().date));
 
+    function resolveDefaultView() {
+      if (
+        calendarConfig.phone_media_query &&
+        window.matchMedia(calendarConfig.phone_media_query).matches
+      )
+        return calendarConfig.phone_default_view;
+      return calendarConfig.default_view;
+    }
+
     var state = {
-      view: calendarConfig.default_view,
+      view: resolveDefaultView(),
       date: defaultDateStr,
       compare: "",
       sameOnly: false,
@@ -744,7 +753,7 @@
 
     if (resetBtn) {
       resetBtn.addEventListener("click", function () {
-        state.view = calendarConfig.default_view;
+        state.view = resolveDefaultView();
         state.date = defaultDateStr;
         state.compare = "";
         state.sameOnly = false;
