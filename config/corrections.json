@@ -1,0 +1,19 @@
+{
+  "events": [
+    {
+      "slug": "r5devcloud10-parttp-infra",
+      "date": "2026-11-16",
+      "remove": true
+    },
+    {
+      "slug": "r5devcloud10-tp-infra",
+      "date": "2026-10-20",
+      "set": { "end": "10:00" }
+    },
+    {
+      "slug": "r5devcloud10-tp-infra",
+      "date": "2026-10-20",
+      "add_copy": { "start": "10:00", "end": "12:00", "category": "partiel-machine" }
+    }
+  ]
+}

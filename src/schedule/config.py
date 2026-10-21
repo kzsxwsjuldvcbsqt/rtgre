@@ -22,6 +22,7 @@ class AppConfig:
     calendar_config: dict
     absence_config: dict
     tasks_config: dict
+    corrections: tuple[dict, ...]
     labels: dict
     timezone: ZoneInfo
 
@@ -69,6 +70,11 @@ def valid_relative_file(value: object) -> bool:
 def validate_calendar_config(calendar: dict):
     if calendar["default_view"] not in ("day", "week", "year"):
         raise ValueError("Invalid default calendar view")
+    if calendar["phone_default_view"] not in ("day", "week", "year"):
+        raise ValueError("Invalid phone calendar view")
+    phone_media_query = calendar["phone_media_query"]
+    if not isinstance(phone_media_query, str) or not phone_media_query.strip():
+        raise ValueError("Invalid phone media query")
     days = calendar["days_of_week"]
     if (
         not days
@@ -206,6 +212,57 @@ def validate_absence_config(
         raise ValueError("Invalid absence PDF URL lifetime")
 
 
+def validate_correction_overrides(overrides: object, category_ids: set[str]):
+    from datetime import time
+
+    allowed = {"category", "rooms", "teachers", "title", "start", "end"}
+    if not isinstance(overrides, dict) or not overrides or set(overrides) - allowed:
+        raise ValueError("Invalid correction overrides")
+    if "category" in overrides and overrides["category"] not in category_ids:
+        raise ValueError("Unknown correction category")
+    if "title" in overrides and (
+        not isinstance(overrides["title"], str) or not overrides["title"].strip()
+    ):
+        raise ValueError("Invalid correction title")
+    for key in ("rooms", "teachers"):
+        if key in overrides and (
+            not isinstance(overrides[key], list)
+            or any(not isinstance(value, str) or not value.strip() for value in overrides[key])
+        ):
+            raise ValueError(f"Invalid correction {key}")
+    for key in ("start", "end"):
+        if key in overrides:
+            value = overrides[key]
+            if not isinstance(value, str) or len(value) != 5:
+                raise ValueError(f"Invalid correction {key}")
+            time.fromisoformat(value)
+
+
+def validate_corrections_config(corrections: dict, category_ids: set[str]):
+    if not isinstance(corrections, dict) or set(corrections) != {"events"}:
+        raise ValueError("Invalid corrections configuration")
+    entries = corrections["events"]
+    if not isinstance(entries, list):
+        raise ValueError("Invalid corrections entries")
+    operations = {"remove", "set", "add_copy"}
+    for entry in entries:
+        if not isinstance(entry, dict) or set(entry) - ({"slug", "date"} | operations):
+            raise ValueError("Invalid correction entry")
+        if not isinstance(entry.get("slug"), str) or not entry["slug"].strip():
+            raise ValueError("Invalid correction slug")
+        try:
+            date.fromisoformat(entry.get("date", ""))
+        except (TypeError, ValueError):
+            raise ValueError("Invalid correction date") from None
+        if len(operations & set(entry)) != 1:
+            raise ValueError("A correction must define exactly one operation")
+        if "remove" in entry and entry["remove"] is not True:
+            raise ValueError("Invalid correction remove flag")
+        for key in ("set", "add_copy"):
+            if key in entry:
+                validate_correction_overrides(entry[key], category_ids)
+
+
 def validate_tasks_config(config: dict):
     expected = {
         "storage_key_prefix",
@@ -261,6 +318,8 @@ def load_config(config_dir: str = "config") -> AppConfig:
         absence_data = json.load(f)
     with open(path / "tasks.json", encoding="utf-8") as f:
         tasks_data = json.load(f)
+    with open(path / "corrections.json", encoding="utf-8") as f:
+        corrections_data = json.load(f)
     validate_curriculum_config(curriculum_data)
     validate_calendar_config(calendar_data)
     class_ids = {cls["id"] for program in classes_data["programs"] for cls in program["classes"]}
@@ -341,6 +400,8 @@ def load_config(config_dir: str = "config") -> AppConfig:
     ):
         raise ValueError("Invalid or duplicate category IDs")
 
+    validate_corrections_config(corrections_data, {category.id for category in categories})
+
     flags = [
         DescriptionFlagConfig(
             id=flg["id"], label=flg["label"], patterns=tuple(flg.get("patterns", []))
@@ -384,6 +445,7 @@ def load_config(config_dir: str = "config") -> AppConfig:
         calendar_config=calendar_data,
         absence_config=absence_data,
         tasks_config=tasks_data,
+        corrections=tuple(corrections_data["events"]),
         labels=labels,
         timezone=tz,
     )

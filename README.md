@@ -201,6 +201,7 @@ Le comportement et le contenu du site sont décrits dans `config/`.
 | `config/curriculum.json` | semestres, parcours, modules, UE et coefficients |
 | `config/sections.json` | pages internes et liens externes affichés dans la navigation |
 | `config/calendar.json` | vues, jours affichés, comparaison et temporisations |
+| `config/corrections.json` | retouches manuelles des cours ADE (suppression ou surcharge) |
 | `config/absences.json` | règles, limites, stockage et mise en page du PDF d'absence |
 | `config/tasks.json` | stockage, format d'export et limites de la liste « À faire » |
 | `config/labels.json` | textes affichés dans l'interface |

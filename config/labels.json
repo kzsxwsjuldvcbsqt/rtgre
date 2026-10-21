@@ -146,8 +146,7 @@
     "results_count_singular": "évaluation",
     "results_count_plural": "évaluations",
     "empty_state": "Aucune évaluation ne correspond aux filtres.",
-    "detail_link": "Voir plus",
-    "past_badge": "Passée"
+    "detail_link": "Voir plus"
   },
   "evaluation_page": {
     "back_link": "Retour aux évaluations de la classe",

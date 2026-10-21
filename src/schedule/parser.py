@@ -31,6 +31,70 @@ def normalize_room_name(raw_room: str, rooms_config: dict) -> str:
     return result
 
 
+def make_evaluation(
+    app_config: AppConfig,
+    class_id: str,
+    summary: str,
+    start_dt: datetime.datetime,
+    end_dt: datetime.datetime,
+    rooms: tuple[str, ...],
+    teachers: tuple[str, ...],
+    staff_markers: tuple[str, ...],
+    groups: tuple[str, ...],
+    flags: tuple[str, ...],
+    complementary: tuple[str, ...],
+    category_id: str,
+    category_label: str,
+    source_uid: str,
+    now: datetime.datetime,
+) -> Evaluation:
+    formats = app_config.site["formats"]
+    months_labels = app_config.labels.get("months", [])
+
+    month_index = start_dt.month - 1
+    month_name = (
+        months_labels[month_index] if 0 <= month_index < len(months_labels) else str(start_dt.month)
+    )
+
+    if "-" in summary:
+        module_code = summary.split("-")[0].strip()
+    else:
+        module_code = summary.split()[0].strip() if summary else ""
+
+    search_raw = " ".join([summary, module_code, *rooms, *teachers, *staff_markers, *groups])
+    normalized_search = "".join(
+        c for c in unicodedata.normalize("NFD", search_raw) if unicodedata.category(c) != "Mn"
+    ).lower()
+
+    return Evaluation(
+        occurrence_id=make_occurrence_id(summary, start_dt, end_dt, source_uid, class_id),
+        class_id=class_id,
+        start_dt=start_dt,
+        end_dt=end_dt,
+        summary=summary,
+        module_code=module_code,
+        category_id=category_id,
+        category_label=category_label,
+        rooms=tuple(rooms),
+        teachers=tuple(teachers),
+        staff_markers=tuple(staff_markers),
+        groups=tuple(groups),
+        flags=tuple(flags),
+        complementary_info=tuple(complementary),
+        date_iso=start_dt.strftime("%Y-%m-%d"),
+        date_formatted=start_dt.strftime(formats["date_absolute"]),
+        time_range=formats["time_range"].format(
+            start=start_dt.strftime(formats["time"]), end=end_dt.strftime(formats["time"])
+        ),
+        month_key=start_dt.strftime("%Y-%m"),
+        month_label=formats["month_title"].format(
+            month_name=month_name.capitalize(), year=start_dt.year
+        ),
+        search_index=normalized_search,
+        is_past=end_dt < now,
+    )
+
+
 def parse_calendar(
     raw_bytes: bytes, class_config: ClassConfig, app_config: AppConfig
 ) -> list[Evaluation]:
@@ -41,10 +105,8 @@ def parse_calendar(
     unknown_marker = app_config.site["teachers"]["unknown_marker"]
     name_overrides = app_config.site["teachers"].get("name_overrides", {})
     rooms_config = app_config.site.get("rooms", {})
-    months_labels = labels.get("months", [])
     non_name_patterns = app_config.categories_raw.get("non_name_lines", [])
 
-    formats = app_config.site["formats"]
     parser_config = app_config.site["parser"]
     now = datetime.datetime.now(tz)
     events = []
@@ -91,29 +153,6 @@ def parse_calendar(
 
         if end_dt <= start_dt:
             continue
-
-        date_iso = start_dt.strftime("%Y-%m-%d")
-        date_formatted = start_dt.strftime(formats["date_absolute"])
-
-        month_key = start_dt.strftime("%Y-%m")
-        month_index = start_dt.month - 1
-        month_name = (
-            months_labels[month_index]
-            if 0 <= month_index < len(months_labels)
-            else str(start_dt.month)
-        )
-
-        month_label = formats["month_title"].format(
-            month_name=month_name.capitalize(), year=start_dt.year
-        )
-        time_range = formats["time_range"].format(
-            start=start_dt.strftime(formats["time"]), end=end_dt.strftime(formats["time"])
-        )
-
-        if "-" in summary:
-            module_code = summary.split("-")[0].strip()
-        else:
-            module_code = summary.split()[0].strip() if summary else ""
 
         location_raw = str(component.get("LOCATION", "") or "")
         location_raw = location_raw.replace(r"\,", ",")
@@ -189,49 +228,26 @@ def parse_calendar(
         cat_id = cat_config.id if cat_config else ""
         cat_label = cat_config.label if cat_config else ""
 
-        occurrence_id = make_occurrence_id(
-            summary, start_dt, end_dt, str(component.get("UID", "")), class_config.id
-        )
-        if occurrence_id in seen_occurrences:
-            continue
-        seen_occurrences.add(occurrence_id)
-        is_past = end_dt < now
-
-        search_tokens = (
-            [summary, module_code]
-            + unique_rooms
-            + list(teachers)
-            + list(staff_markers)
-            + list(groups)
-        )
-        search_raw = " ".join(search_tokens)
-        normalized_search = "".join(
-            c for c in unicodedata.normalize("NFD", search_raw) if unicodedata.category(c) != "Mn"
-        ).lower()
-
-        ev = Evaluation(
-            occurrence_id=occurrence_id,
+        ev = make_evaluation(
+            app_config=app_config,
             class_id=class_config.id,
+            summary=summary,
             start_dt=start_dt,
             end_dt=end_dt,
-            summary=summary,
-            module_code=module_code,
-            category_id=cat_id,
-            category_label=cat_label,
             rooms=tuple(unique_rooms),
             teachers=tuple(teachers),
             staff_markers=tuple(staff_markers),
             groups=tuple(groups),
             flags=flags,
-            complementary_info=tuple(complementary),
-            date_iso=date_iso,
-            date_formatted=date_formatted,
-            time_range=time_range,
-            month_key=month_key,
-            month_label=month_label,
-            search_index=normalized_search,
-            is_past=is_past,
+            complementary=tuple(complementary),
+            category_id=cat_id,
+            category_label=cat_label,
+            source_uid=str(component.get("UID", "")),
+            now=now,
         )
+        if ev.occurrence_id in seen_occurrences:
+            continue
+        seen_occurrences.add(ev.occurrence_id)
         events.append(ev)
 
     events.sort(key=lambda x: x.start_dt)

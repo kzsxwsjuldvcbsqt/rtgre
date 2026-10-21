@@ -7,6 +7,7 @@ from contextlib import contextmanager
 from pathlib import Path
 
 from .config import build_ade_url, load_config
+from .corrections import apply_corrections
 from .exporter import export_data_files
 from .fetcher import fetch_calendar
 from .matcher import build_matching_matrix, reconcile_shared_groups
@@ -116,6 +117,7 @@ def main():
         raw_bytes = fetch_calendar(url, app_config.site, class_config.label)
         events_by_class[class_config.id] = parse_calendar(raw_bytes, class_config, app_config)
 
+    events_by_class = apply_corrections(events_by_class, app_config.corrections, app_config)
     events_by_class = reconcile_shared_groups(events_by_class, all_classes)
     evaluations = {
         class_id: [event for event in events if event.category_id]
