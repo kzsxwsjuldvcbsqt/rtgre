@@ -31,8 +31,10 @@
   --color-positive-soft: #e7f6ec;
   --color-danger: #9b1c1c;
   --color-danger-soft: #fde8e8;
+  --color-field-invalid: #e5484d;
 
   --color-link: #000000;
+  --color-field-focus: #0b63ce;
   --color-primary: #000000;
   --color-primary-hover: #262626;
   --color-on-primary: #ffffff;
