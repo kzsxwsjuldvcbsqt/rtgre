@@ -54,15 +54,3 @@
   background: var(--color-highlight);
   view-transition-name: nav-indicator;
 }
-.section-nav a[aria-current="page"]::before {
-  position: absolute;
-  inset-block-end: var(--rule-nav-active-width);
-  inset-inline-start: 50%;
-  width: 0;
-  height: 0;
-  border-inline: var(--space-sm) solid transparent;
-  border-block-end: var(--space-2xs) solid var(--color-highlight);
-  transform: translateX(-50%);
-  content: "";
-  view-transition-name: nav-caret;
-}
