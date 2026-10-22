@@ -27,13 +27,7 @@
       scriptEl.getAttribute("data-class-labels-json") || "{}",
     );
 
-    var controlsEl = document.getElementById("calendar-controls");
     var navBarEl = document.getElementById("calendar-nav-bar");
-    var savedControlsState = AppUtils.safeStorageGet(
-      "heading_toggle_calendar-controls",
-    );
-    if (controlsEl && savedControlsState !== "collapsed")
-      controlsEl.hidden = false;
     if (navBarEl) navBarEl.hidden = false;
 
     var initialEventsScript = document.getElementById("class-events-data");
