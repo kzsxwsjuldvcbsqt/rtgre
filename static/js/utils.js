@@ -203,8 +203,11 @@
 
       function syncSidebarMainOffset() {
         if (!sidebarMain || !sidebarFilters) return;
+        sidebarMain.style.removeProperty("--section-main-end-offset");
         var mainTop = sidebarMain.getBoundingClientRect().top;
+        var mainRight = sidebarMain.getBoundingClientRect().right;
         var filtersTop = sidebarFilters.getBoundingClientRect().top;
+        var endOffset = document.documentElement.clientWidth - mainRight;
         if (filtersTop > mainTop) {
           sidebarMain.style.setProperty(
             "--section-main-start-offset",
@@ -212,6 +215,12 @@
           );
         } else {
           sidebarMain.style.removeProperty("--section-main-start-offset");
+        }
+        if (endOffset > 0) {
+          sidebarMain.style.setProperty(
+            "--section-main-end-offset",
+            endOffset + "px",
+          );
         }
       }
 
