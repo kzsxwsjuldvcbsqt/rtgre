@@ -16,12 +16,12 @@
 <body class="{% if page_wide %}page-wide{% endif %}">
 <header class="site-header">
 <div class="header-container">
-<a class="site-brand" href="{{ url_for('index.html') }}" aria-label="{{ site.title }}">
+<div class="site-brand">
 <div class="header-titles">
 <span class="site-title">{{ site.title }}</span>
 <span class="site-subtitle"><span class="subtitle-text">{{ site.subtitle }}</span><span class="subtitle-sep">{{ labels.list_separator }}</span><span class="subtitle-unofficial">{{ labels.unofficial_notice }}</span></span>
 </div>
-</a>
+</div>
 </div>
 {% block subnav %}{% endblock %}
 </header>
