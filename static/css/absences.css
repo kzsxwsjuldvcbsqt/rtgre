@@ -16,6 +16,7 @@
   border: var(--rule-width) solid var(--color-border-muted);
   border-radius: var(--radius-medium);
   background: var(--color-surface);
+  box-shadow: var(--shadow-card);
 }
 .absence-primary {
   color: var(--color-text);
@@ -46,6 +47,7 @@
   border: var(--rule-width) solid var(--color-border-muted);
   border-radius: var(--radius-medium);
   background: var(--color-surface);
+  box-shadow: var(--shadow-card);
 }
 .absence-record {
   padding: var(--space-md);

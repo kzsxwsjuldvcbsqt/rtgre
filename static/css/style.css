@@ -19,3 +19,12 @@
 @import url("responsive.css") layer(responsive);
 @import url("print.css") layer(print);
 @import url("utilities.css") layer(utilities);
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2")
+    format("woff2");
+}

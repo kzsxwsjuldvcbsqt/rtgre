@@ -19,11 +19,11 @@ select:disabled {
     text-underline-offset: var(--space-3xs);
   }
   .section-nav a:hover {
-    color: var(--color-text);
+    color: var(--color-navbar-text);
     text-decoration: none;
   }
   .section-nav a:hover::after {
-    background: var(--color-now);
+    background: var(--color-highlight);
   }
   .class-list a:hover,
   .section-item a:hover,

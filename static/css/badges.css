@@ -10,12 +10,21 @@
   color: var(--color-text-muted);
 }
 .category-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-2xs) var(--space-sm);
+  border-radius: var(--radius-pill);
+  background: var(--color-badge);
   color: var(--color-text-muted);
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
   white-space: nowrap;
 }
 .ongoing-badge {
   margin-inline-start: var(--space-xs);
-  color: var(--color-now);
+  padding: var(--space-2xs) var(--space-sm);
+  border-radius: var(--radius-pill);
+  background: var(--color-highlight);
+  color: var(--color-on-highlight);
   font-weight: var(--weight-semibold);
 }

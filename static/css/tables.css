@@ -85,6 +85,7 @@ thead[hidden] + tbody .semester-average-row td {
   border: var(--rule-width) solid var(--color-border-muted);
   border-radius: var(--radius-medium);
   background: var(--color-surface);
+  box-shadow: var(--shadow-card);
   overflow: hidden;
 }
 #evaluations-list {

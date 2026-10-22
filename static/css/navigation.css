@@ -1,5 +1,6 @@
 .section-nav {
   background: var(--color-navbar);
+  border-block-start: var(--rule-width) solid var(--color-navbar-border);
 }
 .section-nav-inner {
   width: 100%;
@@ -24,13 +25,13 @@
   gap: var(--space-xs);
   min-height: var(--touch-target);
   margin-inline-end: var(--space-md);
-  color: var(--color-text-muted);
+  color: var(--color-navbar-muted);
   font-size: var(--text-sm);
   font-weight: var(--weight-medium);
   white-space: nowrap;
 }
 .section-nav a .icon {
-  color: var(--color-text-faint);
+  color: var(--color-navbar-faint);
 }
 .section-nav a::after {
   position: absolute;
@@ -42,12 +43,13 @@
   content: "";
 }
 .section-nav a[aria-current="page"] {
-  color: var(--color-text);
+  color: var(--color-navbar-text);
   font-weight: var(--weight-semibold);
 }
 .section-nav a[aria-current="page"] .icon {
-  color: var(--color-accent);
+  color: var(--color-highlight);
 }
 .section-nav a[aria-current="page"]::after {
-  background: var(--color-now);
+  height: var(--rule-nav-active-width);
+  background: var(--color-highlight);
 }
