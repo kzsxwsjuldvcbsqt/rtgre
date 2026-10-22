@@ -351,6 +351,12 @@
       cd.querySelector(".current-time-text").textContent === "09:00",
       "Simulated time marker works",
     );
+    assert(
+      cd
+        .querySelector("#day-section-2026-09-08")
+        .classList.contains("is-today"),
+      "Current day is identified in week view",
+    );
     const compare = cd.getElementById("cal-compare-select");
     const pending = {};
     cw.fetch = (url) =>
@@ -440,6 +446,19 @@
     assert(
       cd.querySelectorAll(".calendar-event-item").length === 3,
       "Annual view shares day preparation",
+    );
+    assert(
+      cd
+        .querySelector("#day-section-2026-09-08")
+        .classList.contains("is-today"),
+      "Current day is identified in year view",
+    );
+    change(cw, cd.getElementById("cal-view-select"), "day");
+    assert(
+      !cd
+        .querySelector("#day-section-2026-09-08")
+        .classList.contains("is-today"),
+      "Current day is not highlighted in day view",
     );
     calendar.remove();
     const malformed = await frame("classes/b3cya/calendar.html#search=%");

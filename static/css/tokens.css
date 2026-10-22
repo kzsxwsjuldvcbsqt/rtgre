@@ -26,11 +26,11 @@
   --color-highlight: #f7c948;
   --color-on-highlight: #000000;
 
-  --color-now: var(--color-accent);
   --color-positive: #0a6b34;
   --color-positive-soft: #e7f6ec;
   --color-danger: #9b1c1c;
   --color-danger-soft: #fde8e8;
+  --color-now: var(--color-danger);
   --color-field-invalid: #e5484d;
 
   --color-link: #000000;
@@ -38,7 +38,7 @@
   --color-primary: #000000;
   --color-primary-hover: #262626;
   --color-on-primary: #ffffff;
-  --color-bound: var(--color-now);
+  --color-bound: var(--color-accent);
 
   --paper: #ffffff;
   --paper-ink: #1b1f27;
