@@ -10,6 +10,7 @@
   border: var(--rule-width) solid var(--color-border-muted);
   border-radius: var(--radius-medium);
   background: var(--color-surface);
+  box-shadow: var(--shadow-card);
   overflow: hidden;
 }
 .class-list li,
@@ -101,6 +102,7 @@
   border-inline-start: var(--rule-accent-width) solid var(--color-accent);
   border-radius: var(--radius-medium);
   background: var(--color-surface);
+  box-shadow: var(--shadow-card);
 }
 .privacy-notice .icon,
 .noscript-notice .icon {
@@ -140,4 +142,5 @@
   border: var(--rule-width) solid var(--color-border-muted);
   border-radius: var(--radius-medium);
   background: var(--color-surface);
+  box-shadow: var(--shadow-card);
 }

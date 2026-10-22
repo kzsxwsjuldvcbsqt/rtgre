@@ -23,12 +23,13 @@ h4 {
 }
 h1 {
   font-size: var(--text-xl);
-  font-weight: var(--weight-semibold);
+  font-weight: var(--weight-bold);
   letter-spacing: -0.02em;
 }
 h2 {
   font-size: var(--text-lg);
-  font-weight: var(--weight-semibold);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-heading);
 }
 h3 {
   font-size: var(--text-md);
@@ -47,6 +48,7 @@ p:last-child {
 a {
   color: var(--color-link);
   text-decoration: none;
+  text-decoration-thickness: var(--decoration-thickness);
 }
 strong {
   font-weight: var(--weight-semibold);

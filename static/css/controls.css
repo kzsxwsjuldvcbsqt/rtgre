@@ -63,6 +63,7 @@
   border: var(--rule-width) solid var(--color-border-muted);
   border-radius: var(--radius-medium);
   background: var(--color-surface);
+  box-shadow: var(--shadow-card);
 }
 .filter-group,
 .filter-group-checkboxes {
@@ -102,9 +103,10 @@
 }
 .filter-form label:has(input:checked),
 .absence-toggle:has(input:checked) {
-  border-color: var(--color-accent);
+  border-color: var(--color-highlight);
   background: var(--color-accent-soft);
-  color: var(--color-text);
+  color: var(--color-on-highlight);
+  font-weight: var(--weight-semibold);
 }
 .filter-group-reset button {
   border-color: transparent;
@@ -166,7 +168,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   max-height: min(90dvh, 52rem);
   margin: auto;
   padding: 0;
-  border: var(--rule-width) solid var(--color-border);
+  border: var(--rule-width) solid var(--color-border-muted);
   border-radius: var(--radius-large);
   background: var(--color-surface);
   color: var(--color-text);

@@ -3,6 +3,7 @@
   inset-block-start: 0;
   z-index: var(--z-header);
   background: var(--color-navbar);
+  box-shadow: var(--shadow-header);
 }
 .header-container {
   display: flex;
@@ -15,7 +16,7 @@
   display: flex;
   align-items: center;
   min-width: 0;
-  color: var(--color-text);
+  color: var(--color-navbar-text);
 }
 .header-titles {
   display: flex;
@@ -25,24 +26,26 @@
 }
 .site-title {
   flex: none;
-  color: var(--color-text);
-  font-size: var(--text-base);
-  font-weight: var(--weight-semibold);
-  letter-spacing: -0.01em;
+  color: var(--color-navbar-text);
+  font-size: var(--text-md);
+  font-weight: var(--weight-extrabold);
+  letter-spacing: var(--tracking-brand);
 }
 .site-subtitle {
   min-width: 0;
-  color: var(--color-text-faint);
+  color: var(--color-navbar-muted);
   font-size: var(--text-sm);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .subtitle-unofficial {
-  color: var(--color-text-faint);
+  color: var(--color-navbar-faint);
 }
 .site-footer {
   margin-block-start: auto;
+  border-block-start: var(--rule-width) solid var(--color-border-muted);
+  background: var(--color-surface);
   color: var(--color-text-faint);
   font-size: var(--text-xs);
 }
