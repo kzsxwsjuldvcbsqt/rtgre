@@ -14,7 +14,7 @@
 <p class="page-context">{{ class_config.label }}</p>
 <h1 class="collapsible-heading">
 <span>{% for s in sections %}{% if s.id == 'calendar' %}{{ s.label }}{% endif %}{% endfor %}</span>
-<button type="button" class="heading-toggle-btn" aria-expanded="true" aria-controls="calendar-controls" aria-label="{{ labels.calendar.toggle_controls }}"><span class="toggle-arrow">{{ icon('chevron-down', url_for, site.icons) }}</span></button>
+<button type="button" class="heading-toggle-btn" aria-expanded="false" aria-controls="calendar-controls" aria-label="{{ labels.calendar.toggle_controls }}"><span class="toggle-arrow is-collapsed">{{ icon('chevron-down', url_for, site.icons) }}</span></button>
 </h1>
 </div>
 
