@@ -4,6 +4,9 @@
 {% from "_icons.html.j2" import icon %}
 {% block title %}{% for s in sections %}{% if s.id == 'evaluations' %}{{ s.label }}{% endif %}{% endfor %} - {{ class_config.label }} - {{ site.title }}{% endblock %}
 {% block subnav %}{{ section_nav(sections, 'evaluations', class_config, url_for, labels, site.icons) }}{% endblock %}
+{% block head_scripts %}
+<script defer src="{{ url_for('static/js/filters.js') }}"></script>
+{% endblock %}
 {% block content %}
 <div class="page-container has-filter-sidebar">
 <div class="back-navigation">
@@ -58,8 +61,4 @@
 </div>
 </div>
 </div>
-{% endblock %}
-
-{% block scripts %}
-<script defer src="{{ url_for('static/js/filters.js') }}"></script>
 {% endblock %}

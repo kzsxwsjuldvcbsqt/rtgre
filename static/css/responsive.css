@@ -272,6 +272,12 @@
     overflow: hidden;
   }
   .has-filter-sidebar {
+    --section-main-end-offset: max(
+      var(--page-gutter),
+      calc(
+        (100vw - var(--page-max-width-wide)) / 2 + var(--page-gutter)
+      )
+    );
     display: grid;
     grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
     grid-template-rows: auto auto minmax(0, 1fr);
