@@ -829,7 +829,7 @@
         }
         updateControlsFromState();
         render();
-        if (window.matchMedia("(max-width: 59.99em)").matches) {
+        if (window.matchMedia(calendarConfig.mobile_media_query).matches) {
           var marker =
             document.getElementById("current-time-marker") ||
             document.querySelector(".course-progress-dot") ||
@@ -870,7 +870,24 @@
       }
     });
 
+    function anchorToSchedule() {
+      if (
+        !todayBtn ||
+        !window.matchMedia(calendarConfig.mobile_media_query).matches
+      )
+        return;
+      var header = document.querySelector(".site-header");
+      var headerOffset = header ? header.getBoundingClientRect().height : 0;
+      var target =
+        todayBtn.getBoundingClientRect().bottom + window.scrollY - headerOffset;
+      var maxScroll =
+        document.documentElement.scrollHeight - window.innerHeight;
+      if (target > 0 && maxScroll >= target)
+        window.scrollTo({ top: target, behavior: "instant" });
+    }
+
     loadState();
     render();
+    requestAnimationFrame(anchorToSchedule);
   });
 })();
