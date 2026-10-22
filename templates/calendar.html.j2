@@ -5,7 +5,7 @@
 {% block title %}{% for s in sections %}{% if s.id == 'calendar' %}{{ s.label }}{% endif %}{% endfor %} - {{ class_config.label }} - {{ site.title }}{% endblock %}
 {% block subnav %}{{ section_nav(sections, 'calendar', class_config, url_for, labels, site.icons) }}{% endblock %}
 {% block content %}
-<div class="page-container page-container-wide">
+<div class="page-container page-container-wide has-filter-sidebar">
 <div class="back-navigation">
 <a href="{{ url_for('index.html') }}">{{ labels.class_page.back_link }}</a>
 </div>
@@ -26,6 +26,7 @@
 <div class="filter-group filter-group-scroll" id="cal-filters-scroll">
 <div class="filter-group-item" id="cal-view-select-group">
 <label for="cal-view-select" class="visually-hidden">{{ labels.calendar.view_label }}</label>
+<span class="filter-field-title" aria-hidden="true">{{ labels.calendar.view_label }}</span>
 <select id="cal-view-select" aria-label="{{ labels.calendar.view_label }}">
 <optgroup label="{{ labels.calendar.view_label }}">
 <option value="week">{{ labels.calendar.view_week }}</option>
@@ -37,6 +38,7 @@
 
 <div class="filter-group-item" id="cal-compare-select-group">
 <label for="cal-compare-select" class="visually-hidden">{{ labels.calendar.compare_label }}</label>
+<span class="filter-field-title" aria-hidden="true">{{ labels.calendar.compare_label }}</span>
 <select id="cal-compare-select" aria-label="{{ labels.calendar.compare_label }}">
 <optgroup label="{{ labels.calendar.compare_label }}">
 <option value="">{{ labels.calendar.compare_none }}</option>
@@ -59,6 +61,7 @@
 
 <div class="filter-group filter-group-last">
 <label for="cal-search-input" class="visually-hidden">{{ labels.calendar.search_label }}</label>
+<span class="filter-field-title" aria-hidden="true">{{ labels.calendar.search_label }}</span>
 <input type="text" id="cal-search-input" placeholder="{{ labels.calendar.search_placeholder }}" aria-label="{{ labels.calendar.search_label }}">
 </div>
 
@@ -69,9 +72,11 @@
 <div class="results-count" id="cal-results-count"></div>
 </div>
 
+<div class="section-main">
 <div id="calendar-nav-bar" class="calendar-nav-bar" hidden>
 <div class="filter-group-item" id="cal-date-input-group">
 <label for="cal-date-input" class="visually-hidden">{{ labels.fields.date }}</label>
+<span class="filter-field-title" aria-hidden="true">{{ labels.fields.date }}</span>
 <input type="date" id="cal-date-input" min="{{ site.school_year.first_date }}" max="{{ site.school_year.last_date }}">
 </div>
 <button type="button" id="cal-today-btn">{{ labels.calendar.today_btn }}</button>
@@ -142,6 +147,7 @@
 </section>
 {% endfor %}
 {% endif %}
+</div>
 </div>
 </div>
 

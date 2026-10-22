@@ -5,7 +5,7 @@
 {% block title %}{% for s in sections %}{% if s.id == 'evaluations' %}{{ s.label }}{% endif %}{% endfor %} - {{ class_config.label }} - {{ site.title }}{% endblock %}
 {% block subnav %}{{ section_nav(sections, 'evaluations', class_config, url_for, labels, site.icons) }}{% endblock %}
 {% block content %}
-<div class="page-container">
+<div class="page-container has-filter-sidebar">
 <div class="back-navigation">
 <a href="{{ url_for('index.html') }}">{{ labels.class_page.back_link }}</a>
 </div>
@@ -34,6 +34,7 @@
   data-modules='{{ active_modules | tojson }}'
 ></div>
 
+<div class="section-main">
 <div id="evaluations-list">
 {% for month_key, month_label, month_evals in months_grouped %}
 <section class="month-card" data-month="{{ month_key }}">
@@ -54,6 +55,7 @@
 
 <div id="empty-state-message" class="empty-state-message" hidden>
 {{ labels.class_page.empty_state }}
+</div>
 </div>
 </div>
 {% endblock %}

@@ -80,6 +80,9 @@
   display: flex;
   min-width: 0;
 }
+.filter-field-title {
+  display: none;
+}
 .filter-group-last {
   min-width: 12rem;
 }

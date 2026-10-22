@@ -262,3 +262,102 @@
     flex: none;
   }
 }
+@media (min-width: 75em) {
+  body:has(.has-filter-sidebar) {
+    height: 100dvh;
+    overflow: hidden;
+  }
+  body:has(.has-filter-sidebar) .site-main {
+    min-height: 0;
+    overflow: hidden;
+  }
+  .has-filter-sidebar {
+    display: grid;
+    grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+    grid-template-rows: auto auto minmax(0, 1fr);
+    align-items: start;
+    column-gap: var(--space-xl);
+    max-width: var(--page-max-width-wide);
+    height: 100%;
+    padding-block-end: var(--space-lg);
+  }
+  .has-filter-sidebar > .back-navigation,
+  .has-filter-sidebar > .page-heading {
+    grid-column: 1;
+  }
+  .has-filter-sidebar > .page-heading h1 {
+    font-size: var(--text-lg);
+  }
+  .has-filter-sidebar > #calendar-controls,
+  .has-filter-sidebar > #filters-container {
+    grid-column: 1;
+    min-height: 0;
+    max-height: 100%;
+    overflow-y: auto;
+  }
+  .has-filter-sidebar > #calendar-controls[hidden] {
+    display: block !important;
+  }
+  .has-filter-sidebar .heading-toggle-btn {
+    display: none;
+  }
+  .has-filter-sidebar > .section-main {
+    grid-column: 2;
+    grid-row: 1 / -1;
+    align-self: stretch;
+    min-width: 0;
+    min-height: 0;
+    margin-block: calc(-1 * var(--space-lg));
+    padding-block: var(--section-main-start-offset, var(--space-lg))
+      var(--space-lg);
+    overflow-y: auto;
+  }
+  .has-filter-sidebar .filter-form {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-md);
+  }
+  .has-filter-sidebar .filter-group-scroll {
+    flex-direction: column;
+    align-items: stretch;
+    grid-column: 1;
+  }
+  .has-filter-sidebar .filter-group-item,
+  .has-filter-sidebar .filter-group-last {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-2xs);
+  }
+  .has-filter-sidebar .filter-field-title {
+    display: block;
+    color: var(--color-text-faint);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+  }
+  .has-filter-sidebar .filter-group-item,
+  .has-filter-sidebar .filter-group-item select,
+  .has-filter-sidebar .filter-group-item input[type="date"],
+  .has-filter-sidebar .filter-form label:has(input),
+  .has-filter-sidebar .filter-group-last,
+  .has-filter-sidebar .filter-form input[type="text"] {
+    width: 100%;
+    min-width: 0;
+  }
+  .has-filter-sidebar #cal-comp-checkboxes {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+  .has-filter-sidebar .filter-group-reset {
+    grid-column: 1;
+  }
+  .has-filter-sidebar .filter-group-reset button {
+    width: 100%;
+    justify-content: center;
+  }
+  .has-filter-sidebar .results-count {
+    grid-column: 1;
+    justify-self: start;
+  }
+}

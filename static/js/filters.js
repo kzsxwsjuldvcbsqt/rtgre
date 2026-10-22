@@ -28,6 +28,14 @@ document.addEventListener("DOMContentLoaded", function () {
   scrollGroup.className = "filter-group filter-group-scroll";
   scrollGroup.id = "eval-filters-scroll";
 
+  function makeFieldTitle(text) {
+    const title = document.createElement("span");
+    title.className = "filter-field-title";
+    title.setAttribute("aria-hidden", "true");
+    title.textContent = text;
+    return title;
+  }
+
   const periodItem = document.createElement("div");
   periodItem.className = "filter-group-item";
 
@@ -51,6 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
     periodOptGroup.appendChild(opt);
   });
   periodSelect.appendChild(periodOptGroup);
+  periodItem.appendChild(makeFieldTitle(labelPeriod));
   periodItem.appendChild(periodSelect);
   scrollGroup.appendChild(periodItem);
 
@@ -77,11 +86,13 @@ document.addEventListener("DOMContentLoaded", function () {
       modOptGroup.appendChild(opt);
     });
     modSelect.appendChild(modOptGroup);
+    modItem.appendChild(makeFieldTitle(labelModule));
     modItem.appendChild(modSelect);
     scrollGroup.appendChild(modItem);
   }
 
   if (categories.length > 0) {
+    scrollGroup.appendChild(makeFieldTitle(labelCategory));
     categories.forEach(function (cat) {
       const lbl = document.createElement("label");
       const cb = document.createElement("input");
