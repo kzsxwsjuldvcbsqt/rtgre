@@ -24,6 +24,10 @@
   font-size: var(--text-sm);
   font-weight: var(--weight-semibold);
 }
+.calendar-view-week .day-section.is-today > h3,
+.calendar-view-year .day-section.is-today > h3 {
+  color: var(--color-now);
+}
 .calendar-events-list {
   display: flex;
   flex-direction: column;

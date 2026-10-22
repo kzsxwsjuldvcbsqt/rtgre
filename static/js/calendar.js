@@ -279,6 +279,12 @@
       var existingMarker = document.getElementById("current-time-marker");
       if (existingMarker) existingMarker.remove();
 
+      viewContainer
+        .querySelectorAll(".day-section.is-today")
+        .forEach(function (section) {
+          section.classList.remove("is-today");
+        });
+
       var ongoingBadges = document.querySelectorAll(".ongoing-badge");
       ongoingBadges.forEach(function (b) {
         b.remove();
@@ -298,6 +304,9 @@
       var todayIso = formatISODate(now);
 
       var todaySection = document.getElementById("day-section-" + todayIso);
+      if (todaySection && (state.view === "week" || state.view === "year")) {
+        todaySection.classList.add("is-today");
+      }
       if (!todaySection) {
         stopTimeMarkerTimer();
         return;
