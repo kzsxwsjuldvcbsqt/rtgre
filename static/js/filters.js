@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+AppUtils.onDOMReady(function () {
   const container = document.getElementById("filters-container");
   if (!container) return;
 
@@ -327,4 +327,7 @@ document.addEventListener("DOMContentLoaded", function () {
       applyFilters();
     });
   }
+
+  const layout = container.closest(".has-filter-sidebar");
+  if (layout) layout.classList.add("is-layout-ready");
 });

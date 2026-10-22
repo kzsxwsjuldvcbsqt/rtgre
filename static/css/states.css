@@ -82,3 +82,8 @@ select:disabled {
     animation-duration: 0s !important;
   }
 }
+html.js-enabled
+  .has-filter-sidebar:not(.is-layout-ready)
+  > :is(#calendar-controls, #filters-container, .section-main) {
+  visibility: hidden;
+}

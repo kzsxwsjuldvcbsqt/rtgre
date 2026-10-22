@@ -10,8 +10,17 @@
 {% endfor %}
 <title>{% block title %}{{ site.title }}{% endblock %}</title>
 <link rel="stylesheet" href="{{ url_for('static/css/style.css') }}">
+<script type="text/javascript">
+document.documentElement.classList.add("js-enabled");
+window.addEventListener("load", function () {
+document.querySelectorAll(".has-filter-sidebar").forEach(function (layout) {
+layout.classList.add("is-layout-ready");
+});
+});
+</script>
 <script defer src="{{ url_for('static/js/utils.js') }}"></script>
 <script defer src="{{ url_for('static/js/menu.js') }}"></script>
+{% block head_scripts %}{% endblock %}
 </head>
 <body class="{% if page_wide %}page-wide{% endif %}">
 <header class="site-header">

@@ -348,6 +348,14 @@
     const cd = calendar.contentDocument,
       cw = calendar.contentWindow;
     assert(
+      cd
+        .querySelector(".has-filter-sidebar")
+        .classList.contains("is-layout-ready") &&
+        cw.getComputedStyle(cd.querySelector(".section-main")).visibility ===
+          "visible",
+      "Calendar layout is revealed only after initialization",
+    );
+    assert(
       cd.querySelector(".current-time-text").textContent === "09:00",
       "Simulated time marker works",
     );
@@ -491,10 +499,24 @@
       ).display !== "none",
       "Mobile navigation remains visible without JavaScript",
     );
+    assert(
+      nojs.contentWindow.getComputedStyle(
+        nojs.contentDocument.querySelector(".section-main"),
+      ).visibility === "visible",
+      "Calendar content remains visible without JavaScript",
+    );
     nojs.remove();
     const filters = await frame("classes/b3cya/evaluations.html#period=all");
     const fd = filters.contentDocument,
       fw = filters.contentWindow;
+    assert(
+      fd
+        .querySelector(".has-filter-sidebar")
+        .classList.contains("is-layout-ready") &&
+        fw.getComputedStyle(fd.querySelector(".section-main")).visibility ===
+          "visible",
+      "Evaluation layout is revealed only after initialization",
+    );
     const row = fd.querySelector(".eval-row");
     row.dataset.endTimestamp = String((Date.now() - 1000) / 1000);
     fd.dispatchEvent(new fw.Event("visibilitychange"));

@@ -1,5 +1,5 @@
 (function () {
-  document.addEventListener("DOMContentLoaded", function () {
+  AppUtils.onDOMReady(function () {
     var scriptEl = document.querySelector("script[data-class-id]");
     if (!scriptEl) return;
 
@@ -912,6 +912,10 @@
 
     loadState();
     render();
-    requestAnimationFrame(anchorToSchedule);
+    requestAnimationFrame(function () {
+      anchorToSchedule();
+      var layout = document.querySelector(".has-filter-sidebar");
+      if (layout) layout.classList.add("is-layout-ready");
+    });
   });
 })();
