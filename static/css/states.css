@@ -22,9 +22,6 @@ select:disabled {
     color: var(--color-navbar-text);
     text-decoration: none;
   }
-  .section-nav a:hover::after {
-    background: var(--color-highlight);
-  }
   .class-list a:hover,
   .section-item a:hover,
   .global-sections-nav a:hover,
@@ -71,5 +68,10 @@ select:disabled {
   *::before,
   *::after {
     transition-duration: 0s !important;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 0s !important;
   }
 }
