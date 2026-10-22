@@ -190,5 +190,37 @@
         safeStorageSet(storageKey, nextExpanded ? "expanded" : "collapsed");
       });
     });
+
+    var sidebarLayout = document.querySelector(".has-filter-sidebar");
+    if (sidebarLayout) {
+      var sidebarMain = sidebarLayout.querySelector(":scope > .section-main");
+      var sidebarFilters = sidebarLayout.querySelector(
+        ":scope > #calendar-controls, :scope > #filters-container",
+      );
+      var sidebarHeading = sidebarLayout.querySelector(
+        ":scope > .page-heading",
+      );
+
+      function syncSidebarMainOffset() {
+        if (!sidebarMain || !sidebarFilters) return;
+        var mainTop = sidebarMain.getBoundingClientRect().top;
+        var filtersTop = sidebarFilters.getBoundingClientRect().top;
+        if (filtersTop > mainTop) {
+          sidebarMain.style.setProperty(
+            "--section-main-start-offset",
+            filtersTop - mainTop + "px",
+          );
+        } else {
+          sidebarMain.style.removeProperty("--section-main-start-offset");
+        }
+      }
+
+      syncSidebarMainOffset();
+      window.addEventListener("resize", syncSidebarMainOffset);
+      if (window.ResizeObserver && sidebarHeading) {
+        new ResizeObserver(syncSidebarMainOffset).observe(sidebarHeading);
+      }
+      if (document.fonts) document.fonts.ready.then(syncSidebarMainOffset);
+    }
   });
 })(this);

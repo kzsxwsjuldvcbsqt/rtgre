@@ -79,9 +79,11 @@
   --space-3xl: 4rem;
 
   --page-max-width: 76rem;
+  --page-max-width-wide: 88rem;
   --page-gutter: clamp(1rem, 4vw, 2.5rem);
   --measure: 68ch;
   --list-max-width: 46rem;
+  --sidebar-width: 17rem;
 
   --header-height: 4rem;
   --control-height: 2.25rem;
