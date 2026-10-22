@@ -136,6 +136,7 @@ thead[hidden] + tbody .semester-average-row td {
   }
   #evaluations-list .col-action {
     width: var(--width-col-detail);
-    text-align: end;
+    padding-inline: var(--space-lg);
+    text-align: start;
   }
 }

@@ -22,6 +22,9 @@
   .comparison-table td:last-child {
     padding-inline-end: var(--space-lg);
   }
+  #evaluations-list .col-action {
+    padding-inline-start: var(--space-lg);
+  }
 }
 
 @media (max-width: 59.99em) {
