@@ -20,6 +20,10 @@
 @import url("print.css") layer(print);
 @import url("utilities.css") layer(utilities);
 
+@view-transition {
+  navigation: auto;
+}
+
 @font-face {
   font-family: "Inter";
   font-style: normal;
