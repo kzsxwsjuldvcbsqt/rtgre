@@ -3,6 +3,13 @@
   outline-offset: var(--focus-ring-width);
   border-radius: var(--radius-control);
 }
+input[type="text"]:not([aria-invalid="true"]):focus-visible,
+input[type="search"]:not([aria-invalid="true"]):focus-visible,
+input[type="date"]:not([aria-invalid="true"]):focus-visible,
+input[type="number"]:not([aria-invalid="true"]):focus-visible,
+textarea:not([aria-invalid="true"]):focus-visible {
+  outline-color: var(--color-field-focus);
+}
 button:disabled,
 input:disabled,
 select:disabled {
@@ -10,7 +17,7 @@ select:disabled {
   cursor: not-allowed;
 }
 [aria-invalid="true"] {
-  outline: var(--focus-ring-width) solid var(--color-danger);
+  outline: var(--focus-ring-width) solid var(--color-field-invalid);
   outline-offset: var(--focus-ring-width);
 }
 @media (hover: hover) and (pointer: fine) {
