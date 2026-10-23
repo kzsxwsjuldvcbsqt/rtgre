@@ -52,5 +52,4 @@
 .section-nav a[aria-current="page"]::after {
   height: var(--rule-nav-active-width);
   background: var(--color-highlight);
-  view-transition-name: nav-indicator;
 }

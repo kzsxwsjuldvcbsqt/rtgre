@@ -76,11 +76,6 @@ select:disabled {
   *::after {
     transition-duration: 0s !important;
   }
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation-duration: 0s !important;
-  }
 }
 html.js-enabled
   .has-filter-sidebar:not(.is-layout-ready)
