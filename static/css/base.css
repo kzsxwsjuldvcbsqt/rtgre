@@ -78,3 +78,8 @@ button {
   inline-size: var(--icon-size-sm);
   block-size: var(--icon-size-sm);
 }
+.external-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
