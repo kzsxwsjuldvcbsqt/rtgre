@@ -3,7 +3,6 @@ html {
   color: var(--color-text);
   font-family: var(--font-family);
   scroll-behavior: smooth;
-  view-transition-name: none;
 }
 body {
   display: flex;
