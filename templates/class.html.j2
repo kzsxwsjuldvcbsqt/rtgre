@@ -9,6 +9,7 @@
 {% endblock %}
 {% block content %}
 <div class="page-container has-filter-sidebar">
+<div class="filter-sidebar">
 <div class="back-navigation">
 <a href="{{ url_for('index.html') }}">{{ labels.class_page.back_link }}</a>
 </div>
@@ -36,6 +37,7 @@
   data-categories='{{ active_categories | tojson }}'
   data-modules='{{ active_modules | tojson }}'
 ></div>
+</div>
 
 <div class="section-main">
 <div id="evaluations-list">

@@ -195,10 +195,10 @@
     if (sidebarLayout) {
       var sidebarMain = sidebarLayout.querySelector(":scope > .section-main");
       var sidebarFilters = sidebarLayout.querySelector(
-        ":scope > #calendar-controls, :scope > #filters-container",
+        ":scope > .filter-sidebar > #calendar-controls, :scope > .filter-sidebar > #filters-container",
       );
       var sidebarHeading = sidebarLayout.querySelector(
-        ":scope > .page-heading",
+        ":scope > .filter-sidebar > .page-heading",
       );
 
       function syncSidebarMainOffset() {
