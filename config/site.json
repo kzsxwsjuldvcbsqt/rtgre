@@ -7,7 +7,7 @@
   "static_directory": "static",
   "base_path": "/",
   "custom_domain": "rtgre.fr",
-  "github_url": "https://github.com/kzsxwsjuldvcbsqt",
+  "github_url": "https://github.com/kzsxwsjuldvcbsqt/rtgre",
   "github_profile": "kzsxwsjuldvcbsqt",
   "robots_txt": "User-agent: *\nDisallow:\n",
   "favicons": [
