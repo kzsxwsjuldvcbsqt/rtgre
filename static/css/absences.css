@@ -132,6 +132,7 @@
 }
 .absence-field input,
 .absence-field select,
+.absence-field .custom-select-trigger,
 .absence-field textarea {
   width: 100%;
   min-width: 0;

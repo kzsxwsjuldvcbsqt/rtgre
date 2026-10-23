@@ -366,13 +366,72 @@
       "Current day is identified in week view",
     );
     const compare = cd.getElementById("cal-compare-select");
+    const compareControl = compare.closest(".custom-select");
+    const compareTrigger = compareControl.querySelector(
+      ".custom-select-trigger",
+    );
+    assert(
+      compare.classList.contains("visually-hidden") &&
+        compareTrigger.getAttribute("role") === "combobox",
+      "Native calendar select is enhanced as an accessible combobox",
+    );
+    cd.querySelector('[aria-controls="calendar-controls"]').click();
+    const viewTrigger = cd
+      .getElementById("cal-view-select")
+      .closest(".custom-select")
+      .querySelector(".custom-select-trigger");
+    viewTrigger.dispatchEvent(
+      new cw.KeyboardEvent("keydown", {
+        key: "ArrowDown",
+        bubbles: true,
+        cancelable: true,
+      }),
+    );
+    assert(
+      viewTrigger.getAttribute("aria-expanded") === "true",
+      "Custom select opens from the keyboard",
+    );
+    viewTrigger.dispatchEvent(
+      new cw.KeyboardEvent("keydown", {
+        key: "Escape",
+        bubbles: true,
+        cancelable: true,
+      }),
+    );
+    assert(
+      viewTrigger.getAttribute("aria-expanded") === "false",
+      "Custom select closes from the keyboard",
+    );
     const pending = {};
     cw.fetch = (url) =>
       new Promise((resolve) => {
         pending[url] = resolve;
       });
-    change(cw, compare, "b3cyb");
+    compareTrigger.click();
+    const compareMenu = cd.getElementById(
+      compareTrigger.getAttribute("aria-controls"),
+    );
+    const compareOptions = Array.from(
+      compareMenu.querySelectorAll('[role="option"]'),
+    );
+    compareOptions[
+      Array.from(compare.options).findIndex((o) => o.value === "b3cyb")
+    ].click();
+    assert(
+      compare.value === "b3cyb" &&
+        compareTrigger.textContent.includes(
+          compare.selectedOptions[0].textContent,
+        ) &&
+        compareTrigger.getAttribute("aria-expanded") === "false",
+      "Custom calendar select chooses and reflects an option",
+    );
     change(cw, compare, "b3dcc");
+    assert(
+      compareTrigger.textContent.includes(
+        compare.selectedOptions[0].textContent,
+      ),
+      "Custom calendar select follows programmatic changes",
+    );
     pending["../../data/b3dcc.json"]({
       ok: true,
       json: () =>
@@ -516,6 +575,11 @@
         fw.getComputedStyle(fd.querySelector(".section-main")).visibility ===
           "visible",
       "Evaluation layout is revealed only after initialization",
+    );
+    assert(
+      fd.querySelectorAll("#filters-container select").length ===
+        fd.querySelectorAll("#filters-container .custom-select").length,
+      "Dynamic evaluation filters use custom selects",
     );
     const row = fd.querySelector(".eval-row");
     row.dataset.endTimestamp = String((Date.now() - 1000) / 1000);

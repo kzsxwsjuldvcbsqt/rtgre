@@ -59,7 +59,8 @@ select:disabled {
     background: var(--color-primary-hover);
   }
   .menu-list button:hover,
-  .menu-list a:hover {
+  .menu-list a:hover,
+  .custom-select-option:not([aria-disabled="true"]):hover {
     background: var(--color-surface-hover);
     text-decoration: none;
   }
