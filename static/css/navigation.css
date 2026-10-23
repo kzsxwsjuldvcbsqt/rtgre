@@ -21,6 +21,7 @@
 .section-nav a {
   position: relative;
   display: inline-flex;
+  flex: none;
   align-items: center;
   gap: var(--space-xs);
   min-height: var(--touch-target);
