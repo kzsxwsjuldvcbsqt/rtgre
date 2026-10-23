@@ -263,14 +263,6 @@
   }
 }
 @media (min-width: 75em) {
-  body:has(.has-filter-sidebar) {
-    height: 100dvh;
-    overflow: hidden;
-  }
-  body:has(.has-filter-sidebar) .site-main {
-    min-height: 0;
-    overflow: hidden;
-  }
   .has-filter-sidebar {
     --section-main-end-offset: max(
       var(--page-gutter),
@@ -280,25 +272,23 @@
     );
     display: grid;
     grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
-    grid-template-rows: auto auto minmax(0, 1fr);
     align-items: start;
     column-gap: var(--space-xl);
     max-width: var(--page-max-width-wide);
-    height: 100%;
     padding-block-end: var(--space-lg);
   }
-  .has-filter-sidebar > .back-navigation,
-  .has-filter-sidebar > .page-heading {
+  .has-filter-sidebar > .filter-sidebar {
+    position: sticky;
+    inset-block-start: calc(
+      var(--header-height) + var(--touch-target) + var(--space-lg)
+    );
     grid-column: 1;
-  }
-  .has-filter-sidebar > #calendar-controls,
-  .has-filter-sidebar > #filters-container {
-    grid-column: 1;
-    min-height: 0;
-    max-height: 100%;
+    max-height: calc(
+      100dvh - var(--header-height) - var(--touch-target) - var(--space-2xl)
+    );
     overflow-y: auto;
   }
-  .has-filter-sidebar > #calendar-controls[hidden] {
+  .has-filter-sidebar > .filter-sidebar > #calendar-controls[hidden] {
     display: block !important;
   }
   .has-filter-sidebar .heading-toggle-btn {
@@ -306,16 +296,12 @@
   }
   .has-filter-sidebar > .section-main {
     grid-column: 2;
-    grid-row: 1 / -1;
-    align-self: stretch;
     min-width: 0;
-    min-height: 0;
     margin-block: calc(-1 * var(--space-lg));
     margin-inline-end: calc(-1 * var(--section-main-end-offset));
     padding-block: var(--section-main-start-offset, var(--space-lg))
       var(--space-lg);
     padding-inline-end: var(--section-main-end-offset);
-    overflow-y: auto;
   }
   .has-filter-sidebar .filter-form {
     grid-template-columns: minmax(0, 1fr);

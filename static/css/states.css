@@ -84,6 +84,10 @@ select:disabled {
 }
 html.js-enabled
   .has-filter-sidebar:not(.is-layout-ready)
-  > :is(#calendar-controls, #filters-container, .section-main) {
+  > .section-main,
+html.js-enabled
+  .has-filter-sidebar:not(.is-layout-ready)
+  > .filter-sidebar
+  > :is(#calendar-controls, #filters-container) {
   visibility: hidden;
 }
