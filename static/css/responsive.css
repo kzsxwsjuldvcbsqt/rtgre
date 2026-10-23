@@ -342,6 +342,7 @@
   }
   .has-filter-sidebar .filter-group-item,
   .has-filter-sidebar .filter-group-item select,
+  .has-filter-sidebar .filter-group-item .custom-select,
   .has-filter-sidebar .filter-group-item input[type="date"],
   .has-filter-sidebar .filter-form label:has(input),
   .has-filter-sidebar .filter-group-last,

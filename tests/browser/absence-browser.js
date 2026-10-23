@@ -9,6 +9,11 @@ async function runAbsenceBrowserTests({ frame, assert, change, pause }) {
       "Absence page initializes without printable preview: " + width,
     );
     assert(
+      d.querySelectorAll(".absence-selection select").length ===
+        d.querySelectorAll(".absence-selection .custom-select").length,
+      "Absence selects use the shared custom component: " + width,
+    );
+    assert(
       d.documentElement.scrollWidth <= width,
       "Absence page has no overflow: " +
         width +

@@ -20,9 +20,11 @@ layout.classList.add("is-layout-ready");
 </script>
 <script defer src="{{ url_for('static/js/utils.js') }}"></script>
 <script defer src="{{ url_for('static/js/menu.js') }}"></script>
+<script defer src="{{ url_for('static/js/select.js') }}"></script>
 {% block head_scripts %}{% endblock %}
 </head>
 <body class="{% if page_wide %}page-wide{% endif %}">
+<template id="select-chevron-template">{{ icon('chevron-down', url_for, site.icons) }}</template>
 <header class="site-header">
 <div class="header-container">
 <div class="site-brand">
