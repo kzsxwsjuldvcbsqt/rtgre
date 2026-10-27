@@ -16,6 +16,7 @@ Projet étudiant non officiel. Il ne remplace pas ADE ni les informations commun
 - [Installation locale](#installation-locale)
 - [Configuration](#configuration)
 - [Tests et qualité](#tests-et-qualité)
+- [Sécurité](#sécurité)
 - [Déploiement](#déploiement)
 - [Données personnelles et limites](#données-personnelles-et-limites)
 - [Licence](#licence)
@@ -113,7 +114,9 @@ Il n'y a pas de serveur applicatif, pas d'API privée, pas de base de données, 
 
 ```
 .
-├── .github/workflows/   # intégration continue et déploiement GitHub Pages
+├── .github/
+│   ├── workflows/       # intégration continue, analyses de sécurité et déploiement GitHub Pages
+│   └── dependabot.yml   # mises à jour automatiques des dépendances et des actions
 ├── config/              # données de l'année, classes, modules et règles
 ├── src/schedule/        # générateur Python
 ├── templates/           # modèles HTML Jinja2
@@ -145,6 +148,7 @@ Le dossier `dist/` est généré par la construction et n'est pas suivi par Git.
 - unittest et node:test pour les tests
 - Ruff et Prettier pour le formatage et les contrôles
 - GitHub Actions et GitHub Pages
+- Semgrep, Trivy, Gitleaks, zizmor et Dependabot pour la sécurité
 
 Node.js ne fait pas fonctionner le site en production. Il sert aux dépendances, aux contrôles et aux tests.
 
@@ -246,11 +250,34 @@ PYTHONPATH=src python -m unittest discover -s tests -v
 
 Les tests couvrent notamment la validation de la configuration, l'analyse et le rapprochement des événements, le rendu du site et ses liens, les calculs de notes, les imports et exports, les limites de stockage, les absences, la génération des PDF, les interactions dans un navigateur, le responsive, le comportement sous préférence système claire ou sombre, ainsi que certains cas d'injection et de données invalides.
 
+## Sécurité
+
+Les analyses de sécurité sont regroupées dans `.github/workflows/security.yml`, séparé du déploiement. Elles s'exécutent sur les push vers `main`, sur les pull requests, manuellement et chaque lundi. Un nouveau problème fait échouer le workflow sans bloquer la mise à jour de l'emploi du temps.
+
+| Outil | Contrôle |
+| --- | --- |
+| [zizmor](https://docs.zizmor.sh) | sécurité des workflows GitHub Actions (permissions, injections, identifiants persistés, actions non épinglées) |
+| [Semgrep](https://semgrep.dev) | analyse statique du code Python et JavaScript et des workflows |
+| [Trivy](https://trivy.dev) | vulnérabilités connues des dépendances Python et npm, secrets et erreurs de configuration |
+| [Gitleaks](https://gitleaks.io) | secrets présents dans tout l'historique Git |
+| [Dependabot](https://docs.github.com/code-security/dependabot) | mises à jour hebdomadaires groupées des dépendances pip et npm et des actions GitHub |
+
+Chaque analyse publie un rapport SARIF consultable dans l'onglet Security du dépôt. Les deux règles Semgrep désactivées dans le workflow sont des faux positifs analysés : la règle Jinja2 vise Flask, alors que l'échappement automatique est activé ici, et les `Object.assign` signalés portent sur des données validées ou filtrées par liste blanche avant usage.
+
+Les mesures appliquées à la chaîne de livraison :
+
+- toutes les actions GitHub sont épinglées par empreinte de commit et non par tag, et Dependabot les maintient à jour avec un délai de sept jours avant d'adopter une nouvelle version ;
+- les outils téléchargés dans les workflows sont vérifiés par somme SHA-256 et l'image Semgrep est épinglée par empreinte ;
+- les workflows démarrent sans permission et n'accordent à chaque job que celles dont il a besoin ;
+- les jetons GitHub ne sont pas conservés dans le dépôt cloné.
+
+Côté navigateur, chaque page déclare une Content-Security-Policy définie dans `config/site.json`. Elle n'autorise que les scripts, styles et requêtes du site lui-même ; aucun script n'est écrit dans le HTML. Les tests vérifient cette politique et échouent sur toute violation détectée dans le navigateur.
+
 ## Déploiement
 
 Le déploiement est géré par `.github/workflows/build.yml`. Le workflow s'exécute sur les push vers `main` ou `master`, sur les pull requests, manuellement, et automatiquement toutes les six heures.
 
-Il enchaîne l'installation des dépendances, les contrôles de formatage et de syntaxe, la vérification des ressources PDF, les tests Python, JavaScript et navigateur, l'audit des dépendances, la génération du dossier `dist/`, puis l'envoi de l'artefact GitHub Pages. Le déploiement effectif a lieu sauf pour les pull requests.
+Il enchaîne l'installation des dépendances, les contrôles de formatage et de syntaxe, la vérification des ressources PDF, les tests Python, JavaScript et navigateur, la génération du dossier `dist/`, puis l'envoi de l'artefact GitHub Pages. Le déploiement effectif a lieu sauf pour les pull requests.
 
 Le déclenchement toutes les six heures permet de recopier plusieurs fois par jour les nouvelles données disponibles dans ADE.
 
