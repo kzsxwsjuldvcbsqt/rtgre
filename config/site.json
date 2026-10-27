@@ -10,6 +10,36 @@
   "github_url": "https://github.com/kzsxwsjuldvcbsqt/rtgre",
   "github_profile": "kzsxwsjuldvcbsqt",
   "robots_txt": "User-agent: *\nDisallow:\n",
+  "content_security_policy": {
+    "default-src": [
+      "'none'"
+    ],
+    "script-src": [
+      "'self'"
+    ],
+    "style-src": [
+      "'self'"
+    ],
+    "font-src": [
+      "'self'",
+      "https://fonts.gstatic.com"
+    ],
+    "img-src": [
+      "'self'"
+    ],
+    "connect-src": [
+      "'self'"
+    ],
+    "form-action": [
+      "'self'"
+    ],
+    "base-uri": [
+      "'none'"
+    ],
+    "object-src": [
+      "'none'"
+    ]
+  },
   "favicons": [
     {
       "rel": "icon",

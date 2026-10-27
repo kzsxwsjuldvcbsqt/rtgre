@@ -339,9 +339,7 @@ async function runAbsenceBrowserTests({ frame, assert, change, pause }) {
     pdfUrl,
     "PDF download is available: " + get("sheet-message").textContent,
   );
-  const pdfBytes = new w.Uint8Array(
-      await (await w.fetch(pdfUrl)).arrayBuffer(),
-    ),
+  const pdfBytes = new w.Uint8Array(await (await fetch(pdfUrl)).arrayBuffer()),
     pdfDocument = await w.PDFLib.PDFDocument.load(pdfBytes),
     pageSize = pdfDocument.getPage(0).getSize();
   globalThis.absencePdfBase64 = encodeBytes(pdfBytes);
@@ -390,7 +388,7 @@ async function runAbsenceBrowserTests({ frame, assert, change, pause }) {
   get("pdf-download").click();
   await waitFor(() => !get("pdf-download").disabled);
   const annexBytes = new w.Uint8Array(
-      await (await w.fetch(pdfUrl)).arrayBuffer(),
+      await (await fetch(pdfUrl)).arrayBuffer(),
     ),
     annexDocument = await w.PDFLib.PDFDocument.load(annexBytes);
   globalThis.absencePdfAnnexBase64 = encodeBytes(annexBytes);
