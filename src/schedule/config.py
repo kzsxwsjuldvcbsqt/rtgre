@@ -54,6 +54,19 @@ def validate_site_config(site: dict):
         path = PurePosixPath(site[key])
         if path.is_absolute() or len(path.parts) != 1 or path.name in ("", ".", ".."):
             raise ValueError(f"Invalid configured directory: {key}")
+    policy = site.get("content_security_policy")
+    if (
+        not isinstance(policy, dict)
+        or not policy
+        or not all(
+            re.fullmatch(r"[a-z-]+", directive)
+            and isinstance(sources, list)
+            and sources
+            and all(isinstance(s, str) and s and not re.search(r"[\s;,]", s) for s in sources)
+            for directive, sources in policy.items()
+        )
+    ):
+        raise ValueError("Invalid configuration: content_security_policy")
 
 
 def valid_public_id(value: object) -> bool:

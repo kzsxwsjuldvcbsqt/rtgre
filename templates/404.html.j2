@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="{{ content_security_policy }}">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
 {% for icon in favicons %}
 <link rel="{{ icon.rel }}"{% if icon.type %} type="{{ icon.type }}"{% endif %} href="{{ get_404_url('static/' ~ icon.filename) }}">

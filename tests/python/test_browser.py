@@ -84,6 +84,8 @@ class BrowserTests(unittest.TestCase):
                 capture = (
                     "<script>window.__testErrors=[];"
                     'addEventListener("error",e=>__testErrors.push(e.message));'
+                    'addEventListener("securitypolicyviolation",'
+                    "e=>__testErrors.push(`CSP ${e.violatedDirective} ${e.blockedURI}`));"
                     'addEventListener("unhandledrejection",'
                     "e=>__testErrors.push(String(e.reason)));</script>"
                 )
