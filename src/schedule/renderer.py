@@ -69,6 +69,10 @@ def render_site(
     section_files = {section.id: section.file for section in app_config.sections if section.file}
     env.globals.update(
         section_files=section_files,
+        content_security_policy="; ".join(
+            f"{directive} {' '.join(sources)}"
+            for directive, sources in app_config.site["content_security_policy"].items()
+        ),
         grade_empty=app_config.labels["grades"]["empty_value"].format(**app_config.site["grades"]),
         grade_label=app_config.labels["grades"]["grade_input_column"].format(
             **app_config.site["grades"]

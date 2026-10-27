@@ -1,5 +1,6 @@
 import copy
 import json
+import re
 import shutil
 import tempfile
 import unittest
@@ -11,7 +12,12 @@ import requests
 from support.fixtures import calendar_bytes, sample_events
 
 from schedule.build import build_lock, output_path, publish_site
-from schedule.config import load_config, validate_calendar_config, validate_tasks_config
+from schedule.config import (
+    load_config,
+    validate_calendar_config,
+    validate_site_config,
+    validate_tasks_config,
+)
 from schedule.curriculum import get_class_grades_data, validate_curriculum_config
 from schedule.exporter import serialize_events
 from schedule.fetcher import fetch_calendar
@@ -293,6 +299,32 @@ class ScheduleTests(unittest.TestCase):
             (root / "static" / "js" / "utils.js").unlink()
             with self.assertRaisesRegex(ValueError, "Missing"):
                 validate_site(root)
+
+    def test_pages_declare_a_content_security_policy_without_inline_scripts(self):
+        events = sample_events(self.config, self.classes[0])
+        with tempfile.TemporaryDirectory() as directory:
+            render_site(self.config, {self.classes[0].id: events}, output_dir=directory)
+            pages = list(Path(directory).rglob("*.html"))
+            self.assertGreater(len(pages), 10)
+            for page in pages:
+                html = page.read_text()
+                with self.subTest(page=page.name):
+                    policy = html.split('http-equiv="Content-Security-Policy" content="', 1)[1]
+                    self.assertIn("script-src &#39;self&#39;", policy.split('"', 1)[0])
+                    scripts = re.findall(r"<script\b[^>]*>", html)
+                    for tag in scripts:
+                        self.assertTrue("src=" in tag or 'type="application/json"' in tag, tag)
+                    if scripts:
+                        self.assertLess(
+                            html.index("Content-Security-Policy"), html.index("<script")
+                        )
+
+    def test_content_security_policy_configuration_is_validated(self):
+        for policy in ({}, {"script-src": []}, {"script-src": ["'self'; img-src *"]}):
+            site = copy.deepcopy(self.config.site)
+            site["content_security_policy"] = policy
+            with self.subTest(policy=policy), self.assertRaises(ValueError):
+                validate_site_config(site)
 
     def test_repeated_publish_removes_only_stale_generated_files(self):
         with tempfile.TemporaryDirectory() as directory:
