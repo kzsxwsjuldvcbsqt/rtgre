@@ -131,6 +131,8 @@
   --shadow-overlay: 0 18px 48px rgba(0, 0, 0, 0.18);
   --color-scrim: rgba(0, 0, 0, 0.6);
 
+  --site-header-height: 0px;
+
   --z-menu: 30;
   --z-header: 40;
   --z-overlay: 50;

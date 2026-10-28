@@ -7,6 +7,10 @@
 .calendar-view-week:has(> .empty-state-message) {
   display: block;
 }
+.day-section,
+.current-time-marker {
+  scroll-margin-block-start: calc(var(--site-header-height) + var(--space-md));
+}
 .day-section {
   min-width: 0;
   margin-block-end: var(--space-xl);
