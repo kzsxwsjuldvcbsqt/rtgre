@@ -275,6 +275,67 @@
       return { date: inSiteTimezone(new Date()), isSimulated: false };
     }
 
+    function scheduleTimeMarker(isSimulated) {
+      if (isSimulated) {
+        stopTimeMarkerTimer();
+      } else if (!timeMarkerTimer) {
+        timeMarkerTimer = setInterval(
+          updateTimeMarker,
+          calendarConfig.time_marker_interval_ms,
+        );
+      }
+    }
+
+    function buildTimeMarker(tagName, text) {
+      var markerEl = document.createElement(tagName);
+      markerEl.id = "current-time-marker";
+      markerEl.className = "current-time-marker";
+
+      var timeSpan = document.createElement("span");
+      timeSpan.className = "current-time-text";
+      timeSpan.textContent = text;
+      markerEl.appendChild(timeSpan);
+
+      var lineEl = document.createElement("hr");
+      lineEl.className = "current-time-line";
+      markerEl.appendChild(lineEl);
+      return markerEl;
+    }
+
+    function placeOffViewMarker(now, todayIso, nowTimeStr) {
+      var rangeStart = viewContainer.getAttribute("data-range-start");
+      var rangeEnd = viewContainer.getAttribute("data-range-end");
+      if (!rangeStart || !rangeEnd) return false;
+
+      var lowerBound = getPrevWeekday(parseISODate(rangeStart));
+      lowerBound.setDate(lowerBound.getDate() + 1);
+      var upperBound = getNextWeekday(parseISODate(rangeEnd));
+      upperBound.setDate(upperBound.getDate() - 1);
+      if (
+        todayIso < formatISODate(lowerBound) ||
+        todayIso > formatISODate(upperBound)
+      )
+        return false;
+
+      var markerEl = buildTimeMarker(
+        "div",
+        AppUtils.formatText(labels.now_marker, {
+          day_name: dayNames[(now.getDay() + 6) % 7],
+          day_num: now.getDate(),
+          month_name: monthNames[now.getMonth()],
+          time: nowTimeStr,
+        }),
+      );
+      markerEl.classList.add("is-off-view");
+
+      var nextBlock = Array.from(viewContainer.children).find(function (el) {
+        var date = el.getAttribute("data-date");
+        return date && date > todayIso;
+      });
+      viewContainer.insertBefore(markerEl, nextBlock || null);
+      return true;
+    }
+
     function updateTimeMarker() {
       var existingMarker = document.getElementById("current-time-marker");
       if (existingMarker) existingMarker.remove();
@@ -303,45 +364,38 @@
       var now = nowInfo.date;
       var todayIso = formatISODate(now);
 
+      var nowHours = String(now.getHours()).padStart(2, "0");
+      var nowMins = String(now.getMinutes()).padStart(2, "0");
+      var nowTimeStr = nowHours + ":" + nowMins;
+
       var todaySection = document.getElementById("day-section-" + todayIso);
       if (todaySection && (state.view === "week" || state.view === "year")) {
         todaySection.classList.add("is-today");
       }
       if (!todaySection) {
-        stopTimeMarkerTimer();
+        if (placeOffViewMarker(now, todayIso, nowTimeStr)) {
+          scheduleTimeMarker(nowInfo.isSimulated);
+        } else {
+          stopTimeMarkerTimer();
+        }
         return;
       }
 
       var eventsList = todaySection.querySelector(".calendar-events-list");
-      if (!eventsList) {
-        stopTimeMarkerTimer();
-        return;
-      }
-
-      var eventItems = Array.from(
-        eventsList.querySelectorAll(".calendar-event-item"),
-      );
+      var eventItems = eventsList
+        ? Array.from(eventsList.querySelectorAll(".calendar-event-item"))
+        : [];
       if (eventItems.length === 0) {
-        stopTimeMarkerTimer();
+        var dayHeading = todaySection.querySelector(":scope > h3");
+        todaySection.insertBefore(
+          buildTimeMarker("div", nowTimeStr),
+          dayHeading ? dayHeading.nextSibling : todaySection.firstChild,
+        );
+        scheduleTimeMarker(nowInfo.isSimulated);
         return;
       }
 
-      var nowHours = String(now.getHours()).padStart(2, "0");
-      var nowMins = String(now.getMinutes()).padStart(2, "0");
-      var nowTimeStr = nowHours + ":" + nowMins;
-
-      var markerEl = document.createElement("li");
-      markerEl.id = "current-time-marker";
-      markerEl.className = "current-time-marker";
-
-      var timeSpan = document.createElement("span");
-      timeSpan.className = "current-time-text";
-      timeSpan.textContent = nowTimeStr;
-      markerEl.appendChild(timeSpan);
-
-      var lineEl = document.createElement("hr");
-      lineEl.className = "current-time-line";
-      markerEl.appendChild(lineEl);
+      var markerEl = buildTimeMarker("li", nowTimeStr);
 
       function toMinutes(timeStr) {
         var parts = timeStr.split(":");
@@ -410,14 +464,7 @@
         eventsList.appendChild(markerEl);
       }
 
-      if (nowInfo.isSimulated) {
-        stopTimeMarkerTimer();
-      } else if (!timeMarkerTimer) {
-        timeMarkerTimer = setInterval(
-          updateTimeMarker,
-          calendarConfig.time_marker_interval_ms,
-        );
-      }
+      scheduleTimeMarker(nowInfo.isSimulated);
     }
 
     document.addEventListener("visibilitychange", function () {
@@ -835,7 +882,9 @@
         var todayIso = formatISODate(today);
 
         if (state.view === "year") {
-          var todayEl = document.getElementById("day-section-" + todayIso);
+          var todayEl =
+            document.getElementById("day-section-" + todayIso) ||
+            document.getElementById("current-time-marker");
           if (todayEl) {
             todayEl.scrollIntoView({ behavior: "smooth", block: "start" });
           } else {
