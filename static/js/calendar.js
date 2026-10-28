@@ -904,9 +904,15 @@
         spotlightPending = true;
 
         if (state.view === "year") {
+          var siteHeader = document.querySelector(".site-header");
+          document.documentElement.style.setProperty(
+            "--site-header-height",
+            (siteHeader ? siteHeader.getBoundingClientRect().height : 0) + "px",
+          );
           var todayEl =
-            document.getElementById("day-section-" + todayIso) ||
-            document.getElementById("current-time-marker");
+            document.getElementById(
+              "day-section-" + formatISODate(nowObj.date),
+            ) || document.getElementById("current-time-marker");
           if (todayEl) {
             todayEl.scrollIntoView({ behavior: "smooth", block: "start" });
           } else {
