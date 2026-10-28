@@ -75,6 +75,8 @@ select:disabled {
   *::before,
   *::after {
     transition-duration: 0s !important;
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
   }
 }
 html.js-enabled
