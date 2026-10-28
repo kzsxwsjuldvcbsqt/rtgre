@@ -126,6 +126,7 @@
     "status_same": "identique",
     "status_different": "différent",
     "status_ongoing": "[En cours]",
+    "now_marker": "{day_name} {day_num} {month_name} · {time}",
     "evals_only": "Évaluations uniquement",
     "load_error": "Erreur lors du chargement des données de la classe sélectionnée.",
     "week_prefix": "Semaine",

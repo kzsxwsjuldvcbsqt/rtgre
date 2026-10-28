@@ -165,6 +165,14 @@
         (state.search && state.search.trim().length > 0),
       );
 
+      viewContainer.removeAttribute("data-range-start");
+      viewContainer.removeAttribute("data-range-end");
+
+      function setRange(startIso, endIso) {
+        viewContainer.setAttribute("data-range-start", startIso);
+        viewContainer.setAttribute("data-range-end", endIso);
+      }
+
       viewContainer.className =
         "calendar-view-container calendar-view-" +
         state.view +
@@ -190,6 +198,7 @@
       var effShowCompared = state.compare ? state.showCompared : false;
 
       if (state.view === "year") {
+        setRange(firstDateStr, lastDateStr);
         var yearCount = renderYearView(
           primaryEvents,
           compareEvents,
@@ -215,6 +224,13 @@
         }
       } else {
         daysToRender.push(currDate);
+      }
+
+      if (daysToRender.length > 0) {
+        setRange(
+          formatISODate(daysToRender[0]),
+          formatISODate(daysToRender[daysToRender.length - 1]),
+        );
       }
 
       var dayRenderData = [];
@@ -243,6 +259,7 @@
         var emptyWeekP = document.createElement("p");
         emptyWeekP.className = "empty-state-message";
         emptyWeekP.textContent = labels.no_courses_week;
+        emptyWeekP.setAttribute("data-date", formatISODate(daysToRender[0]));
         viewContainer.appendChild(emptyWeekP);
         updateResultsCount(0);
         return;
@@ -283,6 +300,7 @@
       var daySection = document.createElement("section");
       daySection.className = "day-section";
       daySection.setAttribute("id", "day-section-" + dIso);
+      daySection.setAttribute("data-date", dIso);
       var isoDay = dDate.getDay() === 0 ? 7 : dDate.getDay();
       daySection.setAttribute("data-day", String(isoDay));
 
@@ -529,6 +547,7 @@
                 wNum +
                 " : " +
                 labels.no_courses_week;
+              emptyWeekP.setAttribute("data-date", formatISODate(weekDays[0]));
               monthFrag.appendChild(emptyWeekP);
             } else {
               weekDataList.forEach(function (dayData) {
@@ -551,6 +570,10 @@
           var mTitle = document.createElement("h2");
           mTitle.className = "year-month-title";
           mTitle.textContent = monthHeadingText;
+          mTitle.setAttribute(
+            "data-date",
+            formatISODate(new Date(mYear, mMonth, 1)),
+          );
           frag.appendChild(mTitle);
           frag.appendChild(monthFrag);
         }
