@@ -133,6 +133,7 @@
 
     var searchTimeout = null;
     var timeMarkerTimer = null;
+    var spotlightPending = false;
     var lastWrittenHash = "";
 
     function parseISODate(str) {
@@ -467,6 +468,23 @@
       scheduleTimeMarker(nowInfo.isSimulated);
     }
 
+    function spotlightNow() {
+      if (!spotlightPending) return;
+      spotlightPending = false;
+      var target =
+        document.getElementById("current-time-marker") ||
+        viewContainer.querySelector(".course-progress");
+      if (!target) return;
+      target.classList.add("is-spotlit");
+      target.addEventListener(
+        "animationend",
+        function () {
+          target.classList.remove("is-spotlit");
+        },
+        { once: true },
+      );
+    }
+
     document.addEventListener("visibilitychange", function () {
       if (!document.hidden) {
         updateTimeMarker();
@@ -711,6 +729,7 @@
             if (messageEl) messageEl.hidden = true;
             renderCalendarView(currentClassEvents, events);
             updateTimeMarker();
+            spotlightNow();
           })
           .catch(function (error) {
             if (version !== renderVersion) return;
@@ -721,11 +740,13 @@
             }
             renderCalendarView(currentClassEvents, []);
             updateTimeMarker();
+            spotlightNow();
           });
       } else {
         if (messageEl) messageEl.hidden = true;
         renderCalendarView(currentClassEvents, []);
         updateTimeMarker();
+        spotlightNow();
       }
     }
 
@@ -880,6 +901,7 @@
         var nowObj = getNowDate();
         var today = toWeekday(nowObj.date, 1);
         var todayIso = formatISODate(today);
+        spotlightPending = true;
 
         if (state.view === "year") {
           var todayEl =
@@ -892,6 +914,7 @@
             if (firstDayEl)
               firstDayEl.scrollIntoView({ behavior: "smooth", block: "start" });
           }
+          spotlightNow();
           return;
         }
 
