@@ -289,6 +289,9 @@
     overflow-y: auto;
   }
   .has-filter-sidebar > .filter-sidebar > #calendar-controls[hidden] {
+    display: grid !important;
+  }
+  .has-filter-sidebar > .filter-sidebar > #filters-container[hidden] {
     display: block !important;
   }
   .has-filter-sidebar .heading-toggle-btn {
