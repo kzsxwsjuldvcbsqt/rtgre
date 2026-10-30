@@ -1,4 +1,3 @@
-{% set page_wide = true %}
 {% extends "base.html.j2" %}
 {% from "_nav.html.j2" import section_nav %}
 {% from "_icons.html.j2" import icon %}
@@ -23,7 +22,7 @@
 ></script>
 {% endblock %}
 {% block content %}
-<div class="page-container page-container-wide has-filter-sidebar">
+<div class="page-container has-filter-sidebar">
 <div class="filter-sidebar">
 <div class="back-navigation">
 <a href="{{ url_for('index.html') }}">{{ labels.class_page.back_link }}</a>
