@@ -31,36 +31,42 @@
 </noscript>
 
 {% if grades_data.annual_units %}
-<aside class="grades-summary" aria-labelledby="grades-summary-title">
-<h2 class="grades-summary-title" id="grades-summary-title">{{ labels.grades.annual_synthesis }}</h2>
-<p class="grades-summary-total">
-<span class="grades-summary-label">{{ labels.grades.global_annual_average }}</span>
-<span class="grades-summary-figure"><strong id="global-annual-avg">{{ average_empty }}</strong><span class="grades-summary-scale">{{ grade_unit }}</span></span>
-</p>
+<aside class="grades-summary" id="grades-summary" aria-label="{{ labels.grades.annual_synthesis }}" data-empty>
+<p class="grades-summary-label">{{ labels.grades.global_annual_average }}</p>
+<p class="grades-summary-empty">{{ labels.grades.summary_empty }}</p>
+<div class="grades-summary-body">
+<p class="grades-summary-figure"><strong id="global-annual-avg" data-empty>{{ average_empty }}</strong><span>{{ grade_unit }}</span></p>
 <dl class="grades-summary-semesters">
 {% for sem in grades_data.semesters %}
 <div>
-<dt>{{ sem.label }}</dt>
-<dd><strong id="avg-{{ sem.id }}">{{ average_empty }}</strong><span class="grades-summary-scale">{{ grade_unit }}</span></dd>
+<dt>{{ sem.short_label }}</dt>
+<dd id="avg-{{ sem.id }}" data-empty>{{ average_empty }}</dd>
 </div>
 {% endfor %}
 </dl>
-<h3 class="grades-summary-subtitle">{{ labels.grades.ue_breakdown.format(**site.grades) }}</h3>
-<ul class="grades-summary-units">
-{% for au in grades_data.annual_units %}
-<li data-ue-id="{{ au.id }}">
-<p class="grades-summary-unit-head">
-<span>{{ au.label }}</span>
-<strong id="synth-annual-{{ au.id }}">{{ average_empty }}</strong>
-</p>
-<p class="grades-summary-unit-semesters">
+<table class="grades-summary-table">
+<thead>
+<tr>
+<th scope="col"><span class="visually-hidden">{{ labels.grades.annual_header_ue }}</span></th>
 {% for sem in grades_data.semesters %}
-<span>{{ sem.short_label }} <span id="synth-{{ sem.id }}-{{ au.id }}">{{ average_empty }}</span></span>
+<th scope="col">{{ sem.short_label }}</th>
 {% endfor %}
-</p>
-</li>
+<th scope="col">{{ labels.grades.annual_header_annual }}</th>
+</tr>
+</thead>
+<tbody>
+{% for au in grades_data.annual_units %}
+<tr data-ue-id="{{ au.id }}">
+<th scope="row"><abbr title="{{ au.label }}">{{ au.short_label }}</abbr></th>
+{% for sem in grades_data.semesters %}
+<td id="synth-{{ sem.id }}-{{ au.id }}" data-empty>{{ average_empty }}</td>
 {% endfor %}
-</ul>
+<td id="synth-annual-{{ au.id }}" data-empty>{{ average_empty }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
 </aside>
 {% endif %}
 </div>

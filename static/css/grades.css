@@ -6,96 +6,85 @@
   background: var(--color-surface);
   box-shadow: var(--shadow-card);
 }
-.grades-summary-title,
-.grades-summary-subtitle {
-  color: var(--color-text-faint);
-  font-size: var(--text-xs);
-  font-weight: var(--weight-semibold);
-  letter-spacing: var(--tracking-eyebrow);
-  text-transform: uppercase;
-}
-.grades-summary-title {
-  margin-block: 0 var(--space-sm);
-}
-.grades-summary-subtitle {
-  margin-block: var(--space-md) var(--space-2xs);
-}
-.grades-summary-total,
-.grades-summary-semesters {
+.grades-summary-label,
+.grades-summary-empty,
+.grades-summary-figure,
+.grades-summary-semesters,
+.grades-summary-semesters dd {
   margin: 0;
-  padding-block-end: var(--space-md);
-  border-block-end: var(--rule-width) solid var(--color-border-muted);
-}
-.grades-summary-total {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2xs);
 }
 .grades-summary-label,
-.grades-summary-semesters dt {
+.grades-summary-empty {
   color: var(--color-text-muted);
   font-size: var(--text-sm);
 }
-.grades-summary-figure,
-.grades-summary-semesters dd {
+.grades-summary-empty {
+  margin-block-start: var(--space-xs);
+}
+.grades-summary:not([data-empty]) .grades-summary-empty,
+.grades-summary[data-empty] .grades-summary-body {
+  display: none;
+}
+.grades-summary-figure {
   display: flex;
   align-items: baseline;
-  gap: var(--space-2xs);
-  margin: 0;
+  gap: var(--space-xs);
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
 }
-.grades-summary-figure strong,
-.grades-summary-semesters strong,
-.grades-summary-scale,
-.grades-summary-units strong,
-.grades-summary-unit-semesters {
+.grades-summary-figure strong {
+  color: var(--color-text);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+.grades-summary-semesters {
+  display: flex;
+  gap: var(--space-lg);
+  margin-block-start: var(--space-2xs);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+.grades-summary-semesters div {
+  display: flex;
+  gap: var(--space-xs);
+}
+.grades-summary-semesters dd,
+.grades-summary-table td {
+  color: var(--color-text);
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
 }
-.grades-summary-figure strong {
-  font-size: var(--text-xl);
+.grades-summary-semesters dd {
   font-weight: var(--weight-semibold);
 }
-.grades-summary-semesters {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-md);
-  padding-block-start: var(--space-md);
+.grades-summary-table {
+  margin: var(--space-md) 0 0;
 }
-.grades-summary-semesters strong {
-  font-size: var(--text-md);
+.grades-summary-table th,
+.grades-summary-table td {
+  padding: var(--space-xs) 0;
+}
+.grades-summary-table td,
+.grades-summary-table thead th:not(:first-child) {
+  padding-inline-start: var(--space-sm);
+  text-align: end;
+  white-space: nowrap;
+}
+.grades-summary-table tbody th {
   font-weight: var(--weight-semibold);
 }
-.grades-summary-scale {
+.grades-summary-table abbr {
+  text-decoration: none;
+  cursor: help;
+}
+.grades-summary-table td:last-child {
+  font-weight: var(--weight-semibold);
+}
+.grades-summary-body [data-empty] {
   color: var(--color-text-faint);
-  font-size: var(--text-xs);
-}
-.grades-summary-units {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.grades-summary-units li {
-  padding-block: var(--space-xs);
-}
-.grades-summary-units li:not(:last-child) {
-  border-block-end: var(--rule-width) solid var(--color-border-muted);
-}
-.grades-summary-unit-head,
-.grades-summary-unit-semesters {
-  display: flex;
-  justify-content: space-between;
-  gap: var(--space-sm);
-  margin: 0;
-}
-.grades-summary-unit-head {
-  align-items: baseline;
-  font-size: var(--text-sm);
-  font-weight: var(--weight-medium);
-}
-.grades-summary-unit-semesters {
-  justify-content: flex-start;
-  color: var(--color-text-muted);
-  font-size: var(--text-xs);
+  font-weight: var(--weight-normal);
 }
 .grades-page .privacy-notice {
   margin-block: 0;

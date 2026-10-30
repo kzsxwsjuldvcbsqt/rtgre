@@ -89,51 +89,45 @@
       return gradesByCode;
     }
 
+    function showAverage(element, value) {
+      if (!element) return;
+      var known = value !== null && value !== undefined;
+      element.textContent = known ? value.toFixed(decimals) : emptyValue;
+      element.toggleAttribute("data-empty", !known);
+    }
+
     function calculate() {
       var averages = GradesModel.calculate(currentGrades(), gradesConfig);
       gradesConfig.semesters.forEach(function (sem) {
-        sem.units.forEach(function (u) {
-          var value = averages.units[u.id];
-          var cell = document.getElementById("avg-" + u.id);
-          if (cell) {
-            cell.textContent =
-              value !== null ? value.toFixed(decimals) : emptyValue;
-          }
-        });
-        var semAvgCell = document.getElementById("avg-" + sem.id);
-        if (semAvgCell) {
-          var semesterValue = averages.semesters[sem.id];
-          semAvgCell.textContent =
-            semesterValue !== null
-              ? semesterValue.toFixed(decimals)
-              : emptyValue;
-        }
+        showAverage(
+          document.getElementById("avg-" + sem.id),
+          averages.semesters[sem.id],
+        );
       });
-
       gradesConfig.annual_units.forEach(function (au) {
         gradesConfig.semesters.forEach(function (sem) {
-          var average = averages.units[au.units[sem.id]];
-          var cell = document.getElementById("synth-" + sem.id + "-" + au.id);
-          if (cell)
-            cell.textContent =
-              average !== null && average !== undefined
-                ? average.toFixed(decimals)
-                : emptyValue;
+          showAverage(
+            document.getElementById("synth-" + sem.id + "-" + au.id),
+            averages.units[au.units[sem.id]],
+          );
         });
-        var annualCell = document.getElementById("synth-annual-" + au.id);
-        if (annualCell) {
-          var annualValue = averages.annualUnits[au.id];
-          annualCell.textContent =
-            annualValue !== null ? annualValue.toFixed(decimals) : emptyValue;
-        }
+        showAverage(
+          document.getElementById("synth-annual-" + au.id),
+          averages.annualUnits[au.id],
+        );
       });
-      var globalAvgEl = document.getElementById("global-annual-avg");
-      if (globalAvgEl) {
-        globalAvgEl.textContent =
-          averages.global !== null
-            ? averages.global.toFixed(decimals)
-            : emptyValue;
-      }
+      showAverage(
+        document.getElementById("global-annual-avg"),
+        averages.global,
+      );
+      var summary = document.getElementById("grades-summary");
+      if (summary)
+        summary.toggleAttribute(
+          "data-empty",
+          gradesConfig.semesters.every(function (sem) {
+            return averages.semesters[sem.id] === null;
+          }),
+        );
     }
 
     function writeGrades(grades) {

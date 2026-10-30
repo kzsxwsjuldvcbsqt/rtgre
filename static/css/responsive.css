@@ -40,6 +40,10 @@
   }
 }
 @media (max-width: 59.99em) {
+  .grades-summary-table,
+  .grades-summary-table * {
+    all: revert-layer;
+  }
   :root {
     --control-height: var(--touch-target);
     --control-font-size: var(--text-base);

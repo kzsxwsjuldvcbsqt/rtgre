@@ -270,6 +270,7 @@ def get_class_grades_data(class_config: ClassConfig, curriculum_data: dict, labe
             annual_units_data.append(
                 {
                     "id": au_id,
+                    "short_label": au["short_label"],
                     "label": au["label"],
                     "units": {
                         sem_id: unit["id"] for sem_id, unit in semester_units.items() if unit
