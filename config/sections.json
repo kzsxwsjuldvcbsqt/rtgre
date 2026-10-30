@@ -50,10 +50,16 @@
       "url": "https://webmail.etu.univ-grenoble-alpes.fr/"
     },
     {
-      "id": "gitlab",
-      "label": "GitLab",
+      "id": "gitlab-im2ag",
+      "label": "GitLab IM2AG",
       "kind": "external",
       "url": "https://im2ag-gitlab.univ-grenoble-alpes.fr/"
+    },
+    {
+      "id": "gitlab-gricad",
+      "label": "GitLab GRICAD",
+      "kind": "external",
+      "url": "https://gricad-gitlab.univ-grenoble-alpes.fr/"
     },
     {
       "id": "notice",

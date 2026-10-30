@@ -17,7 +17,8 @@
       "grades": "Saisie des notes et moyennes.",
       "tasks": "Notes et rappels de la classe.",
       "webmail": "Messagerie étudiante.",
-      "gitlab": "Dépôts GitLab de l’UGA.",
+      "gitlab-im2ag": "Dépôts GitLab de l’IM2AG.",
+      "gitlab-gricad": "Dépôts GitLab de GRICAD.",
       "absences": "Cours manqués et feuille d’absence."
     }
   },

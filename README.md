@@ -23,7 +23,7 @@ Projet étudiant non officiel. Il ne remplace pas ADE ni les informations commun
 
 ## Pourquoi ce projet
 
-Pendant la formation, les informations utiles sont réparties entre plusieurs services : ADE pour l'emploi du temps, Chamilo pour les espaces des modules, la messagerie universitaire, le GitLab universitaire, et les informations sur les modules, les coefficients et les évaluations.
+Pendant la formation, les informations utiles sont réparties entre plusieurs services : ADE pour l'emploi du temps, Chamilo pour les espaces des modules, la messagerie universitaire, les GitLab universitaires (IM2AG et GRICAD), et les informations sur les modules, les coefficients et les évaluations.
 
 Cette répartition rend le suivi quotidien peu pratique. ADE permet de consulter un planning, mais il est difficile d'y rechercher un cours, de filtrer les évaluations, de comparer plusieurs groupes ou de retrouver rapidement une information précise.
 
@@ -47,7 +47,7 @@ Cette détection dépend des règles de configuration et des informations prése
 
 ### Modules et ressources
 
-La page des modules regroupe les enseignements par semestre, type de module, parcours et statut de la classe. Elle construit les liens vers les espaces Chamilo correspondants lorsqu'ils sont disponibles. La navigation propose aussi des liens vers la messagerie étudiante et le GitLab universitaire.
+La page des modules regroupe les enseignements par semestre, type de module, parcours et statut de la classe. Elle construit les liens vers les espaces Chamilo correspondants lorsqu'ils sont disponibles. La navigation propose aussi des liens vers la messagerie étudiante et les GitLab IM2AG et GRICAD.
 
 ### Calcul des notes
 
