@@ -88,5 +88,4 @@ def prepare_evaluation_comparison(app_config, class_config, evaluation, match_st
     return {
         "match_states_by_program": by_program,
         "diff_cols": differences,
-        "total_cols": 2 + sum(differences.values()),
     }

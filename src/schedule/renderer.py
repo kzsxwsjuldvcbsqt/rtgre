@@ -337,7 +337,6 @@ def render_site(
                     evaluation=ev,
                     match_states_by_program=comparison["match_states_by_program"],
                     diff_cols=comparison["diff_cols"],
-                    total_cols=comparison["total_cols"],
                     module_labels=module_labels,
                     category_map=cat_map,
                     categories=app_config.categories,

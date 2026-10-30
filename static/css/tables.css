@@ -32,16 +32,6 @@ thead th {
 tbody tr:last-child > * {
   border-block-end: 0;
 }
-.month-row th,
-.program-row th {
-  padding-block: var(--space-lg) var(--space-xs);
-  border-block-end: 0;
-  color: var(--color-text-faint);
-  font-size: var(--text-xs);
-  font-weight: var(--weight-bold);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
 .col-date,
 .col-time,
 .grade-input {

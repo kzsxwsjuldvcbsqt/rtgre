@@ -53,8 +53,7 @@
   background: var(--color-surface);
   box-shadow: var(--shadow-card);
 }
-.filter-group,
-.filter-group-checkboxes {
+.filter-group {
   display: flex;
   flex-wrap: wrap;
   align-items: center;

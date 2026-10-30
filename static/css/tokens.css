@@ -26,8 +26,6 @@
   --color-highlight: #f7c948;
   --color-on-highlight: #000000;
 
-  --color-positive: #0a6b34;
-  --color-positive-soft: #e7f6ec;
   --color-danger: #9b1c1c;
   --color-danger-soft: #fde8e8;
   --color-kind-resource: var(--color-surface);
@@ -146,5 +144,4 @@
   --z-raised: 1;
   --z-menu: 30;
   --z-header: 40;
-  --z-overlay: 50;
 }
