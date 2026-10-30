@@ -371,11 +371,6 @@
           section.classList.remove("is-today");
         });
 
-      var ongoingBadges = document.querySelectorAll(".ongoing-badge");
-      ongoingBadges.forEach(function (b) {
-        b.remove();
-      });
-
       document.querySelectorAll(".course-progress").forEach(function (el) {
         el.remove();
       });
@@ -464,14 +459,6 @@
 
         if (nowTimeStr >= startStr && nowTimeStr < endStr) {
           item.classList.add("is-ongoing");
-
-          var titleDiv = item.querySelector(".event-title");
-          if (titleDiv) {
-            var ongBadge = document.createElement("span");
-            ongBadge.className = "ongoing-badge";
-            ongBadge.textContent = " " + labels.status_ongoing;
-            titleDiv.appendChild(ongBadge);
-          }
 
           var span = toMinutes(endStr) - toMinutes(startStr);
           var elapsed =
