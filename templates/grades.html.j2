@@ -32,16 +32,6 @@
 
 {% if grades_data.annual_units %}
 <aside class="grades-summary" aria-label="{{ labels.grades.annual_synthesis }}">
-<p class="grades-summary-label">{{ labels.grades.global_annual_average }}</p>
-<p class="grades-summary-figure"><strong id="global-annual-avg" data-empty>{{ average_empty }}</strong><span>{{ grade_unit }}</span></p>
-<dl class="grades-summary-semesters">
-{% for sem in grades_data.semesters %}
-<div>
-<dt>{{ sem.short_label }}</dt>
-<dd id="avg-{{ sem.id }}"></dd>
-</div>
-{% endfor %}
-</dl>
 <table class="grades-summary-table">
 <thead>
 <tr>
@@ -63,6 +53,15 @@
 </tr>
 {% endfor %}
 </tbody>
+<tfoot>
+<tr>
+<th scope="row"><abbr title="{{ labels.grades.semester_average }}">{{ labels.grades.semester_average_short }}</abbr></th>
+{% for sem in grades_data.semesters %}
+<td id="avg-{{ sem.id }}"></td>
+{% endfor %}
+<td></td>
+</tr>
+</tfoot>
 </table>
 </aside>
 {% endif %}
@@ -133,7 +132,6 @@
   data-decimals="{{ site.grades.decimals }}"
   data-storage-prefix="{{ site.grades.storage_key_prefix }}"
   data-format-version="{{ site.grades.export_format_version }}"
-  data-empty-value="{{ average_empty }}"
   data-export-format="{{ site.grades.export_format }}"
   data-export-filename="{{ site.grades.export_filename }}"
   data-max-import-bytes="{{ site.grades.max_import_bytes }}"

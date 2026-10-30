@@ -91,12 +91,7 @@
       annualUnits[annualUnit.id] = weightedAverage(contributions);
     });
 
-    const global = weightedAverage(
-      config.annual_units.map(function (unit) {
-        return { value: annualUnits[unit.id], weight: unit.weight };
-      }),
-    );
-    return { units, semesters, annualUnits, global };
+    return { units, semesters, annualUnits };
   }
 
   const api = { calculate, normalizeGrades };

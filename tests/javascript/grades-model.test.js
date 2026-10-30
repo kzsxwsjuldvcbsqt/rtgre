@@ -27,7 +27,7 @@ const config = {
       ],
     },
   ],
-  annual_units: [{ id: "annual", weight: 1, units: { s5: "ue1" } }],
+  annual_units: [{ id: "annual", units: { s5: "ue1" } }],
 };
 
 test("grade averages are independent from the DOM", () => {
@@ -36,7 +36,6 @@ test("grade averages are independent from the DOM", () => {
   assert.equal(result.units.ue2, 15);
   assert.ok(Math.abs(result.semesters.s5 - 125 / 9) < 1e-12);
   assert.equal(result.annualUnits.annual, 40 / 3);
-  assert.equal(result.global, 40 / 3);
 });
 
 test("grade data accepts compatible values and rejects unsafe structures", () => {

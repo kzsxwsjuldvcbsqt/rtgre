@@ -82,8 +82,6 @@ def render_site(
         grade_label=app_config.labels["grades"]["grade_input_column"].format(
             **app_config.site["grades"]
         ),
-        grade_unit=app_config.labels["grades"]["grade_unit"].format(**app_config.site["grades"]),
-        average_empty=app_config.labels["grades"]["average_empty"],
     )
     all_classes = [c for p in app_config.programs for c in p.classes]
     if matching_matrix is None:

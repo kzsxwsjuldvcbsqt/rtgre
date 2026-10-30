@@ -32,7 +32,6 @@
     var errRestore = scriptEl.getAttribute("data-err-restore");
     var errFileSize = scriptEl.getAttribute("data-err-file-size");
     var messageEl = document.getElementById("grades-message");
-    var emptyValue = scriptEl.getAttribute("data-empty-value");
     var resetConfirmMsg = scriptEl.getAttribute("data-reset-confirm");
     var confirmOtherClassMsg = scriptEl.getAttribute(
       "data-confirm-other-class",
@@ -89,11 +88,10 @@
       return gradesByCode;
     }
 
-    function showAverage(element, value, emptyText) {
+    function showAverage(element, value) {
       if (!element) return;
-      var known = value !== null && value !== undefined;
-      element.textContent = known ? value.toFixed(decimals) : emptyText || "";
-      element.toggleAttribute("data-empty", !known);
+      element.textContent =
+        value !== null && value !== undefined ? value.toFixed(decimals) : "";
     }
 
     function calculate() {
@@ -111,16 +109,15 @@
             averages.units[au.units[sem.id]],
           );
         });
+        var complete = gradesConfig.semesters.every(function (sem) {
+          var unitId = au.units[sem.id];
+          return !unitId || averages.units[unitId] !== null;
+        });
         showAverage(
           document.getElementById("synth-annual-" + au.id),
-          averages.annualUnits[au.id],
+          complete ? averages.annualUnits[au.id] : null,
         );
       });
-      showAverage(
-        document.getElementById("global-annual-avg"),
-        averages.global,
-        emptyValue,
-      );
     }
 
     function writeGrades(grades) {
