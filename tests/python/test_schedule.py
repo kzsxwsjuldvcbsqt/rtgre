@@ -126,10 +126,15 @@ class ScheduleTests(unittest.TestCase):
                 self.assertEqual(payload["config"], valid)
                 self.assertIn("tasks-model.js", html)
                 self.assertIn("a-faire.html", (root / "index.html").read_text())
-                self.assertIn(external_urls["gitlab"], html)
+                self.assertIn(external_urls["gitlab-im2ag"], html)
+                self.assertIn(external_urls["gitlab-gricad"], html)
                 self.assertLess(
                     html.index(external_urls["webmail"]),
-                    html.index(external_urls["gitlab"]),
+                    html.index(external_urls["gitlab-im2ag"]),
+                )
+                self.assertLess(
+                    html.index(external_urls["gitlab-im2ag"]),
+                    html.index(external_urls["gitlab-gricad"]),
                 )
 
     def test_safe_json_hidden_teachers_and_configured_grades(self):
