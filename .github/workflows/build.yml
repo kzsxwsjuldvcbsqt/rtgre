@@ -45,9 +45,6 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Install PDF verification tools
-        run: sudo apt-get update && sudo apt-get install -y poppler-utils
-
       - name: Install JavaScript dependencies
         run: npm ci
 
@@ -57,9 +54,6 @@ jobs:
           ruff format --check src tests
           npm run format:check
           for script in static/js/*.js; do node --check "$script"; done
-
-      - name: Verify PDF assets
-        run: sha256sum --check static/PDF-ASSETS.sha256
 
       - name: Run JavaScript tests
         run: npm test

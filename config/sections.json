@@ -31,19 +31,6 @@
       "kind": "internal"
     },
     {
-      "id": "tasks",
-      "label": "À faire",
-      "file": "a-faire.html",
-      "kind": "internal"
-    },
-    {
-      "id": "absences",
-      "label": "Absences",
-      "file": "absences.html",
-      "kind": "internal",
-      "statuses": ["fi"]
-    },
-    {
       "id": "webmail",
       "label": "Messagerie",
       "kind": "external",

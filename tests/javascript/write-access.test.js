@@ -20,7 +20,7 @@ test("independent editors cannot acquire the same write lease concurrently", asy
   ]);
   first.assertWritable();
   assert.throws(() => second.assertWritable(), /conflict/);
-  const other = await acquire("absences", locks, {});
+  const other = await acquire("other", locks, {});
   other.assertWritable();
   first.close();
   await new Promise((resolve) => setTimeout(resolve, 0));

@@ -15,8 +15,11 @@
 .page-container > h1:first-child {
   margin-block-start: 0;
 }
-.page-heading.section-head {
-  align-items: flex-start;
+.section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-md);
 }
 .page-heading h1,
 .page-heading .collapsible-heading {

@@ -19,8 +19,7 @@
   .filter-form,
   .calendar-nav-bar,
   .heading-toggle-btn,
-  .menu,
-  .absence-launch {
+  .menu {
     display: none !important;
   }
   body,

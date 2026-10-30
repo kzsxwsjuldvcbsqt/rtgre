@@ -1,5 +1,5 @@
 (async function () {
-  const { errors, pause, assert, frame, change } = BrowserTest.create();
+  const { errors, frame } = BrowserTest.create();
   try {
     const expectedTheme = new URLSearchParams(location.search).get("theme");
     const dark = matchMedia("(prefers-color-scheme: dark)").matches;
@@ -7,19 +7,8 @@
       throw new Error("Color scheme preference was not applied");
     }
     for (const width of [320, 390, 768, 959, 960, 1440]) {
-      for (const page of [
-        "calendar.html",
-        "notes.html",
-        "a-faire.html",
-        "absences.html",
-      ]) {
-        const current = await frame(
-          "classes/" +
-            (page === "absences.html" ? "b3cy1" : "b3cya") +
-            "/" +
-            page,
-          width,
-        );
+      for (const page of ["calendar.html", "notes.html"]) {
+        const current = await frame("classes/b3cya/" + page, width);
         if (current.contentDocument.documentElement.scrollWidth > width) {
           throw new Error("Horizontal overflow on " + page);
         }
@@ -47,7 +36,6 @@
       throw new Error("Shared keyboard contract failed");
     }
     notes.remove();
-    await runAbsenceBrowserTests({ frame, assert, change, pause });
     if (errors.length) throw new Error(errors.join(", "));
     document.documentElement.dataset.testResult = "passed";
   } catch (error) {

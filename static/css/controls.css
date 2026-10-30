@@ -6,10 +6,7 @@
 .calendar-nav-bar input[type="date"],
 .filter-form button,
 .calendar-nav-bar button,
-.grade-input,
-.absence-field input,
-.absence-field select,
-.absence-field textarea {
+.grade-input {
   min-height: var(--control-height);
   padding-inline: var(--space-sm);
   border: var(--rule-width) solid var(--color-field-border);
@@ -32,15 +29,6 @@
 }
 .btn {
   padding-inline: var(--space-md);
-}
-.btn-primary {
-  border-color: var(--color-primary);
-  background: var(--color-primary);
-  color: var(--color-on-primary);
-  font-weight: var(--weight-semibold);
-}
-.btn-primary .icon {
-  color: var(--color-on-primary);
 }
 .filter-form input[type="text"] {
   width: min(100%, 20rem);
@@ -89,8 +77,7 @@
 #cal-comp-checkboxes {
   display: contents;
 }
-.filter-form label:has(input),
-.absence-toggle {
+.filter-form label:has(input) {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -104,8 +91,7 @@
   cursor: pointer;
   user-select: none;
 }
-.filter-form label:has(input:checked),
-.absence-toggle:has(input:checked) {
+.filter-form label:has(input:checked) {
   border-color: var(--color-highlight);
   background: var(--color-accent-soft);
   color: var(--color-on-highlight);
@@ -163,40 +149,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: inline-flex;
 }
 
-.app-dialog {
-  position: fixed;
-  inset: 0;
-  width: min(calc(100% - 2 * var(--page-gutter)), var(--dialog-width));
-  max-width: var(--dialog-width);
-  max-height: min(90dvh, 52rem);
-  margin: auto;
-  padding: 0;
-  border: var(--rule-width) solid var(--color-border-muted);
-  border-radius: var(--radius-large);
-  background: var(--color-surface);
-  color: var(--color-text);
-  box-shadow: var(--shadow-overlay);
-  overflow: hidden;
-}
-.app-dialog::backdrop {
-  background: var(--color-scrim);
-}
-.app-dialog-body {
-  display: flex;
-  flex-direction: column;
-  max-height: inherit;
-  padding: var(--space-lg);
-  overflow-y: auto;
-  overscroll-behavior: contain;
-}
-.app-dialog-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-md);
-  margin-block-end: var(--space-lg);
-}
-.app-dialog-close,
 .menu > summary {
   display: inline-flex;
   align-items: center;

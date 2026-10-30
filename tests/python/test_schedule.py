@@ -19,7 +19,6 @@ from schedule.config import (
     validate_calendar_config,
     validate_session_marks,
     validate_site_config,
-    validate_tasks_config,
 )
 from schedule.curriculum import (
     get_class_grades_data,
@@ -143,15 +142,7 @@ class ScheduleTests(unittest.TestCase):
             with self.subTest(days=days), self.assertRaises(ValueError):
                 validate_calendar_config({**self.config.calendar_config, "days_of_week": days})
 
-    def test_tasks_configuration_and_pages(self):
-        valid = self.config.tasks_config
-        for candidate in (
-            {**valid, "max_items": 0},
-            {**valid, "max_text_length": valid["max_total_text_length"] + 1},
-            {key: value for key, value in valid.items() if key != "export_format"},
-        ):
-            with self.subTest(candidate=candidate), self.assertRaises(ValueError):
-                validate_tasks_config(candidate)
+    def test_external_links_follow_navigation_order(self):
         external_urls = {
             section.id: section.url
             for section in self.config.sections
@@ -160,13 +151,7 @@ class ScheduleTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             render_site(self.config, {}, output_dir=directory)
             for cls in self.classes:
-                root = Path(directory) / "classes" / cls.id
-                html = (root / "a-faire.html").read_text()
-                payload = json.loads(html.split('id="tasks-data">', 1)[1].split("</script>", 1)[0])
-                self.assertEqual(payload["classId"], cls.id)
-                self.assertEqual(payload["config"], valid)
-                self.assertIn("tasks-model.js", html)
-                self.assertIn("a-faire.html", (root / "index.html").read_text())
+                html = (Path(directory) / "classes" / cls.id / "notes.html").read_text()
                 self.assertIn(external_urls["gitlab-im2ag"], html)
                 self.assertIn(external_urls["gitlab-gricad"], html)
                 self.assertLess(
@@ -247,91 +232,6 @@ class ScheduleTests(unittest.TestCase):
                 fetch_calendar("https://example.invalid", self.config.site, "test")
             self.assertIs(raised.exception.__cause__, error)
             self.assertEqual(client.get.call_count, self.config.site["ade"]["retry_attempts"])
-
-    def test_absence_page_uses_shared_calendar_and_configuration(self):
-        eligible = next(cls for cls in self.classes if cls.status == "fi")
-        config = self.config
-        events = sample_events(config, eligible)
-        with tempfile.TemporaryDirectory() as directory:
-            render_site(
-                config,
-                {eligible.id: events},
-                output_dir=directory,
-            )
-            root = Path(directory) / "classes" / eligible.id
-            html = (root / "absences.html").read_text()
-            payload = json.loads(html.split('id="absence-data">', 1)[1].split("</script>", 1)[0])
-            self.assertEqual(
-                payload["events"],
-                serialize_events(config, eligible.id, events)["events"],
-            )
-            self.assertEqual(payload["config"], config.absence_config)
-            self.assertEqual(payload["classId"], eligible.id)
-            self.assertEqual(payload["year"], config.site["school_year"])
-            self.assertEqual(payload["pdfAssets"]["logo"], "../../static/images/IUT1-UGA.png")
-            self.assertEqual(
-                payload["pdfAssets"]["library"],
-                "../../static/vendor/pdf-lib-1.17.1.min.js",
-            )
-            self.assertIn(">Tout effacer</button>", html)
-            self.assertNotIn("built-in method", html)
-            self.assertNotIn("Enregistrer le suivi", html)
-            self.assertIn("À partir du matin", html)
-            self.assertIn("Jusqu’à la fin de la journée", html)
-            self.assertIn(">Télécharger le PDF</button>", html)
-            self.assertIn(">Ouvrir le PDF</button>", html)
-            self.assertNotIn("window.print", (Path("static") / "js" / "absences.js").read_text())
-            self.assertNotIn("absence-print-sheet", html)
-            self.assertIn("absences.html", (root / "index.html").read_text())
-            self.assertNotIn("static/absences.js", (root / "notes.html").read_text())
-
-    def test_absence_configuration_rejects_invalid_boundaries(self):
-        from schedule.config import validate_absence_config
-
-        for value in ("00:00", "24:00", "12:99", "12:00:00"):
-            with self.subTest(value=value), self.assertRaises(ValueError):
-                validate_absence_config({**self.config.absence_config, "afternoon_start": value})
-
-    def test_absence_sheet_configuration_is_validated(self):
-        from schedule.config import validate_absence_config
-
-        valid = self.config.absence_config
-        for sheet in [
-            {**valid["sheet"], "blob_revoke_delay_ms": 0},
-            {**valid["sheet"], "logo_path": "favicon.png"},
-            {**valid["sheet"], "pdf_assets": {**valid["sheet"]["pdf_assets"], "font_bold": ""}},
-            {**valid["sheet"], "pdf_layout": {**valid["sheet"]["pdf_layout"], "rule_width": 0}},
-            {key: value for key, value in valid["sheet"].items() if key != "logo_path"},
-        ]:
-            with self.subTest(sheet=sheet), self.assertRaises(ValueError):
-                validate_absence_config({**valid, "sheet": sheet})
-
-    def test_absence_configuration_has_no_semester_dependency(self):
-        eligible = next(cls for cls in self.classes if cls.status == "fi")
-        self.assertNotIn("semester_periods", self.config.absence_config)
-        with tempfile.TemporaryDirectory() as directory:
-            render_site(
-                self.config,
-                {eligible.id: sample_events(self.config, eligible)},
-                output_dir=directory,
-            )
-            payload = json.loads(
-                (Path(directory) / "classes" / eligible.id / "absences.html")
-                .read_text()
-                .split('id="absence-data">', 1)[1]
-                .split("</script>", 1)[0]
-            )
-            self.assertNotIn("semesterPeriods", payload)
-
-    def test_absences_are_only_generated_and_linked_for_eligible_classes(self):
-        with tempfile.TemporaryDirectory() as directory:
-            render_site(self.config, {}, output_dir=directory)
-            for cls in self.classes:
-                root = Path(directory) / "classes" / cls.id
-                eligible = cls.status == "fi"
-                self.assertEqual((root / "absences.html").exists(), eligible)
-                for page in ("index.html", "calendar.html", "notes.html", "evaluations.html"):
-                    self.assertEqual("absences.html" in (root / page).read_text(), eligible)
 
     def test_all_page_families_render_with_safe_links(self):
         events = sample_events(self.config, self.classes[0])

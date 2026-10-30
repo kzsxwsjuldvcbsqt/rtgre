@@ -1,6 +1,6 @@
 # RTGRE
 
-Site étudiant qui regroupe l'emploi du temps, les évaluations, les modules, un calcul de notes indicatif, une liste personnelle et un suivi des absences pour la troisième année du BUT Réseaux et Télécommunications de l'IUT1 de Grenoble.
+Site étudiant qui regroupe l'emploi du temps, les évaluations, les modules, et un calcul de notes indicatif pour la troisième année du BUT Réseaux et Télécommunications de l'IUT1 de Grenoble.
 
 Site en ligne : https://rtgre.fr
 
@@ -55,16 +55,6 @@ Le site propose une saisie locale des notes. Les calculs s'appuient sur les coef
 
 Ces résultats ne sont pas des notes officielles. Ce sont des estimations basées sur les coefficients configurés et sur les valeurs saisies par l'utilisateur.
 
-### Liste « À faire »
-
-Chaque classe dispose d'une liste personnelle pour ajouter des notes ou des rappels. Les éléments restent dans le navigateur, sont séparés par classe et par année, peuvent être exportés et importés en JSON, et ne sont envoyés à aucun serveur.
-
-### Suivi des absences
-
-Cette fonction est proposée pour les classes en formation initiale. Elle permet de déclarer une absence sur une journée, une demi-journée, un cours précis ou une période de plusieurs jours. Le site retrouve les cours concernés à partir du planning de la classe.
-
-Elle permet aussi de suivre les absences enregistrées, de distinguer les absences justifiées, non justifiées ou à vérifier, de suivre la remise d'un justificatif, et d'importer ou exporter l'historique en JSON. Une fiche d'absence peut être préparée et générée localement en PDF, avec une annexe ajoutée lorsque le contenu le nécessite. La génération du PDF utilise pdf-lib, fontkit et les polices DejaVu Sans distribuées avec le projet.
-
 ### Interface
 
 L'interface est responsive et prévue pour les écrans mobiles. Elle utilise un thème sombre ; l'impression utilise un rendu clair. La navigation reste utilisable au clavier, et les pages principalement informatives fonctionnent partiellement sans JavaScript. Les libellés et contrôles sont pensés pour l'accessibilité, sans que le projet revendique une conformité complète à une norme faute d'audit dédié.
@@ -104,11 +94,11 @@ La publication est protégée par plusieurs garde-fous : un verrou contre deux g
 
 ### Navigateur, en JavaScript
 
-Le dossier `static/js/` contient la logique exécutée dans le navigateur : le calendrier et la comparaison des groupes, les filtres des évaluations, le calcul des notes, la liste de tâches, le suivi des absences, la génération du PDF, l'import et l'export JSON, ainsi qu'un accès protégé aux données modifiables entre plusieurs onglets.
+Le dossier `static/js/` contient la logique exécutée dans le navigateur : le calendrier et la comparaison des groupes, les filtres des évaluations, le calcul des notes, l'import et l'export JSON, ainsi qu'un accès protégé aux données modifiables entre plusieurs onglets.
 
-Le calendrier de la classe courante est intégré dans la page générée. Les données des autres classes sont chargées à la demande depuis `dist/data/<classe>.json` lors d'une comparaison. Les notes, tâches et absences utilisent `localStorage` ; les filtres et réglages temporaires utilisent selon la page `sessionStorage` ou l'URL.
+Le calendrier de la classe courante est intégré dans la page générée. Les données des autres classes sont chargées à la demande depuis `dist/data/<classe>.json` lors d'une comparaison. Les notes utilisent `localStorage` ; les filtres et réglages temporaires utilisent selon la page `sessionStorage` ou l'URL.
 
-Il n'y a pas de serveur applicatif, pas d'API privée, pas de base de données, pas de système de compte ni d'authentification. Les notes, tâches et absences ne sont pas envoyées vers un serveur.
+Il n'y a pas de serveur applicatif, pas d'API privée, pas de base de données, pas de système de compte ni d'authentification. Les notes ne sont pas envoyées vers un serveur.
 
 ## Organisation du dépôt
 
@@ -123,9 +113,7 @@ Il n'y a pas de serveur applicatif, pas d'API privée, pas de base de données, 
 ├── static/
 │   ├── css/             # styles
 │   ├── js/              # logique exécutée dans le navigateur
-│   ├── fonts/           # polices utilisées dans les PDF
-│   ├── icons/           # icônes Octicons
-│   └── vendor/          # bibliothèques PDF distribuées localement
+│   └── icons/           # icônes Octicons
 ├── tests/
 │   ├── python/
 │   ├── javascript/
@@ -143,7 +131,6 @@ Le dossier `dist/` est généré par la construction et n'est pas suivi par Git.
 - Python 3.12
 - requests, icalendar, Jinja2
 - HTML, CSS, JavaScript sans framework côté navigateur
-- pdf-lib et @pdf-lib/fontkit pour la génération des PDF
 - Node.js 22 pour les outils et les tests JavaScript
 - unittest et node:test pour les tests
 - Ruff et Prettier pour le formatage et les contrôles
@@ -191,7 +178,7 @@ python -m http.server 8000 --directory dist
 
 Puis ouvrir http://localhost:8000
 
-Les tests navigateur complets, utilisés en intégration continue, demandent des outils supplémentaires : Chrome ou Chromium, Firefox pour les vérifications multi-navigateurs, et les outils Poppler `pdfinfo`, `pdftotext` et `pdffonts` pour les contrôles des PDF.
+Les tests navigateur complets, utilisés en intégration continue, demandent des outils supplémentaires : Chrome ou Chromium, et Firefox pour les vérifications multi-navigateurs.
 
 ## Configuration
 
@@ -206,8 +193,6 @@ Le comportement et le contenu du site sont décrits dans `config/`.
 | `config/sections.json` | pages internes et liens externes affichés dans la navigation |
 | `config/calendar.json` | vues, jours affichés, comparaison et temporisations |
 | `config/corrections.json` | retouches manuelles des cours ADE (suppression ou surcharge) |
-| `config/absences.json` | règles, limites, stockage et mise en page du PDF d'absence |
-| `config/tasks.json` | stockage, format d'export et limites de la liste « À faire » |
 | `config/labels.json` | textes affichés dans l'interface |
 
 Pour adapter le site à une nouvelle année :
@@ -236,19 +221,13 @@ Contrôles JavaScript (formatage, tests unitaires et vérification de syntaxe) :
 npm run check
 ```
 
-Vérification des ressources PDF :
-
-```bash
-sha256sum --check static/PDF-ASSETS.sha256
-```
-
 Suite complète, y compris les tests navigateur :
 
 ```bash
 PYTHONPATH=src python -m unittest discover -s tests -v
 ```
 
-Les tests couvrent notamment la validation de la configuration, l'analyse et le rapprochement des événements, le rendu du site et ses liens, les calculs de notes, les imports et exports, les limites de stockage, les absences, la génération des PDF, les interactions dans un navigateur, le responsive, le comportement sous préférence système claire ou sombre, ainsi que certains cas d'injection et de données invalides.
+Les tests couvrent notamment la validation de la configuration, l'analyse et le rapprochement des événements, le rendu du site et ses liens, les calculs de notes, les imports et exports, les limites de stockage, les interactions dans un navigateur, le responsive, le comportement sous préférence système claire ou sombre, ainsi que certains cas d'injection et de données invalides.
 
 ## Sécurité
 
@@ -277,13 +256,13 @@ Côté navigateur, chaque page déclare une Content-Security-Policy définie dan
 
 Le déploiement est géré par `.github/workflows/build.yml`. Le workflow s'exécute sur les push vers `main` ou `master`, sur les pull requests, manuellement, et automatiquement toutes les six heures.
 
-Il enchaîne l'installation des dépendances, les contrôles de formatage et de syntaxe, la vérification des ressources PDF, les tests Python, JavaScript et navigateur, la génération du dossier `dist/`, puis l'envoi de l'artefact GitHub Pages. Le déploiement effectif a lieu sauf pour les pull requests.
+Il enchaîne l'installation des dépendances, les contrôles de formatage et de syntaxe, les tests Python, JavaScript et navigateur, la génération du dossier `dist/`, puis l'envoi de l'artefact GitHub Pages. Le déploiement effectif a lieu sauf pour les pull requests.
 
 Le déclenchement toutes les six heures permet de recopier plusieurs fois par jour les nouvelles données disponibles dans ADE.
 
 ## Données personnelles et limites
 
-Les notes, tâches et absences personnelles restent dans le `localStorage` du navigateur. L'application ne les envoie à aucun serveur. Elles sont propres au navigateur et à l'appareil utilisés, et peuvent être perdues si le stockage du navigateur est effacé. Les fonctions d'export JSON permettent de les sauvegarder. Une importation doit provenir d'un fichier de confiance, même si son format est validé. Le site est statique et sans compte utilisateur.
+Les notes personnelles restent dans le `localStorage` du navigateur. L'application ne les envoie à aucun serveur. Elles sont propres au navigateur et à l'appareil utilisés, et peuvent être perdues si le stockage du navigateur est effacé. Les fonctions d'export JSON permettent de les sauvegarder. Une importation doit provenir d'un fichier de confiance, même si son format est validé. Le site est statique et sans compte utilisateur.
 
 Quelques limites à garder en tête :
 
@@ -303,6 +282,3 @@ Le projet est distribué sous licence MIT. Voir [LICENSE](LICENSE).
 Certaines ressources distribuées avec le dépôt conservent leur propre licence :
 
 - Octicons : [static/icons/OCTICONS-LICENSE.md](static/icons/OCTICONS-LICENSE.md)
-- DejaVu Sans : [static/fonts/DejaVuSans-LICENSE.txt](static/fonts/DejaVuSans-LICENSE.txt)
-- pdf-lib : [static/vendor/pdf-lib-LICENSE.md](static/vendor/pdf-lib-LICENSE.md)
-- fontkit : [static/vendor/pdf-lib-fontkit-LICENSE.md](static/vendor/pdf-lib-fontkit-LICENSE.md)

@@ -6,7 +6,6 @@
       for (const page of [
         "calendar.html#view=week&date=2026-09-08",
         "notes.html",
-        "a-faire.html",
         "evaluations.html#period=all",
       ]) {
         const f = await frame("classes/b3cya/" + page, width);
@@ -52,28 +51,6 @@
       );
       cal.remove();
     }
-    const tasks = await frame("classes/b3cya/a-faire.html"),
-      td = tasks.contentDocument,
-      tw = tasks.contentWindow,
-      taskInput = td.getElementById("tasks-input"),
-      taskText = "Préparer le rendu <script>window.taskInjected=1</script>";
-    change(tw, taskInput, taskText);
-    td.getElementById("tasks-form").dispatchEvent(
-      new tw.Event("submit", { bubbles: true, cancelable: true }),
-    );
-    assert(
-      td.querySelectorAll(".task-item").length === 1 &&
-        td.querySelector(".task-text").textContent === taskText &&
-        !tw.taskInjected,
-      "Free task text is stored and rendered as inert text",
-    );
-    tw.confirm = () => true;
-    td.querySelector(".task-item .menu-item-danger").click();
-    assert(
-      td.querySelectorAll(".task-item").length === 0,
-      "A task can be deleted independently",
-    );
-    tasks.remove();
     const notes = await frame("classes/b3cya/notes.html");
     const nd = notes.contentDocument,
       nw = notes.contentWindow;

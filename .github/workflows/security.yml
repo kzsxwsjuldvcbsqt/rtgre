@@ -55,7 +55,6 @@ jobs:
             --config p/python \
             --config p/javascript \
             --config p/github-actions \
-            --exclude static/vendor \
             --exclude-rule python.flask.security.xss.audit.direct-use-of-jinja2.direct-use-of-jinja2 \
             --exclude-rule javascript.lang.security.insecure-object-assign.insecure-object-assign \
             --metrics off \

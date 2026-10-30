@@ -190,7 +190,6 @@ def render_site(
     class_evals_tpl = env.get_template("class.html.j2")
     calendar_tpl = env.get_template("calendar.html.j2")
     grades_tpl = env.get_template("grades.html.j2")
-    tasks_tpl = env.get_template("tasks.html.j2")
     resources_tpl = env.get_template("resources.html.j2")
     eval_detail_tpl = env.get_template("evaluation.html.j2")
 
@@ -316,57 +315,6 @@ def render_site(
             )
             with open(class_dir / section_files["grades"], "w", encoding="utf-8") as f:
                 f.write(grades_html)
-
-            tasks_page_path = f"classes/{cls.id}/{section_files['tasks']}"
-            tasks_html = tasks_tpl.render(
-                site=app_config.site,
-                labels=app_config.labels,
-                class_config=cls,
-                sections=class_sections,
-                favicons=active_favicons,
-                generated_at=now_str,
-                page_wide=False,
-                tasks_payload={
-                    "classId": cls.id,
-                    "schoolYear": app_config.site["school_year"]["label"],
-                    "config": app_config.tasks_config,
-                    "labels": app_config.labels["tasks"],
-                },
-                url_for=lambda target, p=tasks_page_path: get_rel_path(p, target),
-            )
-            with open(class_dir / section_files["tasks"], "w", encoding="utf-8") as f:
-                f.write(tasks_html)
-
-            if any(section.id == "absences" for section in class_sections):
-                absence_page_path = f"classes/{cls.id}/{section_files['absences']}"
-                sheet = app_config.absence_config["sheet"]
-                pdf_assets = {
-                    key: get_rel_path(absence_page_path, path)
-                    for key, path in {"logo": sheet["logo_path"], **sheet["pdf_assets"]}.items()
-                }
-                absence_html = env.get_template("absences.html.j2").render(
-                    site=app_config.site,
-                    labels=app_config.labels,
-                    class_config=cls,
-                    sections=class_sections,
-                    favicons=active_favicons,
-                    generated_at=now_str,
-                    page_wide=False,
-                    absence_payload={
-                        "classId": cls.id,
-                        "classLabel": cls.label,
-                        "year": app_config.site["school_year"],
-                        "timezone": app_config.site["timezone"],
-                        "locale": app_config.site["language"],
-                        "config": app_config.absence_config,
-                        "labels": app_config.labels["absences"],
-                        "events": initial_payload["events"],
-                        "categories": cat_map,
-                        "pdfAssets": pdf_assets,
-                    },
-                    url_for=lambda target, p=absence_page_path: get_rel_path(p, target),
-                )
-                (class_dir / section_files["absences"]).write_text(absence_html, encoding="utf-8")
 
             resource_groups = get_class_resources(
                 cls, app_config.curriculum, app_config.site["chamilo"], app_config.labels
