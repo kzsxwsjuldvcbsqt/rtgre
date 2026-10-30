@@ -29,8 +29,6 @@ class AppConfig:
     sections: tuple[SectionConfig, ...]
     curriculum: dict
     calendar_config: dict
-    absence_config: dict
-    tasks_config: dict
     corrections: tuple[dict, ...]
     labels: dict
     timezone: ZoneInfo
@@ -146,114 +144,6 @@ def validate_calendar_config(calendar: dict):
             time.fromisoformat(value)
 
 
-def validate_absence_config(
-    config: dict, curriculum: dict | None = None, class_ids: set[str] | None = None
-):
-    from datetime import time
-
-    boundary = time.fromisoformat(config["afternoon_start"])
-    if boundary == time.min or len(config["afternoon_start"]) != 5:
-        raise ValueError("Invalid absence afternoon boundary")
-    if config["default_mode"] not in ("day", "half_day", "course", "range") or config[
-        "default_period"
-    ] not in ("morning", "afternoon"):
-        raise ValueError("Invalid default absence selection")
-    for key in (
-        "max_import_bytes",
-        "max_records",
-        "max_courses_per_record",
-        "max_id_length",
-        "max_text_length",
-        "max_name_length",
-        "max_total_text_length",
-        "export_format_version",
-    ):
-        if type(config[key]) is not int or config[key] <= 0:
-            raise ValueError(f"Invalid absence setting: {key}")
-    if not isinstance(config["legacy_export_format_versions"], list) or any(
-        type(version) is not int or version <= 0 or version >= config["export_format_version"]
-        for version in config["legacy_export_format_versions"]
-    ):
-        raise ValueError("Invalid legacy absence formats")
-    sheet = config["sheet"]
-    sheet_keys = {
-        "program_label",
-        "signature_place",
-        "logo_path",
-        "pdf_filename",
-        "blob_revoke_delay_ms",
-        "pdf_assets",
-        "pdf_layout",
-    }
-    if not isinstance(sheet, dict) or set(sheet) != sheet_keys:
-        raise ValueError("Invalid absence sheet configuration")
-    if not all(
-        isinstance(sheet[key], str) and sheet[key].strip()
-        for key in (
-            "program_label",
-            "signature_place",
-            "pdf_filename",
-        )
-    ):
-        raise ValueError("Invalid absence sheet text")
-    assets = sheet["pdf_assets"]
-    asset_paths = [sheet["logo_path"]] + list(assets.values()) if isinstance(assets, dict) else []
-    if (
-        not isinstance(assets, dict)
-        or set(assets) != {"library", "fontkit", "font_regular", "font_bold"}
-        or any(
-            not valid_relative_file(path) or PurePosixPath(path).parts[0] != "static"
-            for path in asset_paths
-        )
-    ):
-        raise ValueError("Invalid absence PDF assets")
-    layout_keys = {
-        "page_width",
-        "page_height",
-        "margin",
-        "body_font_size",
-        "body_line_height",
-        "title_font_size",
-        "notice_font_size",
-        "notice_line_height",
-        "section_heading_font_size",
-        "annex_heading_font_size",
-        "header_height",
-        "logo_max_width",
-        "logo_max_height",
-        "header_gap",
-        "section_gap",
-        "paragraph_gap",
-        "notice_padding",
-        "cell_padding",
-        "label_column_width",
-        "rule_width",
-        "bullet_indent",
-        "signature_height",
-        "footer_gap",
-        "annex_section_gap",
-    }
-    layout = sheet["pdf_layout"]
-    if (
-        not isinstance(layout, dict)
-        or set(layout) != layout_keys
-        or any(
-            type(value) not in (int, float) or not math.isfinite(value) or value <= 0
-            for value in layout.values()
-        )
-    ):
-        raise ValueError("Invalid absence PDF layout")
-    if (
-        layout["margin"] * 2 >= min(layout["page_width"], layout["page_height"])
-        or layout["label_column_width"] >= layout["page_width"] - layout["margin"] * 2
-        or layout["body_line_height"] <= layout["body_font_size"]
-        or layout["notice_line_height"] <= layout["notice_font_size"]
-    ):
-        raise ValueError("Invalid absence PDF dimensions")
-    if type(sheet["blob_revoke_delay_ms"]) is not int or sheet["blob_revoke_delay_ms"] <= 0:
-        raise ValueError("Invalid absence PDF URL lifetime")
-
-
 def validate_correction_overrides(overrides: object, category_ids: set[str]):
     from datetime import time
 
@@ -305,39 +195,6 @@ def validate_corrections_config(corrections: dict, category_ids: set[str]):
                 validate_correction_overrides(entry[key], category_ids)
 
 
-def validate_tasks_config(config: dict):
-    expected = {
-        "storage_key_prefix",
-        "export_format",
-        "export_format_version",
-        "export_filename",
-        "max_import_bytes",
-        "max_items",
-        "max_text_length",
-        "max_total_text_length",
-    }
-    if not isinstance(config, dict) or set(config) != expected:
-        raise ValueError("Invalid tasks configuration")
-    if not all(
-        isinstance(config[key], str) and config[key].strip()
-        for key in ("storage_key_prefix", "export_format", "export_filename")
-    ):
-        raise ValueError("Invalid tasks text configuration")
-    if any(
-        type(config[key]) is not int or config[key] <= 0
-        for key in (
-            "export_format_version",
-            "max_import_bytes",
-            "max_items",
-            "max_text_length",
-            "max_total_text_length",
-        )
-    ):
-        raise ValueError("Invalid tasks limits")
-    if config["max_text_length"] > config["max_total_text_length"]:
-        raise ValueError("Invalid tasks text limits")
-
-
 def load_config(config_dir: str = "config") -> AppConfig:
     path = Path(config_dir)
     with open(path / "site.json", encoding="utf-8") as f:
@@ -356,17 +213,10 @@ def load_config(config_dir: str = "config") -> AppConfig:
     with open(path / "calendar.json", encoding="utf-8") as f:
         calendar_data = json.load(f)
 
-    with open(path / "absences.json", encoding="utf-8") as f:
-        absence_data = json.load(f)
-    with open(path / "tasks.json", encoding="utf-8") as f:
-        tasks_data = json.load(f)
     with open(path / "corrections.json", encoding="utf-8") as f:
         corrections_data = json.load(f)
     validate_curriculum_config(curriculum_data)
     validate_calendar_config(calendar_data)
-    class_ids = {cls["id"] for program in classes_data["programs"] for cls in program["classes"]}
-    validate_absence_config(absence_data, curriculum_data, class_ids)
-    validate_tasks_config(tasks_data)
     first_date = date.fromisoformat(site["school_year"]["first_date"])
     last_date = date.fromisoformat(site["school_year"]["last_date"])
     if first_date > last_date:
@@ -499,8 +349,6 @@ def load_config(config_dir: str = "config") -> AppConfig:
         sections=tuple(sections),
         curriculum=curriculum_data,
         calendar_config=calendar_data,
-        absence_config=absence_data,
-        tasks_config=tasks_data,
         corrections=tuple(corrections_data["events"]),
         labels=labels,
         timezone=tz,

@@ -21,7 +21,7 @@
         element.src = path;
       });
       const deadline = Date.now() + 30000;
-      if (/\/(?:notes|absences|a-faire)\.html(?:[?#]|$)/.test(path)) {
+      if (/\/notes\.html(?:[?#]|$)/.test(path)) {
         while (
           element.contentDocument.documentElement.dataset.storageReady !==
           "true"

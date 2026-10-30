@@ -43,20 +43,15 @@ select:disabled {
   .section-item a:hover .list-chevron {
     color: var(--color-text-muted);
   }
-  button:hover:not(:disabled):not(.heading-toggle-btn):not(.app-dialog-close),
+  button:hover:not(:disabled):not(.heading-toggle-btn),
   select:hover:not(:disabled):not(:focus):not([aria-invalid="true"]),
   input:hover:not(:disabled):not(:focus):not([aria-invalid="true"]),
   textarea:hover:not(:disabled):not(:focus):not([aria-invalid="true"]),
   .filter-form label:has(input):hover,
-  .absence-toggle:hover,
   .detail-link:hover {
     border-color: var(--color-text-faint);
     background: var(--color-surface-hover);
     text-decoration: none;
-  }
-  .btn-primary:hover:not(:disabled) {
-    border-color: var(--color-primary-hover);
-    background: var(--color-primary-hover);
   }
   .menu-list button:hover,
   .menu-list a:hover {

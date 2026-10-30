@@ -1,7 +1,5 @@
-import base64
 import json
 import os
-import re
 import shutil
 import subprocess
 import tempfile
@@ -31,9 +29,6 @@ class BrowserTests(unittest.TestCase):
             self.fail("Chrome or Chromium must be installed in CI")
         if not browser:
             self.skipTest("Chromium or Chrome is required for browser tests")
-        if os.environ.get("CI"):
-            for tool in ("pdfinfo", "pdftotext", "pdffonts"):
-                self.assertIsNotNone(shutil.which(tool), f"{tool} must be installed in CI")
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             config = load_config()
@@ -58,16 +53,9 @@ class BrowserTests(unittest.TestCase):
                 '<script src="harness.js"></script><script src="browser-report.js"></script>'
                 '<script src="browser.js"></script></body></html>'
             )
-            (root / "absence-runner.html").write_text(
-                '<!doctype html><html><head><meta charset="utf-8"></head><body>'
-                '<script src="harness.js"></script><script src="browser-report.js"></script>'
-                '<script src="absence-browser.js"></script>'
-                '<script src="absence-runner.js"></script></body></html>'
-            )
             (root / "cross-browser.html").write_text(
                 '<!doctype html><html><head><meta charset="utf-8"></head><body>'
                 '<script src="harness.js"></script><script src="browser-report.js"></script>'
-                '<script src="absence-browser.js"></script>'
                 '<script src="cross-browser.js"></script></body></html>'
             )
             calendar = root / "classes" / classes[0].id / "calendar.html"
@@ -146,22 +134,20 @@ class BrowserTests(unittest.TestCase):
             thread = threading.Thread(target=server.serve_forever, daemon=True)
             thread.start()
             try:
-                results = {}
-                for name in ("runner", "absence-runner"):
-                    results[name] = run_browser(
-                        name,
-                        [
-                            browser,
-                            "--headless",
-                            "--no-sandbox",
-                            "--disable-dev-shm-usage",
-                            "--disable-gpu",
-                            "--no-first-run",
-                            "--no-default-browser-check",
-                            "--user-data-dir=" + str(root / f"profile-{name}"),
-                            f"http://127.0.0.1:{server.server_port}/{name}.html",
-                        ],
-                    )
+                run_browser(
+                    "runner",
+                    [
+                        browser,
+                        "--headless",
+                        "--no-sandbox",
+                        "--disable-dev-shm-usage",
+                        "--disable-gpu",
+                        "--no-first-run",
+                        "--no-default-browser-check",
+                        "--user-data-dir=" + str(root / "profile-runner"),
+                        f"http://127.0.0.1:{server.server_port}/runner.html",
+                    ],
+                )
                 firefox = os.environ.get("FIREFOX_BIN") or shutil.which("firefox")
                 if not firefox and os.environ.get("CI"):
                     self.fail("Firefox must be installed in CI")
@@ -188,67 +174,3 @@ class BrowserTests(unittest.TestCase):
                 server.shutdown()
                 server.server_close()
                 thread.join()
-            result = results["absence-runner"]
-            encoded_pdf = re.search(r'<output id="absence-pdf-data">([^<]+)</output>', result)
-            self.assertIsNotNone(encoded_pdf)
-            pdf_bytes = base64.b64decode(encoded_pdf.group(1))
-            pdf_path = root / "absence-test.pdf"
-            pdf_path.write_bytes(pdf_bytes)
-            if os.environ.get("ABSENCE_PDF_OUTPUT"):
-                Path(os.environ["ABSENCE_PDF_OUTPUT"]).write_bytes(pdf_bytes)
-            if shutil.which("pdfinfo"):
-                info = subprocess.run(
-                    ["pdfinfo", str(pdf_path)], capture_output=True, text=True, check=True
-                ).stdout
-                self.assertIn("Pages:           1", info)
-                self.assertIn("595.28 x 841.89 pts (A4)", info)
-            if shutil.which("pdftotext"):
-                text = subprocess.run(
-                    ["pdftotext", "-layout", str(pdf_path), "-"],
-                    capture_output=True,
-                    text=True,
-                    check=True,
-                ).stdout
-                for expected in (
-                    "ABSENCE - Département RT",
-                    "A déposer dans la boîte d’absence",
-                    "Rappels :",
-                    "Année",
-                    "Nom Prénom",
-                    "Motif : cœur, œuvre • l’étudiant — délai.",
-                    "Saint-Martin-d’Hères, le",
-                    "Signature :",
-                ):
-                    self.assertIn(expected, text)
-                self.assertNotIn("http://", text)
-            if shutil.which("pdffonts"):
-                fonts = subprocess.run(
-                    ["pdffonts", str(pdf_path)], capture_output=True, text=True, check=True
-                ).stdout
-                self.assertGreaterEqual(fonts.count("DejaVuSans"), 2)
-            encoded_annex = re.search(
-                r'<output id="absence-pdf-annex-data">([^<]+)</output>', result
-            )
-            self.assertIsNotNone(encoded_annex)
-            annex_path = root / "absence-annex-test.pdf"
-            annex_path.write_bytes(base64.b64decode(encoded_annex.group(1)))
-            if shutil.which("pdfinfo"):
-                info = subprocess.run(
-                    ["pdfinfo", str(annex_path)], capture_output=True, text=True, check=True
-                ).stdout
-                self.assertNotIn("Pages:           1", info)
-            if shutil.which("pdftotext"):
-                text = subprocess.run(
-                    ["pdftotext", "-layout", str(annex_path), "-"],
-                    capture_output=True,
-                    text=True,
-                    check=True,
-                ).stdout
-                self.assertIn("Voir l’annexe.", text)
-                self.assertIn("Annexe", text)
-                self.assertGreaterEqual(
-                    " ".join(text.split()).count(
-                        "Motif détaillé avec œuvre, cœur et délai — contenu conservé."
-                    ),
-                    80,
-                )
