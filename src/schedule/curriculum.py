@@ -16,6 +16,33 @@ def build_chamilo_url(module_data: dict, chamilo_config: dict) -> str | None:
     return f"{chamilo_config['course_base_url']}{chamilo_config['course_prefix']}{clean_code}"
 
 
+def module_code_variants(curriculum_data: dict):
+    track_aliases = {
+        track["id"]: track.get("ade_aliases", []) for track in curriculum_data.get("tracks", [])
+    }
+    for module in curriculum_data.get("modules", []):
+        yield module["code"], module
+        for code in module.get("ade_codes", []):
+            yield code, module
+        for track_id, aliases in track_aliases.items():
+            if track_id in module["code"]:
+                for alias in aliases:
+                    yield module["code"].replace(track_id, alias), module
+
+
+def resolve_module_styles(curriculum_data: dict, module_codes) -> dict[str, dict]:
+    tones: dict[str, int] = {}
+    siblings: dict[tuple, int] = {}
+    for module in curriculum_data.get("modules", []):
+        group = (module["kind"], module["semester"])
+        siblings[group] = siblings.get(group, 0) + 1
+        tones[module["code"]] = siblings[group]
+    known: dict[str, dict] = {}
+    for code, module in module_code_variants(curriculum_data):
+        known.setdefault(code, {"kind": module["kind"], "tone": tones[module["code"]]})
+    return {code: known[code] for code in module_codes if code in known}
+
+
 def validate_curriculum_config(curriculum_data: dict):
     def index_unique(key, field="id"):
         items = curriculum_data[key]
@@ -35,6 +62,12 @@ def validate_curriculum_config(curriculum_data: dict):
     kinds = index_unique("kinds")
     annual_units = index_unique("annual_units")
     coefficients = curriculum_data["coefficients"]
+    for module in modules.values():
+        ade_codes = module.get("ade_codes", [])
+        if not isinstance(ade_codes, list) or any(
+            not isinstance(code, str) or not code for code in ade_codes
+        ):
+            raise ValueError(f"Invalid ADE codes for {module['code']}")
     for module in modules.values():
         if module["kind"] not in kinds or (
             module["semester"] is not None and module["semester"] not in semesters

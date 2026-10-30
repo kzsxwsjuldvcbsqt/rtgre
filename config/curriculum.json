@@ -62,7 +62,7 @@
 
     { "code": "SAE501", "label": "Concevoir, réaliser et présenter une solution technique pour la télécommunication", "semester": "s5", "kind": "sae", "graded": true, "tracks": ["cy", "dc"], "statuses": ["fi"], "chamilo_course": "IUT1RT3SAE501" },
     { "code": "SAE502", "label": "Piloter un projet informatique", "semester": "s5", "kind": "sae", "graded": true, "tracks": ["cy", "dc"], "statuses": ["fi"], "chamilo_course": "IUT1RT3SAE502" },
-    { "code": "SAE5", "label": "Portfolio", "semester": "s5", "kind": "sae", "graded": false, "tracks": ["cy", "dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3SAEPORTFOLIO" },
+    { "code": "SAE5", "label": "Portfolio", "semester": "s5", "kind": "sae", "graded": false, "tracks": ["cy", "dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3SAEPORTFOLIO", "ade_codes": ["SAE5Portfolio", "SAE5Porfolio"] },
     { "code": "SAE5cy03", "label": "Assurer la sécurisation et la supervision avancées d'un système d'information", "semester": "s5", "kind": "sae", "graded": true, "tracks": ["cy"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3SAE5CY03" },
     { "code": "SAE5dc03", "label": "Orchestrer la conteneurisation d'une application", "semester": "s5", "kind": "sae", "graded": true, "tracks": ["dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3SAE5DC03" },
     { "code": "SAE5Entreprise", "label": "Alternance 3ᵐᵉ année", "semester": "s5", "kind": "sae", "graded": true, "tracks": ["cy", "dc"], "statuses": ["fa"], "chamilo_course": "IUT1RT3ALT", "show_code": false },
@@ -73,7 +73,7 @@
     { "code": "R6cy04", "label": "Réponse à incidents", "semester": "s6", "kind": "resource", "graded": true, "tracks": ["cy"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3R6CY04" },
     { "code": "R6dc04", "label": "Pilotage de solutions Cloud pour l'entreprise", "semester": "s6", "kind": "resource", "graded": true, "tracks": ["dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3R6DC04" },
 
-    { "code": "SAE6", "label": "Portfolio", "semester": "s6", "kind": "sae", "graded": true, "tracks": ["cy", "dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3SAEPORTFOLIO" },
+    { "code": "SAE6", "label": "Portfolio", "semester": "s6", "kind": "sae", "graded": true, "tracks": ["cy", "dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3SAEPORTFOLIO", "ade_codes": ["SAE6Portfolio"] },
     { "code": "SAE6Stage", "label": "Stage 3ᵐᵉ année", "semester": "s6", "kind": "sae", "graded": true, "tracks": ["cy", "dc"], "statuses": ["fi"], "chamilo_course": "IUT1RT3STAGE", "show_code": false },
     { "code": "SAE6Entreprise", "label": "Alternance 3ᵐᵉ année", "semester": "s6", "kind": "sae", "graded": true, "tracks": ["cy", "dc"], "statuses": ["fa"], "chamilo_course": "IUT1RT3ALT", "show_code": false },
     { "code": "SAE6cy01", "label": "Réagir face à une cyber attaque", "semester": "s6", "kind": "sae", "graded": true, "tracks": ["cy"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3SAE6CY01" },

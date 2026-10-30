@@ -4,7 +4,12 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
 from .config import AppConfig
-from .curriculum import get_class_grades_data, get_class_resources
+from .curriculum import (
+    get_class_grades_data,
+    get_class_resources,
+    module_code_variants,
+    resolve_module_styles,
+)
 from .exporter import serialize_events
 from .matcher import build_matching_matrix
 from .models import slugify
@@ -87,21 +92,20 @@ def render_site(
         matching_matrix = build_matching_matrix(evaluations_only_by_class, all_classes, app_config)
 
     cat_map = {c.id: c.label for c in app_config.categories}
-    track_aliases = {
-        t["id"]: t.get("ade_aliases", [])
-        for t in app_config.curriculum.get("tracks", [])
-        if "id" in t
-    }
     module_labels: dict[str, str] = {}
-    for m in app_config.curriculum.get("modules", []):
-        code = m.get("code")
-        if not code:
-            continue
-        module_labels.setdefault(code, m["label"])
-        for track_id, aliases in track_aliases.items():
-            if track_id in code:
-                for alias in aliases:
-                    module_labels.setdefault(code.replace(track_id, alias), m["label"])
+    for code, module in module_code_variants(app_config.curriculum):
+        module_labels.setdefault(code, module["label"])
+    module_styles = resolve_module_styles(
+        app_config.curriculum,
+        sorted(
+            {
+                ev.module_code
+                for class_events in events_by_class.values()
+                for ev in class_events
+                if ev.module_code
+            }
+        ),
+    )
 
     configured_group_codes = {
         cls_item.ade_group_code
@@ -283,6 +287,7 @@ def render_site(
                 },
                 calendar_config=app_config.calendar_config,
                 class_labels_json=class_labels_json,
+                module_styles=module_styles,
                 initial_payload=initial_payload,
                 initial_week_days=initial_week_days,
                 favicons=active_favicons,
