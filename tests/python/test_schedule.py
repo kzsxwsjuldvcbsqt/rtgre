@@ -4,6 +4,7 @@ import re
 import shutil
 import tempfile
 import unittest
+from dataclasses import replace
 from datetime import datetime, timedelta
 from pathlib import Path
 from unittest.mock import patch
@@ -12,9 +13,11 @@ import requests
 from support.fixtures import calendar_bytes, sample_events
 
 from schedule.build import build_lock, output_path, publish_site
+from schedule.classifier import match_session_marks
 from schedule.config import (
     load_config,
     validate_calendar_config,
+    validate_session_marks,
     validate_site_config,
     validate_tasks_config,
 )
@@ -115,6 +118,25 @@ class ScheduleTests(unittest.TestCase):
         config["modules"][0]["ade_codes"] = [""]
         with self.assertRaises(ValueError):
             validate_curriculum_config(config)
+
+    def test_session_marks_match_title_and_rooms(self):
+        self.assertEqual(
+            match_session_marks("R504-TD-ProjInf", ("T22",), self.config), ("tp-note",)
+        )
+        self.assertEqual(match_session_marks("R504-TD-ProjInf", ("T32",), self.config), ())
+        self.assertEqual(match_session_marks("R501-TP-VirtualBox", (), self.config), ())
+        for marks in (
+            [replace(self.config.session_marks[0], id="scolarite")],
+            [replace(self.config.session_marks[0], rules=())],
+            [
+                replace(
+                    self.config.session_marks[0],
+                    rules=(replace(self.config.session_marks[0].rules[0], title="("),),
+                )
+            ],
+        ):
+            with self.subTest(marks=marks), self.assertRaises(ValueError):
+                validate_session_marks(marks, {"scolarite"})
 
     def test_calendar_rejects_invalid_days(self):
         for days in ([], [1, 1], [0], [8], [True], [2, 1]):

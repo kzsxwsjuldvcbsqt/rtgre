@@ -9,6 +9,19 @@
   "description_flags": [
     { "id": "scolarite", "label": "Surveillé par la scolarité", "patterns": ["^DS-Scol$"] }
   ],
+  "session_marks": [
+    {
+      "id": "tp-note",
+      "label": "TP noté",
+      "rules": [
+        { "title": "^R501-TP-WiFi$", "rooms": [] },
+        { "title": "^R502-TP-Supervision1", "rooms": [] },
+        { "title": "^R504-TD-ProjInf$", "rooms": ["T22", "T25"] },
+        { "title": "^R5devcloud10-TP-Infra$", "rooms": [] },
+        { "title": "^R5devcloud11-TP-ProgInfra$", "rooms": [] }
+      ]
+    }
+  ],
   "categories": [
     {
       "id": "ds",

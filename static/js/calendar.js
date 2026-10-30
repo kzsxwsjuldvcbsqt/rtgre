@@ -22,6 +22,13 @@
       categoryMap[c.id] = c;
     });
 
+    var sessionMarks = {};
+    JSON.parse(
+      scriptEl.getAttribute("data-session-marks-json") || "[]",
+    ).forEach(function (mark) {
+      sessionMarks[mark.id] = mark.label;
+    });
+
     var labels = JSON.parse(scriptEl.getAttribute("data-labels-json") || "{}");
     var classLabels = JSON.parse(
       scriptEl.getAttribute("data-class-labels-json") || "{}",
@@ -823,6 +830,7 @@
       displayMode,
       categoryMap,
       moduleStyles,
+      sessionMarks,
       labels,
       classLabels,
       prevBtn,

@@ -7,7 +7,15 @@ from pathlib import Path, PurePosixPath
 from zoneinfo import ZoneInfo
 
 from .curriculum import validate_curriculum_config
-from .models import CategoryConfig, ClassConfig, DescriptionFlagConfig, ProgramConfig, SectionConfig
+from .models import (
+    CategoryConfig,
+    ClassConfig,
+    DescriptionFlagConfig,
+    ProgramConfig,
+    SectionConfig,
+    SessionMarkConfig,
+    SessionMarkRule,
+)
 
 
 @dataclass
@@ -17,6 +25,7 @@ class AppConfig:
     categories_raw: dict
     categories: tuple[CategoryConfig, ...]
     description_flags: tuple[DescriptionFlagConfig, ...]
+    session_marks: tuple[SessionMarkConfig, ...]
     sections: tuple[SectionConfig, ...]
     curriculum: dict
     calendar_config: dict
@@ -78,6 +87,24 @@ def valid_relative_file(value: object) -> bool:
         return False
     path = PurePosixPath(value)
     return not path.is_absolute() and ".." not in path.parts and path.name not in ("", ".")
+
+
+def validate_session_marks(session_marks, reserved_ids: set[str]):
+    ids = [mark.id for mark in session_marks]
+    if len(set(ids)) != len(ids) or any(
+        not valid_public_id(mark_id) or mark_id in reserved_ids for mark_id in ids
+    ):
+        raise ValueError("Invalid or duplicate session mark IDs")
+    for mark in session_marks:
+        if not mark.label or not mark.rules:
+            raise ValueError(f"Invalid session mark: {mark.id}")
+        for rule in mark.rules:
+            try:
+                re.compile(rule.title)
+            except re.error as error:
+                raise ValueError(f"Invalid session mark pattern: {rule.title}") from error
+            if any(not isinstance(room, str) or not room for room in rule.rooms):
+                raise ValueError(f"Invalid session mark rooms: {mark.id}")
 
 
 def validate_calendar_config(calendar: dict):
@@ -424,6 +451,19 @@ def load_config(config_dir: str = "config") -> AppConfig:
         for flg in categories_data.get("description_flags", [])
     ]
 
+    session_marks = [
+        SessionMarkConfig(
+            id=mark["id"],
+            label=mark["label"],
+            rules=tuple(
+                SessionMarkRule(title=rule["title"], rooms=tuple(rule["rooms"]))
+                for rule in mark["rules"]
+            ),
+        )
+        for mark in categories_data.get("session_marks", [])
+    ]
+    validate_session_marks(session_marks, {flg.id for flg in flags})
+
     sections = [
         SectionConfig(
             id=s["id"],
@@ -455,6 +495,7 @@ def load_config(config_dir: str = "config") -> AppConfig:
         categories_raw=categories_data,
         categories=tuple(categories),
         description_flags=tuple(flags),
+        session_marks=tuple(session_marks),
         sections=tuple(sections),
         curriculum=curriculum_data,
         calendar_config=calendar_data,
