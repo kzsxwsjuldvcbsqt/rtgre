@@ -139,7 +139,8 @@
     "noscript_notice": "Activez JavaScript pour naviguer dans le calendrier, filtrer et comparer les emplois du temps.",
     "year_title": "Année {year}",
     "week_title": "{prefix} {week} : {start_day} {start_month} - {end_day} {end_month} {year}",
-    "day_title": "{day_name} {day_num} {month_name} {year}"
+    "day_title": "{day_name} {day_num} {month_name} {year}",
+    "week_day_date": "{day_num} {month_name}"
   },
   "class_page": {
     "back_link": "Retour au choix de la classe",

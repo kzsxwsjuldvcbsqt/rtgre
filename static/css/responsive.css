@@ -128,9 +128,6 @@
   .calendar-view-week {
     grid-template-columns: 1fr;
   }
-  .calendar-view-week .day-section > h3 {
-    min-height: auto;
-  }
   table,
   thead,
   tbody,
