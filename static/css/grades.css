@@ -7,23 +7,14 @@
   box-shadow: var(--shadow-card);
 }
 .grades-summary-label,
-.grades-summary-empty,
 .grades-summary-figure,
 .grades-summary-semesters,
 .grades-summary-semesters dd {
   margin: 0;
 }
-.grades-summary-label,
-.grades-summary-empty {
+.grades-summary-label {
   color: var(--color-text-muted);
   font-size: var(--text-sm);
-}
-.grades-summary-empty {
-  margin-block-start: var(--space-xs);
-}
-.grades-summary:not([data-empty]) .grades-summary-empty,
-.grades-summary[data-empty] .grades-summary-body {
-  display: none;
 }
 .grades-summary-figure {
   display: flex;
@@ -61,6 +52,10 @@
 }
 .grades-summary-table {
   margin: var(--space-md) 0 0;
+  table-layout: fixed;
+}
+.grades-summary-table thead th:not(:first-child) {
+  width: var(--width-summary-value);
 }
 .grades-summary-table th,
 .grades-summary-table td {
@@ -82,7 +77,7 @@
 .grades-summary-table td:last-child {
   font-weight: var(--weight-semibold);
 }
-.grades-summary-body [data-empty] {
+.grades-summary-figure strong[data-empty] {
   color: var(--color-text-faint);
   font-weight: var(--weight-normal);
 }
