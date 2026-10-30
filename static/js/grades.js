@@ -89,10 +89,10 @@
       return gradesByCode;
     }
 
-    function showAverage(element, value) {
+    function showAverage(element, value, emptyText) {
       if (!element) return;
       var known = value !== null && value !== undefined;
-      element.textContent = known ? value.toFixed(decimals) : emptyValue;
+      element.textContent = known ? value.toFixed(decimals) : emptyText || "";
       element.toggleAttribute("data-empty", !known);
     }
 
@@ -119,15 +119,8 @@
       showAverage(
         document.getElementById("global-annual-avg"),
         averages.global,
+        emptyValue,
       );
-      var summary = document.getElementById("grades-summary");
-      if (summary)
-        summary.toggleAttribute(
-          "data-empty",
-          gradesConfig.semesters.every(function (sem) {
-            return averages.semesters[sem.id] === null;
-          }),
-        );
     }
 
     function writeGrades(grades) {

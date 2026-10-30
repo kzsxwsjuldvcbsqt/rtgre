@@ -31,16 +31,14 @@
 </noscript>
 
 {% if grades_data.annual_units %}
-<aside class="grades-summary" id="grades-summary" aria-label="{{ labels.grades.annual_synthesis }}" data-empty>
+<aside class="grades-summary" aria-label="{{ labels.grades.annual_synthesis }}">
 <p class="grades-summary-label">{{ labels.grades.global_annual_average }}</p>
-<p class="grades-summary-empty">{{ labels.grades.summary_empty }}</p>
-<div class="grades-summary-body">
 <p class="grades-summary-figure"><strong id="global-annual-avg" data-empty>{{ average_empty }}</strong><span>{{ grade_unit }}</span></p>
 <dl class="grades-summary-semesters">
 {% for sem in grades_data.semesters %}
 <div>
 <dt>{{ sem.short_label }}</dt>
-<dd id="avg-{{ sem.id }}" data-empty>{{ average_empty }}</dd>
+<dd id="avg-{{ sem.id }}"></dd>
 </div>
 {% endfor %}
 </dl>
@@ -59,14 +57,13 @@
 <tr data-ue-id="{{ au.id }}">
 <th scope="row"><abbr title="{{ au.label }}">{{ au.short_label }}</abbr></th>
 {% for sem in grades_data.semesters %}
-<td id="synth-{{ sem.id }}-{{ au.id }}" data-empty>{{ average_empty }}</td>
+<td id="synth-{{ sem.id }}-{{ au.id }}"></td>
 {% endfor %}
-<td id="synth-annual-{{ au.id }}" data-empty>{{ average_empty }}</td>
+<td id="synth-annual-{{ au.id }}"></td>
 </tr>
 {% endfor %}
 </tbody>
 </table>
-</div>
 </aside>
 {% endif %}
 </div>
