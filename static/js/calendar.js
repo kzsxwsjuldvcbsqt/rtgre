@@ -26,6 +26,9 @@
     var classLabels = JSON.parse(
       scriptEl.getAttribute("data-class-labels-json") || "{}",
     );
+    var moduleStyles = JSON.parse(
+      scriptEl.getAttribute("data-module-styles-json") || "{}",
+    );
 
     var navBarEl = document.getElementById("calendar-nav-bar");
     if (navBarEl) navBarEl.hidden = false;
@@ -819,6 +822,7 @@
       allowedDays,
       displayMode,
       categoryMap,
+      moduleStyles,
       labels,
       classLabels,
       prevBtn,

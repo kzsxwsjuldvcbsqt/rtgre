@@ -48,6 +48,34 @@
   background: var(--color-surface);
   box-shadow: var(--shadow-card);
 }
+.calendar-event-item.kind-resource {
+  background: var(--color-kind-resource);
+}
+.calendar-event-item.kind-sae,
+.calendar-event-item.is-special {
+  --color-bound: var(--color-accent-emphasis);
+}
+.calendar-event-item.is-special {
+  background: var(--color-kind-special);
+}
+.calendar-event-item.kind-sae.tone-1 {
+  background: var(--color-sae-1);
+}
+.calendar-event-item.kind-sae.tone-2 {
+  background: var(--color-sae-2);
+}
+.calendar-event-item.kind-sae.tone-3 {
+  background: var(--color-sae-3);
+}
+.calendar-event-item.kind-sae.tone-4 {
+  background: var(--color-sae-4);
+}
+.calendar-event-item.kind-sae.tone-5 {
+  background: var(--color-sae-5);
+}
+.calendar-event-item.kind-sae.tone-6 {
+  background: var(--color-sae-6);
+}
 .calendar-view-week .calendar-event-item {
   display: flex;
   flex-direction: column;
@@ -277,9 +305,6 @@
   );
   padding: var(--space-xs);
 }
-.calendar-view-week.is-grid .calendar-event-item.is-evaluation {
-  border-inline-start: var(--rule-nav-active-width) solid var(--color-highlight);
-}
 .calendar-view-week.is-grid .calendar-event-item.is-ongoing {
   border-color: var(--color-now);
 }
@@ -295,10 +320,17 @@
   overflow: hidden;
 }
 .event-summary .event-series,
-.event-summary .category-badge,
+.event-summary .category-badge ~ .event-rooms,
 .event-summary .event-teachers,
 .event-summary .event-groups {
   display: none;
+}
+.event-summary > *,
+.event-summary .event-info > * {
+  flex: none;
+}
+.event-summary .category-badge {
+  align-self: flex-start;
 }
 .event-summary .event-title {
   display: -webkit-box;

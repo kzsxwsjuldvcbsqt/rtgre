@@ -18,7 +18,11 @@ from schedule.config import (
     validate_site_config,
     validate_tasks_config,
 )
-from schedule.curriculum import get_class_grades_data, validate_curriculum_config
+from schedule.curriculum import (
+    get_class_grades_data,
+    resolve_module_styles,
+    validate_curriculum_config,
+)
 from schedule.exporter import serialize_events
 from schedule.fetcher import fetch_calendar
 from schedule.matcher import build_matching_matrix
@@ -96,6 +100,21 @@ class ScheduleTests(unittest.TestCase):
         validate_curriculum_config(config)
         grades = get_class_grades_data(self.classes[0], config, self.config.labels)
         self.assertIn("custom-semester", grades["annual_units"][0]["units"])
+
+    def test_module_kinds_follow_curriculum(self):
+        styles = resolve_module_styles(
+            self.config.curriculum, ["R5cyber09", "SAE501", "SAE502", "SAE5Porfolio", "Forum"]
+        )
+        self.assertEqual(styles.keys(), {"R5cyber09", "SAE501", "SAE502", "SAE5Porfolio"})
+        self.assertEqual(styles["R5cyber09"]["kind"], "resource")
+        self.assertEqual(
+            styles["SAE5Porfolio"], resolve_module_styles(self.config.curriculum, ["SAE5"])["SAE5"]
+        )
+        self.assertNotEqual(styles["SAE501"]["tone"], styles["SAE502"]["tone"])
+        config = copy.deepcopy(self.config.curriculum)
+        config["modules"][0]["ade_codes"] = [""]
+        with self.assertRaises(ValueError):
+            validate_curriculum_config(config)
 
     def test_calendar_rejects_invalid_days(self):
         for days in ([], [1, 1], [0], [8], [True], [2, 1]):

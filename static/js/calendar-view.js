@@ -7,6 +7,7 @@
     allowedDays,
     displayMode,
     categoryMap,
+    moduleStyles,
     labels,
     classLabels,
     prevBtn,
@@ -344,6 +345,14 @@
         card.appendChild(node.cloneNode(true));
         summary.appendChild(node);
       });
+      var summaryCategory = summary.querySelector(".category-badge");
+      if (summaryCategory) {
+        var summaryTitle = summary.querySelector(".event-title");
+        summaryTitle.parentNode.insertBefore(
+          summaryCategory,
+          summaryTitle.nextSibling,
+        );
+      }
       item.appendChild(summary);
       item.appendChild(card);
       item.tabIndex = 0;
@@ -728,9 +737,16 @@
     function renderEventItem(item, cLabel, bounds) {
       var ev = item.event;
       var li = document.createElement("li");
-      li.className =
-        "calendar-event-item" +
-        (ev.category && categoryMap[ev.category] ? " is-evaluation" : "");
+      li.className = "calendar-event-item";
+      if (Object.prototype.hasOwnProperty.call(moduleStyles, ev.module)) {
+        var moduleStyle = moduleStyles[ev.module];
+        li.classList.add(
+          "kind-" + moduleStyle.kind,
+          "tone-" + moduleStyle.tone,
+        );
+      } else {
+        li.classList.add("is-special");
+      }
 
       var startTime = ev.start.substring(11, 16);
       var endTime = ev.end.substring(11, 16);
