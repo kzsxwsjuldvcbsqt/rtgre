@@ -240,24 +240,6 @@
   background: var(--color-now);
   transform: translate(-50%, -50%);
 }
-.cal-day-summary,
-.cal-class-subheading {
-  margin-block-end: var(--space-xs);
-  color: var(--color-text-muted);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-semibold);
-}
-.cal-class-subheading {
-  margin-block-start: var(--space-sm);
-}
-.cal-summary-primary,
-.cal-summary-compared {
-  color: var(--color-text-muted);
-  font-size: var(--text-sm);
-}
-.cal-summary-compared {
-  color: var(--color-text-faint);
-}
 .year-month-title {
   margin-block: var(--space-2xl) var(--space-md);
   font-size: var(--text-lg);
@@ -266,7 +248,7 @@
   grid-template-columns:
     var(--width-hour-axis)
     repeat(var(--calendar-day-count), minmax(0, 1fr));
-  grid-template-rows: [before] auto [heading] auto [summary] auto [body] auto [after] auto;
+  grid-template-rows: [before] auto [heading] auto [body] auto [after] auto;
   row-gap: 0;
 }
 .calendar-view-week.is-grid > .day-section {
@@ -277,9 +259,6 @@
 }
 .calendar-view-week.is-grid > .day-section > h3 {
   grid-row: heading;
-}
-.calendar-view-week.is-grid > .day-section > .cal-day-summary {
-  grid-row: summary;
 }
 .calendar-view-week.is-grid > .current-time-marker {
   grid-row: before;

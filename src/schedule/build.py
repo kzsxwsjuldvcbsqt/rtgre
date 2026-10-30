@@ -8,7 +8,6 @@ from pathlib import Path
 
 from .config import build_ade_url, load_config
 from .corrections import apply_corrections
-from .exporter import export_data_files
 from .fetcher import fetch_calendar
 from .matcher import build_matching_matrix, reconcile_shared_groups
 from .parser import parse_calendar
@@ -78,7 +77,6 @@ def _publish_site(app_config, events_by_class, matching_matrix, project_root: Pa
             output_dir=str(staging),
             static_dir=str(static),
         )
-        export_data_files(app_config, events_by_class, str(staging))
         dist_static = staging / "static"
         dist_static.mkdir(parents=True, exist_ok=True)
         for source in static.rglob("*"):

@@ -25,7 +25,7 @@ Projet étudiant non officiel. Il ne remplace pas ADE ni les informations commun
 
 Pendant la formation, les informations utiles sont réparties entre plusieurs services : ADE pour l'emploi du temps, Chamilo pour les espaces des modules, la messagerie universitaire, les GitLab universitaires (IM2AG et GRICAD), et les informations sur les modules, les coefficients et les évaluations.
 
-Cette répartition rend le suivi quotidien peu pratique. ADE permet de consulter un planning, mais il est difficile d'y rechercher un cours, de filtrer les évaluations, de comparer plusieurs groupes ou de retrouver rapidement une information précise.
+Cette répartition rend le suivi quotidien peu pratique. ADE permet de consulter un planning, mais il est difficile d'y rechercher un cours, de filtrer les évaluations ou de retrouver rapidement une information précise.
 
 Ce projet rassemble ces usages sur un site unique, plus simple à consulter, adapté au contenu de cette formation. Le contenu actuel couvre les parcours Cybersécurité et DevCloud, la formation initiale et l'alternance, six groupes et les semestres 5 et 6 pour l'année configurée. Le code est paramétrable, mais il n'est pas pensé comme une plateforme générique pour d'autres établissements.
 
@@ -35,7 +35,7 @@ Ce projet rassemble ces usages sur un site unique, plus simple à consulter, ada
 
 Le calendrier est construit à partir des flux iCalendar d'ADE. Il propose une vue par jour, par semaine et une vue annuelle, ainsi que la navigation par date. La recherche porte sur le cours, le module, la salle, l'enseignant ou le groupe.
 
-Il permet aussi de filtrer les évaluations, de masquer les cours sans enseignant, de comparer l'emploi du temps avec un autre groupe et d'afficher les cours communs ou les différences. Le cours en cours et l'heure actuelle sont indiqués. Les réglages de consultation sont conservés temporairement dans la session du navigateur.
+Il permet aussi de filtrer les évaluations et de masquer les cours sans enseignant. Le cours en cours et l'heure actuelle sont indiqués. Les réglages de consultation sont conservés temporairement dans la session du navigateur.
 
 ### Évaluations
 
@@ -94,9 +94,9 @@ La publication est protégée par plusieurs garde-fous : un verrou contre deux g
 
 ### Navigateur, en JavaScript
 
-Le dossier `static/js/` contient la logique exécutée dans le navigateur : le calendrier et la comparaison des groupes, les filtres des évaluations, le calcul des notes, l'import et l'export JSON, ainsi qu'un accès protégé aux données modifiables entre plusieurs onglets.
+Le dossier `static/js/` contient la logique exécutée dans le navigateur : le calendrier, les filtres des évaluations, le calcul des notes, l'import et l'export JSON, ainsi qu'un accès protégé aux données modifiables entre plusieurs onglets.
 
-Le calendrier de la classe courante est intégré dans la page générée. Les données des autres classes sont chargées à la demande depuis `dist/data/<classe>.json` lors d'une comparaison. Les notes utilisent `localStorage` ; les filtres et réglages temporaires utilisent selon la page `sessionStorage` ou l'URL.
+Le calendrier de la classe courante est intégré dans la page générée, sans requête supplémentaire. Les notes utilisent `localStorage` ; les filtres et réglages temporaires utilisent selon la page `sessionStorage` ou l'URL.
 
 Il n'y a pas de serveur applicatif, pas d'API privée, pas de base de données, pas de système de compte ni d'authentification. Les notes ne sont pas envoyées vers un serveur.
 
@@ -191,7 +191,7 @@ Le comportement et le contenu du site sont décrits dans `config/`.
 | `config/categories.json` | règles de reconnaissance des évaluations et marqueurs |
 | `config/curriculum.json` | semestres, parcours, modules, UE et coefficients |
 | `config/sections.json` | pages internes et liens externes affichés dans la navigation |
-| `config/calendar.json` | vues, jours affichés, comparaison et temporisations |
+| `config/calendar.json` | vues, jours affichés, affichage de la semaine et temporisations |
 | `config/corrections.json` | retouches manuelles des cours ADE (suppression ou surcharge) |
 | `config/labels.json` | textes affichés dans l'interface |
 
@@ -250,7 +250,7 @@ Les mesures appliquées à la chaîne de livraison :
 - les workflows démarrent sans permission et n'accordent à chaque job que celles dont il a besoin ;
 - les jetons GitHub ne sont pas conservés dans le dépôt cloné.
 
-Côté navigateur, chaque page déclare une Content-Security-Policy définie dans `config/site.json`. Elle n'autorise que les scripts, styles et requêtes du site lui-même ; aucun script n'est écrit dans le HTML. Les tests vérifient cette politique et échouent sur toute violation détectée dans le navigateur.
+Côté navigateur, chaque page déclare une Content-Security-Policy définie dans `config/site.json`. Elle n'autorise que les scripts et styles du site lui-même, et aucune requête réseau ; aucun script n'est écrit dans le HTML. Les tests vérifient cette politique et échouent sur toute violation détectée dans le navigateur.
 
 ## Déploiement
 

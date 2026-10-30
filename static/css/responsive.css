@@ -92,8 +92,7 @@
   .filter-group-scroll::-webkit-scrollbar {
     display: none;
   }
-  .filter-group-scroll > *,
-  #cal-comp-checkboxes > * {
+  .filter-group-scroll > * {
     flex: none;
     width: auto;
     min-width: 0;
@@ -299,11 +298,6 @@
   .has-filter-sidebar .filter-form input[type="text"] {
     width: 100%;
     min-width: 0;
-  }
-  .has-filter-sidebar #cal-comp-checkboxes {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-xs);
   }
   .has-filter-sidebar .filter-group-reset {
     grid-column: 1;

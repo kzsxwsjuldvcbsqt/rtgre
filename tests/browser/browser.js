@@ -1,6 +1,5 @@
 (async function () {
-  const { results, errors, pause, assert, frame, change } =
-    BrowserTest.create();
+  const { results, errors, assert, frame, change } = BrowserTest.create();
   try {
     for (const width of [320, 390, 768, 959, 960, 1440]) {
       for (const page of [
@@ -342,91 +341,6 @@
         .classList.contains("is-today"),
       "Current day is identified in week view",
     );
-    const compare = cd.getElementById("cal-compare-select");
-    const pending = {};
-    cw.fetch = (url) =>
-      new Promise((resolve) => {
-        pending[url] = resolve;
-      });
-    change(cw, compare, "b3cyb");
-    change(cw, compare, "b3dcc");
-    pending["../../data/b3dcc.json"]({
-      ok: true,
-      json: () =>
-        Promise.resolve({
-          class: "b3dcc",
-          events: [
-            {
-              start: "2026-09-08T10:00:00+02:00",
-              end: "2026-09-08T11:00:00+02:00",
-              title: "Current",
-              slug: "current",
-              module: "R501",
-              category: null,
-              rooms: [],
-              teachers: [],
-              staff_markers: [],
-              groups: [],
-              flags: [],
-            },
-          ],
-        }),
-    });
-    await pause();
-    assert(
-      cd
-        .querySelector("#day-section-2026-09-08 .cal-summary-compared")
-        .textContent.includes("10:00"),
-      "Latest comparison is displayed",
-    );
-    pending["../../data/b3cyb.json"]({
-      ok: true,
-      json: () =>
-        Promise.resolve({
-          class: "b3cyb",
-          events: [
-            {
-              start: "2026-09-08T18:00:00+02:00",
-              end: "2026-09-08T19:00:00+02:00",
-              title: "Stale",
-              slug: "stale",
-              module: "R501",
-              category: null,
-              rooms: [],
-              teachers: [],
-              staff_markers: [],
-              groups: [],
-              flags: [],
-            },
-          ],
-        }),
-    });
-    await pause();
-    assert(
-      cd
-        .querySelector("#day-section-2026-09-08 .cal-summary-compared")
-        .textContent.includes("10:00") &&
-        !cd
-          .querySelector("#day-section-2026-09-08 .cal-summary-compared")
-          .textContent.includes("18:00"),
-      "Stale comparison cannot overwrite current selection",
-    );
-    change(cw, compare, "b3cy1");
-    pending["../../data/b3cy1.json"]({
-      ok: true,
-      json: () =>
-        Promise.resolve({
-          class: "b3cy1",
-          events: [{ start: "2026-02-30T10:00:00+02:00" }],
-        }),
-    });
-    await pause();
-    assert(
-      !cd.getElementById("calendar-message").hidden &&
-        cd.getElementById("calendar-message").dataset.error === "format",
-      "Invalid comparison data is rejected before rendering",
-    );
-    change(cw, compare, "");
     change(cw, cd.getElementById("cal-view-select"), "year");
     assert(
       cd.querySelectorAll(".calendar-event-item").length === 3,

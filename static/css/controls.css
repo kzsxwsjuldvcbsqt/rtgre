@@ -74,9 +74,6 @@
 .filter-group-last {
   min-width: 12rem;
 }
-#cal-comp-checkboxes {
-  display: contents;
-}
 .filter-form label:has(input) {
   position: relative;
   display: inline-flex;

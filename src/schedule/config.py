@@ -122,15 +122,11 @@ def validate_calendar_config(calendar: dict):
         or days != sorted(set(days))
     ):
         raise ValueError("Calendar days must be distinct ISO weekdays in ascending order")
-    if not set(calendar["comparison_options"]) <= {"same_only", "show_compared"}:
-        raise ValueError("Invalid calendar comparison options")
     if (
         type(calendar["search_delay_ms"]) is not int
         or calendar["search_delay_ms"] < 0
         or type(calendar["time_marker_interval_ms"]) is not int
         or calendar["time_marker_interval_ms"] <= 0
-        or type(calendar["max_comparison_events"]) is not int
-        or calendar["max_comparison_events"] <= 0
     ):
         raise ValueError("Invalid calendar timers")
     from datetime import time
