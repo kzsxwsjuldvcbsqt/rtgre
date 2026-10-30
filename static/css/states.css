@@ -36,7 +36,7 @@ select:disabled {
     background: var(--color-surface-hover);
     text-decoration: none;
   }
-  tbody tr:not(.month-row):not(.program-row):hover {
+  tbody tr:hover {
     background: var(--color-surface-hover);
   }
   .class-list a:hover .list-chevron,

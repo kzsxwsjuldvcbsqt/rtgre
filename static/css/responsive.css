@@ -194,28 +194,12 @@
     justify-content: center;
     width: 100%;
   }
-  .month-row,
-  .program-row {
-    margin-block-start: var(--space-md);
-    padding: 0;
-    border: 0;
-    background: transparent;
-  }
-  tbody .month-row:first-child,
-  tbody .program-row:first-child {
-    margin-block-start: 0;
-  }
-  .month-row th,
-  .program-row th {
-    padding: 0 0 var(--space-xs);
-  }
   .grades-table td.col-ue-cell[data-empty="true"] {
     display: none;
   }
 }
 @media (max-width: 39.99em) {
   .filter-group,
-  .filter-group-checkboxes,
   .filter-group-scroll {
     grid-template-columns: 1fr;
   }

@@ -1,10 +1,8 @@
 {
   "index": {
-    "heading": "Choisir une classe",
-    "programs_heading": "Formations"
+    "heading": "Choisir une classe"
   },
   "sections": {
-    "external_suffix": "",
     "navigation": "Sections",
     "global_navigation": "Sections globales"
   },
@@ -23,7 +21,6 @@
   "resources": {
     "title": "Modules",
     "chamilo_main_link": "Accéder à l'espace Chamilo de la formation",
-    "no_link": "Pas d'espace de cours",
     "no_semester": "Complémentaires"
   },
   "grades": {
@@ -74,15 +71,9 @@
     "today_btn": "Aujourd'hui",
     "prev_btn": "Précédent",
     "next_btn": "Suivant",
-    "symbol_prev": "<",
-    "symbol_next": ">",
     "toggle_controls": "Afficher ou masquer les filtres",
     "no_courses": "Aucun cours ce jour-là.",
     "no_courses_week": "Aucun cours cette semaine.",
-    "bound_start": "début",
-    "bound_end": "fin",
-    "status_same": "identique",
-    "status_different": "différent",
     "status_ongoing": "[En cours]",
     "now_marker": "{day_name} {day_num} {month_name} · {time}",
     "evals_only": "Évaluations uniquement",
@@ -111,8 +102,6 @@
     "back_link": "Retour aux évaluations de la classe",
     "comparison_heading": "Dans les autres classes",
     "absent": "Absent de l'ADE",
-    "alternate_date": "Programmé à une autre date",
-    "same_date": "Même date",
     "same_all": "Tout est identique",
     "comparison_note": "Seules les différences avec la classe consultée sont affichées dans les colonnes.",
     "no_other_class": "Aucune autre classe n'a cette évaluation.",
