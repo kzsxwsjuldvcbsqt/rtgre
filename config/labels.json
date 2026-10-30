@@ -74,7 +74,6 @@
     "toggle_controls": "Afficher ou masquer les filtres",
     "no_courses": "Aucun cours ce jour-là.",
     "no_courses_week": "Aucun cours cette semaine.",
-    "status_ongoing": "[En cours]",
     "now_marker": "{day_name} {day_num} {month_name} · {time}",
     "evals_only": "Évaluations uniquement",
     "week_prefix": "Semaine",
