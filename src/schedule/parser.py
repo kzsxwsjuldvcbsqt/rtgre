@@ -4,7 +4,7 @@ import unicodedata
 
 from icalendar import Calendar
 
-from .classifier import classify_event
+from .classifier import classify_event, match_session_marks
 from .config import AppConfig
 from .models import ClassConfig, Evaluation, format_teacher_name, make_occurrence_id
 
@@ -238,7 +238,7 @@ def parse_calendar(
             teachers=tuple(teachers),
             staff_markers=tuple(staff_markers),
             groups=tuple(groups),
-            flags=flags,
+            flags=flags + match_session_marks(summary, tuple(unique_rooms), app_config),
             complementary=tuple(complementary),
             category_id=cat_id,
             category_label=cat_label,

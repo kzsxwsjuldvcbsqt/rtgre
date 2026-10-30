@@ -8,6 +8,7 @@
     displayMode,
     categoryMap,
     moduleStyles,
+    sessionMarks,
     labels,
     classLabels,
     prevBtn,
@@ -738,6 +739,8 @@
       var ev = item.event;
       var li = document.createElement("li");
       li.className = "calendar-event-item";
+      var isEvaluation = Boolean(ev.category && categoryMap[ev.category]);
+      if (isEvaluation) li.classList.add("is-evaluation");
       if (Object.prototype.hasOwnProperty.call(moduleStyles, ev.module)) {
         var moduleStyle = moduleStyles[ev.module];
         li.classList.add(
@@ -791,13 +794,22 @@
         titleDiv.appendChild(document.createTextNode(" "));
       }
 
-      if (ev.category && categoryMap[ev.category]) {
+      if (isEvaluation) {
         var cat = categoryMap[ev.category];
         var catSpan = document.createElement("span");
         catSpan.className = "category-badge cat-" + cat.id;
         catSpan.textContent = cat.label;
         titleDiv.appendChild(catSpan);
         titleDiv.appendChild(document.createTextNode(" "));
+      } else {
+        (ev.flags || []).forEach(function (flag) {
+          if (!Object.prototype.hasOwnProperty.call(sessionMarks, flag)) return;
+          var markSpan = document.createElement("span");
+          markSpan.className = "category-badge session-mark";
+          markSpan.textContent = sessionMarks[flag];
+          titleDiv.appendChild(markSpan);
+          titleDiv.appendChild(document.createTextNode(" "));
+        });
       }
 
       infoDiv.appendChild(titleDiv);

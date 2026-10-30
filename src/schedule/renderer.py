@@ -195,6 +195,7 @@ def render_site(
     eval_detail_tpl = env.get_template("evaluation.html.j2")
 
     categories_json = [{"id": c.id, "label": c.label} for c in app_config.categories]
+    session_marks_json = [{"id": m.id, "label": m.label} for m in app_config.session_marks]
 
     class_labels_json = {
         cls_item.id: cls_item.label for prg in app_config.programs for cls_item in prg.classes
@@ -278,6 +279,7 @@ def render_site(
                 sections=class_sections,
                 programs=app_config.programs,
                 categories_json=categories_json,
+                session_marks_json=session_marks_json,
                 calendar_labels={
                     **app_config.labels["calendar"],
                     "days": app_config.labels["days"],

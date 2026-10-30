@@ -4,6 +4,21 @@ from .config import AppConfig
 from .models import CategoryConfig
 
 
+def match_session_marks(
+    summary: str, rooms: tuple[str, ...], app_config: AppConfig
+) -> tuple[str, ...]:
+    clean_summary = summary.strip()
+    return tuple(
+        mark.id
+        for mark in app_config.session_marks
+        if any(
+            re.search(rule.title, clean_summary, re.IGNORECASE)
+            and (not rule.rooms or set(rule.rooms) & set(rooms))
+            for rule in mark.rules
+        )
+    )
+
+
 def classify_event(
     summary: str, description_lines: list[str], app_config: AppConfig
 ) -> tuple[CategoryConfig | None, tuple[str, ...]]:

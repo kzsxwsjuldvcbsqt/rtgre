@@ -104,6 +104,19 @@ class DescriptionFlagConfig:
 
 
 @dataclass(frozen=True)
+class SessionMarkRule:
+    title: str
+    rooms: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class SessionMarkConfig:
+    id: str
+    label: str
+    rules: tuple[SessionMarkRule, ...]
+
+
+@dataclass(frozen=True)
 class SectionConfig:
     id: str
     label: str

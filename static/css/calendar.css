@@ -76,6 +76,18 @@
 .calendar-event-item.kind-sae.tone-6 {
   background: var(--color-sae-6);
 }
+.calendar-event-item.is-evaluation {
+  border: var(--rule-accent-width) solid var(--color-text);
+}
+.calendar-event-item.is-evaluation .category-badge {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+.calendar-event-item .session-mark {
+  border: var(--rule-width) solid var(--color-text);
+  background: transparent;
+  color: var(--color-text);
+}
 .calendar-view-week .calendar-event-item {
   display: flex;
   flex-direction: column;
