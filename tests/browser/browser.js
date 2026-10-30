@@ -166,8 +166,8 @@
       "Semester weighted averages are preserved",
     );
     assert(
-      nd.getElementById("global-annual-avg").textContent === "15.28",
-      "Annual weighted averages are preserved",
+      nd.getElementById("synth-annual-ue1").textContent === "",
+      "A unit annual average waits for both semesters",
     );
     let exportedBlob;
     nw.URL.createObjectURL = (blob) => {

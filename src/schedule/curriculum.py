@@ -275,7 +275,6 @@ def get_class_grades_data(class_config: ClassConfig, curriculum_data: dict, labe
                     "units": {
                         sem_id: unit["id"] for sem_id, unit in semester_units.items() if unit
                     },
-                    "weight": next(unit["weight"] for unit in semester_units.values() if unit),
                 }
             )
 
