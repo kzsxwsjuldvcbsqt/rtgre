@@ -101,6 +101,9 @@
   "calendar": {
     "title": "Emploi du temps",
     "view_label": "Vue",
+    "layout_label": "Affichage",
+    "layout_grid": "Grille horaire",
+    "layout_list": "Liste",
     "view_week": "Semaine",
     "view_day": "Jour",
     "view_year": "Année",

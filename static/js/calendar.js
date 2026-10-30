@@ -86,13 +86,38 @@
         });
       });
     }
+    function toClockMinutes(instant) {
+      return (
+        parseInt(instant.substring(11, 13), 10) * 60 +
+        parseInt(instant.substring(14, 16), 10)
+      );
+    }
+
+    function computeGridRange(events) {
+      if (events.length === 0) return null;
+      var first = Infinity;
+      var last = -Infinity;
+      events.forEach(function (ev) {
+        first = Math.min(first, toClockMinutes(ev.start));
+        last = Math.max(last, toClockMinutes(ev.end));
+      });
+      return {
+        start: Math.floor(first / 60) * 60,
+        end: Math.ceil(last / 60) * 60,
+      };
+    }
+
     applyBreaks(currentClassEvents);
     assignSeriesCounts(currentClassEvents);
+    var gridRange = computeGridRange(currentClassEvents);
 
     var comparisonCache = Object.create(null);
     var renderVersion = 0;
 
     var viewSelect = document.getElementById("cal-view-select");
+    var layoutSelect = document.getElementById("cal-layout-select");
+    var layoutGroup = document.getElementById("cal-layout-select-group");
+    var mobileQuery = window.matchMedia(calendarConfig.mobile_media_query);
     var dateInput = document.getElementById("cal-date-input");
     var dateGroup = document.getElementById("cal-date-input-group");
     var calendarControls = document.getElementById("calendar-controls");
@@ -197,6 +222,7 @@
 
     var state = {
       view: resolveDefaultView(),
+      layout: calendarConfig.default_week_layout,
       date: defaultDateStr,
       compare: "",
       sameOnly: false,
@@ -382,6 +408,33 @@
         return;
       }
 
+      if (viewContainer.classList.contains("is-grid")) {
+        var gridList = todaySection.querySelector(".calendar-events-list");
+        var gridMarker = buildTimeMarker("li", nowTimeStr);
+        gridMarker.style.setProperty(
+          "--calendar-offset",
+          Math.min(
+            Math.max(
+              now.getHours() * 60 + now.getMinutes() - gridRange.start,
+              0,
+            ),
+            gridRange.end - gridRange.start,
+          ),
+        );
+        gridList.appendChild(gridMarker);
+        gridList
+          .querySelectorAll(".calendar-event-item")
+          .forEach(function (item) {
+            if (
+              nowTimeStr >= item.dataset.start &&
+              nowTimeStr < item.dataset.end
+            )
+              item.classList.add("is-ongoing");
+          });
+        scheduleTimeMarker(nowInfo.isSimulated);
+        return;
+      }
+
       var eventsList = todaySection.querySelector(".calendar-events-list");
       var eventItems = eventsList
         ? Array.from(eventsList.querySelectorAll(".calendar-event-item"))
@@ -512,6 +565,10 @@
         state.view = merged.view;
       }
 
+      if (merged.layout === "grid" || merged.layout === "list") {
+        state.layout = merged.layout;
+      }
+
       if (
         hashObj.now &&
         !hashObj.date &&
@@ -568,6 +625,7 @@
       var hashObj = AppUtils.parseHash(window.location.hash);
       var saveObj = {
         view: state.view,
+        layout: state.layout,
         date: state.date,
         compare: state.compare,
         sameOnly: state.compare && state.sameOnly ? "1" : "0",
@@ -603,6 +661,9 @@
 
     function updateControlsFromState() {
       if (viewSelect) viewSelect.value = state.view;
+      if (layoutSelect) layoutSelect.value = state.layout;
+      if (layoutGroup)
+        layoutGroup.hidden = state.view !== "week" || mobileQuery.matches;
       if (dateInput) dateInput.value = state.date;
       if (compareSelect) compareSelect.value = state.compare;
       if (evalsOnlyCb) evalsOnlyCb.checked = state.evals;
@@ -776,10 +837,28 @@
       getWeekStart,
       getISOWeekNumber,
       filterEvents,
+      isWeekGrid,
+      gridRange,
     });
     function renderCalendarView(primaryEvents, comparedEvents) {
       calendarView.render(primaryEvents, comparedEvents);
     }
+
+    function isWeekGrid() {
+      return state.layout === "grid" && !mobileQuery.matches;
+    }
+
+    if (layoutSelect) {
+      layoutSelect.addEventListener("change", function () {
+        state.layout = layoutSelect.value;
+        render();
+      });
+    }
+
+    mobileQuery.addEventListener("change", function () {
+      updateControlsFromState();
+      render();
+    });
 
     if (viewSelect) {
       viewSelect.addEventListener("change", function () {
@@ -846,6 +925,7 @@
     if (resetBtn) {
       resetBtn.addEventListener("click", function () {
         state.view = resolveDefaultView();
+        state.layout = calendarConfig.default_week_layout;
         state.date = defaultDateStr;
         state.compare = "";
         state.sameOnly = false;

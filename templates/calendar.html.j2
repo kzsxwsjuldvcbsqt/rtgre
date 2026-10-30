@@ -53,6 +53,17 @@
 </select>
 </div>
 
+<div class="filter-group-item" id="cal-layout-select-group" hidden>
+<label for="cal-layout-select" class="visually-hidden">{{ labels.calendar.layout_label }}</label>
+<span class="filter-field-title" aria-hidden="true">{{ labels.calendar.layout_label }}</span>
+<select id="cal-layout-select" aria-label="{{ labels.calendar.layout_label }}">
+<optgroup label="{{ labels.calendar.layout_label }}">
+<option value="grid">{{ labels.calendar.layout_grid }}</option>
+<option value="list">{{ labels.calendar.layout_list }}</option>
+</optgroup>
+</select>
+</div>
+
 <div class="filter-group-item" id="cal-compare-select-group">
 <label for="cal-compare-select" class="visually-hidden">{{ labels.calendar.compare_label }}</label>
 <span class="filter-field-title" aria-hidden="true">{{ labels.calendar.compare_label }}</span>

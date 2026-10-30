@@ -85,6 +85,8 @@ def validate_calendar_config(calendar: dict):
         raise ValueError("Invalid default calendar view")
     if calendar["phone_default_view"] not in ("day", "week", "year"):
         raise ValueError("Invalid phone calendar view")
+    if calendar["default_week_layout"] not in ("grid", "list"):
+        raise ValueError("Invalid default week layout")
     for key in ("phone_media_query", "mobile_media_query"):
         if not isinstance(calendar[key], str) or not calendar[key].strip():
             raise ValueError(f"Invalid calendar media query: {key}")

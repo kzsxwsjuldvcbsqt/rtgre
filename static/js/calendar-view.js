@@ -25,6 +25,8 @@
     getWeekStart,
     getISOWeekNumber,
     filterEvents,
+    isWeekGrid,
+    gridRange,
   }) {
     function indexByDate(events) {
       var result = Object.create(null);
@@ -278,7 +280,127 @@
         viewContainer.appendChild(daySection);
       });
 
+      if (
+        state.view === "week" &&
+        !effShowCompared &&
+        gridRange &&
+        isWeekGrid()
+      )
+        layoutWeekGrid();
+
       updateResultsCount(totalWeekItems);
+    }
+
+    function toMinutes(time) {
+      var parts = time.split(":");
+      return parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
+    }
+
+    function formatMinutes(minutes) {
+      return (
+        String(Math.floor(minutes / 60)).padStart(2, "0") +
+        ":" +
+        String(minutes % 60).padStart(2, "0")
+      );
+    }
+
+    function assignLanes(items) {
+      var placements = [];
+      var cluster = [];
+      var laneEnds = [];
+      var clusterEnd = "";
+      function closeCluster() {
+        cluster.forEach(function (placement) {
+          placement.lanes = laneEnds.length;
+        });
+        cluster = [];
+        laneEnds = [];
+      }
+      items.forEach(function (item) {
+        var start = item.dataset.start;
+        var end = item.dataset.end;
+        if (cluster.length > 0 && start >= clusterEnd) closeCluster();
+        var lane = laneEnds.findIndex(function (laneEnd) {
+          return laneEnd <= start;
+        });
+        if (lane === -1) lane = laneEnds.length;
+        laneEnds[lane] = end;
+        clusterEnd = cluster.length > 0 && clusterEnd > end ? clusterEnd : end;
+        var placement = { item: item, lane: lane, lanes: 1 };
+        cluster.push(placement);
+        placements.push(placement);
+      });
+      closeCluster();
+      return placements;
+    }
+
+    function buildEventCard(item) {
+      var summary = document.createElement("div");
+      summary.className = "event-summary";
+      summary.setAttribute("aria-hidden", "true");
+      var card = document.createElement("div");
+      card.className = "event-card";
+      Array.from(item.childNodes).forEach(function (node) {
+        card.appendChild(node.cloneNode(true));
+        summary.appendChild(node);
+      });
+      item.appendChild(summary);
+      item.appendChild(card);
+      item.tabIndex = 0;
+    }
+
+    function layoutWeekGrid() {
+      viewContainer.classList.add("is-grid");
+      viewContainer.style.setProperty(
+        "--calendar-grid-minutes",
+        gridRange.end - gridRange.start,
+      );
+
+      var hours = document.createElement("div");
+      hours.className = "calendar-hours";
+      hours.setAttribute("aria-hidden", "true");
+      for (
+        var minute = gridRange.start;
+        minute <= gridRange.end;
+        minute += 60
+      ) {
+        var hour = document.createElement("span");
+        hour.className = "calendar-hour";
+        hour.textContent = formatMinutes(minute);
+        hour.style.setProperty("--calendar-offset", minute - gridRange.start);
+        hours.appendChild(hour);
+      }
+      viewContainer.insertBefore(hours, viewContainer.firstChild);
+
+      viewContainer
+        .querySelectorAll(".day-section")
+        .forEach(function (section) {
+          var list = section.querySelector(".calendar-events-list");
+          if (!list) {
+            var empty = section.querySelector(".empty-state-message");
+            if (empty) empty.remove();
+            list = document.createElement("ul");
+            list.className = "calendar-events-list";
+            section.appendChild(list);
+          }
+          assignLanes(
+            Array.from(list.querySelectorAll(".calendar-event-item")),
+          ).forEach(function (placement) {
+            var item = placement.item;
+            var start = toMinutes(item.dataset.start);
+            item.style.setProperty(
+              "--calendar-offset",
+              start - gridRange.start,
+            );
+            item.style.setProperty(
+              "--event-span",
+              toMinutes(item.dataset.end) - start,
+            );
+            item.style.setProperty("--event-lane", placement.lane);
+            item.style.setProperty("--event-lanes", placement.lanes);
+            buildEventCard(item);
+          });
+        });
     }
 
     function buildDaySection(
@@ -606,7 +728,9 @@
     function renderEventItem(item, cLabel, bounds) {
       var ev = item.event;
       var li = document.createElement("li");
-      li.className = "calendar-event-item";
+      li.className =
+        "calendar-event-item" +
+        (ev.category && categoryMap[ev.category] ? " is-evaluation" : "");
 
       var startTime = ev.start.substring(11, 16);
       var endTime = ev.end.substring(11, 16);
