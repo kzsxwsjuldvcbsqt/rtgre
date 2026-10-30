@@ -1,6 +1,7 @@
 {
   "default_view": "week",
   "phone_default_view": "day",
+  "default_week_layout": "grid",
   "phone_media_query": "(max-width: 39.99em)",
   "mobile_media_query": "(max-width: 59.99em)",
   "days_of_week": [

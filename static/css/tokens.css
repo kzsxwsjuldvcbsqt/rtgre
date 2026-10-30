@@ -105,6 +105,11 @@
 
   --width-grade-input: 6.5rem;
   --width-event-time: 6.5rem;
+  --width-event-card: 18rem;
+  --width-hour-axis: 3.5rem;
+  --calendar-hour-height: 4.5rem;
+  --calendar-minute-height: calc(var(--calendar-hour-height) / 60);
+  --event-title-lines: 2;
   --width-progress-lane: 1.5rem;
   --size-progress-dot: 0.5rem;
   --width-col-date: 7rem;
@@ -133,6 +138,7 @@
 
   --site-header-height: 0px;
 
+  --z-raised: 1;
   --z-menu: 30;
   --z-header: 40;
   --z-overlay: 50;
