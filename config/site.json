@@ -27,9 +27,6 @@
     "img-src": [
       "'self'"
     ],
-    "connect-src": [
-      "'self'"
-    ],
     "form-action": [
       "'self'"
     ],

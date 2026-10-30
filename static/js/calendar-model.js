@@ -105,12 +105,11 @@
     };
   }
 
-  function normalizeEnvelope(data, classId, maxEvents) {
+  function normalizeEnvelope(data, classId) {
     if (
       !isObject(data) ||
       data.class !== classId ||
-      !Array.isArray(data.events) ||
-      data.events.length > maxEvents
+      !Array.isArray(data.events)
     ) {
       throw new Error("format");
     }

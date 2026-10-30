@@ -30,9 +30,7 @@
     });
 
     var labels = JSON.parse(scriptEl.getAttribute("data-labels-json") || "{}");
-    var classLabels = JSON.parse(
-      scriptEl.getAttribute("data-class-labels-json") || "{}",
-    );
+    var classLabel = scriptEl.getAttribute("data-class-label");
     var moduleStyles = JSON.parse(
       scriptEl.getAttribute("data-module-styles-json") || "{}",
     );
@@ -48,7 +46,6 @@
         currentClassEvents = CalendarModel.normalizeEnvelope(
           rawEventsData,
           currentClassId,
-          calendarConfig.max_comparison_events,
         );
       } catch (error) {
         currentClassEvents = [];
@@ -121,9 +118,6 @@
     assignSeriesCounts(currentClassEvents);
     var gridRange = computeGridRange(currentClassEvents);
 
-    var comparisonCache = Object.create(null);
-    var renderVersion = 0;
-
     var viewSelect = document.getElementById("cal-view-select");
     var layoutSelect = document.getElementById("cal-layout-select");
     var layoutGroup = document.getElementById("cal-layout-select-group");
@@ -132,7 +126,7 @@
     var dateGroup = document.getElementById("cal-date-input-group");
     var calendarControls = document.getElementById("calendar-controls");
     var filtersScroll = document.getElementById("cal-filters-scroll");
-    var compareGroup = document.getElementById("cal-compare-select-group");
+    var dateAnchor = document.querySelector('label[for="cal-evals-only"]');
     var controlsToggle = document.querySelector(
       '[aria-controls="calendar-controls"]',
     );
@@ -143,7 +137,7 @@
       var sidebarActive =
         controlsToggle && controlsToggle.getClientRects().length === 0;
       if (sidebarActive && dateGroup.parentElement !== filtersScroll) {
-        filtersScroll.insertBefore(dateGroup, compareGroup);
+        filtersScroll.insertBefore(dateGroup, dateAnchor);
       } else if (!sidebarActive && dateGroup.parentElement !== navBarEl) {
         navBarEl.insertBefore(dateGroup, navBarEl.firstChild);
       }
@@ -152,8 +146,6 @@
     syncDateControlPlacement();
     window.addEventListener("resize", syncDateControlPlacement);
 
-    var compareSelect = document.getElementById("cal-compare-select");
-    var compCheckboxes = document.getElementById("cal-comp-checkboxes");
     var evalsOnlyCb = document.getElementById("cal-evals-only");
     var teacherlessCb = document.getElementById("cal-teacherless-only");
     var searchInput = document.getElementById("cal-search-input");
@@ -163,7 +155,6 @@
     var todayBtn = document.getElementById("cal-today-btn");
     var nextBtn = document.getElementById("cal-next-btn");
     var periodHeading = document.getElementById("cal-period-heading");
-    var messageEl = document.getElementById("calendar-message");
     var viewContainer = document.getElementById("calendar-view-container");
 
     var searchTimeout = null;
@@ -234,9 +225,6 @@
       view: resolveDefaultView(),
       layout: calendarConfig.default_week_layout,
       date: defaultDateStr,
-      compare: "",
-      sameOnly: false,
-      showCompared: false,
       evals: false,
       teacherless: false,
       search: "",
@@ -595,51 +583,21 @@
         state.date = defaultDateStr;
       }
 
-      if (merged.compare !== undefined)
-        state.compare =
-          typeof merged.compare === "string" &&
-          merged.compare !== currentClassId &&
-          Object.prototype.hasOwnProperty.call(classLabels, merged.compare)
-            ? merged.compare
-            : "";
-      if (merged.sameOnly !== undefined)
-        state.sameOnly = merged.sameOnly === "1" || merged.sameOnly === true;
-      if (merged.showCompared !== undefined)
-        state.showCompared =
-          merged.showCompared === "1" || merged.showCompared === true;
       if (merged.evals !== undefined)
         state.evals = merged.evals === "1" || merged.evals === true;
       if (merged.teacherless !== undefined)
         state.teacherless =
           merged.teacherless === "1" || merged.teacherless === true;
       if (typeof merged.search === "string") state.search = merged.search;
-
-      if (!state.compare) {
-        state.sameOnly = false;
-        state.showCompared = false;
-      }
-
-      if (calendarConfig.comparison_options.indexOf("same_only") === -1)
-        state.sameOnly = false;
-      if (calendarConfig.comparison_options.indexOf("show_compared") === -1)
-        state.showCompared = false;
       updateControlsFromState();
     }
 
     function saveState() {
-      if (!state.compare) {
-        state.sameOnly = false;
-        state.showCompared = false;
-      }
-
       var hashObj = AppUtils.parseHash(window.location.hash);
       var saveObj = {
         view: state.view,
         layout: state.layout,
         date: state.date,
-        compare: state.compare,
-        sameOnly: state.compare && state.sameOnly ? "1" : "0",
-        showCompared: state.compare && state.showCompared ? "1" : "0",
         evals: state.evals ? "1" : "0",
         teacherless: state.teacherless ? "1" : "0",
         search: state.search,
@@ -675,7 +633,6 @@
       if (layoutGroup)
         layoutGroup.hidden = state.view !== "week" || mobileQuery.matches;
       if (dateInput) dateInput.value = state.date;
-      if (compareSelect) compareSelect.value = state.compare;
       if (evalsOnlyCb) evalsOnlyCb.checked = state.evals;
       if (teacherlessCb) teacherlessCb.checked = state.teacherless;
       if (searchInput) searchInput.value = state.search;
@@ -688,73 +645,6 @@
       else if (dateInput) dateInput.hidden = isYear;
       var navBar = document.getElementById("calendar-nav-bar");
       if (navBar) navBar.hidden = false;
-
-      if (compCheckboxes) {
-        while (compCheckboxes.firstChild) {
-          compCheckboxes.removeChild(compCheckboxes.firstChild);
-        }
-        if (state.compare) {
-          var sameLabel = document.createElement("label");
-          sameLabel.setAttribute("for", "cal-same-only");
-          var sameCb = document.createElement("input");
-          sameCb.type = "checkbox";
-          sameCb.id = "cal-same-only";
-          sameCb.checked = state.sameOnly;
-          sameCb.addEventListener("change", function () {
-            state.sameOnly = sameCb.checked;
-            render();
-          });
-          sameLabel.appendChild(sameCb);
-          sameLabel.appendChild(
-            document.createTextNode(" " + labels.same_only),
-          );
-
-          var showLabel = document.createElement("label");
-          showLabel.setAttribute("for", "cal-show-compared");
-          var showCb = document.createElement("input");
-          showCb.type = "checkbox";
-          showCb.id = "cal-show-compared";
-          showCb.checked = state.showCompared;
-          showCb.addEventListener("change", function () {
-            state.showCompared = showCb.checked;
-            render();
-          });
-          showLabel.appendChild(showCb);
-          showLabel.appendChild(
-            document.createTextNode(" " + labels.show_compared),
-          );
-
-          if (calendarConfig.comparison_options.indexOf("same_only") !== -1)
-            compCheckboxes.appendChild(sameLabel);
-          if (calendarConfig.comparison_options.indexOf("show_compared") !== -1)
-            compCheckboxes.appendChild(showLabel);
-        }
-      }
-    }
-
-    function fetchComparisonClass(classId) {
-      if (!comparisonCache[classId]) {
-        comparisonCache[classId] = fetch(
-          "../../data/" + encodeURIComponent(classId) + ".json",
-        )
-          .then(function (response) {
-            if (!response.ok)
-              throw new Error("Comparison fetch failed: " + response.status);
-            return response.json();
-          })
-          .then(function (data) {
-            return CalendarModel.normalizeEnvelope(
-              data,
-              classId,
-              calendarConfig.max_comparison_events,
-            );
-          })
-          .catch(function (error) {
-            delete comparisonCache[classId];
-            throw error;
-          });
-      }
-      return comparisonCache[classId];
     }
 
     function filterEvents(events, searchNorm) {
@@ -792,33 +682,9 @@
     function render() {
       stopTimeMarkerTimer();
       saveState();
-      var version = ++renderVersion;
-      if (state.compare) {
-        fetchComparisonClass(state.compare)
-          .then(function (events) {
-            if (version !== renderVersion) return;
-            if (messageEl) messageEl.hidden = true;
-            renderCalendarView(currentClassEvents, events);
-            updateTimeMarker();
-            spotlightNow();
-          })
-          .catch(function (error) {
-            if (version !== renderVersion) return;
-            if (messageEl) {
-              messageEl.dataset.error = error.message;
-              messageEl.textContent = labels.load_error;
-              messageEl.hidden = false;
-            }
-            renderCalendarView(currentClassEvents, []);
-            updateTimeMarker();
-            spotlightNow();
-          });
-      } else {
-        if (messageEl) messageEl.hidden = true;
-        renderCalendarView(currentClassEvents, []);
-        updateTimeMarker();
-        spotlightNow();
-      }
+      renderCalendarView(currentClassEvents);
+      updateTimeMarker();
+      spotlightNow();
     }
 
     const calendarView = CalendarView.create({
@@ -832,7 +698,7 @@
       moduleStyles,
       sessionMarks,
       labels,
-      classLabels,
+      classLabel,
       prevBtn,
       nextBtn,
       periodHeading,
@@ -852,8 +718,8 @@
       isWeekGrid,
       gridRange,
     });
-    function renderCalendarView(primaryEvents, comparedEvents) {
-      calendarView.render(primaryEvents, comparedEvents);
+    function renderCalendarView(events) {
+      calendarView.render(events);
     }
 
     function isWeekGrid() {
@@ -893,18 +759,6 @@
       });
     }
 
-    if (compareSelect) {
-      compareSelect.addEventListener("change", function () {
-        state.compare = compareSelect.value;
-        if (!state.compare) {
-          state.sameOnly = false;
-          state.showCompared = false;
-        }
-        updateControlsFromState();
-        render();
-      });
-    }
-
     if (evalsOnlyCb) {
       evalsOnlyCb.addEventListener("change", function () {
         state.evals = evalsOnlyCb.checked;
@@ -939,9 +793,6 @@
         state.view = resolveDefaultView();
         state.layout = calendarConfig.default_week_layout;
         state.date = defaultDateStr;
-        state.compare = "";
-        state.sameOnly = false;
-        state.showCompared = false;
         state.evals = false;
         state.teacherless = false;
         state.search = "";

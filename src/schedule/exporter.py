@@ -1,6 +1,3 @@
-import json
-from pathlib import Path
-
 from .config import AppConfig
 from .models import Evaluation, slugify
 
@@ -33,15 +30,3 @@ def serialize_events(app_config: AppConfig, class_id: str, events: list[Evaluati
             for ev in events
         ],
     }
-
-
-def export_data_files(
-    app_config: AppConfig, events_by_class: dict[str, list[Evaluation]], output_dir: str = "dist"
-):
-    out_path = Path(output_dir) / "data"
-    out_path.mkdir(parents=True, exist_ok=True)
-    for class_id, events in events_by_class.items():
-        payload = serialize_events(app_config, class_id, events)
-        (out_path / f"{class_id}.json").write_text(
-            json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8"
-        )

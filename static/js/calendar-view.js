@@ -10,7 +10,7 @@
     moduleStyles,
     sessionMarks,
     labels,
-    classLabels,
+    classLabel,
     prevBtn,
     nextBtn,
     periodHeading,
@@ -40,63 +40,22 @@
       return result;
     }
 
-    function prepareDay(
-      date,
-      primaryByDate,
-      comparedByDate,
-      search,
-      sameOnly,
-      showCompared,
-    ) {
+    function prepareDay(date, eventsByDate, search) {
       var iso = formatISODate(date);
-      var primary = filterEvents(primaryByDate[iso] || [], search);
-      var compared = state.compare
-        ? filterEvents(comparedByDate[iso] || [], search)
-        : [];
-      function slotKey(event) {
-        return JSON.stringify([event.slug, event.start, event.end]);
-      }
-      var sharedSlots = new Set(compared.map(slotKey));
-      var primaryItems = primary
-        .map(function (event) {
-          return {
-            event: event,
-            isPrimary: true,
-            isShared: sharedSlots.has(slotKey(event)),
-          };
-        })
-        .filter(function (item) {
-          return !sameOnly || item.isShared;
-        });
-      var comparedItems =
-        state.compare && showCompared
-          ? compared.map(function (event) {
-              return { event: event, isPrimary: false, isShared: false };
-            })
-          : [];
-      [primaryItems, comparedItems].forEach(function (items) {
-        items.sort(function (a, b) {
-          return a.event.start.localeCompare(b.event.start);
-        });
+      var dayEvents = eventsByDate[iso] || [];
+      var events = filterEvents(dayEvents, search).sort(function (a, b) {
+        return a.start.localeCompare(b.start);
       });
-      var pBounds = getDayBounds(
-        (primaryByDate[iso] || []).map(function (event) {
-          return { event: event };
-        }),
-      );
       return {
         dDate: date,
         dIso: iso,
-        pEvents: primary,
-        cEvents: compared,
-        pItems: primaryItems,
-        cItems: comparedItems,
-        pBounds: pBounds,
-        dayCount: primaryItems.length + comparedItems.length,
+        events: events,
+        bounds: getDayBounds(dayEvents),
+        dayCount: events.length,
       };
     }
 
-    function renderCalendarView(primaryEvents, compareEvents) {
+    function renderCalendarView(events) {
       var currDate = parseISODate(state.date);
 
       if (state.view !== "year") {
@@ -162,8 +121,6 @@
       }
 
       var isFiltered = Boolean(
-        state.sameOnly ||
-        state.showCompared ||
         state.evals ||
         state.teacherless ||
         (state.search && state.search.trim().length > 0),
@@ -193,26 +150,13 @@
       }
 
       var searchNorm = AppUtils.stripAccents(state.search).toLowerCase();
-      var pLabel = classLabels[currentClassId] || currentClassId.toUpperCase();
-      var cLabel =
-        classLabels[state.compare] ||
-        (state.compare ? state.compare.toUpperCase() : "");
-
-      var effSameOnly = state.compare ? state.sameOnly : false;
-      var effShowCompared = state.compare ? state.showCompared : false;
-
       if (state.view === "year") {
         setRange(firstDateStr, lastDateStr);
         var yearCount = renderYearView(
-          primaryEvents,
-          compareEvents,
+          events,
           searchNorm,
           dayNames,
           monthNames,
-          pLabel,
-          cLabel,
-          effSameOnly,
-          effShowCompared,
         );
         updateResultsCount(yearCount);
         return;
@@ -244,17 +188,9 @@
         "--calendar-day-count",
         daysToRender.length,
       );
-      var primaryByDate = indexByDate(primaryEvents);
-      var comparedByDate = indexByDate(compareEvents);
+      var eventsByDate = indexByDate(events);
       daysToRender.forEach(function (date) {
-        var data = prepareDay(
-          date,
-          primaryByDate,
-          comparedByDate,
-          searchNorm,
-          effSameOnly,
-          effShowCompared,
-        );
+        var data = prepareDay(date, eventsByDate, searchNorm);
         totalWeekItems += data.dayCount;
         dayRenderData.push(data);
       });
@@ -274,21 +210,12 @@
           dayData,
           dayNames,
           monthNames,
-          pLabel,
-          cLabel,
-          effShowCompared,
           state.view === "week",
         );
         viewContainer.appendChild(daySection);
       });
 
-      if (
-        state.view === "week" &&
-        !effShowCompared &&
-        gridRange &&
-        isWeekGrid()
-      )
-        layoutWeekGrid();
+      if (state.view === "week" && gridRange && isWeekGrid()) layoutWeekGrid();
 
       updateResultsCount(totalWeekItems);
     }
@@ -413,21 +340,9 @@
         });
     }
 
-    function buildDaySection(
-      dayData,
-      dayNames,
-      monthNames,
-      pLabel,
-      cLabel,
-      effShowCompared,
-      includeHeading,
-    ) {
+    function buildDaySection(dayData, dayNames, monthNames, includeHeading) {
       var dDate = dayData.dDate;
       var dIso = dayData.dIso;
-      var pEvents = dayData.pEvents;
-      var cEvents = dayData.cEvents;
-      var pItems = dayData.pItems;
-      var cItems = dayData.cItems;
 
       var daySection = document.createElement("section");
       daySection.className = "day-section";
@@ -463,144 +378,33 @@
         daySection.appendChild(heading);
       }
 
-      if (state.compare) {
-        var noCoursesStr = labels.no_courses_compared;
-
-        var pSummary = "";
-        var pMinStartStr = null,
-          pMaxEndStr = null;
-        if (pEvents.length > 0) {
-          pMinStartStr = pEvents[0].start.substring(11, 16);
-          pMaxEndStr = pEvents[0].end.substring(11, 16);
-          pEvents.forEach(function (ev) {
-            var s = ev.start.substring(11, 16);
-            var e = ev.end.substring(11, 16);
-            if (s < pMinStartStr) pMinStartStr = s;
-            if (e > pMaxEndStr) pMaxEndStr = e;
-          });
-          pSummary = pLabel + " : " + pMinStartStr + " - " + pMaxEndStr;
-        } else {
-          pSummary = pLabel + " : " + noCoursesStr;
-        }
-
-        var cSummary = "";
-        var cMinStartStr = null,
-          cMaxEndStr = null;
-        if (cEvents.length > 0) {
-          cMinStartStr = cEvents[0].start.substring(11, 16);
-          cMaxEndStr = cEvents[0].end.substring(11, 16);
-          cEvents.forEach(function (ev) {
-            var s = ev.start.substring(11, 16);
-            var e = ev.end.substring(11, 16);
-            if (s < cMinStartStr) cMinStartStr = s;
-            if (e > cMaxEndStr) cMaxEndStr = e;
-          });
-          cSummary = cLabel + " : " + cMinStartStr + " - " + cMaxEndStr;
-        } else {
-          cSummary = cLabel + " : " + noCoursesStr;
-        }
-
-        var summaryDiv = document.createElement("div");
-        summaryDiv.className = "cal-day-summary";
-
-        var line1 = document.createElement("div");
-        line1.className = "cal-summary-primary";
-        line1.textContent = pSummary;
-        summaryDiv.appendChild(line1);
-
-        var line2 = document.createElement("div");
-        line2.className = "cal-summary-compared";
-        line2.textContent = cSummary;
-        summaryDiv.appendChild(line2);
-        daySection.appendChild(summaryDiv);
-      }
-
-      var pBounds = dayData.pBounds;
-
-      if (state.compare && effShowCompared) {
-        var pHeading = document.createElement("h4");
-        pHeading.className = "cal-class-subheading";
-        pHeading.textContent = pLabel;
-        daySection.appendChild(pHeading);
-
-        if (pItems.length > 0) {
-          var ulP = document.createElement("ul");
-          ulP.className = "calendar-events-list";
-          pItems.forEach(function (item) {
-            var li = renderEventItem(item, cLabel, pBounds);
-            ulP.appendChild(li);
-          });
-          daySection.appendChild(ulP);
-        } else {
-          var noCoursesP = document.createElement("p");
-          noCoursesP.className = "empty-state-message";
-          noCoursesP.textContent = labels.no_courses;
-          daySection.appendChild(noCoursesP);
-        }
-
-        var cHeading = document.createElement("h4");
-        cHeading.className = "cal-class-subheading";
-        cHeading.textContent = cLabel;
-        daySection.appendChild(cHeading);
-
-        if (cItems.length > 0) {
-          var ulC = document.createElement("ul");
-          ulC.className = "calendar-events-list";
-          cItems.forEach(function (item) {
-            var li = renderEventItem(item, cLabel, null);
-            ulC.appendChild(li);
-          });
-          daySection.appendChild(ulC);
-        } else {
-          var noCoursesC = document.createElement("p");
-          noCoursesC.className = "empty-state-message";
-          noCoursesC.textContent = labels.no_courses;
-          daySection.appendChild(noCoursesC);
-        }
+      if (dayData.events.length === 0) {
+        var noCoursesP = document.createElement("p");
+        noCoursesP.className = "empty-state-message";
+        noCoursesP.textContent = labels.no_courses;
+        daySection.appendChild(noCoursesP);
       } else {
-        if (pItems.length === 0) {
-          if (!state.compare) {
-            var noCoursesP = document.createElement("p");
-            noCoursesP.className = "empty-state-message";
-            noCoursesP.textContent = labels.no_courses;
-            daySection.appendChild(noCoursesP);
-          }
-        } else {
-          var ul = document.createElement("ul");
-          ul.className = "calendar-events-list";
-          pItems.forEach(function (item) {
-            var li = renderEventItem(item, cLabel, pBounds);
-            ul.appendChild(li);
-          });
-          daySection.appendChild(ul);
-        }
+        var ul = document.createElement("ul");
+        ul.className = "calendar-events-list";
+        dayData.events.forEach(function (event) {
+          ul.appendChild(renderEventItem(event, dayData.bounds));
+        });
+        daySection.appendChild(ul);
       }
 
       return daySection;
     }
 
-    function renderYearView(
-      primaryEvents,
-      compareEvents,
-      searchNorm,
-      dayNames,
-      monthNames,
-      pLabel,
-      cLabel,
-      effSameOnly,
-      effShowCompared,
-    ) {
+    function renderYearView(events, searchNorm, dayNames, monthNames) {
       var frag = document.createDocumentFragment();
       var totalYearItems = 0;
       var hasFilter = Boolean(
-        effSameOnly ||
         state.evals ||
         state.teacherless ||
         (searchNorm && searchNorm.length > 0),
       );
 
-      var eventsByDateP = indexByDate(primaryEvents);
-      var eventsByDateC = indexByDate(compareEvents);
+      var eventsByDate = indexByDate(events);
 
       var startY = parseISODate(firstDateStr).getFullYear();
       var startM = parseISODate(firstDateStr).getMonth();
@@ -655,14 +459,7 @@
           var weekItemCount = 0;
 
           weekDays.forEach(function (date) {
-            var data = prepareDay(
-              date,
-              eventsByDateP,
-              eventsByDateC,
-              searchNorm,
-              effSameOnly,
-              effShowCompared,
-            );
+            var data = prepareDay(date, eventsByDate, searchNorm);
             weekItemCount += data.dayCount;
             weekDataList.push(data);
           });
@@ -676,9 +473,6 @@
                 dayData,
                 dayNames,
                 monthNames,
-                pLabel,
-                cLabel,
-                effShowCompared,
                 true,
               );
               monthFrag.appendChild(daySection);
@@ -702,9 +496,6 @@
                   dayData,
                   dayNames,
                   monthNames,
-                  pLabel,
-                  cLabel,
-                  effShowCompared,
                   true,
                 );
                 monthFrag.appendChild(daySection);
@@ -737,21 +528,20 @@
       return totalYearItems;
     }
 
-    function getDayBounds(items) {
-      if (!items || items.length === 0) return { minStart: null, maxEnd: null };
-      var minStart = items[0].event.start.substring(11, 16);
-      var maxEnd = items[0].event.end.substring(11, 16);
-      for (var i = 1; i < items.length; i++) {
-        var s = items[i].event.start.substring(11, 16);
-        var e = items[i].event.end.substring(11, 16);
+    function getDayBounds(events) {
+      if (events.length === 0) return { minStart: null, maxEnd: null };
+      var minStart = events[0].start.substring(11, 16);
+      var maxEnd = events[0].end.substring(11, 16);
+      for (var i = 1; i < events.length; i++) {
+        var s = events[i].start.substring(11, 16);
+        var e = events[i].end.substring(11, 16);
         if (s < minStart) minStart = s;
         if (e > maxEnd) maxEnd = e;
       }
       return { minStart: minStart, maxEnd: maxEnd };
     }
 
-    function renderEventItem(item, cLabel, bounds) {
-      var ev = item.event;
+    function renderEventItem(ev, bounds) {
       var li = document.createElement("li");
       li.className = "calendar-event-item";
       var isEvaluation = Boolean(ev.category && categoryMap[ev.category]);
@@ -866,21 +656,10 @@
         infoDiv.appendChild(roomsDiv);
       }
 
-      var referenceLabel = item.isPrimary
-        ? classLabels[currentClassId] || currentClassId
-        : cLabel;
-      var referenceId = item.isPrimary ? currentClassId : "";
-      var otherGroups = [];
-      if (ev.groups && ev.groups.length > 0) {
-        var refLabelLower = (referenceLabel || "").toLowerCase();
-        var refIdLower = (referenceId || "").toLowerCase();
-        otherGroups = ev.groups.filter(function (g) {
-          var gLower = g.toLowerCase();
-          return (
-            gLower !== refLabelLower && (!refIdLower || gLower !== refIdLower)
-          );
-        });
-      }
+      var ownGroups = [classLabel.toLowerCase(), currentClassId.toLowerCase()];
+      var otherGroups = (ev.groups || []).filter(function (g) {
+        return ownGroups.indexOf(g.toLowerCase()) === -1;
+      });
 
       if (otherGroups.length > 0) {
         var groupsDiv = document.createElement("div");

@@ -14,7 +14,6 @@ from pathlib import Path
 from support.fixtures import sample_events
 
 from schedule.config import load_config
-from schedule.exporter import export_data_files
 from schedule.renderer import render_site
 
 
@@ -44,7 +43,6 @@ class BrowserTests(unittest.TestCase):
                 )
             )
             render_site(config, events, output_dir=str(root))
-            export_data_files(config, events, str(root))
             shutil.copytree("static", root / "static")
             for script in Path("tests/browser").glob("*.js"):
                 shutil.copy(script, root / script.name)

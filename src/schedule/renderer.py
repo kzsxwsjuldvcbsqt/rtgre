@@ -193,10 +193,6 @@ def render_site(
     categories_json = [{"id": c.id, "label": c.label} for c in app_config.categories]
     session_marks_json = [{"id": m.id, "label": m.label} for m in app_config.session_marks]
 
-    class_labels_json = {
-        cls_item.id: cls_item.label for prg in app_config.programs for cls_item in prg.classes
-    }
-
     for prog in app_config.programs:
         for cls in prog.classes:
             class_sections = tuple(
@@ -271,7 +267,6 @@ def render_site(
                 labels=app_config.labels,
                 class_config=cls,
                 sections=class_sections,
-                programs=app_config.programs,
                 categories_json=categories_json,
                 session_marks_json=session_marks_json,
                 calendar_labels={
@@ -282,7 +277,6 @@ def render_site(
                     "groups_all": app_config.labels["groups_all"],
                 },
                 calendar_config=app_config.calendar_config,
-                class_labels_json=class_labels_json,
                 module_styles=module_styles,
                 initial_payload=initial_payload,
                 initial_week_days=initial_week_days,
