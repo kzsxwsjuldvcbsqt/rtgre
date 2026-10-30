@@ -134,7 +134,9 @@
   --visually-hidden-size: 1px;
 
   --opacity-disabled: 0.5;
+  --opacity-dimmed: 0.45;
   --transition-fast: 180ms ease;
+  --transition-undim: opacity 0s 150ms;
   --motion-spotlight: 900ms cubic-bezier(0.4, 0, 0.2, 1) 250ms 2;
   --size-spotlight-halo: 0.25rem;
   --size-spotlight-ping: 0.625rem;

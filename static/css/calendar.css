@@ -329,6 +329,21 @@
 .calendar-view-week.is-grid .calendar-event-item.is-ongoing {
   border-color: var(--color-now);
 }
+.calendar-view-week.is-grid .calendar-event-item {
+  transition: var(--transition-undim);
+}
+.calendar-view-week.is-grid .calendar-event-item:hover,
+.calendar-view-week.is-grid .calendar-event-item:focus-visible {
+  transition: none;
+}
+.calendar-view-week.is-grid:has(
+    .calendar-event-item:hover,
+    .calendar-event-item:focus-visible
+  )
+  .calendar-event-item:not(:hover, :focus-visible) {
+  opacity: var(--opacity-dimmed);
+  transition: none;
+}
 .calendar-view-week.is-grid .calendar-event-item:hover,
 .calendar-view-week.is-grid .calendar-event-item:focus-visible {
   z-index: var(--z-menu);
@@ -367,6 +382,7 @@
 }
 .event-card {
   position: absolute;
+  pointer-events: none;
   width: var(--visually-hidden-size);
   height: var(--visually-hidden-size);
   overflow: hidden;
