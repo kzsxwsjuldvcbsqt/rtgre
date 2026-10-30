@@ -92,25 +92,6 @@
   color: var(--color-text-muted);
   font-size: var(--text-sm);
 }
-.privacy-notice,
-.noscript-notice {
-  display: flex;
-  align-items: center;
-  gap: var(--space-md);
-  padding: var(--space-md);
-  border: var(--rule-width) solid var(--color-border-muted);
-  border-inline-start: var(--rule-accent-width) solid var(--color-accent);
-  border-radius: var(--radius-medium);
-  background: var(--color-surface);
-  box-shadow: var(--shadow-card);
-}
-.privacy-notice .icon,
-.noscript-notice .icon {
-  flex: none;
-  inline-size: 1.5rem;
-  block-size: 1.5rem;
-  color: var(--color-accent);
-}
 .grades-message {
   max-width: none;
   margin-block: var(--space-md);

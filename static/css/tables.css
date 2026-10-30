@@ -49,32 +49,13 @@ tbody tr:last-child > * {
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
-.col-grade-input,
-.col-semester-avg,
-.col-annual-avg {
+.col-grade-input {
   text-align: end;
 }
 .col-ue-header,
 .col-ue-cell {
+  padding-inline: var(--space-xs);
   text-align: center;
-}
-.col-grade-input strong,
-.col-semester-avg,
-.col-annual-avg {
-  font-family: var(--font-mono);
-  font-variant-numeric: tabular-nums;
-}
-.semester-average-row td,
-.annual-average-row td {
-  border-block-start: var(--rule-width) solid var(--color-border);
-  color: var(--color-text);
-  font-weight: var(--weight-semibold);
-}
-thead[hidden] + tbody .semester-average-row td {
-  border-block-start: 0;
-}
-.table-card:has(thead[hidden]) {
-  padding-block-start: 0;
 }
 .grade-input {
   width: var(--width-grade-input);

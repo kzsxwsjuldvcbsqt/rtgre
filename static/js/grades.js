@@ -432,16 +432,12 @@
         var btn = sec.querySelector(".heading-toggle-btn");
         if (!btn) return;
         var arrow = btn.querySelector(".toggle-arrow");
-        var thead = table.querySelector("thead");
-        var subjectRows = table.querySelectorAll(".subject-row");
+        var card = sec.querySelector(".table-card");
 
         var semStorageKey = "sem_collapsed_" + classId + "_" + semId;
 
         function setCollapsed(isCollapsed) {
-          if (thead) thead.hidden = isCollapsed;
-          subjectRows.forEach(function (row) {
-            row.hidden = isCollapsed;
-          });
+          card.hidden = isCollapsed;
           btn.setAttribute("aria-expanded", isCollapsed ? "false" : "true");
           if (arrow) {
             if (isCollapsed) {
@@ -458,8 +454,7 @@
         }
 
         btn.addEventListener("click", function () {
-          var currentlyCollapsed = thead ? thead.hidden : false;
-          var nextState = !currentlyCollapsed;
+          var nextState = !card.hidden;
           setCollapsed(nextState);
           AppUtils.safeStorageSet(semStorageKey, nextState ? "1" : "0", true);
         });

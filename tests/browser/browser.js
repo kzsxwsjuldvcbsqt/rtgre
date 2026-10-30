@@ -189,9 +189,9 @@
     const semester = nd.querySelector(".semester-toggle-btn");
     semester.click();
     assert(
-      nd.querySelector(".subject-row").hidden &&
-        !nd.querySelector(".grades-table").hidden,
-      "Semester collapse keeps average visible",
+      nd.querySelector("#semester-section-s5 .table-card").hidden &&
+        /^\d+\.\d{2}$/.test(nd.getElementById("avg-s5").textContent),
+      "Collapsed semester keeps its average in the summary",
     );
     const gradesStoragePrototype = nw.Storage.prototype;
     const originalGradeSetItem = gradesStoragePrototype.setItem;

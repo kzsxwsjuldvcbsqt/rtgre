@@ -4,7 +4,8 @@
 {% block title %}{% for s in sections %}{% if s.id == 'grades' %}{{ s.label }}{% endif %}{% endfor %} - {{ class_config.label }} - {{ site.title }}{% endblock %}
 {% block subnav %}{{ section_nav(sections, 'grades', class_config, url_for, labels, site.icons) }}{% endblock %}
 {% block content %}
-<div class="page-container">
+<div class="page-container has-filter-sidebar grades-page">
+<div class="filter-sidebar">
 <div class="back-navigation">
 <a href="{{ url_for('index.html') }}">{{ labels.class_page.back_link }}</a>
 </div>
@@ -25,12 +26,47 @@
 </details>
 </div>
 
-<p class="privacy-notice">{{ icon('info', url_for, site.icons, 'icon-sm') }}<span>{{ labels.grades.privacy_notice }}</span></p>
-
 <noscript>
-<p class="noscript-notice">{{ icon('alert', url_for, site.icons, 'icon-sm') }}<span>{{ labels.grades.noscript_notice }}</span></p>
+<p class="noscript-notice">{{ labels.grades.noscript_notice }}</p>
 </noscript>
 
+{% if grades_data.annual_units %}
+<aside class="grades-summary" aria-labelledby="grades-summary-title">
+<h2 class="grades-summary-title" id="grades-summary-title">{{ labels.grades.annual_synthesis }}</h2>
+<p class="grades-summary-total">
+<span class="grades-summary-label">{{ labels.grades.global_annual_average }}</span>
+<span class="grades-summary-figure"><strong id="global-annual-avg">{{ average_empty }}</strong><span class="grades-summary-scale">{{ grade_unit }}</span></span>
+</p>
+<dl class="grades-summary-semesters">
+{% for sem in grades_data.semesters %}
+<div>
+<dt>{{ sem.label }}</dt>
+<dd><strong id="avg-{{ sem.id }}">{{ average_empty }}</strong><span class="grades-summary-scale">{{ grade_unit }}</span></dd>
+</div>
+{% endfor %}
+</dl>
+<h3 class="grades-summary-subtitle">{{ labels.grades.ue_breakdown.format(**site.grades) }}</h3>
+<ul class="grades-summary-units">
+{% for au in grades_data.annual_units %}
+<li data-ue-id="{{ au.id }}">
+<p class="grades-summary-unit-head">
+<span>{{ au.label }}</span>
+<strong id="synth-annual-{{ au.id }}">{{ average_empty }}</strong>
+</p>
+<p class="grades-summary-unit-semesters">
+{% for sem in grades_data.semesters %}
+<span>{{ sem.short_label }} <span id="synth-{{ sem.id }}-{{ au.id }}">{{ average_empty }}</span></span>
+{% endfor %}
+</p>
+</li>
+{% endfor %}
+</ul>
+</aside>
+{% endif %}
+</div>
+
+<div class="section-main">
+<p class="privacy-notice">{{ labels.grades.privacy_notice }}</p>
 <div id="grades-message" class="grades-message" role="status" aria-live="polite" hidden></div>
 
 <div id="notes-content">
@@ -76,49 +112,12 @@
 </td>
 </tr>
 {% endfor %}
-<tr class="semester-average-row">
-<td colspan="{{ 2 + sem.units|length }}" class="average-label"><strong>{{ labels.grades.overall_semester_average }}</strong></td>
-<td class="col-grade-input"><strong id="avg-{{ sem.id }}">{{ grade_empty }}</strong></td>
-</tr>
 </tbody>
 </table>
 </div>
 </section>
 {% endfor %}
-
-{% if grades_data.annual_units %}
-<section class="table-group">
-<h3 class="table-group-title">{{ labels.grades.annual_synthesis }}</h3>
-<div class="table-card">
-<table class="annual-synthesis-table">
-<thead>
-<tr>
-<th class="col-ue-name">{{ labels.grades.annual_header_ue }}</th>
-{% for sem in grades_data.semesters %}
-<th class="col-semester-avg">{{ sem.short_label }}</th>
-{% endfor %}
-<th class="col-annual-avg">{{ labels.grades.annual_header_annual }}</th>
-</tr>
-</thead>
-<tbody>
-{% for au in grades_data.annual_units %}
-<tr class="annual-ue-row" data-ue-id="{{ au.id }}">
-<td class="col-ue-name" data-label="{{ labels.grades.annual_header_ue }}"><strong>{{ au.label }}</strong></td>
-{% for sem in grades_data.semesters %}
-<td class="col-semester-avg" data-label="{{ sem.short_label }}" id="synth-{{ sem.id }}-{{ au.id }}">{{ grade_empty }}</td>
-{% endfor %}
-<td class="col-annual-avg" data-label="{{ labels.grades.annual_header_annual }}" id="synth-annual-{{ au.id }}"><strong>{{ grade_empty }}</strong></td>
-</tr>
-{% endfor %}
-<tr class="annual-average-row">
-<td class="col-ue-name" colspan="{{ 1 + grades_data.semesters | length }}"><strong>{{ labels.grades.global_annual_average }}</strong></td>
-<td class="col-annual-avg"><strong id="global-annual-avg">{{ grade_empty }}</strong></td>
-</tr>
-</tbody>
-</table>
 </div>
-</section>
-{% endif %}
 </div>
 </div>
 
@@ -131,7 +130,7 @@
   data-decimals="{{ site.grades.decimals }}"
   data-storage-prefix="{{ site.grades.storage_key_prefix }}"
   data-format-version="{{ site.grades.export_format_version }}"
-  data-empty-value="{{ grade_empty }}"
+  data-empty-value="{{ average_empty }}"
   data-export-format="{{ site.grades.export_format }}"
   data-export-filename="{{ site.grades.export_filename }}"
   data-max-import-bytes="{{ site.grades.max_import_bytes }}"
