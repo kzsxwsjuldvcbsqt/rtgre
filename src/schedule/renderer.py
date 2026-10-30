@@ -136,7 +136,6 @@ def render_site(
         sections=app_config.sections,
         favicons=active_favicons,
         generated_at=now_str,
-        page_wide=False,
         url_for=lambda target, p=index_page_path: get_rel_path(p, target),
     )
     with open(out_path / "index.html", "w", encoding="utf-8") as f:
@@ -149,7 +148,6 @@ def render_site(
         sections=app_config.sections,
         favicons=active_favicons,
         generated_at=now_str,
-        page_wide=False,
         url_for=lambda target, p=notice_page_path: get_rel_path(p, target),
     )
     with open(out_path / notice_page_path, "w", encoding="utf-8") as f:
@@ -164,7 +162,6 @@ def render_site(
         sections=app_config.sections,
         favicons=active_favicons,
         generated_at=now_str,
-        page_wide=False,
         get_404_url=lambda target: get_404_url(target, base_path),
     )
     with open(out_path / "404.html", "w", encoding="utf-8") as f:
@@ -219,7 +216,6 @@ def render_site(
                 categories=app_config.categories,
                 favicons=active_favicons,
                 generated_at=now_str,
-                page_wide=False,
                 url_for=lambda target, p=cls_home_page_path: get_rel_path(p, target),
             )
             with open(class_dir / section_files["home"], "w", encoding="utf-8") as f:
@@ -261,7 +257,6 @@ def render_site(
                 favicons=active_favicons,
                 generated_at=now_str,
                 format_groups=format_groups,
-                page_wide=False,
                 url_for=lambda target, p=cls_evals_page_path: get_rel_path(p, target),
             )
             with open(class_dir / section_files["evaluations"], "w", encoding="utf-8") as f:
@@ -293,7 +288,6 @@ def render_site(
                 initial_week_days=initial_week_days,
                 favicons=active_favicons,
                 generated_at=now_str,
-                page_wide=True,
                 url_for=lambda target, p=cal_page_path: get_rel_path(p, target),
             )
             with open(class_dir / section_files["calendar"], "w", encoding="utf-8") as f:
@@ -310,7 +304,6 @@ def render_site(
                 categories=app_config.categories,
                 favicons=active_favicons,
                 generated_at=now_str,
-                page_wide=False,
                 url_for=lambda target, p=grades_page_path: get_rel_path(p, target),
             )
             with open(class_dir / section_files["grades"], "w", encoding="utf-8") as f:
@@ -329,7 +322,6 @@ def render_site(
                 categories=app_config.categories,
                 favicons=active_favicons,
                 generated_at=now_str,
-                page_wide=False,
                 url_for=lambda target, p=resources_page_path: get_rel_path(p, target),
             )
             with open(class_dir / section_files["resources"], "w", encoding="utf-8") as f:
@@ -358,7 +350,6 @@ def render_site(
                     favicons=active_favicons,
                     generated_at=now_str,
                     format_groups=format_groups,
-                    page_wide=False,
                     url_for=lambda target, p=detail_page_path: get_rel_path(p, target),
                 )
                 with open(eval_dir / f"{ev.occurrence_id}.html", "w", encoding="utf-8") as f:
@@ -377,7 +368,6 @@ def render_site(
                     sections=class_sections,
                     favicons=active_favicons,
                     generated_at=now_str,
-                    page_wide=False,
                     slots=slots,
                     url_for=lambda target, p=page_path: get_rel_path(p, target),
                 )

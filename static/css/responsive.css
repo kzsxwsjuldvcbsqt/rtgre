@@ -230,14 +230,13 @@
     --section-main-end-offset: max(
       var(--page-gutter),
       calc(
-        (100vw - var(--page-max-width-wide)) / 2 + var(--page-gutter)
+        (100vw - var(--page-max-width)) / 2 + var(--page-gutter)
       )
     );
     display: grid;
     grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
     align-items: start;
     column-gap: var(--space-xl);
-    max-width: var(--page-max-width-wide);
     padding-block-end: var(--space-lg);
   }
   .has-filter-sidebar > .filter-sidebar {
