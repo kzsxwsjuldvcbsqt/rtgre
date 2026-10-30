@@ -33,13 +33,13 @@
     { "id": "ue6.dc.5", "label": "UE6.dc.5", "semester": "s6", "tracks": ["dc"], "annual": "ue5_dc", "weight": 1 }
   ],
   "annual_units": [
-    { "id": "ue1", "label": "UE1 Administrer" },
-    { "id": "ue2", "label": "UE2 Connecter" },
-    { "id": "ue3", "label": "UE3 Programmer" },
-    { "id": "ue4", "label": "UE4 Sécuriser / Piloter", "tracks": ["cy"] },
-    { "id": "ue5", "label": "UE5 Lancer / Automatiser", "tracks": ["cy"] },
-    { "id": "ue4_dc", "label": "UE4 Sécuriser / Piloter", "tracks": ["dc"] },
-    { "id": "ue5_dc", "label": "UE5 Lancer / Automatiser", "tracks": ["dc"] }
+    { "id": "ue1", "short_label": "UE1", "label": "UE1 Administrer" },
+    { "id": "ue2", "short_label": "UE2", "label": "UE2 Connecter" },
+    { "id": "ue3", "short_label": "UE3", "label": "UE3 Programmer" },
+    { "id": "ue4", "short_label": "UE4", "label": "UE4 Sécuriser / Piloter", "tracks": ["cy"] },
+    { "id": "ue5", "short_label": "UE5", "label": "UE5 Lancer / Automatiser", "tracks": ["cy"] },
+    { "id": "ue4_dc", "short_label": "UE4", "label": "UE4 Sécuriser / Piloter", "tracks": ["dc"] },
+    { "id": "ue5_dc", "short_label": "UE5", "label": "UE5 Lancer / Automatiser", "tracks": ["dc"] }
   ],
   "modules": [
     { "code": "R501", "label": "Wifi Avancé", "semester": "s5", "kind": "resource", "graded": true, "tracks": ["cy", "dc"], "statuses": ["fi", "fa"], "chamilo_course": "IUT1RT3R501" },
