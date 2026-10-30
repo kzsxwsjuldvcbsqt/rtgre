@@ -27,6 +27,18 @@
   }
 }
 
+@media (max-width: 74.99em) {
+  .grades-page {
+    display: flex;
+    flex-direction: column;
+  }
+  .grades-page > .filter-sidebar {
+    display: contents;
+  }
+  .grades-summary {
+    order: 1;
+  }
+}
 @media (max-width: 59.99em) {
   :root {
     --control-height: var(--touch-target);
@@ -197,14 +209,6 @@
   .grades-table td.col-ue-cell[data-empty="true"] {
     display: none;
   }
-  .semester-average-row,
-  .annual-average-row {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--space-md);
-    border-block-start: var(--rule-width) solid var(--color-border);
-  }
 }
 @media (max-width: 39.99em) {
   .filter-group,
@@ -249,7 +253,7 @@
   .has-filter-sidebar > .filter-sidebar > #filters-container[hidden] {
     display: block !important;
   }
-  .has-filter-sidebar .heading-toggle-btn {
+  .has-filter-sidebar > .filter-sidebar .heading-toggle-btn {
     display: none;
   }
   .has-filter-sidebar > .section-main {

@@ -195,7 +195,7 @@
     if (sidebarLayout) {
       var sidebarMain = sidebarLayout.querySelector(":scope > .section-main");
       var sidebarFilters = sidebarLayout.querySelector(
-        ":scope > .filter-sidebar > #calendar-controls, :scope > .filter-sidebar > #filters-container",
+        ":scope > .filter-sidebar > #calendar-controls, :scope > .filter-sidebar > #filters-container, :scope > .filter-sidebar > .grades-summary",
       );
       var sidebarHeading = sidebarLayout.querySelector(
         ":scope > .filter-sidebar > .page-heading",
