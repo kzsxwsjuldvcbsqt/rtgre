@@ -20,13 +20,22 @@
   color: var(--color-text);
 }
 .calendar-view-week .day-section > h3 {
-  min-height: 2.5rem;
   margin-block-end: var(--space-sm);
   padding-block-end: var(--space-xs);
   border-block-end: var(--rule-width) solid var(--color-border);
   color: var(--color-text-muted);
   font-size: var(--text-sm);
   font-weight: var(--weight-semibold);
+}
+.day-heading-name,
+.day-heading-date {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.day-heading-date {
+  font-weight: var(--weight-normal);
 }
 .calendar-view-week .day-section.is-today > h3,
 .calendar-view-year .day-section.is-today > h3 {

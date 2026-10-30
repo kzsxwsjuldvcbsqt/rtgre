@@ -439,12 +439,27 @@
       if (includeHeading) {
         var dayIdx = (dDate.getDay() + 6) % 7;
         var heading = document.createElement("h3");
-        heading.textContent = AppUtils.formatText(labels.day_title, {
-          day_name: dayNames[dayIdx],
-          day_num: dDate.getDate(),
-          month_name: monthNames[dDate.getMonth()],
-          year: dDate.getFullYear(),
-        });
+        if (state.view === "week") {
+          var headingName = document.createElement("span");
+          headingName.className = "day-heading-name";
+          headingName.textContent = dayNames[dayIdx];
+          var headingDate = document.createElement("span");
+          headingDate.className = "day-heading-date";
+          headingDate.textContent = AppUtils.formatText(labels.week_day_date, {
+            day_num: dDate.getDate(),
+            month_name: monthNames[dDate.getMonth()],
+          });
+          heading.appendChild(headingName);
+          heading.appendChild(document.createTextNode(" "));
+          heading.appendChild(headingDate);
+        } else {
+          heading.textContent = AppUtils.formatText(labels.day_title, {
+            day_name: dayNames[dayIdx],
+            day_num: dDate.getDate(),
+            month_name: monthNames[dDate.getMonth()],
+            year: dDate.getFullYear(),
+          });
+        }
         daySection.appendChild(heading);
       }
 
