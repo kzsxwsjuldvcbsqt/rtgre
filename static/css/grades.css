@@ -47,3 +47,6 @@
 .grades-page .privacy-notice {
   margin-block: 0;
 }
+.grades-toolbar {
+  align-items: center;
+}

@@ -10,20 +10,9 @@
 <a href="{{ url_for('index.html') }}">{{ labels.class_page.back_link }}</a>
 </div>
 
-<div class="page-heading section-head">
-<div>
+<div class="page-heading">
 <p class="page-context">{{ class_config.label }}</p>
 <h1>{% for s in sections %}{% if s.id == 'grades' %}{{ s.label }}{% endif %}{% endfor %}</h1>
-</div>
-<details class="menu grades-menu" id="grades-actions" hidden>
-<summary aria-label="{{ labels.grades.actions }}">{{ icon('kebab-horizontal', url_for, site.icons) }}</summary>
-<div class="menu-list">
-<button type="button" id="grades-export-btn">{{ icon('download', url_for, site.icons) }}{{ labels.grades.export_btn }}</button>
-<button type="button" id="grades-import-btn">{{ icon('upload', url_for, site.icons) }}{{ labels.grades.import_btn }}</button>
-<button type="button" id="grades-reset-btn" class="menu-item-danger">{{ icon('trash', url_for, site.icons) }}{{ labels.grades.reset_btn }}</button>
-<input type="file" id="grades-import-file" accept=".json" hidden>
-</div>
-</details>
 </div>
 
 <noscript>
@@ -68,7 +57,18 @@
 </div>
 
 <div class="section-main">
+<div class="section-head grades-toolbar">
 <p class="privacy-notice">{{ labels.grades.privacy_notice }}</p>
+<details class="menu grades-menu" id="grades-actions" hidden>
+<summary aria-label="{{ labels.grades.actions }}">{{ icon('kebab-horizontal', url_for, site.icons) }}</summary>
+<div class="menu-list">
+<button type="button" id="grades-export-btn">{{ icon('download', url_for, site.icons) }}{{ labels.grades.export_btn }}</button>
+<button type="button" id="grades-import-btn">{{ icon('upload', url_for, site.icons) }}{{ labels.grades.import_btn }}</button>
+<button type="button" id="grades-reset-btn" class="menu-item-danger">{{ icon('trash', url_for, site.icons) }}{{ labels.grades.reset_btn }}</button>
+<input type="file" id="grades-import-file" accept=".json" hidden>
+</div>
+</details>
+</div>
 <div id="grades-message" class="grades-message" role="status" aria-live="polite" hidden></div>
 
 <div id="notes-content">
