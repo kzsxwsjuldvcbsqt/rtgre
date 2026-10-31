@@ -15,7 +15,8 @@
       "grades": "Saisie des notes et moyennes.",
       "webmail": "Messagerie étudiante.",
       "gitlab-im2ag": "Dépôts GitLab de l’IM2AG.",
-      "gitlab-gricad": "Dépôts GitLab de GRICAD."
+      "gitlab-gricad": "Dépôts GitLab de GRICAD.",
+      "openstack": "Compte OpenStack de l’IUT pour les projets."
     }
   },
   "resources": {
