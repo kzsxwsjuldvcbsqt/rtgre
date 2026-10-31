@@ -49,6 +49,12 @@
       "url": "https://gricad-gitlab.univ-grenoble-alpes.fr/"
     },
     {
+      "id": "openstack",
+      "label": "OpenStack",
+      "kind": "external",
+      "url": "https://iut1r-ltdln.univ-grenoble-alpes.fr/"
+    },
+    {
       "id": "notice",
       "label": "À savoir",
       "file": "a-savoir.html",
