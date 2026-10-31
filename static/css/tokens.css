@@ -37,6 +37,7 @@
   --color-sae-5: #fbe7f0;
   --color-sae-6: #edf3da;
   --color-now: var(--color-field-invalid);
+  --color-veil: rgba(255, 255, 255, 0.6);
   --color-now-soft: rgba(229, 72, 77, 0.16);
   --color-now-glow: rgba(229, 72, 77, 0.45);
   --color-field-invalid: #e5484d;
@@ -116,7 +117,6 @@
   --calendar-hour-height: 4.5rem;
   --calendar-minute-height: calc(var(--calendar-hour-height) / 60);
   --event-title-lines: 2;
-  --width-progress-lane: 1.5rem;
   --size-progress-dot: 0.5rem;
   --width-col-date: 7rem;
   --width-col-time: 8rem;

@@ -169,9 +169,6 @@
 .current-time-marker.is-spotlit .current-time-line {
   animation: now-line var(--motion-spotlight);
 }
-.course-progress.is-spotlit .course-progress-dot {
-  animation: now-ping var(--motion-spotlight);
-}
 @keyframes now-halo {
   0%,
   100% {
@@ -210,35 +207,59 @@
   color: inherit;
   border-block-start: var(--rule-width) solid currentColor;
 }
-.calendar-event-item.is-ongoing {
+.calendar-event-item.is-ongoing,
+.calendar-event-item.is-past {
   position: relative;
-  padding-inline-start: var(--width-progress-lane);
 }
-.course-progress {
+.calendar-event-item.is-ongoing::after,
+.calendar-event-item.is-past::after {
+  content: "";
   position: absolute;
-  inset-block: var(--space-sm);
-  inset-inline-start: var(--space-sm);
-  width: var(--rule-accent-width);
-  border-radius: var(--radius-pill);
-  background: var(--color-border);
+  inset-block-start: 0;
+  inset-inline: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-veil);
+  pointer-events: none;
 }
-.course-progress-fill {
+.calendar-event-item.is-ongoing {
+  border-color: var(--color-now);
+}
+.calendar-event-item.is-past {
+  border-color: var(--color-border-muted);
+}
+.calendar-event-item.is-ongoing::after {
+  height: calc(var(--course-progress) * 100%);
+}
+.current-time-marker.is-line {
   position: absolute;
   inset-inline: 0;
-  inset-block-start: 0;
-  height: calc(var(--course-progress) * 100%);
-  border-radius: var(--radius-pill);
-  background: var(--color-now);
+  z-index: var(--z-raised);
+  gap: 0;
+  margin: 0;
+  transform: translateY(-50%);
 }
-.course-progress-dot {
-  position: absolute;
-  inset-inline-start: 50%;
+.calendar-event-item > .current-time-marker.is-line {
   inset-block-start: calc(var(--course-progress) * 100%);
+}
+.current-time-marker.is-line .current-time-text {
+  position: absolute;
+  width: var(--visually-hidden-size);
+  height: var(--visually-hidden-size);
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.current-time-marker.is-line::before {
+  content: "";
+  flex: none;
   width: var(--size-progress-dot);
   height: var(--size-progress-dot);
   border-radius: var(--radius-pill);
   background: var(--color-now);
-  transform: translate(-50%, -50%);
+}
+.current-time-marker.is-line.is-spotlit::before {
+  animation: now-ping var(--motion-spotlight);
 }
 .year-month-title {
   margin-block: var(--space-2xl) var(--space-md);
@@ -308,9 +329,6 @@
     var(--event-span) * var(--calendar-minute-height) - var(--space-3xs)
   );
   padding: var(--space-xs);
-}
-.calendar-view-week.is-grid .calendar-event-item.is-ongoing {
-  border-color: var(--color-now);
 }
 .calendar-view-week.is-grid .calendar-event-item {
   transition: var(--transition-undim);
@@ -396,41 +414,7 @@
   inset-inline: auto calc(100% + var(--space-xs));
 }
 .calendar-view-week.is-grid .calendar-events-list > .current-time-marker {
-  position: absolute;
   inset-block-start: calc(
     var(--calendar-offset) * var(--calendar-minute-height)
   );
-  inset-inline: 0;
-  z-index: var(--z-raised);
-  margin: 0;
-  transform: translateY(-50%);
-}
-.calendar-view-week.is-grid
-  .calendar-events-list
-  > .current-time-marker
-  .current-time-text {
-  position: absolute;
-  width: var(--visually-hidden-size);
-  height: var(--visually-hidden-size);
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-.calendar-view-week.is-grid .calendar-events-list > .current-time-marker {
-  gap: 0;
-}
-.calendar-view-week.is-grid
-  .calendar-events-list
-  > .current-time-marker::before {
-  content: "";
-  flex: none;
-  width: var(--size-progress-dot);
-  height: var(--size-progress-dot);
-  border-radius: var(--radius-pill);
-  background: var(--color-now);
-}
-.calendar-view-week.is-grid
-  .calendar-events-list
-  > .current-time-marker.is-spotlit::before {
-  animation: now-ping var(--motion-spotlight);
 }
