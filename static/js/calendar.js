@@ -441,7 +441,11 @@
         }
       });
 
-      if (viewContainer.classList.contains("is-grid")) {
+      if (ongoingItem) {
+        var courseMarker = buildTimeMarker("div", nowTimeStr);
+        courseMarker.classList.add("is-line");
+        ongoingItem.appendChild(courseMarker);
+      } else if (viewContainer.classList.contains("is-grid")) {
         var gridMarker = buildTimeMarker("li", nowTimeStr);
         gridMarker.classList.add("is-line");
         gridMarker.style.setProperty(
@@ -452,10 +456,6 @@
           ),
         );
         eventsList.appendChild(gridMarker);
-      } else if (ongoingItem) {
-        var courseMarker = buildTimeMarker("div", nowTimeStr);
-        courseMarker.classList.add("is-line");
-        ongoingItem.appendChild(courseMarker);
       } else if (eventsList) {
         eventsList.insertBefore(buildTimeMarker("li", nowTimeStr), nextItem);
       } else {

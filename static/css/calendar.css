@@ -222,14 +222,16 @@
   background: var(--color-veil);
   pointer-events: none;
 }
-.calendar-event-item.is-ongoing {
-  border-color: var(--color-now);
+.calendar-event-item.is-ongoing:not(.is-evaluation) {
+  border-color: transparent;
 }
 .calendar-event-item.is-past {
   border-color: var(--color-border-muted);
 }
 .calendar-event-item.is-ongoing::after {
   height: calc(var(--course-progress) * 100%);
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
 }
 .current-time-marker.is-line {
   position: absolute;
@@ -392,6 +394,7 @@
 }
 .calendar-event-item:hover > .event-card,
 .calendar-event-item:focus-visible > .event-card {
+  z-index: var(--z-menu);
   inset-block-start: 0;
   inset-inline-start: calc(100% + var(--space-xs));
   display: flex;
