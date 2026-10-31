@@ -93,11 +93,15 @@
         });
       });
     }
-    function toClockMinutes(instant) {
+    function timeToMinutes(time) {
       return (
-        parseInt(instant.substring(11, 13), 10) * 60 +
-        parseInt(instant.substring(14, 16), 10)
+        parseInt(time.substring(0, 2), 10) * 60 +
+        parseInt(time.substring(3, 5), 10)
       );
+    }
+
+    function toClockMinutes(instant) {
+      return timeToMinutes(instant.substring(11, 16));
     }
 
     function computeGridRange(events) {
@@ -371,13 +375,13 @@
           section.classList.remove("is-today");
         });
 
-      document.querySelectorAll(".course-progress").forEach(function (el) {
-        el.remove();
-      });
-      document
-        .querySelectorAll(".calendar-event-item.is-ongoing")
+      viewContainer
+        .querySelectorAll(
+          ".calendar-event-item.is-ongoing, .calendar-event-item.is-past",
+        )
         .forEach(function (el) {
-          el.classList.remove("is-ongoing");
+          el.classList.remove("is-ongoing", "is-past");
+          el.style.removeProperty("--course-progress");
         });
 
       var nowInfo = getNowDate();
@@ -387,6 +391,17 @@
       var nowHours = String(now.getHours()).padStart(2, "0");
       var nowMins = String(now.getMinutes()).padStart(2, "0");
       var nowTimeStr = nowHours + ":" + nowMins;
+
+      viewContainer
+        .querySelectorAll(".day-section")
+        .forEach(function (section) {
+          if (section.dataset.date >= todayIso) return;
+          section
+            .querySelectorAll(".calendar-event-item")
+            .forEach(function (item) {
+              item.classList.add("is-past");
+            });
+        });
 
       var todaySection = document.getElementById("day-section-" + todayIso);
       if (todaySection && (state.view === "week" || state.view === "year")) {
@@ -401,106 +416,54 @@
         return;
       }
 
-      if (viewContainer.classList.contains("is-grid")) {
-        var gridList = todaySection.querySelector(".calendar-events-list");
-        var gridMarker = buildTimeMarker("li", nowTimeStr);
-        gridMarker.style.setProperty(
-          "--calendar-offset",
-          Math.min(
-            Math.max(
-              now.getHours() * 60 + now.getMinutes() - gridRange.start,
-              0,
-            ),
-            gridRange.end - gridRange.start,
-          ),
-        );
-        gridList.appendChild(gridMarker);
-        gridList
-          .querySelectorAll(".calendar-event-item")
-          .forEach(function (item) {
-            if (
-              nowTimeStr >= item.dataset.start &&
-              nowTimeStr < item.dataset.end
-            )
-              item.classList.add("is-ongoing");
-          });
-        scheduleTimeMarker(nowInfo.isSimulated);
-        return;
-      }
-
       var eventsList = todaySection.querySelector(".calendar-events-list");
       var eventItems = eventsList
         ? Array.from(eventsList.querySelectorAll(".calendar-event-item"))
         : [];
-      if (eventItems.length === 0) {
+      var nowMinutes =
+        now.getHours() * 60 + now.getMinutes() + now.getSeconds() / 60;
+      var ongoingItem = null;
+      var nextItem = null;
+      eventItems.forEach(function (item) {
+        var start = timeToMinutes(item.dataset.start);
+        var end = timeToMinutes(item.dataset.end);
+        if (end <= nowMinutes) {
+          item.classList.add("is-past");
+        } else if (start <= nowMinutes) {
+          item.classList.add("is-ongoing");
+          item.style.setProperty(
+            "--course-progress",
+            ((nowMinutes - start) / (end - start)).toFixed(4),
+          );
+          ongoingItem = ongoingItem || item;
+        } else if (!nextItem) {
+          nextItem = item;
+        }
+      });
+
+      if (viewContainer.classList.contains("is-grid")) {
+        var gridMarker = buildTimeMarker("li", nowTimeStr);
+        gridMarker.classList.add("is-line");
+        gridMarker.style.setProperty(
+          "--calendar-offset",
+          Math.min(
+            Math.max(Math.floor(nowMinutes) - gridRange.start, 0),
+            gridRange.end - gridRange.start,
+          ),
+        );
+        eventsList.appendChild(gridMarker);
+      } else if (ongoingItem) {
+        var courseMarker = buildTimeMarker("div", nowTimeStr);
+        courseMarker.classList.add("is-line");
+        ongoingItem.appendChild(courseMarker);
+      } else if (eventsList) {
+        eventsList.insertBefore(buildTimeMarker("li", nowTimeStr), nextItem);
+      } else {
         var dayHeading = todaySection.querySelector(":scope > h3");
         todaySection.insertBefore(
           buildTimeMarker("div", nowTimeStr),
           dayHeading ? dayHeading.nextSibling : todaySection.firstChild,
         );
-        scheduleTimeMarker(nowInfo.isSimulated);
-        return;
-      }
-
-      var markerEl = buildTimeMarker("li", nowTimeStr);
-
-      function toMinutes(timeStr) {
-        var parts = timeStr.split(":");
-        return parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
-      }
-
-      var inserted = false;
-
-      for (var i = 0; i < eventItems.length; i++) {
-        var item = eventItems[i];
-        var startStr = item.getAttribute("data-start");
-        var endStr = item.getAttribute("data-end");
-        if (!startStr || !endStr) continue;
-
-        if (nowTimeStr >= startStr && nowTimeStr < endStr) {
-          item.classList.add("is-ongoing");
-
-          var span = toMinutes(endStr) - toMinutes(startStr);
-          var elapsed =
-            now.getHours() * 60 +
-            now.getMinutes() +
-            now.getSeconds() / 60 -
-            toMinutes(startStr);
-          var fraction = span > 0 ? elapsed / span : 0;
-          fraction = Math.min(1, Math.max(0, fraction));
-
-          var progress = document.createElement("div");
-          progress.className = "course-progress";
-          progress.style.setProperty("--course-progress", fraction.toFixed(4));
-
-          var progressFill = document.createElement("span");
-          progressFill.className = "course-progress-fill";
-          progressFill.setAttribute("aria-hidden", "true");
-
-          var progressDot = document.createElement("span");
-          progressDot.className = "course-progress-dot";
-          progressDot.setAttribute("aria-hidden", "true");
-
-          var progressTime = document.createElement("span");
-          progressTime.className = "current-time-text visually-hidden";
-          progressTime.textContent = nowTimeStr;
-
-          progress.appendChild(progressFill);
-          progress.appendChild(progressDot);
-          progress.appendChild(progressTime);
-          item.appendChild(progress);
-
-          inserted = true;
-          break;
-        } else if (nowTimeStr < startStr) {
-          eventsList.insertBefore(markerEl, item);
-          inserted = true;
-          break;
-        }
-      }
-
-      if (!inserted) {
-        eventsList.appendChild(markerEl);
       }
 
       scheduleTimeMarker(nowInfo.isSimulated);
@@ -509,9 +472,7 @@
     function spotlightNow() {
       if (!spotlightPending) return;
       spotlightPending = false;
-      var target =
-        document.getElementById("current-time-marker") ||
-        viewContainer.querySelector(".course-progress");
+      var target = document.getElementById("current-time-marker");
       if (!target) return;
       target.classList.add("is-spotlit");
       target.addEventListener(
@@ -862,10 +823,7 @@
         updateControlsFromState();
         render();
         if (window.matchMedia(calendarConfig.mobile_media_query).matches) {
-          var marker =
-            document.getElementById("current-time-marker") ||
-            document.querySelector(".course-progress-dot") ||
-            document.querySelector(".calendar-event-item.is-ongoing");
+          var marker = document.getElementById("current-time-marker");
           if (marker)
             marker.scrollIntoView({ behavior: "smooth", block: "center" });
         }
