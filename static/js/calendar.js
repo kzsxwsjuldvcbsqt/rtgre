@@ -56,27 +56,6 @@
       ? calendarConfig.breaks
       : [];
 
-    function applyBreaks(events) {
-      if (breaks.length === 0) return;
-      function remap(instant, isStart) {
-        var time = instant.substring(11, 16);
-        for (var i = 0; i < breaks.length; i++) {
-          if (breaks[i].boundary === time) {
-            return (
-              instant.substring(0, 11) +
-              (isStart ? breaks[i].after : breaks[i].before) +
-              instant.substring(16)
-            );
-          }
-        }
-        return instant;
-      }
-      events.forEach(function (ev) {
-        ev.start = remap(ev.start, true);
-        ev.end = remap(ev.end, false);
-      });
-    }
-
     function assignSeriesCounts(events) {
       var groups = Object.create(null);
       events.forEach(function (ev) {
@@ -118,7 +97,7 @@
       };
     }
 
-    applyBreaks(currentClassEvents);
+    CalendarModel.applyBreaks(currentClassEvents, breaks);
     assignSeriesCounts(currentClassEvents);
     var gridRange = computeGridRange(currentClassEvents);
 
@@ -239,28 +218,7 @@
     }
 
     function inSiteTimezone(date) {
-      var parts = new Intl.DateTimeFormat("en-CA", {
-        timeZone: timezone,
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hourCycle: "h23",
-      }).formatToParts(date);
-      var values = {};
-      parts.forEach(function (part) {
-        values[part.type] = part.value;
-      });
-      return new Date(
-        Number(values.year),
-        Number(values.month) - 1,
-        Number(values.day),
-        Number(values.hour),
-        Number(values.minute),
-        Number(values.second),
-      );
+      return CalendarModel.inSiteTimezone(date, timezone);
     }
 
     function getNowDate() {

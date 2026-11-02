@@ -124,7 +124,54 @@
     return events;
   }
 
+  function applyBreaks(events, breaks) {
+    function remap(instant, isStart) {
+      const time = instant.substring(11, 16);
+      const match = breaks.find(function (entry) {
+        return entry.boundary === time;
+      });
+      if (!match) return instant;
+      return (
+        instant.substring(0, 11) +
+        (isStart ? match.after : match.before) +
+        instant.substring(16)
+      );
+    }
+    events.forEach(function (event) {
+      event.start = remap(event.start, true);
+      event.end = remap(event.end, false);
+    });
+  }
+
+  function inSiteTimezone(date, timezone) {
+    const values = {};
+    new Intl.DateTimeFormat("en-CA", {
+      timeZone: timezone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hourCycle: "h23",
+    })
+      .formatToParts(date)
+      .forEach(function (part) {
+        values[part.type] = part.value;
+      });
+    return new Date(
+      Number(values.year),
+      Number(values.month) - 1,
+      Number(values.day),
+      Number(values.hour),
+      Number(values.minute),
+      Number(values.second),
+    );
+  }
+
   const api = {
+    applyBreaks,
+    inSiteTimezone,
     normalizeEnvelope,
     parseCivilDate,
     validInstant,

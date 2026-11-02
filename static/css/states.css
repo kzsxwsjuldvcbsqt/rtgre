@@ -31,7 +31,6 @@ select:disabled {
     text-decoration: none;
   }
   .class-list a:hover,
-  .section-item a:hover,
   .resource-list li:hover {
     background: var(--color-surface);
     text-decoration: none;
@@ -39,8 +38,7 @@ select:disabled {
   tbody tr:hover {
     background: var(--color-surface);
   }
-  .class-list a:hover .list-chevron,
-  .section-item a:hover .list-chevron {
+  .class-list a:hover .list-chevron {
     color: var(--color-text-muted);
   }
   button:hover:not(:disabled):not(.heading-toggle-btn),
