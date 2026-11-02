@@ -342,3 +342,18 @@
     white-space: nowrap;
   }
 }
+
+@media (min-width: 75em) {
+  html {
+    overscroll-behavior-y: none;
+  }
+  .app-sidebar {
+    position: fixed;
+    inset-block: 0;
+    inset-inline-start: 0;
+    width: var(--width-app-sidebar);
+  }
+  .app-main {
+    grid-column: 2;
+  }
+}
