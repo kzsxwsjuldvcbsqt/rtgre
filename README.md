@@ -31,6 +31,10 @@ Ce projet rassemble ces usages sur un site unique, plus simple à consulter, ada
 
 ## Fonctionnalités
 
+### Tableau de bord
+
+L'accueil de chaque classe résume l'essentiel : les cours du jour, ou ceux du prochain jour de cours, la prochaine évaluation et les moyennes de semestre calculées à partir des notes saisies dans le navigateur.
+
 ### Emploi du temps
 
 Le calendrier est construit à partir des flux iCalendar d'ADE. Il propose une vue par jour, par semaine et une vue annuelle, ainsi que la navigation par date. La recherche porte sur le cours, le module, la salle, l'enseignant ou le groupe.
@@ -57,7 +61,7 @@ Ces résultats ne sont pas des notes officielles. Ce sont des estimations basée
 
 ### Interface
 
-L'interface est responsive et prévue pour les écrans mobiles. Elle utilise un thème sombre ; l'impression utilise un rendu clair. La navigation reste utilisable au clavier, et les pages principalement informatives fonctionnent partiellement sans JavaScript. Les libellés et contrôles sont pensés pour l'accessibilité, sans que le projet revendique une conformité complète à une norme faute d'audit dédié.
+L'interface reprend la structure d'une application web : une barre latérale fixe avec le choix de la classe, les pages et les liens utiles, une barre supérieure avec le fil d'Ariane et les actions de la page, et un contenu sur toute la largeur. Sur mobile et tablette, la navigation passe dans une barre d'onglets en bas de l'écran. L'impression utilise un rendu clair adapté. La navigation reste utilisable au clavier, et les pages principalement informatives fonctionnent partiellement sans JavaScript. Les libellés et contrôles sont pensés pour l'accessibilité, sans que le projet revendique une conformité complète à une norme faute d'audit dédié.
 
 ## Architecture
 

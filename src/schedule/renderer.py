@@ -203,20 +203,6 @@ def render_site(
             class_dir = out_path / "classes" / cls.id
             class_dir.mkdir(parents=True, exist_ok=True)
 
-            cls_home_page_path = f"classes/{cls.id}/{section_files['home']}"
-            cls_home_html = class_home_tpl.render(
-                site=app_config.site,
-                labels=app_config.labels,
-                class_config=cls,
-                sections=class_sections,
-                categories=app_config.categories,
-                favicons=active_favicons,
-                generated_at=now_str,
-                url_for=lambda target, p=cls_home_page_path: get_rel_path(p, target),
-            )
-            with open(class_dir / section_files["home"], "w", encoding="utf-8") as f:
-                f.write(cls_home_html)
-
             all_cls_events = events_by_class.get(cls.id, [])
             evals = [ev for ev in all_cls_events if ev.category_id]
 
@@ -288,6 +274,38 @@ def render_site(
                 f.write(cal_html)
 
             grades_data = get_class_grades_data(cls, app_config.curriculum, app_config.labels)
+            grade_settings = app_config.site["grades"]
+            cls_home_page_path = f"classes/{cls.id}/{section_files['home']}"
+            cls_home_html = class_home_tpl.render(
+                site=app_config.site,
+                labels=app_config.labels,
+                class_config=cls,
+                sections=class_sections,
+                favicons=active_favicons,
+                generated_at=now_str,
+                dashboard_payload={
+                    "events": initial_payload,
+                    "categories": cat_map,
+                    "breaks": app_config.calendar_config.get("breaks", []),
+                    "timezone": app_config.site["timezone"],
+                    "grades": grades_data,
+                    "gradeLimits": {
+                        "minimum": grade_settings["minimum"],
+                        "maximum": grade_settings["maximum"],
+                        "maxEntries": grade_settings["max_entries"],
+                        "decimals": grade_settings["decimals"],
+                        "storageKey": f"{grade_settings['storage_key_prefix']}_{cls.id}",
+                    },
+                    "days": app_config.labels["days"],
+                    "months": app_config.labels["months"],
+                    "dayTitle": app_config.labels["calendar"]["day_title"],
+                    "labels": app_config.labels["dashboard"],
+                },
+                url_for=lambda target, p=cls_home_page_path: get_rel_path(p, target),
+            )
+            with open(class_dir / section_files["home"], "w", encoding="utf-8") as f:
+                f.write(cls_home_html)
+
             grades_page_path = f"classes/{cls.id}/{section_files['grades']}"
             grades_html = grades_tpl.render(
                 site=app_config.site,

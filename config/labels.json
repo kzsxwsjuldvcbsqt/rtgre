@@ -9,18 +9,18 @@
     "class_switcher": "Changer de classe",
     "more": "Plus de liens"
   },
-  "class_home": {
-    "descriptions": {
-      "home": "Vue d'ensemble de la classe.",
-      "resources": "Espaces Chamilo des modules.",
-      "calendar": "Emploi du temps de la classe.",
-      "evaluations": "Planning des évaluations.",
-      "grades": "Saisie des notes et moyennes.",
-      "webmail": "Messagerie étudiante.",
-      "gitlab-im2ag": "Dépôts GitLab de l’IM2AG.",
-      "gitlab-gricad": "Dépôts GitLab de GRICAD.",
-      "openstack": "Compte OpenStack de l’IUT pour les projets."
-    }
+  "dashboard": {
+    "today": "Aujourd’hui",
+    "upcoming": "Prochains cours",
+    "no_courses": "Aucun cours à venir.",
+    "see_calendar": "Emploi du temps",
+    "next_evaluation": "Prochaine évaluation",
+    "no_evaluation": "Aucune évaluation à venir.",
+    "see_evaluations": "Toutes les évaluations",
+    "averages": "Moyennes",
+    "no_grades": "Aucune note saisie pour l’instant.",
+    "see_grades": "Saisir mes notes",
+    "noscript": "Activez JavaScript pour afficher le tableau de bord."
   },
   "resources": {
     "title": "Modules",

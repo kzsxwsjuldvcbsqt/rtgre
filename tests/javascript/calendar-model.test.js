@@ -52,3 +52,31 @@ test("calendar events are canonicalized before rendering", () => {
     /format/,
   );
 });
+
+test("break boundaries are replaced by the real start and end times", () => {
+  const events = [
+    event({
+      start: "2026-09-08T08:00:00+02:00",
+      end: "2026-09-08T10:00:00+02:00",
+    }),
+    event({
+      start: "2026-09-08T10:00:00+02:00",
+      end: "2026-09-08T12:00:00+02:00",
+    }),
+  ];
+  model.applyBreaks(events, [
+    { boundary: "10:00", before: "09:50", after: "10:10" },
+  ]);
+  assert.equal(events[0].end, "2026-09-08T09:50:00+02:00");
+  assert.equal(events[1].start, "2026-09-08T10:10:00+02:00");
+  assert.equal(events[0].start, "2026-09-08T08:00:00+02:00");
+});
+
+test("an instant is converted to the wall clock of the site timezone", () => {
+  const local = model.inSiteTimezone(
+    new Date("2026-09-08T06:30:00Z"),
+    "Europe/Paris",
+  );
+  assert.equal(local.getHours(), 8);
+  assert.equal(local.getMinutes(), 30);
+});
