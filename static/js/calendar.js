@@ -449,8 +449,11 @@
     }
 
     function stickyBarHeight() {
+      var shell = document.querySelector(".app");
       var bar = document.querySelector(
-        mobileQuery.matches ? ".app-sidebar" : ".app-topbar",
+        shell && getComputedStyle(shell).display === "grid"
+          ? ".app-topbar"
+          : ".app-sidebar",
       );
       return bar ? bar.getBoundingClientRect().height : 0;
     }

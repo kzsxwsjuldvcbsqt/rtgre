@@ -23,7 +23,7 @@
   },
   "resources": {
     "title": "Modules",
-    "chamilo_main_link": "Accéder à l'espace Chamilo de la formation",
+    "chamilo_space": "Espace Chamilo",
     "no_semester": "Complémentaires"
   },
   "grades": {
