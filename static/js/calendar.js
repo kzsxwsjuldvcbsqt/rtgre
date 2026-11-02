@@ -128,27 +128,6 @@
     var mobileQuery = window.matchMedia(calendarConfig.mobile_media_query);
     var dateInput = document.getElementById("cal-date-input");
     var dateGroup = document.getElementById("cal-date-input-group");
-    var calendarControls = document.getElementById("calendar-controls");
-    var filtersScroll = document.getElementById("cal-filters-scroll");
-    var dateAnchor = document.querySelector('label[for="cal-evals-only"]');
-    var controlsToggle = document.querySelector(
-      '[aria-controls="calendar-controls"]',
-    );
-
-    function syncDateControlPlacement() {
-      if (!dateGroup || !navBarEl || !filtersScroll || !calendarControls)
-        return;
-      var sidebarActive =
-        controlsToggle && controlsToggle.getClientRects().length === 0;
-      if (sidebarActive && dateGroup.parentElement !== filtersScroll) {
-        filtersScroll.insertBefore(dateGroup, dateAnchor);
-      } else if (!sidebarActive && dateGroup.parentElement !== navBarEl) {
-        navBarEl.insertBefore(dateGroup, navBarEl.firstChild);
-      }
-    }
-
-    syncDateControlPlacement();
-    window.addEventListener("resize", syncDateControlPlacement);
 
     var evalsOnlyCb = document.getElementById("cal-evals-only");
     var teacherlessCb = document.getElementById("cal-teacherless-only");

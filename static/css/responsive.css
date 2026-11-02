@@ -248,13 +248,54 @@
 }
 @media (min-width: 60em) {
   .has-filter-sidebar > .filter-sidebar > #calendar-controls[hidden] {
-    display: grid !important;
+    display: flex !important;
   }
   .has-filter-sidebar > .filter-sidebar > #filters-container[hidden] {
     display: block !important;
   }
   .filters-toggle {
     display: none;
+  }
+  .has-filter-sidebar:not(.grades-page) > .filter-sidebar {
+    margin: calc(-1 * var(--space-lg)) calc(-1 * var(--page-gutter))
+      var(--space-lg);
+    padding: var(--space-sm) var(--page-gutter);
+    border-block-end: var(--rule-width) solid var(--color-border-muted);
+    background: var(--color-surface);
+  }
+  .has-filter-sidebar:not(.grades-page) #calendar-controls,
+  .has-filter-sidebar:not(.grades-page) #filters-container {
+    margin-block-end: 0;
+  }
+  .has-filter-sidebar:not(.grades-page) .filter-form {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    gap: var(--space-xs);
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  .has-filter-sidebar:not(.grades-page) .filter-group-scroll {
+    flex: 1;
+  }
+  .has-filter-sidebar:not(.grades-page)
+    .filter-form
+    > :not(.filter-group-scroll) {
+    flex: none;
+    min-width: 0;
+  }
+  .has-filter-sidebar:not(.grades-page) .filter-form input[type="text"] {
+    width: var(--width-toolbar-search);
+  }
+  .has-filter-sidebar:not(.grades-page) .results-count {
+    display: flex;
+    align-self: flex-start;
+    align-items: center;
+    min-height: var(--control-height);
+    color: var(--color-text-faint);
   }
 }
 @media (min-width: 75em) {
