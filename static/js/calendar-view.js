@@ -27,7 +27,7 @@
     getWeekStart,
     getISOWeekNumber,
     filterEvents,
-    isWeekGrid,
+    isTimeGrid,
     gridRange,
   }) {
     function indexByDate(events) {
@@ -215,7 +215,7 @@
         viewContainer.appendChild(daySection);
       });
 
-      if (state.view === "week" && gridRange && isWeekGrid()) layoutWeekGrid();
+      if (totalWeekItems > 0 && gridRange && isTimeGrid()) layoutTimeGrid();
 
       updateResultsCount(totalWeekItems);
     }
@@ -286,7 +286,7 @@
       item.tabIndex = 0;
     }
 
-    function layoutWeekGrid() {
+    function layoutTimeGrid() {
       viewContainer.classList.add("is-grid");
       viewContainer.style.setProperty(
         "--calendar-grid-minutes",
@@ -335,7 +335,7 @@
             );
             item.style.setProperty("--event-lane", placement.lane);
             item.style.setProperty("--event-lanes", placement.lanes);
-            buildEventCard(item);
+            if (state.view === "week") buildEventCard(item);
           });
         });
     }
