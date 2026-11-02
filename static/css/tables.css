@@ -54,36 +54,10 @@ tbody tr:last-child > * {
 .table-card {
   overflow-x: auto;
 }
-.table-card table {
-  margin-block-end: 0;
-}
-#evaluations-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-lg);
-}
-.table-group,
-.semester-section {
-  margin-block-start: var(--space-lg);
-}
-.table-group-title {
-  margin-block: 0 var(--space-sm);
-}
 .semester-section .collapsible-heading {
-  margin-block: 0 var(--space-sm);
+  margin: 0;
 }
 @media (min-width: 60em) {
-  .table-card {
-    margin-inline: calc(-1 * var(--space-sm));
-  }
-  .table-card th:first-child,
-  .table-card td:first-child {
-    padding-inline-start: var(--space-sm);
-  }
-  .table-card th:last-child,
-  .table-card td:last-child {
-    padding-inline-end: var(--space-sm);
-  }
   #evaluations-list .evaluations-table {
     table-layout: fixed;
   }

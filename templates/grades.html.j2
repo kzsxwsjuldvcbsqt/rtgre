@@ -5,50 +5,10 @@
 {% block sidebar %}{{ app_sidebar(sections, 'grades', class_config, section_files.grades, url_for, labels, site) }}{% endblock %}
 {% block topbar %}{{ app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.home))], (sections | selectattr('id', 'equalto', 'grades') | first).label, labels) }}{% endblock %}
 {% block content %}
-<div class="page-container has-filter-sidebar grades-page">
-<div class="filter-sidebar">
+<div class="page-container grades-page">
 <noscript>
 <p class="noscript-notice">{{ labels.grades.noscript_notice }}</p>
 </noscript>
-
-{% if grades_data.annual_units %}
-<aside class="grades-summary" aria-label="{{ labels.grades.annual_synthesis }}">
-<table class="grades-summary-table">
-<thead>
-<tr>
-<th scope="col"><span class="visually-hidden">{{ labels.grades.annual_header_ue }}</span></th>
-{% for sem in grades_data.semesters %}
-<th scope="col">{{ sem.short_label }}</th>
-{% endfor %}
-<th scope="col">{{ labels.grades.annual_header_annual }}</th>
-</tr>
-</thead>
-<tbody>
-{% for au in grades_data.annual_units %}
-<tr data-ue-id="{{ au.id }}">
-<th scope="row"><abbr title="{{ au.label }}">{{ au.short_label }}</abbr></th>
-{% for sem in grades_data.semesters %}
-<td id="synth-{{ sem.id }}-{{ au.id }}"></td>
-{% endfor %}
-<td id="synth-annual-{{ au.id }}"></td>
-</tr>
-{% endfor %}
-</tbody>
-<tfoot>
-<tr>
-<th scope="row"><abbr title="{{ labels.grades.semester_average }}">{{ labels.grades.semester_average_short }}</abbr></th>
-{% for sem in grades_data.semesters %}
-<td id="avg-{{ sem.id }}"></td>
-{% endfor %}
-<td></td>
-</tr>
-</tfoot>
-</table>
-</aside>
-{% endif %}
-</div>
-
-<div class="section-main">
 <div class="section-head grades-toolbar">
 <p class="privacy-notice">{{ labels.grades.privacy_notice }}</p>
 <details class="menu grades-menu" id="grades-actions" hidden>
@@ -63,15 +23,54 @@
 </div>
 <div id="grades-message" class="grades-message" role="status" aria-live="polite" hidden></div>
 
+{% if grades_data.annual_units %}
+<section class="data-box grades-summary" aria-labelledby="grades-summary-title">
+<header class="data-box-head"><h2 id="grades-summary-title">{{ labels.grades.annual_synthesis }}</h2></header>
+<div class="table-card">
+<table class="grades-summary-table">
+<thead>
+<tr>
+<th scope="col"><span class="visually-hidden">{{ labels.grades.semester_column }}</span></th>
+{% for au in grades_data.annual_units %}
+<th scope="col"><abbr title="{{ au.label }}">{{ au.short_label }}</abbr></th>
+{% endfor %}
+<th scope="col">{{ labels.grades.average_column }}</th>
+</tr>
+</thead>
+<tbody>
+{% for sem in grades_data.semesters %}
+<tr>
+<th scope="row"><abbr title="{{ sem.label }}">{{ sem.short_label }}</abbr></th>
+{% for au in grades_data.annual_units %}
+<td id="synth-{{ sem.id }}-{{ au.id }}"></td>
+{% endfor %}
+<td id="avg-{{ sem.id }}"></td>
+</tr>
+{% endfor %}
+<tr class="grades-summary-annual">
+<th scope="row">{{ labels.grades.annual_header_annual }}</th>
+{% for au in grades_data.annual_units %}
+<td id="synth-annual-{{ au.id }}"></td>
+{% endfor %}
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+{% endif %}
+
 <div id="notes-content">
 {% for sem in grades_data.semesters %}
-<section class="semester-section" id="semester-section-{{ sem.id }}">
+<section class="semester-section data-box" id="semester-section-{{ sem.id }}">
+<header class="data-box-head">
 <h3 class="collapsible-heading">
   <span>{{ sem.label }}</span>
   <button type="button" class="heading-toggle-btn semester-toggle-btn" id="sem-toggle-{{ sem.id }}" aria-expanded="true" aria-label="{{ labels.grades.toggle_semester.format(semester=sem.label) }}" aria-controls="semester-table-{{ sem.id }}">
     <span class="toggle-arrow">{{ icon('chevron-down', url_for, site.icons) }}</span>
   </button>
 </h3>
+</header>
 <div class="table-card">
 <table id="semester-table-{{ sem.id }}" class="grades-table" data-semester="{{ sem.id }}">
 <thead>
@@ -111,7 +110,6 @@
 </div>
 </section>
 {% endfor %}
-</div>
 </div>
 </div>
 

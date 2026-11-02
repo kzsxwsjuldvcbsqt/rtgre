@@ -7,6 +7,7 @@
 {% block topbar %}{{ app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.home)), ((sections | selectattr('id', 'equalto', 'evaluations') | first).label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.evaluations))], evaluation.summary, labels) }}{% endblock %}
 {% block content %}
 <div class="page-container">
+<section class="data-box">
 <div class="table-card">
 <table class="evaluations-table">
 {{ evaluation_table_header(site, labels, show_action=false, full=true) }}
@@ -15,13 +16,14 @@
 </tbody>
 </table>
 </div>
+</section>
 
 <h2>{{ labels.evaluation_page.comparison_heading }}</h2>
 
 {% if match_states_by_program %}
 {% for prog, item_states in match_states_by_program %}
-<section class="table-group">
-<h3 class="table-group-title">{{ prog.label }}</h3>
+<section class="data-box">
+<header class="data-box-head"><h3>{{ prog.label }}</h3></header>
 <div class="table-card">
 <table class="comparison-table">
 <colgroup>
