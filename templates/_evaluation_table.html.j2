@@ -28,7 +28,7 @@
 <th class="col-groups">{{ labels.fields.groups }}</th>
 {% endif %}
 {% if show_action %}
-<th class="col-action">{{ labels.fields.compare }}</th>
+<th class="col-action"><span class="visually-hidden">{{ labels.fields.compare }}</span></th>
 {% endif %}
 </tr>
 </thead>
@@ -75,7 +75,7 @@
 {% if show_action %}
 <td class="col-action" data-label="">
 {% set detail_target = 'classes/' ~ ev.class_id ~ '/evaluations/' ~ ev.occurrence_id ~ '.html' %}
-<a href="{{ url_for(detail_target) }}" class="detail-link">{{ labels.class_page.detail_link }}{{ icon('chevron-right', url_for, site.icons, 'icon-sm') }}</a>
+<a href="{{ url_for(detail_target) }}" class="detail-link"><span class="detail-link-text">{{ labels.class_page.detail_link }}</span>{{ icon('chevron-right', url_for, site.icons, 'icon-sm') }}</a>
 </td>
 {% endif %}
 </tr>

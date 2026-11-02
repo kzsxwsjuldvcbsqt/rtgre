@@ -126,8 +126,9 @@
   --width-col-date: 7rem;
   --width-col-time: 8rem;
   --width-col-category: 9rem;
-  --width-col-module: 9.5rem;
-  --width-col-detail: 9.625rem;
+  --width-col-module: 8.5rem;
+  --width-col-chevron: 3rem;
+  --width-col-class: 12rem;
   --menu-min-width: 13rem;
 
   --visually-hidden-size: 1px;

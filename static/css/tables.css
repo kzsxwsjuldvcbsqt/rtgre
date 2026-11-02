@@ -57,6 +57,12 @@ tbody tr:last-child > * {
 .semester-section .collapsible-heading {
   margin: 0;
 }
+td .room-tag {
+  display: inline;
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+}
 @media (min-width: 60em) {
   #evaluations-list .evaluations-table {
     table-layout: fixed;
@@ -73,9 +79,11 @@ tbody tr:last-child > * {
   #evaluations-list .col-module {
     width: var(--width-col-module);
   }
+  .comparison-table .col-class {
+    width: var(--width-col-class);
+  }
   #evaluations-list .col-action {
-    width: var(--width-col-detail);
-    padding-inline: var(--space-lg);
-    text-align: start;
+    width: var(--width-col-chevron);
+    text-align: end;
   }
 }
