@@ -32,9 +32,6 @@
   font-weight: var(--weight-extrabold);
   letter-spacing: var(--tracking-brand);
 }
-.app-brand .icon {
-  color: var(--color-highlight);
-}
 .app-sidebar .class-switcher {
   display: block;
 }
