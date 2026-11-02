@@ -16,6 +16,21 @@
 </div>
 </details>
 {% endif %}
+<details class="menu app-more">
+<summary aria-label="{{ labels.sections.more }}">{{ icon('kebab-horizontal', url_for, site.icons) }}</summary>
+<div class="menu-list">
+{% for sec in sections %}
+{% if sec.kind == 'external' %}
+<a href="{{ sec.url }}" target="_blank" rel="noopener noreferrer">{{ sec.label }}{{ icon('link-external', url_for, site.icons, 'icon-sm') }}</a>
+{% endif %}
+{% endfor %}
+{% for sec in sections %}
+{% if sec.kind == 'global' %}
+<a href="{{ url_for(sec.file) }}">{{ icon(sec.icon, url_for, site.icons) }}{{ sec.label }}</a>
+{% endif %}
+{% endfor %}
+</div>
+</details>
 </div>
 <nav class="app-nav" aria-label="{{ labels.sections.navigation }}">
 {% if class_config %}

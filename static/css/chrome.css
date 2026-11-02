@@ -72,6 +72,9 @@
 .menu-list a[aria-current="true"] {
   font-weight: var(--weight-semibold);
 }
+.app-sidebar .app-more {
+  display: none;
+}
 .app-main {
   display: flex;
   flex-direction: column;
