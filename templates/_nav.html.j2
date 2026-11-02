@@ -2,7 +2,7 @@
 {% macro app_sidebar(sections, current_id, class_config, switch_file, url_for, labels, site) %}
 <aside class="app-sidebar">
 <div class="app-sidebar-head">
-<p class="app-brand">{{ icon('mortar-board', url_for, site.icons) }}<span>{{ site.title }}</span></p>
+<p class="app-brand">{{ site.title }}</p>
 {% if class_config %}
 <details class="menu class-switcher">
 <summary aria-label="{{ labels.sections.class_switcher }}"><span class="class-switcher-label">{{ class_config.label }}</span>{{ icon('unfold', url_for, site.icons, 'icon-sm') }}</summary>
