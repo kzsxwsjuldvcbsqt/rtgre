@@ -14,16 +14,13 @@
   .evaluations-table td:first-child,
   .comparison-table th:first-child,
   .comparison-table td:first-child {
-    padding-inline-start: var(--space-lg);
+    padding-inline-start: var(--space-md);
   }
   .evaluations-table th:last-child,
   .evaluations-table td:last-child,
   .comparison-table th:last-child,
   .comparison-table td:last-child {
-    padding-inline-end: var(--space-lg);
-  }
-  #evaluations-list .col-action {
-    padding-inline-start: var(--space-lg);
+    padding-inline-end: var(--space-md);
   }
 }
 
@@ -312,5 +309,36 @@
     align-items: center;
     min-height: var(--control-height);
     color: var(--color-text-faint);
+  }
+}
+
+@media (min-width: 60em) {
+  .eval-row {
+    position: relative;
+  }
+  .eval-row .detail-link,
+  .eval-row .detail-link:hover {
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--color-text-faint);
+    vertical-align: middle;
+  }
+  .eval-row .detail-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+  .eval-row:hover .detail-link {
+    color: var(--color-text);
+  }
+  .detail-link-text {
+    position: absolute;
+    width: var(--visually-hidden-size);
+    height: var(--visually-hidden-size);
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 }
