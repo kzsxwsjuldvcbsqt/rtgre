@@ -30,21 +30,20 @@
 @media (max-width: 74.99em) {
   .app {
     display: block;
+    padding-block-end: calc(var(--height-tabbar) + env(safe-area-inset-bottom));
   }
   .app-sidebar {
-    flex-direction: column;
-    gap: var(--space-xs);
     height: auto;
-    padding: var(--space-xs) 0 0;
+    padding: var(--space-xs) var(--page-gutter);
     overflow: visible;
   }
   .app-sidebar-head {
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
-    padding-inline: var(--page-gutter);
+    gap: var(--space-xs);
   }
   .app-brand {
+    margin-inline-end: auto;
     padding-inline: 0;
   }
   .app-sidebar .class-switcher > summary {
@@ -53,29 +52,51 @@
   .app-sidebar .class-switcher .menu-list {
     inset-inline: auto 0;
   }
+  .app-sidebar .app-more {
+    display: inline-flex;
+  }
+  .app-sidebar .app-more > summary {
+    color: var(--color-navbar-text);
+  }
   .app-nav {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: var(--z-header);
+    padding-block-end: env(safe-area-inset-bottom);
+    border-block-start: var(--rule-width) solid var(--color-navbar-border);
+    background: var(--color-navbar);
+  }
+  .app-nav .nav-menu {
     flex-direction: row;
+    gap: 0;
+  }
+  .app-nav .nav-menu li {
+    flex: 1;
+    min-width: 0;
+  }
+  .app-nav .nav-menu a {
+    flex-direction: column;
+    justify-content: center;
     gap: var(--space-3xs);
-    padding: 0 var(--page-gutter) var(--space-xs);
-    overflow-x: auto;
-    scrollbar-width: none;
+    min-height: var(--height-tabbar);
+    padding: var(--space-2xs);
+    border-radius: 0;
+    font-size: var(--text-xs);
+    line-height: var(--leading-tight);
+    text-align: center;
+    white-space: normal;
   }
-  .app-nav::-webkit-scrollbar {
-    display: none;
+  .app-nav .nav-menu a[aria-current="page"] {
+    background: transparent;
   }
-  .app-nav ul {
-    flex: none;
-    flex-direction: row;
-  }
+  .app-nav-heading,
+  .app-nav-links,
   .app-nav .app-nav-foot {
-    margin: 0;
-    padding: 0;
-  }
-  .app-nav-heading {
     display: none;
   }
   .app-topbar {
     position: static;
+    z-index: auto;
   }
 }
 @media (max-width: 59.99em) {
