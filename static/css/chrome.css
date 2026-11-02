@@ -23,6 +23,7 @@
 }
 .app-brand {
   display: flex;
+  margin: 0;
   align-items: center;
   gap: var(--space-xs);
   padding: var(--space-xs) var(--space-sm);
