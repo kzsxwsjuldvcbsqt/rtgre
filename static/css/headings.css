@@ -1,4 +1,4 @@
-.page-container > h1:first-child {
+.page-container > :first-child {
   margin-block-start: 0;
 }
 .section-head {
@@ -18,7 +18,7 @@
   font-weight: var(--weight-medium);
   letter-spacing: 0;
 }
-.page-container > h2:not(.collapsible-heading),
+.page-container > h2:not(.collapsible-heading, :first-child),
 .program-section > h2,
 .resource-list + h2 {
   margin-block: var(--space-xl) var(--space-sm);

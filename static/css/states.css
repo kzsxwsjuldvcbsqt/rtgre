@@ -33,11 +33,11 @@ select:disabled {
   .class-list a:hover,
   .section-item a:hover,
   .resource-list li:hover {
-    background: var(--color-surface-hover);
+    background: var(--color-surface);
     text-decoration: none;
   }
   tbody tr:hover {
-    background: var(--color-surface-hover);
+    background: var(--color-surface);
   }
   .class-list a:hover .list-chevron,
   .section-item a:hover .list-chevron {

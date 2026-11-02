@@ -3,13 +3,9 @@
 {% from "_icons.html.j2" import icon %}
 {% block title %}{% for s in sections %}{% if s.id == 'resources' %}{{ s.label }}{% endif %}{% endfor %} - {{ class_config.label }} - {{ site.title }}{% endblock %}
 {% block sidebar %}{{ app_sidebar(sections, 'resources', class_config, section_files.resources, url_for, labels, site) }}{% endblock %}
-{% block topbar %}{{ app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.home))], (sections | selectattr('id', 'equalto', 'resources') | first).label, labels) }}{% endblock %}
+{% block topbar %}{% call app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.home))], (sections | selectattr('id', 'equalto', 'resources') | first).label, labels) %}<a class="btn" href="{{ site.chamilo.space_url }}" target="_blank" rel="noopener noreferrer">{{ labels.resources.chamilo_space }}{{ icon('link-external', url_for, site.icons, 'icon-sm') }}</a>{% endcall %}{% endblock %}
 {% block content %}
 <div class="page-container">
-<div class="main-chamilo-link">
-<a href="{{ site.chamilo.space_url }}" target="_blank" rel="noopener noreferrer">{{ labels.resources.chamilo_main_link }}{{ icon('link-external', url_for, site.icons, 'icon-sm') }}</a>
-</div>
-
 {% for sem_info, kinds_grouped in resource_groups %}
 <h2>{{ sem_info.label }}</h2>
 {% for kind_info, modules in kinds_grouped %}
