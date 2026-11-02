@@ -1,40 +1,31 @@
-.grades-summary {
-  padding: var(--space-md) var(--space-lg);
-  border: var(--rule-width) solid var(--color-border-muted);
-  border-radius: var(--radius-medium);
-  background: var(--color-surface);
-  box-shadow: var(--shadow-card);
-}
 .grades-summary-table td {
   color: var(--color-text);
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
 }
 .grades-summary-table {
-  margin: 0;
   table-layout: fixed;
 }
-.grades-summary-table thead th:not(:first-child) {
-  width: var(--width-summary-value);
+.grades-summary-table th:first-child {
+  width: var(--width-summary-label);
 }
 .grades-summary-table th,
 .grades-summary-table td {
-  padding: var(--space-xs) 0;
+  padding-inline: var(--space-2xs);
+}
+.grades-summary-table tbody > tr > * {
+  font-size: var(--text-sm);
 }
 .grades-summary-table td,
 .grades-summary-table thead th:not(:first-child) {
-  padding-inline-start: var(--space-sm);
   text-align: end;
   white-space: nowrap;
 }
-.grades-summary-table tbody th,
-.grades-summary-table tfoot th,
-.grades-summary-table tfoot td {
+.grades-summary-table tbody th {
   font-weight: var(--weight-semibold);
 }
-.grades-summary-table tfoot > tr > * {
+.grades-summary-annual > * {
   border-block-start: var(--rule-width) solid var(--color-border);
-  border-block-end: 0;
 }
 .grades-summary-table abbr {
   text-decoration: none;
@@ -48,4 +39,15 @@
 }
 .grades-toolbar {
   align-items: center;
+}
+@media (max-width: 59.99em) {
+  .grades-summary-table {
+    table-layout: auto;
+  }
+  .grades-summary-table th:first-child {
+    width: auto;
+  }
+  .grades-summary-table tbody > tr > * {
+    font-size: var(--text-xs);
+  }
 }

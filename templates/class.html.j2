@@ -31,8 +31,8 @@
 <div class="section-main">
 <div id="evaluations-list">
 {% for month_key, month_label, month_evals in months_grouped %}
-<section class="month-card" data-month="{{ month_key }}">
-<h3 class="table-group-title">{{ month_label }}</h3>
+<section class="month-card data-box" data-month="{{ month_key }}">
+<header class="data-box-head"><h3>{{ month_label }}</h3><span class="data-box-meta">{{ month_evals | length }}</span></header>
 <div class="table-card">
 <table class="evaluations-table">
 {{ evaluation_table_header(site, labels, show_action=true) }}

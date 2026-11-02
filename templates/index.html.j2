@@ -7,8 +7,8 @@
 {% block content %}
 <div class="page-container">
 {% for prog in programs %}
-<section class="program-section">
-<h2>{{ prog.label }}</h2>
+<section class="data-box">
+<header class="data-box-head"><h2>{{ prog.label }}</h2><span class="data-box-meta">{{ prog.classes | length }}</span></header>
 <ul class="class-list">
 {% for cls in prog.classes %}
 {% set cls_target = 'classes/' ~ cls.id ~ '/' ~ section_files.home %}

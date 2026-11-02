@@ -32,8 +32,6 @@
     "privacy_notice": "Tes notes restent strictement dans ce navigateur. Exporte-les pour les sauvegarder.",
     "noscript_notice": "Activez JavaScript pour calculer vos moyennes, sauvegarder vos notes et exporter vos données.",
     "annual_synthesis": "Synthèse annuelle",
-    "semester_average": "Moyenne du semestre",
-    "semester_average_short": "Moy.",
     "actions": "Actions",
     "export_btn": "Exporter",
     "import_btn": "Importer",
@@ -48,7 +46,6 @@
     "subject_code": "Module",
     "subject_label": "Nom complet",
     "grade_input_column": "Note / {maximum}",
-    "annual_header_ue": "UE",
     "annual_header_annual": "Annuel",
     "empty_value": "— / {maximum}",
     "toggle_semester": "Afficher ou masquer {semester}",
@@ -57,7 +54,9 @@
     "err_restore": "Les notes enregistrées sont illisibles. Elles sont conservées dans le navigateur ; importez une sauvegarde valide ou effacez-les explicitement.",
     "err_file_size": "Ce fichier est trop volumineux pour être importé.",
     "err_empty_import": "Aucune note compatible à importer.",
-    "err_conflict": "Les notes sont ouvertes en modification dans un autre onglet, ou leur sauvegarde a changé. Ferme l’autre onglet puis recharge cette page. Tu peux exporter les valeurs affichées."
+    "err_conflict": "Les notes sont ouvertes en modification dans un autre onglet, ou leur sauvegarde a changé. Ferme l’autre onglet puis recharge cette page. Tu peux exporter les valeurs affichées.",
+    "semester_column": "Semestre",
+    "average_column": "Moyenne"
   },
   "calendar": {
     "title": "Emploi du temps",

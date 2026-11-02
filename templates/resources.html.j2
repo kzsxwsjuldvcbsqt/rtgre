@@ -9,8 +9,9 @@
 {% for sem_info, kinds_grouped in resource_groups %}
 <h2>{{ sem_info.label }}</h2>
 {% for kind_info, modules in kinds_grouped %}
+<section class="data-box">
 {% if kind_info.label %}
-<h3>{{ kind_info.label }}</h3>
+<header class="data-box-head"><h3>{{ kind_info.label }}</h3><span class="data-box-meta">{{ modules | length }}</span></header>
 {% endif %}
 <ul class="resource-list">
 {% for mod in modules %}
@@ -23,6 +24,7 @@
 </li>
 {% endfor %}
 </ul>
+</section>
 {% endfor %}
 {% endfor %}
 </div>

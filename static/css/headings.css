@@ -18,10 +18,11 @@
   font-weight: var(--weight-medium);
   letter-spacing: 0;
 }
-.page-container > h2:not(.collapsible-heading, :first-child),
-.program-section > h2,
-.resource-list + h2 {
+.page-container > h2 {
   margin-block: var(--space-xl) var(--space-sm);
+}
+.page-container > h2:first-child {
+  margin-block-start: 0;
 }
 .page-container > h3 {
   margin-block: var(--space-lg) var(--space-sm);

@@ -16,22 +16,22 @@
 <p class="noscript-notice">{{ labels.dashboard.noscript }}</p>
 </noscript>
 <div class="dashboard">
-<section class="dashboard-panel" aria-labelledby="dashboard-courses-title">
-<header class="dashboard-panel-head">
+<section class="dashboard-panel data-box" aria-labelledby="dashboard-courses-title">
+<header class="data-box-head">
 <h2 id="dashboard-courses-title">{{ labels.dashboard.today }}</h2>
 <a href="{{ url_for(class_root ~ section_files.calendar) }}">{{ labels.dashboard.see_calendar }}{{ icon('chevron-right', url_for, site.icons, 'icon-sm') }}</a>
 </header>
 <div class="dashboard-panel-body" id="dashboard-courses"></div>
 </section>
-<section class="dashboard-panel" aria-labelledby="dashboard-evaluation-title">
-<header class="dashboard-panel-head">
+<section class="dashboard-panel data-box" aria-labelledby="dashboard-evaluation-title">
+<header class="data-box-head">
 <h2 id="dashboard-evaluation-title">{{ labels.dashboard.next_evaluation }}</h2>
 <a href="{{ url_for(class_root ~ section_files.evaluations) }}">{{ labels.dashboard.see_evaluations }}{{ icon('chevron-right', url_for, site.icons, 'icon-sm') }}</a>
 </header>
 <div class="dashboard-panel-body" id="dashboard-evaluation" data-detail-base="{{ url_for(class_root ~ 'evaluations') }}"></div>
 </section>
-<section class="dashboard-panel" aria-labelledby="dashboard-grades-title">
-<header class="dashboard-panel-head">
+<section class="dashboard-panel data-box" aria-labelledby="dashboard-grades-title">
+<header class="data-box-head">
 <h2 id="dashboard-grades-title">{{ labels.dashboard.averages }}</h2>
 <a href="{{ url_for(class_root ~ section_files.grades) }}">{{ labels.dashboard.see_grades }}{{ icon('chevron-right', url_for, site.icons, 'icon-sm') }}</a>
 </header>

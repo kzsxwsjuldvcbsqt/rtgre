@@ -1,10 +1,6 @@
-.program-section {
-  margin-block-start: var(--space-xl);
-}
 .class-list,
 .resource-list {
-  margin: 0 calc(-1 * var(--space-sm)) var(--space-xl);
-  border-block-start: var(--rule-width) solid var(--color-border-muted);
+  margin: 0;
 }
 .class-list li {
   display: flex;
@@ -23,13 +19,13 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-md);
-  min-height: var(--height-list-row);
-  padding: var(--space-sm);
+  min-height: var(--height-box-row);
+  padding: var(--space-xs) var(--space-md);
   color: var(--color-text);
   transition: background var(--transition-fast);
 }
-.class-list a,
-.resource-list li {
+.class-list li:not(:last-child) a,
+.resource-list li:not(:last-child) {
   border-block-end: var(--rule-width) solid var(--color-border-muted);
 }
 .class-list a > span {
