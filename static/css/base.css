@@ -7,7 +7,7 @@ html {
 body {
   display: flex;
   flex-direction: column;
-  background: var(--color-canvas);
+  background: var(--color-surface);
   color: var(--color-text);
   font-size: var(--text-base);
   line-height: var(--leading-normal);

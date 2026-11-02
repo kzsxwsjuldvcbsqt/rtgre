@@ -55,7 +55,6 @@
   border: var(--rule-width) solid var(--color-border-muted);
   border-radius: var(--radius-control);
   background: var(--color-surface);
-  box-shadow: var(--shadow-card);
 }
 .calendar-event-item.kind-resource {
   background: var(--color-kind-resource);
