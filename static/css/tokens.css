@@ -10,7 +10,7 @@
   --color-navbar-hover: rgba(255, 255, 255, 0.06);
   --color-navbar-active: rgba(255, 255, 255, 0.1);
   --color-surface: #ffffff;
-  --color-surface-hover: #f4f4f4;
+  --color-surface-hover: var(--color-canvas);
   --color-inset: #ffffff;
   --color-badge: #eeeeee;
 
