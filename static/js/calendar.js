@@ -185,7 +185,7 @@
 
     var state = {
       view: resolveDefaultView(),
-      layout: calendarConfig.default_week_layout,
+      layout: calendarConfig.default_layout,
       date: defaultDateStr,
       evals: false,
       teacherless: false,
@@ -526,7 +526,7 @@
       if (viewSelect) viewSelect.value = state.view;
       if (layoutSelect) layoutSelect.value = state.layout;
       if (layoutGroup)
-        layoutGroup.hidden = state.view !== "week" || mobileQuery.matches;
+        layoutGroup.hidden = state.view === "year" || mobileQuery.matches;
       if (dateInput) dateInput.value = state.date;
       if (evalsOnlyCb) evalsOnlyCb.checked = state.evals;
       if (teacherlessCb) teacherlessCb.checked = state.teacherless;
@@ -610,15 +610,17 @@
       getWeekStart,
       getISOWeekNumber,
       filterEvents,
-      isWeekGrid,
+      isTimeGrid,
       gridRange,
     });
     function renderCalendarView(events) {
       calendarView.render(events);
     }
 
-    function isWeekGrid() {
-      return state.layout === "grid" && !mobileQuery.matches;
+    function isTimeGrid() {
+      return (
+        state.layout === "grid" && state.view !== "year" && !mobileQuery.matches
+      );
     }
 
     if (layoutSelect) {
@@ -686,7 +688,7 @@
     if (resetBtn) {
       resetBtn.addEventListener("click", function () {
         state.view = resolveDefaultView();
-        state.layout = calendarConfig.default_week_layout;
+        state.layout = calendarConfig.default_layout;
         state.date = defaultDateStr;
         state.evals = false;
         state.teacherless = false;

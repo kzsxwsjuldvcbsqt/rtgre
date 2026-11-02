@@ -37,7 +37,7 @@ L'accueil de chaque classe résume l'essentiel : les cours du jour, ou ceux du p
 
 ### Emploi du temps
 
-Le calendrier est construit à partir des flux iCalendar d'ADE. Il propose une vue par jour, par semaine et une vue annuelle, ainsi que la navigation par date. La recherche porte sur le cours, le module, la salle, l'enseignant ou le groupe.
+Le calendrier est construit à partir des flux iCalendar d'ADE. Il propose une vue par jour, par semaine et une vue annuelle, ainsi que la navigation par date. Sur ordinateur, les vues jour et semaine s'affichent en grille horaire ou en liste ; la vue annuelle reste en liste. La recherche porte sur le cours, le module, la salle, l'enseignant ou le groupe.
 
 Il permet aussi de filtrer les évaluations et de masquer les cours sans enseignant. Le cours en cours et l'heure actuelle sont indiqués. Les réglages de consultation sont conservés temporairement dans la session du navigateur.
 
@@ -195,7 +195,7 @@ Le comportement et le contenu du site sont décrits dans `config/`.
 | `config/categories.json` | règles de reconnaissance des évaluations et marqueurs |
 | `config/curriculum.json` | semestres, parcours, modules, UE et coefficients |
 | `config/sections.json` | pages internes et liens externes affichés dans la navigation |
-| `config/calendar.json` | vues, jours affichés, affichage de la semaine et temporisations |
+| `config/calendar.json` | vues, jours affichés, affichage (grille horaire ou liste) et temporisations |
 | `config/corrections.json` | retouches manuelles des cours ADE (suppression ou surcharge) |
 | `config/labels.json` | textes affichés dans l'interface |
 
