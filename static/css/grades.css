@@ -1,5 +1,4 @@
 .grades-summary {
-  margin-block-start: var(--space-lg);
   padding: var(--space-md) var(--space-lg);
   border: var(--rule-width) solid var(--color-border-muted);
   border-radius: var(--radius-medium);

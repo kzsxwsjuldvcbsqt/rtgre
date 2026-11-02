@@ -1,20 +1,12 @@
 {% extends "base.html.j2" %}
-{% from "_nav.html.j2" import section_nav %}
+{% from "_nav.html.j2" import app_sidebar, app_topbar %}
 {% from "_icons.html.j2" import icon %}
 {% block title %}{% for s in sections %}{% if s.id == 'grades' %}{{ s.label }}{% endif %}{% endfor %} - {{ class_config.label }} - {{ site.title }}{% endblock %}
-{% block subnav %}{{ section_nav(sections, 'grades', class_config, url_for, labels, site.icons) }}{% endblock %}
+{% block sidebar %}{{ app_sidebar(sections, 'grades', class_config, section_files.grades, url_for, labels, site) }}{% endblock %}
+{% block topbar %}{{ app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.home))], (sections | selectattr('id', 'equalto', 'grades') | first).label, labels) }}{% endblock %}
 {% block content %}
 <div class="page-container has-filter-sidebar grades-page">
 <div class="filter-sidebar">
-<div class="back-navigation">
-<a href="{{ url_for('index.html') }}">{{ labels.class_page.back_link }}</a>
-</div>
-
-<div class="page-heading">
-<p class="page-context">{{ class_config.label }}</p>
-<h1>{% for s in sections %}{% if s.id == 'grades' %}{{ s.label }}{% endif %}{% endfor %}</h1>
-</div>
-
 <noscript>
 <p class="noscript-notice">{{ labels.grades.noscript_notice }}</p>
 </noscript>

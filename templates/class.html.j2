@@ -1,27 +1,16 @@
 {% extends "base.html.j2" %}
-{% from "_nav.html.j2" import section_nav %}
+{% from "_nav.html.j2" import app_sidebar, app_topbar %}
 {% from "_evaluation_table.html.j2" import evaluation_table_header, evaluation_row %}
 {% from "_icons.html.j2" import icon %}
 {% block title %}{% for s in sections %}{% if s.id == 'evaluations' %}{{ s.label }}{% endif %}{% endfor %} - {{ class_config.label }} - {{ site.title }}{% endblock %}
-{% block subnav %}{{ section_nav(sections, 'evaluations', class_config, url_for, labels, site.icons) }}{% endblock %}
+{% block sidebar %}{{ app_sidebar(sections, 'evaluations', class_config, section_files.evaluations, url_for, labels, site) }}{% endblock %}
+{% block topbar %}{% call app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.home))], (sections | selectattr('id', 'equalto', 'evaluations') | first).label, labels) %}<button type="button" class="heading-toggle-btn filters-toggle" aria-expanded="true" aria-controls="filters-container" aria-label="{{ labels.calendar.toggle_controls }}">{{ icon('filter', url_for, site.icons) }}</button>{% endcall %}{% endblock %}
 {% block head_scripts %}
 <script defer src="{{ url_for('static/js/filters.js') }}"></script>
 {% endblock %}
 {% block content %}
 <div class="page-container has-filter-sidebar">
 <div class="filter-sidebar">
-<div class="back-navigation">
-<a href="{{ url_for('index.html') }}">{{ labels.class_page.back_link }}</a>
-</div>
-
-<div class="page-heading">
-<p class="page-context">{{ class_config.label }}</p>
-<h1 class="collapsible-heading">
-<span>{% for s in sections %}{% if s.id == 'evaluations' %}{{ s.label }}{% endif %}{% endfor %}</span>
-<button type="button" class="heading-toggle-btn" aria-expanded="true" aria-controls="filters-container" aria-label="{{ labels.calendar.toggle_controls }}"><span class="toggle-arrow">{{ icon('chevron-down', url_for, site.icons) }}</span></button>
-</h1>
-</div>
-
 <div id="filters-container"
   data-label-filters-heading="{{ labels.class_page.filters_heading }}"
   data-label-category="{{ labels.class_page.category_filter }}"

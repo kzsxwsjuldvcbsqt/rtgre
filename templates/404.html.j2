@@ -1,3 +1,4 @@
+{% from "_icons.html.j2" import icon %}
 <!DOCTYPE html>
 <html lang="{{ site.language }}">
 <head>
@@ -11,29 +12,26 @@
 <title>{{ labels.page_404.title }} - {{ site.title }}</title>
 <link rel="stylesheet" href="{{ get_404_url('static/css/style.css') }}">
 </head>
-<body>
-<header class="site-header">
-<div class="header-container">
-<a class="site-brand" href="{{ get_404_url('index.html') }}" aria-label="{{ site.title }}">
-<div class="header-titles">
-<span class="site-title">{{ site.title }}</span>
-<span class="site-subtitle"><span class="subtitle-text">{{ site.subtitle }}</span><span class="subtitle-sep">{{ labels.list_separator }}</span><span class="subtitle-unofficial">{{ labels.unofficial_notice }}</span></span>
+<body class="app">
+<aside class="app-sidebar">
+<div class="app-sidebar-head">
+<a class="app-brand" href="{{ get_404_url('index.html') }}">{{ icon('mortar-board', get_404_url, site.icons) }}<span>{{ site.title }}</span></a>
 </div>
-</a>
-</div>
+</aside>
+<div class="app-main">
+<header class="app-topbar">
+<h1>{{ labels.page_404.title }}</h1>
 </header>
 <main class="site-main">
 <div class="page-container">
-<h1>{{ labels.page_404.title }}</h1>
 <p>{{ labels.page_404.description }}</p>
 <p><a href="{{ get_404_url('index.html') }}">{{ labels.page_404.home_link }}</a></p>
 </div>
 </main>
-<footer class="site-footer">
-<div class="footer-container">
+<footer class="app-footnote">
+<span>{{ site.subtitle }}{{ labels.list_separator }}{{ labels.unofficial_notice }}</span>
 <span>{{ labels.footer.generated_at }} {{ generated_at }}</span>
-</div>
 </footer>
-
+</div>
 </body>
 </html>

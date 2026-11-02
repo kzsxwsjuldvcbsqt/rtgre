@@ -469,6 +469,13 @@
       scheduleTimeMarker(nowInfo.isSimulated);
     }
 
+    function stickyBarHeight() {
+      var bar = document.querySelector(
+        mobileQuery.matches ? ".app-sidebar" : ".app-topbar",
+      );
+      return bar ? bar.getBoundingClientRect().height : 0;
+    }
+
     function spotlightNow() {
       if (!spotlightPending) return;
       spotlightPending = false;
@@ -795,10 +802,9 @@
         spotlightPending = true;
 
         if (state.view === "year") {
-          var siteHeader = document.querySelector(".site-header");
           document.documentElement.style.setProperty(
             "--site-header-height",
-            (siteHeader ? siteHeader.getBoundingClientRect().height : 0) + "px",
+            stickyBarHeight() + "px",
           );
           var todayEl =
             document.getElementById(
@@ -866,10 +872,10 @@
         !window.matchMedia(calendarConfig.mobile_media_query).matches
       )
         return;
-      var header = document.querySelector(".site-header");
-      var headerOffset = header ? header.getBoundingClientRect().height : 0;
       var target =
-        todayBtn.getBoundingClientRect().bottom + window.scrollY - headerOffset;
+        todayBtn.getBoundingClientRect().bottom +
+        window.scrollY -
+        stickyBarHeight();
       var maxScroll =
         document.documentElement.scrollHeight - window.innerHeight;
       if (target > 0 && maxScroll >= target)

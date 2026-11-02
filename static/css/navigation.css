@@ -1,56 +1,53 @@
-.section-nav {
-  background: var(--color-navbar);
-  border-block-start: var(--rule-width) solid var(--color-navbar-border);
+.app-nav {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
 }
-.section-nav-inner {
-  width: 100%;
-  max-width: var(--page-max-width);
-  margin-inline: auto;
-  padding-inline: var(--page-gutter);
+.app-nav ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
-.nav-menu {
+.app-nav a {
   display: flex;
   align-items: center;
-  min-width: 0;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.nav-menu::-webkit-scrollbar {
-  display: none;
-}
-.section-nav a {
-  position: relative;
-  display: inline-flex;
-  flex: none;
-  align-items: center;
-  gap: var(--space-xs);
-  min-height: var(--touch-target);
-  margin-inline-end: var(--space-md);
+  gap: var(--space-sm);
+  min-height: var(--control-height);
+  padding-inline: var(--space-sm);
+  border-radius: var(--radius-control);
   color: var(--color-navbar-muted);
   font-size: var(--text-sm);
   font-weight: var(--weight-medium);
   white-space: nowrap;
 }
-.section-nav a .icon {
+.app-nav a .icon {
+  flex: none;
   color: var(--color-navbar-faint);
 }
-.section-nav a::after {
-  position: absolute;
-  inset-inline: 0;
-  inset-block-end: 0;
-  height: var(--rule-accent-width);
-  border-radius: var(--radius-pill) var(--radius-pill) 0 0;
-  background: transparent;
-  content: "";
-}
-.section-nav a[aria-current="page"] {
+.app-nav a[aria-current="page"] {
+  background: var(--color-navbar-active);
   color: var(--color-navbar-text);
   font-weight: var(--weight-semibold);
 }
-.section-nav a[aria-current="page"] .icon {
+.app-nav a[aria-current="page"] .icon {
   color: var(--color-highlight);
 }
-.section-nav a[aria-current="page"]::after {
-  height: var(--rule-nav-active-width);
-  background: var(--color-highlight);
+.app-nav-heading {
+  margin: var(--space-lg) var(--space-sm) var(--space-2xs);
+  color: var(--color-navbar-faint);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+}
+.app-nav-links a {
+  justify-content: space-between;
+}
+.app-nav .app-nav-foot {
+  margin-block-start: auto;
+  padding-block-start: var(--space-md);
 }

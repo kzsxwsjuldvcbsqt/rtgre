@@ -123,6 +123,7 @@ class SectionConfig:
     kind: str
     file: str | None = None
     url: str | None = None
+    icon: str | None = None
     statuses: tuple[str, ...] = ()
 
 

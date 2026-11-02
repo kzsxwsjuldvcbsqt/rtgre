@@ -25,13 +25,13 @@ select:disabled {
     text-decoration: underline;
     text-underline-offset: var(--space-3xs);
   }
-  .section-nav a:hover {
+  .app-nav a:hover {
+    background: var(--color-navbar-hover);
     color: var(--color-navbar-text);
     text-decoration: none;
   }
   .class-list a:hover,
   .section-item a:hover,
-  .global-sections-nav a:hover,
   .resource-list li:hover {
     background: var(--color-surface-hover);
     text-decoration: none;
@@ -74,9 +74,7 @@ select:disabled {
     animation-iteration-count: 1 !important;
   }
 }
-html.js-enabled
-  .has-filter-sidebar:not(.is-layout-ready)
-  > .section-main,
+html.js-enabled .has-filter-sidebar:not(.is-layout-ready) > .section-main,
 html.js-enabled
   .has-filter-sidebar:not(.is-layout-ready)
   > .filter-sidebar
