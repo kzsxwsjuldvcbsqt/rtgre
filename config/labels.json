@@ -4,7 +4,9 @@
   },
   "sections": {
     "navigation": "Sections",
-    "global_navigation": "Sections globales"
+    "external_heading": "Liens",
+    "breadcrumb": "Fil d’Ariane",
+    "class_switcher": "Changer de classe"
   },
   "class_home": {
     "descriptions": {

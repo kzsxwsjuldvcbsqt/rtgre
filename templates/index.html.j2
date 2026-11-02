@@ -1,9 +1,11 @@
 {% extends "base.html.j2" %}
+{% from "_nav.html.j2" import app_sidebar, app_topbar %}
 {% from "_icons.html.j2" import icon %}
 {% block title %}{{ labels.index.heading }} - {{ site.title }}{% endblock %}
+{% block sidebar %}{{ app_sidebar(sections, 'index', none, none, url_for, labels, site) }}{% endblock %}
+{% block topbar %}{{ app_topbar([], labels.index.heading, labels) }}{% endblock %}
 {% block content %}
 <div class="page-container">
-<h1>{{ labels.index.heading }}</h1>
 {% for prog in programs %}
 <section class="program-section">
 <h2>{{ prog.label }}</h2>
@@ -15,20 +17,5 @@
 </ul>
 </section>
 {% endfor %}
-
-{% set global_secs = [] %}
-{% for sec in sections %}
-  {% if sec.kind == 'global' %}
-    {% set _ = global_secs.append(sec) %}
-  {% endif %}
-{% endfor %}
-
-{% if global_secs %}
-<nav class="global-sections-nav" aria-label="{{ labels.sections.global_navigation }}">
-{% for sec in global_secs %}
-<p><a href="{{ url_for(sec.file) }}"><span>{{ sec.label }}</span>{{ icon('chevron-right', url_for, site.icons, 'list-chevron') }}</a></p>
-{% endfor %}
-</nav>
-{% endif %}
 </div>
 {% endblock %}

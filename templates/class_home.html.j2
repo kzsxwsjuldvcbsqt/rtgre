@@ -1,16 +1,11 @@
 {% extends "base.html.j2" %}
-{% from "_nav.html.j2" import section_nav %}
+{% from "_nav.html.j2" import app_sidebar, app_topbar %}
 {% from "_icons.html.j2" import icon %}
 {% block title %}{{ class_config.label }} - {{ site.title }}{% endblock %}
-{% block subnav %}{{ section_nav(sections, 'home', class_config, url_for, labels, site.icons) }}{% endblock %}
+{% block sidebar %}{{ app_sidebar(sections, 'home', class_config, section_files.home, url_for, labels, site) }}{% endblock %}
+{% block topbar %}{{ app_topbar([], class_config.label, labels) }}{% endblock %}
 {% block content %}
 <div class="page-container">
-<div class="back-navigation">
-<a href="{{ url_for('index.html') }}">{{ labels.class_page.back_link }}</a>
-</div>
-
-<h1>{{ class_config.label }}</h1>
-
 <ul class="class-sections-list">
 {% for sec in sections %}
   {% if sec.id != 'home' and sec.kind != 'global' %}

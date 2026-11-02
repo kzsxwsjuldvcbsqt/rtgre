@@ -1,12 +1,11 @@
 {% extends "base.html.j2" %}
+{% from "_nav.html.j2" import app_sidebar, app_topbar %}
 {% from "_icons.html.j2" import icon %}
 {% block title %}{{ slots[0].summary }} - {{ site.title }}{% endblock %}
+{% block sidebar %}{{ app_sidebar(sections, 'evaluations', class_config, section_files.evaluations, url_for, labels, site) }}{% endblock %}
+{% block topbar %}{{ app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.home)), ((sections | selectattr('id', 'equalto', 'evaluations') | first).label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.evaluations))], slots[0].summary, labels) }}{% endblock %}
 {% block content %}
 <div class="page-container">
-<div class="page-heading">
-<p class="page-context">{{ class_config.label }}</p>
-<h1>{{ slots[0].summary }}</h1>
-</div>
 <p>{{ labels.evaluation_page.choose_slot }}</p>
 <ul class="resource-list">
 {% for ev in slots %}

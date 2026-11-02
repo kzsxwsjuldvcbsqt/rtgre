@@ -3,7 +3,6 @@
 }
 .class-list,
 .class-sections-list,
-.global-sections-nav,
 .resource-list {
   max-width: var(--list-max-width);
   margin-block-end: var(--space-xl);
@@ -14,7 +13,6 @@
   overflow: hidden;
 }
 .class-list li,
-.global-sections-nav p,
 .section-item {
   display: flex;
   min-width: 0;
@@ -27,7 +25,6 @@
 }
 .class-list a,
 .section-item a,
-.global-sections-nav a,
 .resource-list li {
   display: flex;
   flex: 1;
@@ -40,13 +37,11 @@
   transition: background var(--transition-fast);
 }
 .class-list li:not(:last-child) a,
-.global-sections-nav p:not(:last-child) a,
 .section-item:not(:last-child) a,
 .resource-list li:not(:last-child) {
   border-block-end: var(--rule-width) solid var(--color-border-muted);
 }
-.class-list a > span,
-.global-sections-nav a > span {
+.class-list a > span {
   font-weight: var(--weight-semibold);
 }
 .section-item-text {

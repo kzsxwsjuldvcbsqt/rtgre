@@ -317,6 +317,7 @@ def load_config(config_dir: str = "config") -> AppConfig:
             kind=s["kind"],
             file=s.get("file"),
             url=s.get("url"),
+            icon=s.get("icon"),
             statuses=tuple(s.get("statuses", [])),
         )
         for s in sections_data.get("sections", [])
@@ -327,6 +328,10 @@ def load_config(config_dir: str = "config") -> AppConfig:
         raise ValueError("Invalid or duplicate section IDs")
     if any(set(section.statuses) - statuses for section in sections):
         raise ValueError("Unknown section status")
+    if any(
+        section.kind != "external" and not valid_public_id(section.icon) for section in sections
+    ):
+        raise ValueError("Missing section icon")
     section_files = [section.file for section in sections if section.file]
     if len(set(section_files)) != len(section_files) or any(
         not valid_relative_file(filename) for filename in section_files

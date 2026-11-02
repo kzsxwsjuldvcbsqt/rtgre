@@ -1,18 +1,63 @@
 {% from "_icons.html.j2" import icon %}
-{% macro section_nav(sections, current_id, class_config, url_for, labels, icons) %}
-<nav class="section-nav" aria-label="{{ labels.sections.navigation }}">
-<div class="section-nav-inner">
-<div class="nav-menu">
-{% for sec in sections %}
-{% if sec.kind == 'internal' %}
-{% set sec_target = 'classes/' ~ class_config.id ~ '/' ~ sec.file %}
-{% set is_active = (sec.id == current_id) %}
-<a href="{{ url_for(sec_target) }}"{% if is_active %} aria-current="page" class="nav-active"{% endif %}>{{ sec.label }}</a>
-{% elif sec.kind == 'external' %}
-<a href="{{ sec.url }}" target="_blank" rel="noopener noreferrer" class="nav-external">{{ sec.label }}{{ icon('link-external', url_for, icons, 'icon-sm') }}</a>
-{% endif %}
+{% macro app_sidebar(sections, current_id, class_config, switch_file, url_for, labels, site) %}
+<aside class="app-sidebar">
+<div class="app-sidebar-head">
+<a class="app-brand" href="{{ url_for('index.html') }}">{{ icon('mortar-board', url_for, site.icons) }}<span>{{ site.title }}</span></a>
+{% if class_config %}
+<details class="menu class-switcher">
+<summary aria-label="{{ labels.sections.class_switcher }}"><span class="class-switcher-label">{{ class_config.label }}</span>{{ icon('unfold', url_for, site.icons, 'icon-sm') }}</summary>
+<div class="menu-list">
+{% for prog in programs %}
+<p class="menu-group">{{ prog.label }}</p>
+{% for cls in prog.classes %}
+<a href="{{ url_for('classes/' ~ cls.id ~ '/' ~ switch_file) }}"{% if cls.id == class_config.id %} aria-current="true"{% endif %}>{{ cls.label }}</a>
+{% endfor %}
 {% endfor %}
 </div>
+</details>
+{% endif %}
 </div>
+<nav class="app-nav" aria-label="{{ labels.sections.navigation }}">
+{% if class_config %}
+<ul class="nav-menu">
+{% for sec in sections %}
+{% if sec.kind == 'internal' %}
+<li><a href="{{ url_for('classes/' ~ class_config.id ~ '/' ~ sec.file) }}"{% if sec.id == current_id %} aria-current="page"{% endif %}>{{ icon(sec.icon, url_for, site.icons) }}<span>{{ sec.label }}</span></a></li>
+{% endif %}
+{% endfor %}
+</ul>
+{% endif %}
+<p class="app-nav-heading">{{ labels.sections.external_heading }}</p>
+<ul class="app-nav-links">
+{% for sec in sections %}
+{% if sec.kind == 'external' %}
+<li><a href="{{ sec.url }}" target="_blank" rel="noopener noreferrer" class="nav-external"><span>{{ sec.label }}</span>{{ icon('link-external', url_for, site.icons, 'icon-sm') }}</a></li>
+{% endif %}
+{% endfor %}
+</ul>
+<ul class="app-nav-foot">
+{% for sec in sections %}
+{% if sec.kind == 'global' %}
+<li><a href="{{ url_for(sec.file) }}"{% if sec.id == current_id %} aria-current="page"{% endif %}>{{ icon(sec.icon, url_for, site.icons) }}<span>{{ sec.label }}</span></a></li>
+{% endif %}
+{% endfor %}
+</ul>
 </nav>
+</aside>
+{% endmacro %}
+
+{% macro app_topbar(trail, title, labels) %}
+<header class="app-topbar">
+<nav class="app-breadcrumb" aria-label="{{ labels.sections.breadcrumb }}">
+<ol>
+{% for label, href in trail %}
+<li><a href="{{ href }}">{{ label }}</a></li>
+{% endfor %}
+<li><h1>{{ title }}</h1></li>
+</ol>
+</nav>
+{% if caller is defined %}
+<div class="app-topbar-actions">{{ caller() }}</div>
+{% endif %}
+</header>
 {% endmacro %}

@@ -2,30 +2,35 @@
   "sections": [
     {
       "id": "home",
+      "icon": "home",
       "label": "Accueil",
       "file": "index.html",
       "kind": "internal"
     },
     {
       "id": "resources",
+      "icon": "book",
       "label": "Modules",
       "file": "ressources.html",
       "kind": "internal"
     },
     {
       "id": "calendar",
+      "icon": "calendar",
       "label": "Emploi du temps",
       "file": "calendar.html",
       "kind": "internal"
     },
     {
       "id": "evaluations",
+      "icon": "checklist",
       "label": "Évaluations",
       "file": "evaluations.html",
       "kind": "internal"
     },
     {
       "id": "grades",
+      "icon": "graph",
       "label": "Notes",
       "file": "notes.html",
       "kind": "internal"
@@ -56,6 +61,7 @@
     },
     {
       "id": "notice",
+      "icon": "info",
       "label": "À savoir",
       "file": "a-savoir.html",
       "kind": "global"

@@ -12,10 +12,9 @@
     --color-border-muted: var(--paper-rule);
     --color-field-border: var(--paper-rule);
   }
-  .site-header,
-  .section-nav,
-  .back-navigation,
-  .site-footer,
+  .app-sidebar,
+  .app-topbar-actions,
+  .app-footnote,
   .filter-form,
   .calendar-nav-bar,
   .heading-toggle-btn,
@@ -23,6 +22,7 @@
     display: none !important;
   }
   body,
+  .app,
   .site-main,
   .page-container {
     width: 100%;

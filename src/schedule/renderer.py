@@ -74,6 +74,7 @@ def render_site(
     section_files = {section.id: section.file for section in app_config.sections if section.file}
     env.globals.update(
         section_files=section_files,
+        programs=app_config.programs,
         content_security_policy="; ".join(
             f"{directive} {' '.join(sources)}"
             for directive, sources in app_config.site["content_security_policy"].items()
@@ -132,7 +133,6 @@ def render_site(
     html_index = tpl_index.render(
         site=app_config.site,
         labels=app_config.labels,
-        programs=app_config.programs,
         sections=app_config.sections,
         favicons=active_favicons,
         generated_at=now_str,

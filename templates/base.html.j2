@@ -16,26 +16,18 @@
 <script defer src="{{ url_for('static/js/menu.js') }}"></script>
 {% block head_scripts %}{% endblock %}
 </head>
-<body>
-<header class="site-header">
-<div class="header-container">
-<div class="site-brand">
-<div class="header-titles">
-<span class="site-title">{{ site.title }}</span>
-<span class="site-subtitle"><span class="subtitle-text">{{ site.subtitle }}</span><span class="subtitle-sep">{{ labels.list_separator }}</span><span class="subtitle-unofficial">{{ labels.unofficial_notice }}</span></span>
-</div>
-</div>
-</div>
-{% block subnav %}{% endblock %}
-</header>
+<body class="app">
+{% block sidebar %}{% endblock %}
+<div class="app-main">
+{% block topbar %}{% endblock %}
 <main class="site-main">
 {% block content %}{% endblock %}
 </main>
-<footer class="site-footer">
-<div class="footer-container">
+<footer class="app-footnote">
+<span>{{ site.subtitle }}{{ labels.list_separator }}{{ labels.unofficial_notice }}</span>
 <span>{{ labels.footer.generated_at }} {{ generated_at }}</span>
-</div>
 </footer>
+</div>
 {% block scripts %}{% endblock %}
 </body>
 </html>

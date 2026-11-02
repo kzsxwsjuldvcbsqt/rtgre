@@ -1,8 +1,9 @@
 {% extends "base.html.j2" %}
-{% from "_nav.html.j2" import section_nav %}
+{% from "_nav.html.j2" import app_sidebar, app_topbar %}
 {% from "_icons.html.j2" import icon %}
 {% block title %}{% for s in sections %}{% if s.id == 'calendar' %}{{ s.label }}{% endif %}{% endfor %} - {{ class_config.label }} - {{ site.title }}{% endblock %}
-{% block subnav %}{{ section_nav(sections, 'calendar', class_config, url_for, labels, site.icons) }}{% endblock %}
+{% block sidebar %}{{ app_sidebar(sections, 'calendar', class_config, section_files.calendar, url_for, labels, site) }}{% endblock %}
+{% block topbar %}{% call app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.home))], (sections | selectattr('id', 'equalto', 'calendar') | first).label, labels) %}<button type="button" class="heading-toggle-btn filters-toggle" aria-expanded="false" aria-controls="calendar-controls" aria-label="{{ labels.calendar.toggle_controls }}">{{ icon('filter', url_for, site.icons) }}</button>{% endcall %}{% endblock %}
 {% block head_scripts %}
 <script defer src="{{ url_for('static/js/calendar-model.js') }}"></script>
 <script defer src="{{ url_for('static/js/calendar-view.js') }}"></script>
@@ -24,18 +25,6 @@
 {% block content %}
 <div class="page-container has-filter-sidebar">
 <div class="filter-sidebar">
-<div class="back-navigation">
-<a href="{{ url_for('index.html') }}">{{ labels.class_page.back_link }}</a>
-</div>
-
-<div class="page-heading">
-<p class="page-context">{{ class_config.label }}</p>
-<h1 class="collapsible-heading">
-<span>{% for s in sections %}{% if s.id == 'calendar' %}{{ s.label }}{% endif %}{% endfor %}</span>
-<button type="button" class="heading-toggle-btn" aria-expanded="false" aria-controls="calendar-controls" aria-label="{{ labels.calendar.toggle_controls }}"><span class="toggle-arrow is-collapsed">{{ icon('chevron-down', url_for, site.icons) }}</span></button>
-</h1>
-</div>
-
 <noscript>
 <p class="noscript-notice">{{ labels.calendar.noscript_notice }}</p>
 </noscript>

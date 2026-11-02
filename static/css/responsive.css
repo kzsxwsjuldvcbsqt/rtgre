@@ -60,16 +60,54 @@
   select:focus-visible {
     outline: none;
   }
-  .header-titles {
+  .app {
     display: block;
   }
-  .site-subtitle {
-    display: block;
-    font-size: var(--text-xs);
+  .app-sidebar {
+    flex-direction: column;
+    gap: var(--space-xs);
+    height: auto;
+    padding: var(--space-xs) 0 0;
+    overflow: visible;
   }
-  .nav-menu {
-    margin-inline: calc(-1 * var(--page-gutter));
+  .app-sidebar-head {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     padding-inline: var(--page-gutter);
+  }
+  .app-brand {
+    padding-inline: 0;
+  }
+  .app-sidebar .class-switcher > summary {
+    width: auto;
+  }
+  .app-sidebar .class-switcher .menu-list {
+    inset-inline: auto 0;
+  }
+  .app-nav {
+    flex-direction: row;
+    gap: var(--space-3xs);
+    padding: 0 var(--page-gutter) var(--space-xs);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .app-nav::-webkit-scrollbar {
+    display: none;
+  }
+  .app-nav ul {
+    flex: none;
+    flex-direction: row;
+  }
+  .app-nav .app-nav-foot {
+    margin: 0;
+    padding: 0;
+  }
+  .app-nav-heading {
+    display: none;
+  }
+  .app-topbar {
+    position: static;
   }
   .filter-form {
     display: flex;
@@ -208,90 +246,31 @@
     gap: var(--space-2xs);
   }
 }
-@media (min-width: 75em) {
-  .has-filter-sidebar {
-    --section-main-end-offset: max(
-      var(--page-gutter),
-      calc(
-        (100vw - var(--page-max-width)) / 2 + var(--page-gutter)
-      )
-    );
-    display: grid;
-    grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
-    align-items: start;
-    column-gap: var(--space-xl);
-    padding-block-end: var(--space-lg);
-  }
-  .has-filter-sidebar > .filter-sidebar {
-    position: sticky;
-    inset-block-start: calc(
-      var(--header-height) + var(--touch-target) + var(--space-lg)
-    );
-    grid-column: 1;
-    max-height: calc(
-      100dvh - var(--header-height) - var(--touch-target) - var(--space-2xl)
-    );
-    overflow-y: auto;
-  }
+@media (min-width: 60em) {
   .has-filter-sidebar > .filter-sidebar > #calendar-controls[hidden] {
     display: grid !important;
   }
   .has-filter-sidebar > .filter-sidebar > #filters-container[hidden] {
     display: block !important;
   }
-  .has-filter-sidebar > .filter-sidebar .heading-toggle-btn {
+  .filters-toggle {
     display: none;
   }
-  .has-filter-sidebar > .section-main {
-    grid-column: 2;
+}
+@media (min-width: 75em) {
+  .grades-page {
+    display: grid;
+    grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+    align-items: start;
+    column-gap: var(--space-xl);
+  }
+  .grades-page > .filter-sidebar {
+    position: sticky;
+    inset-block-start: calc(var(--topbar-height) + var(--space-lg));
+    max-height: calc(100dvh - var(--topbar-height) - var(--space-2xl));
+    overflow-y: auto;
+  }
+  .grades-page > .section-main {
     min-width: 0;
-    margin-block: calc(-1 * var(--space-lg));
-    margin-inline-end: calc(-1 * var(--section-main-end-offset));
-    padding-block: var(--section-main-start-offset, var(--space-lg))
-      var(--space-lg);
-    padding-inline-end: var(--section-main-end-offset);
-  }
-  .has-filter-sidebar .filter-form {
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-md);
-  }
-  .has-filter-sidebar .filter-group-scroll {
-    flex-direction: column;
-    align-items: stretch;
-    grid-column: 1;
-  }
-  .has-filter-sidebar .filter-group-item,
-  .has-filter-sidebar .filter-group-last {
-    flex-direction: column;
-    align-items: stretch;
-    gap: var(--space-2xs);
-  }
-  .has-filter-sidebar .filter-field-title {
-    display: block;
-    color: var(--color-text-faint);
-    font-size: var(--text-xs);
-    font-weight: var(--weight-semibold);
-    letter-spacing: var(--tracking-eyebrow);
-    text-transform: uppercase;
-  }
-  .has-filter-sidebar .filter-group-item,
-  .has-filter-sidebar .filter-group-item select,
-  .has-filter-sidebar .filter-group-item input[type="date"],
-  .has-filter-sidebar .filter-form label:has(input),
-  .has-filter-sidebar .filter-group-last,
-  .has-filter-sidebar .filter-form input[type="text"] {
-    width: 100%;
-    min-width: 0;
-  }
-  .has-filter-sidebar .filter-group-reset {
-    grid-column: 1;
-  }
-  .has-filter-sidebar .filter-group-reset button {
-    width: 100%;
-    justify-content: center;
-  }
-  .has-filter-sidebar .results-count {
-    grid-column: 1;
-    justify-self: start;
   }
 }
