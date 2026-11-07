@@ -97,7 +97,39 @@
     });
   }
 
+  function playMotion(element, className, done) {
+    var token = {};
+    element.motionToken = token;
+    element.classList.remove("is-revealing", "is-concealing");
+    void element.offsetWidth;
+    element.classList.add(className);
+    var running = element.getAnimations ? element.getAnimations() : [];
+    function finish() {
+      if (element.motionToken !== token) return;
+      element.motionToken = null;
+      element.classList.remove(className);
+      if (done) done();
+    }
+    if (running.length === 0) {
+      finish();
+      return;
+    }
+    var longest = Math.max.apply(
+      null,
+      running.map(function (animation) {
+        return animation.effect.getComputedTiming().endTime || 0;
+      }),
+    );
+    setTimeout(finish, longest);
+    Promise.all(
+      running.map(function (animation) {
+        return animation.finished;
+      }),
+    ).then(finish, finish);
+  }
+
   global.AppUtils = {
+    playMotion: playMotion,
     formatText: formatText,
     parseGrade: parseGrade,
     stripAccents: stripAccents,
@@ -182,7 +214,14 @@
         var isExpanded = btn.getAttribute("aria-expanded") === "true";
         var nextExpanded = !isExpanded;
         btn.setAttribute("aria-expanded", nextExpanded ? "true" : "false");
-        targetEl.hidden = !nextExpanded;
+        if (nextExpanded) {
+          targetEl.hidden = false;
+          playMotion(targetEl, "is-revealing");
+        } else {
+          playMotion(targetEl, "is-concealing", function () {
+            targetEl.hidden = btn.getAttribute("aria-expanded") !== "true";
+          });
+        }
         var arrow = btn.querySelector(".toggle-arrow");
         if (arrow) {
           arrow.classList.toggle("is-collapsed", !nextExpanded);
