@@ -318,6 +318,7 @@ def load_config(config_dir: str = "config") -> AppConfig:
             file=s.get("file"),
             url=s.get("url"),
             icon=s.get("icon"),
+            short_label=s.get("short_label"),
             statuses=tuple(s.get("statuses", [])),
         )
         for s in sections_data.get("sections", [])
@@ -332,6 +333,12 @@ def load_config(config_dir: str = "config") -> AppConfig:
         section.kind != "external" and not valid_public_id(section.icon) for section in sections
     ):
         raise ValueError("Missing section icon")
+    if any(
+        section.short_label is not None
+        and (not isinstance(section.short_label, str) or not section.short_label.strip())
+        for section in sections
+    ):
+        raise ValueError("Invalid section short label")
     section_files = [section.file for section in sections if section.file]
     if len(set(section_files)) != len(section_files) or any(
         not valid_relative_file(filename) for filename in section_files

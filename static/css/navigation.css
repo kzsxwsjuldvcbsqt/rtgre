@@ -51,3 +51,6 @@
   margin-block-start: auto;
   padding-block-start: var(--space-md);
 }
+.nav-label-short {
+  display: none;
+}

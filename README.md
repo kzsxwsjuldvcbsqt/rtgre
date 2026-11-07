@@ -194,7 +194,7 @@ Le comportement et le contenu du site sont décrits dans `config/`.
 | `config/classes.json` | formations, classes, parcours, statuts et identifiants de ressources ADE |
 | `config/categories.json` | règles de reconnaissance des évaluations et marqueurs |
 | `config/curriculum.json` | semestres, parcours, modules, UE et coefficients |
-| `config/sections.json` | pages internes et liens externes affichés dans la navigation |
+| `config/sections.json` | pages internes et liens externes affichés dans la navigation, avec un libellé court facultatif pour la barre d'onglets mobile |
 | `config/calendar.json` | vues, jours affichés, affichage (grille horaire ou liste) et temporisations |
 | `config/corrections.json` | retouches manuelles des cours ADE (suppression ou surcharge) |
 | `config/labels.json` | textes affichés dans l'interface |

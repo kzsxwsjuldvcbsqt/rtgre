@@ -37,7 +37,7 @@
 <ul class="nav-menu">
 {% for sec in sections %}
 {% if sec.kind == 'internal' %}
-<li><a href="{{ url_for('classes/' ~ class_config.id ~ '/' ~ sec.file) }}"{% if sec.id == current_id %} aria-current="page"{% endif %}>{{ icon(sec.icon, url_for, site.icons) }}<span>{{ sec.label }}</span></a></li>
+<li><a href="{{ url_for('classes/' ~ class_config.id ~ '/' ~ sec.file) }}"{% if sec.id == current_id %} aria-current="page"{% endif %}>{{ icon(sec.icon, url_for, site.icons) }}{% if sec.short_label %}<span class="nav-label-full">{{ sec.label }}</span><span class="nav-label-short">{{ sec.short_label }}</span>{% else %}<span>{{ sec.label }}</span>{% endif %}</a></li>
 {% endif %}
 {% endfor %}
 </ul>

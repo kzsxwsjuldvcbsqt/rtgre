@@ -125,6 +125,12 @@
   .app-nav .nav-menu a[aria-current="page"] {
     background: transparent;
   }
+  .app-nav .nav-label-full {
+    display: none;
+  }
+  .app-nav .nav-label-short {
+    display: inline;
+  }
   .app-nav-heading,
   .app-nav-links,
   .app-nav .app-nav-foot {
