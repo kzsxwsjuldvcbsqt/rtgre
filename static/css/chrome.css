@@ -106,6 +106,9 @@
   min-width: 0;
   min-height: 100dvh;
 }
+.app-topbar-actions .heading-toggle-btn {
+  margin-inline: 0;
+}
 .app-topbar {
   position: sticky;
   inset-block-start: 0;
