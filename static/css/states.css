@@ -59,6 +59,11 @@ select:disabled {
   .menu-list .menu-item-danger:hover {
     background: var(--color-danger-soft);
   }
+  .app-sidebar .menu-list button:hover,
+  .app-sidebar .menu-list a:hover {
+    background: var(--color-navbar-active);
+    color: var(--color-navbar-text);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   html {
