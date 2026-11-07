@@ -1,4 +1,5 @@
 html {
+  interpolate-size: allow-keywords;
   background: var(--color-navbar);
   color: var(--color-text);
   font-family: var(--font-family);

@@ -21,6 +21,7 @@
   data-class-label="{{ class_config.label }}"
   data-module-styles-json='{{ module_styles | tojson }}'
 ></script>
+<script defer src="{{ url_for('static/js/choice-rows.js') }}" data-chevron="{{ url_for('static/' ~ site.icons.sprite) }}#chevron-down"></script>
 {% endblock %}
 {% block content %}
 <div class="page-container has-filter-sidebar">
