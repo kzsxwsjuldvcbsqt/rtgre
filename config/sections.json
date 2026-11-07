@@ -18,6 +18,7 @@
       "id": "calendar",
       "icon": "calendar",
       "label": "Emploi du temps",
+      "short_label": "Planning",
       "file": "calendar.html",
       "kind": "internal"
     },
