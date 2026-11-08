@@ -37,9 +37,12 @@ select:disabled {
     background: var(--color-canvas);
     text-decoration: none;
   }
-  .picker-option:hover .picker-chevron,
-  .picker-back:hover {
+  .picker-option:hover .picker-chevron {
     color: var(--color-text);
+  }
+  .picker-back:hover {
+    text-decoration: underline;
+    text-underline-offset: var(--space-3xs);
   }
   .resource-list li:hover {
     background: var(--color-canvas);
