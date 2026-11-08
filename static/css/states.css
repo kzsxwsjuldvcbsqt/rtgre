@@ -26,9 +26,11 @@ select:disabled {
     text-underline-offset: var(--space-3xs);
   }
   .app-nav a:hover {
-    background: var(--color-navbar-hover);
-    color: var(--color-navbar-text);
     text-decoration: none;
+  }
+  .app-nav a:not([aria-current="page"]):hover {
+    background: var(--color-navbar-active);
+    color: var(--color-navbar-text);
   }
   .class-list a:hover,
   .resource-list li:hover {
