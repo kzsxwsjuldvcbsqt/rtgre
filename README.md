@@ -61,7 +61,7 @@ Ces résultats ne sont pas des notes officielles. Ce sont des estimations basée
 
 ### Interface
 
-L'interface reprend la structure d'une application web : une barre latérale fixe avec le choix de la classe, les pages et les liens utiles, une barre supérieure avec le fil d'Ariane et les actions de la page, et un contenu sur toute la largeur. Sur mobile et tablette, la navigation passe dans une barre d'onglets en bas de l'écran. L'impression utilise un rendu clair adapté. La navigation reste utilisable au clavier, et les pages principalement informatives fonctionnent partiellement sans JavaScript. Les libellés et contrôles sont pensés pour l'accessibilité, sans que le projet revendique une conformité complète à une norme faute d'audit dédié.
+L'interface reprend la structure d'une application web : une barre latérale fixe avec le choix de la classe, les pages et les liens utiles, une barre supérieure avec le fil d'Ariane et les actions de la page, et un contenu sur toute la largeur. Sur mobile et tablette, la navigation passe dans une barre d'onglets en bas de l'écran. La page d'accueil guide le choix en deux étapes, formation puis classe ; la dernière classe consultée est mémorisée dans le navigateur, et l'adresse du site y ramène directement ensuite. L'impression utilise un rendu clair adapté. La navigation reste utilisable au clavier, et les pages principalement informatives fonctionnent partiellement sans JavaScript. Les libellés et contrôles sont pensés pour l'accessibilité, sans que le projet revendique une conformité complète à une norme faute d'audit dédié.
 
 ## Architecture
 

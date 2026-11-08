@@ -32,16 +32,21 @@ select:disabled {
     background: var(--color-navbar-active);
     color: var(--color-navbar-text);
   }
-  .class-list a:hover,
+  .picker-option:hover {
+    border-color: var(--color-text-faint);
+    background: var(--color-canvas);
+    text-decoration: none;
+  }
+  .picker-option:hover .picker-chevron,
+  .picker-back:hover {
+    color: var(--color-text);
+  }
   .resource-list li:hover {
     background: var(--color-canvas);
     text-decoration: none;
   }
   tbody tr:hover {
     background: var(--color-canvas);
-  }
-  .class-list a:hover .list-chevron {
-    color: var(--color-text-muted);
   }
   button:hover:not(:disabled):not(.heading-toggle-btn),
   select:hover:not(:disabled):not(:focus):not([aria-invalid="true"]),

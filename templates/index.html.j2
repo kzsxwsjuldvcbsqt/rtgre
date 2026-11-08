@@ -2,20 +2,38 @@
 {% from "_nav.html.j2" import app_sidebar, app_topbar %}
 {% from "_icons.html.j2" import icon %}
 {% block title %}{{ labels.index.heading }} - {{ site.title }}{% endblock %}
+{% block head_scripts %}
+{% set ns = namespace(urls={}) %}
+{% for prog in programs %}{% for cls in prog.classes %}{% set _ = ns.urls.update({cls.id: url_for('classes/' ~ cls.id ~ '/' ~ section_files.home)}) %}{% endfor %}{% endfor %}
+<script src="{{ url_for('static/js/remember-class.js') }}" data-class-urls='{{ ns.urls | tojson }}'></script>
+<script defer src="{{ url_for('static/js/class-picker.js') }}"></script>
+{% endblock %}
 {% block sidebar %}{{ app_sidebar(sections, 'index', none, none, url_for, labels, site) }}{% endblock %}
 {% block topbar %}{{ app_topbar([], labels.index.heading, labels) }}{% endblock %}
 {% block content %}
-<div class="page-container">
+<div class="page-container class-picker-page">
+<div class="class-picker">
+<section class="picker-step" data-step-panel="program" aria-labelledby="picker-title-program">
+<p class="picker-progress">{{ labels.index.step_progress.format(current=1, total=2) }}</p>
+<h2 class="picker-title" id="picker-title-program">{{ labels.index.program_question }}</h2>
+<ul class="picker-options">
 {% for prog in programs %}
-<section class="data-box">
-<header class="data-box-head"><h2>{{ prog.label }}</h2><span class="data-box-meta">{{ prog.classes | length }}</span></header>
-<ul class="class-list">
+<li><button type="button" class="picker-option" data-program="{{ prog.id }}"><span class="picker-option-text"><span class="picker-option-label">{{ prog.label }}</span><span class="picker-option-meta">{{ labels.index.class_count.format(count=prog.classes | length) }}</span></span>{{ icon('chevron-right', url_for, site.icons, 'picker-chevron') }}</button></li>
+{% endfor %}
+</ul>
+</section>
+{% for prog in programs %}
+<section class="picker-step" data-step-panel="{{ prog.id }}" aria-labelledby="picker-title-{{ prog.id }}">
+<button type="button" class="picker-back">{{ icon('chevron-left', url_for, site.icons, 'icon-sm') }}{{ labels.index.back }}</button>
+<p class="picker-progress">{{ labels.index.step_progress_program.format(current=2, total=2, program=prog.label) }}</p>
+<h2 class="picker-title" id="picker-title-{{ prog.id }}">{{ labels.index.class_question }}</h2>
+<ul class="picker-options">
 {% for cls in prog.classes %}
-{% set cls_target = 'classes/' ~ cls.id ~ '/' ~ section_files.home %}
-<li><a href="{{ url_for(cls_target) }}"><span>{{ cls.label }}</span>{{ icon('chevron-right', url_for, site.icons, 'list-chevron') }}</a></li>
+<li><a class="picker-option" href="{{ url_for('classes/' ~ cls.id ~ '/' ~ section_files.home) }}"><span class="picker-option-label">{{ cls.label }}</span>{{ icon('chevron-right', url_for, site.icons, 'picker-chevron') }}</a></li>
 {% endfor %}
 </ul>
 </section>
 {% endfor %}
+</div>
 </div>
 {% endblock %}
