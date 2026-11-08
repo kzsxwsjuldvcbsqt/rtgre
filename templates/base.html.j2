@@ -12,6 +12,9 @@
 <title>{% block title %}{{ site.title }}{% endblock %}</title>
 <link rel="stylesheet" href="{{ url_for('static/css/style.css') }}">
 <script src="{{ url_for('static/js/boot.js') }}"></script>
+{% if class_config is defined and class_config %}
+<script src="{{ url_for('static/js/remember-class.js') }}" data-remember-class="{{ class_config.id }}"></script>
+{% endif %}
 <script defer src="{{ url_for('static/js/utils.js') }}"></script>
 <script defer src="{{ url_for('static/js/menu.js') }}"></script>
 {% block head_scripts %}{% endblock %}

@@ -1,6 +1,12 @@
 {
   "index": {
-    "heading": "Choisir une classe"
+    "heading": "Choisir une classe",
+    "program_question": "Quelle est ta formation ?",
+    "class_question": "Quelle est ta classe ?",
+    "step_progress": "Étape {current} sur {total}",
+    "step_progress_program": "Étape {current} sur {total} · {program}",
+    "class_count": "{count} classes",
+    "back": "Changer de formation"
   },
   "sections": {
     "navigation": "Sections",

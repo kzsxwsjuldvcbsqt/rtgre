@@ -1,18 +1,10 @@
-.class-list,
 .resource-list {
-  margin: 0;
-}
-.class-list li {
-  display: flex;
-  min-width: 0;
-  max-width: none;
   margin: 0;
 }
 .resource-list li {
   min-width: 0;
   margin: 0;
 }
-.class-list a,
 .resource-list li {
   display: flex;
   flex: 1;
@@ -24,12 +16,8 @@
   color: var(--color-text);
   transition: background var(--transition-fast);
 }
-.class-list li:not(:last-child) a,
 .resource-list li:not(:last-child) {
   border-block-end: var(--rule-width) solid var(--color-border-muted);
-}
-.class-list a > span {
-  font-weight: var(--weight-semibold);
 }
 .resource-list a {
   color: var(--color-text);

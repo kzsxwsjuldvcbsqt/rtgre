@@ -1,0 +1,106 @@
+.site-main:has(.class-picker-page) {
+  display: flex;
+  flex-direction: column;
+}
+.class-picker-page {
+  flex: 1;
+  display: grid;
+  place-items: center;
+}
+.class-picker {
+  width: min(100%, var(--width-picker));
+}
+.picker-step + .picker-step {
+  margin-block-start: var(--space-2xl);
+}
+.picker-progress {
+  margin: 0 auto var(--space-2xs);
+  color: var(--color-text-faint);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+.picker-title {
+  margin: 0 0 var(--space-lg);
+  font-size: var(--text-lg);
+  text-align: center;
+}
+.picker-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.picker-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  width: 100%;
+  min-height: var(--height-picker-option);
+  padding: var(--space-sm) var(--space-md);
+  border: var(--rule-width) solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+}
+.picker-option-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xs);
+}
+.picker-option-label {
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+}
+.picker-option-meta {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+.picker-chevron {
+  color: var(--color-text-faint);
+}
+.picker-back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  margin: 0 0 var(--space-md);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+html:not(.js-enabled) [data-step-panel="program"],
+html:not(.js-enabled) .picker-back {
+  display: none;
+}
+.class-picker.is-ready {
+  display: grid;
+}
+.class-picker.is-ready > .picker-step {
+  grid-area: 1 / 1;
+  align-self: center;
+  margin: 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(var(--picker-slide));
+  transition:
+    opacity var(--motion-slide),
+    transform var(--motion-slide),
+    visibility var(--motion-slide);
+}
+.class-picker.is-ready > [data-step-panel="program"] {
+  transform: translateX(calc(-1 * var(--picker-slide)));
+}
+.class-picker.is-ready > .picker-step.is-active {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}

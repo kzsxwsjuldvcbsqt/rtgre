@@ -98,6 +98,9 @@
   --topbar-height: 3.5rem;
   --height-tabbar: 3.5rem;
   --width-app-sidebar: 15rem;
+  --width-picker: 28rem;
+  --height-picker-option: 3.5rem;
+  --picker-slide: 2.5rem;
   --width-toolbar-search: clamp(12rem, 14vw, 13rem);
   --control-height: 2.25rem;
   --control-font-size: var(--text-sm);
@@ -141,6 +144,7 @@
   --transition-fast: 180ms ease;
   --transition-undim: opacity 0s 150ms;
   --motion-spotlight: 1400ms linear 250ms;
+  --motion-slide: 320ms cubic-bezier(0.2, 0, 0, 1);
   --size-spotlight-halo: 0.25rem;
   --size-spotlight-ping: 0.625rem;
   --scale-spotlight-line: 2;
