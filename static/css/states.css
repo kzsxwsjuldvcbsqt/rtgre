@@ -41,6 +41,7 @@ select:disabled {
     color: var(--color-text);
   }
   .picker-back:hover {
+    color: var(--color-text);
     text-decoration: underline;
     text-underline-offset: var(--space-3xs);
   }
@@ -51,7 +52,7 @@ select:disabled {
   tbody tr:hover {
     background: var(--color-canvas);
   }
-  button:hover:not(:disabled):not(.heading-toggle-btn),
+  button:hover:not(:disabled):not(.heading-toggle-btn, .picker-back),
   select:hover:not(:disabled):not(:focus):not([aria-invalid="true"]),
   input:hover:not(:disabled):not(:focus):not([aria-invalid="true"]),
   textarea:hover:not(:disabled):not(:focus):not([aria-invalid="true"]),
