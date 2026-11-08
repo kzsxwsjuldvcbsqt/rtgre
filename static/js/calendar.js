@@ -109,7 +109,7 @@
     var dateGroup = document.getElementById("cal-date-input-group");
 
     var evalsOnlyCb = document.getElementById("cal-evals-only");
-    var teacherlessCb = document.getElementById("cal-teacherless-only");
+    var teacherCb = document.getElementById("cal-teacher-only");
     var searchInput = document.getElementById("cal-search-input");
     var resetBtn = document.getElementById("cal-reset-btn");
 
@@ -188,7 +188,7 @@
       layout: calendarConfig.default_layout,
       date: defaultDateStr,
       evals: false,
-      teacherless: false,
+      withTeacher: false,
       search: "",
     };
 
@@ -480,9 +480,8 @@
 
       if (merged.evals !== undefined)
         state.evals = merged.evals === "1" || merged.evals === true;
-      if (merged.teacherless !== undefined)
-        state.teacherless =
-          merged.teacherless === "1" || merged.teacherless === true;
+      if (merged.teacher !== undefined)
+        state.withTeacher = merged.teacher === "1" || merged.teacher === true;
       if (typeof merged.search === "string") state.search = merged.search;
       updateControlsFromState();
     }
@@ -494,7 +493,7 @@
         layout: state.layout,
         date: state.date,
         evals: state.evals ? "1" : "0",
-        teacherless: state.teacherless ? "1" : "0",
+        teacher: state.withTeacher ? "1" : "0",
         search: state.search,
       };
       if (
@@ -529,7 +528,7 @@
         layoutGroup.hidden = state.view === "year" || mobileQuery.matches;
       if (dateInput) dateInput.value = state.date;
       if (evalsOnlyCb) evalsOnlyCb.checked = state.evals;
-      if (teacherlessCb) teacherlessCb.checked = state.teacherless;
+      if (teacherCb) teacherCb.checked = state.withTeacher;
       if (searchInput) searchInput.value = state.search;
 
       var isYear = state.view === "year";
@@ -548,9 +547,9 @@
           return false;
         }
 
-        if (state.teacherless) {
+        if (state.withTeacher) {
           var tList = ev.teachers || [];
-          if (tList.length > 0) return false;
+          if (tList.length === 0) return false;
         }
 
         if (searchNorm) {
@@ -582,7 +581,7 @@
           state.view === resolveDefaultView() &&
           state.layout === calendarConfig.default_layout &&
           !state.evals &&
-          !state.teacherless &&
+          !state.withTeacher &&
           !state.search;
       }
       renderCalendarView(currentClassEvents);
@@ -674,9 +673,9 @@
       });
     }
 
-    if (teacherlessCb) {
-      teacherlessCb.addEventListener("change", function () {
-        state.teacherless = teacherlessCb.checked;
+    if (teacherCb) {
+      teacherCb.addEventListener("change", function () {
+        state.withTeacher = teacherCb.checked;
         render();
       });
     }
@@ -702,7 +701,7 @@
         state.layout = calendarConfig.default_layout;
         state.date = defaultDateStr;
         state.evals = false;
-        state.teacherless = false;
+        state.withTeacher = false;
         state.search = "";
         updateControlsFromState();
         render();
