@@ -122,7 +122,7 @@
 
       var isFiltered = Boolean(
         state.evals ||
-        state.teacherless ||
+        state.withTeacher ||
         (state.search && state.search.trim().length > 0),
       );
 
@@ -401,7 +401,7 @@
       var totalYearItems = 0;
       var hasFilter = Boolean(
         state.evals ||
-        state.teacherless ||
+        state.withTeacher ||
         (searchNorm && searchNorm.length > 0),
       );
 

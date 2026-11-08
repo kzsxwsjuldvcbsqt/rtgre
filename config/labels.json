@@ -74,7 +74,7 @@
     "view_week": "Semaine",
     "view_day": "Jour",
     "view_year": "Année",
-    "teacherless_filter": "Sans enseignant",
+    "teacher_filter": "Avec enseignant",
     "search_label": "Rechercher",
     "search_placeholder": "Module, salle, prof...",
     "reset_btn": "Réinitialiser",
