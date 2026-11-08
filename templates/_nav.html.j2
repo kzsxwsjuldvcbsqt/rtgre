@@ -42,6 +42,15 @@
 {% endfor %}
 </ul>
 {% endif %}
+<p class="app-nav-heading">{{ labels.sections.classes_heading }}</p>
+{% for prog in programs %}
+<p class="app-nav-group">{{ prog.label }}</p>
+<ul class="app-nav-classes">
+{% for cls in prog.classes %}
+<li><a href="{{ url_for('classes/' ~ cls.id ~ '/' ~ (switch_file or section_files.home)) }}"{% if class_config and cls.id == class_config.id %} aria-current="page"{% endif %}><span>{{ cls.label }}</span></a></li>
+{% endfor %}
+</ul>
+{% endfor %}
 <p class="app-nav-heading">{{ labels.sections.external_heading }}</p>
 <ul class="app-nav-links">
 {% for sec in sections %}

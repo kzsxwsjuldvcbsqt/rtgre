@@ -132,6 +132,8 @@
     display: inline;
   }
   .app-nav-heading,
+  .app-nav-group,
+  .app-nav-classes,
   .app-nav-links,
   .app-nav .app-nav-foot {
     display: none;
@@ -429,6 +431,9 @@
   .app-main {
     grid-column: 2;
   }
+  .app-sidebar .class-switcher {
+    display: none;
+  }
   .app-sidebar-head,
   .app-nav-heading,
   .app-nav .app-nav-foot {
@@ -443,6 +448,11 @@
     margin-block-start: var(--space-md);
     padding: var(--space-md) calc(2 * var(--space-sm)) 0;
     border-block-start: var(--rule-width) solid var(--color-navbar-divider);
+  }
+  .app-nav > .app-nav-heading:first-child {
+    margin-block-start: 0;
+    padding-block-start: 0;
+    border-block-start: 0;
   }
   .app-nav .app-nav-foot {
     padding-block-start: var(--space-sm);
