@@ -91,6 +91,54 @@
   cursor: pointer;
   user-select: none;
 }
+.filter-form select,
+.filter-form label:has(input),
+.choice-trigger,
+.choice {
+  border-radius: var(--radius-pill);
+}
+.filter-form label:has(input) input {
+  position: absolute;
+  width: var(--visually-hidden-size);
+  height: var(--visually-hidden-size);
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.filter-form label:has(input:focus-visible) {
+  outline: var(--focus-ring-width) solid var(--color-accent);
+  outline-offset: var(--focus-ring-width);
+}
+.filter-form label:has(input) .icon {
+  display: none;
+}
+.filter-form label:has(input:checked) .icon {
+  display: inline-block;
+}
+.choice-trigger-key {
+  color: var(--color-text-faint);
+  font-weight: var(--weight-normal);
+}
+.search-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.search-field .icon {
+  position: absolute;
+  inset-inline-start: var(--space-sm);
+  color: var(--color-text-faint);
+  pointer-events: none;
+}
+.filter-form .search-field input {
+  padding-inline-start: calc(2 * var(--space-sm) + var(--icon-size-sm));
+  border-color: var(--color-border-muted);
+  background: var(--color-canvas);
+}
+.filter-form .search-field input:focus {
+  background: var(--color-surface);
+}
 .filter-form label:has(input:checked) {
   border-color: var(--color-highlight);
   background: var(--color-accent-soft);

@@ -55,18 +55,18 @@
 </select>
 </div>
 
-<label for="cal-evals-only"><input type="checkbox" id="cal-evals-only"> {{ labels.calendar.evals_only }}</label>
-<label for="cal-teacherless-only"><input type="checkbox" id="cal-teacherless-only"> {{ labels.calendar.teacherless_filter }}</label>
+<label for="cal-evals-only"><input type="checkbox" id="cal-evals-only">{{ icon('check', url_for, site.icons, 'icon-sm') }}{{ labels.calendar.evals_only }}</label>
+<label for="cal-teacherless-only"><input type="checkbox" id="cal-teacherless-only">{{ icon('check', url_for, site.icons, 'icon-sm') }}{{ labels.calendar.teacherless_filter }}</label>
 </div>
 
 <div class="filter-group filter-group-last">
 <label for="cal-search-input" class="visually-hidden">{{ labels.calendar.search_label }}</label>
 <span class="filter-field-title" aria-hidden="true">{{ labels.calendar.search_label }}</span>
-<input type="text" id="cal-search-input" placeholder="{{ labels.calendar.search_placeholder }}" aria-label="{{ labels.calendar.search_label }}">
+<span class="search-field">{{ icon('search', url_for, site.icons, 'icon-sm') }}<input type="text" id="cal-search-input" placeholder="{{ labels.calendar.search_placeholder }}" aria-label="{{ labels.calendar.search_label }}"></span>
 </div>
 
 <div class="filter-group filter-group-reset">
-<button type="button" id="cal-reset-btn">{{ labels.calendar.reset_btn }}</button>
+<button type="button" id="cal-reset-btn" hidden>{{ icon('x', url_for, site.icons, 'icon-sm') }}{{ labels.calendar.reset_btn }}</button>
 </div>
 
 <div class="results-count" id="cal-results-count"></div>

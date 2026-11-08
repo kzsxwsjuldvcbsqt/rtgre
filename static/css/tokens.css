@@ -98,7 +98,7 @@
   --topbar-height: 3.5rem;
   --height-tabbar: 3.5rem;
   --width-app-sidebar: 15rem;
-  --width-toolbar-search: clamp(9rem, 18vw, 16rem);
+  --width-toolbar-search: clamp(12rem, 14vw, 13rem);
   --control-height: 2.25rem;
   --control-font-size: var(--text-sm);
   --touch-target: 2.75rem;

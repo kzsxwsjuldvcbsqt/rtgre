@@ -378,6 +378,12 @@
   .has-filter-sidebar .filter-form input[type="text"] {
     width: var(--width-toolbar-search);
   }
+  .has-filter-sidebar .filter-group-last {
+    order: -1;
+    margin-inline-end: var(--space-2xs);
+    padding-inline-end: var(--space-sm);
+    border-inline-end: var(--rule-width) solid var(--color-border-muted);
+  }
   .has-filter-sidebar .results-count {
     display: flex;
     align-self: flex-start;

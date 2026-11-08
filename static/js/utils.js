@@ -97,6 +97,18 @@
     });
   }
 
+  function buildIcon(href, className) {
+    var svgNs = "http://www.w3.org/2000/svg";
+    var svg = document.createElementNS(svgNs, "svg");
+    svg.setAttribute("class", className ? "icon " + className : "icon");
+    svg.setAttribute("aria-hidden", "true");
+    svg.setAttribute("focusable", "false");
+    var use = document.createElementNS(svgNs, "use");
+    use.setAttribute("href", href);
+    svg.appendChild(use);
+    return svg;
+  }
+
   function playMotion(element, className, done) {
     var token = {};
     element.motionToken = token;
@@ -129,6 +141,7 @@
   }
 
   global.AppUtils = {
+    buildIcon: buildIcon,
     playMotion: playMotion,
     formatText: formatText,
     parseGrade: parseGrade,

@@ -16,6 +16,7 @@
   data-label-filters-heading="{{ labels.class_page.filters_heading }}"
   data-label-category="{{ labels.class_page.category_filter }}"
   data-label-module="{{ labels.class_page.module_filter }}"
+  data-label-module-all="{{ labels.class_page.module_all }}"
   data-label-period="{{ labels.class_page.period_filter }}"
   data-label-reset="{{ labels.class_page.reset_filters }}"
   data-label-singular="{{ labels.class_page.results_count_singular }}"
@@ -26,6 +27,8 @@
   data-label-all="{{ labels.periods.all }}"
   data-categories='{{ active_categories | tojson }}'
   data-modules='{{ active_modules | tojson }}'
+  data-icon-check="{{ url_for('static/' ~ site.icons.sprite) }}#check"
+  data-icon-reset="{{ url_for('static/' ~ site.icons.sprite) }}#x"
 ></div>
 </div>
 
