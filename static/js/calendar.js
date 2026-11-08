@@ -577,6 +577,14 @@
     function render() {
       stopTimeMarkerTimer();
       saveState();
+      if (resetBtn) {
+        resetBtn.hidden =
+          state.view === resolveDefaultView() &&
+          state.layout === calendarConfig.default_layout &&
+          !state.evals &&
+          !state.teacherless &&
+          !state.search;
+      }
       renderCalendarView(currentClassEvents);
       updateTimeMarker();
       spotlightNow();

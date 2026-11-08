@@ -76,7 +76,7 @@ AppUtils.onDOMReady(function () {
 
     const defaultOpt = document.createElement("option");
     defaultOpt.value = "";
-    defaultOpt.textContent = labelAll;
+    defaultOpt.textContent = dataset.labelModuleAll;
     modOptGroup.appendChild(defaultOpt);
 
     modules.forEach(function (mod) {
@@ -101,7 +101,8 @@ AppUtils.onDOMReady(function () {
       cb.value = cat.id;
       cb.checked = true;
       lbl.appendChild(cb);
-      lbl.appendChild(document.createTextNode(" " + cat.label));
+      lbl.appendChild(AppUtils.buildIcon(dataset.iconCheck, "icon-sm"));
+      lbl.appendChild(document.createTextNode(cat.label));
       scrollGroup.appendChild(lbl);
     });
   }
@@ -113,7 +114,9 @@ AppUtils.onDOMReady(function () {
   const resetBtn = document.createElement("button");
   resetBtn.type = "button";
   resetBtn.id = "filter-reset";
-  resetBtn.textContent = labelReset;
+  resetBtn.hidden = true;
+  resetBtn.appendChild(AppUtils.buildIcon(dataset.iconReset, "icon-sm"));
+  resetBtn.appendChild(document.createTextNode(labelReset));
   resetGroup.appendChild(resetBtn);
   form.appendChild(resetGroup);
 
@@ -253,6 +256,13 @@ AppUtils.onDOMReady(function () {
     catCheckboxes.forEach(function (cb) {
       if (cb.checked) selectedCats.push(cb.value);
     });
+
+    if (resetButton) {
+      resetButton.hidden =
+        selectedPeriod === "upcoming" &&
+        !selectedModule &&
+        selectedCats.length === catCheckboxes.length;
+    }
 
     let visibleCount = 0;
 

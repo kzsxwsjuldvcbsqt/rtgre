@@ -6,18 +6,6 @@
   );
   const rows = [];
 
-  function buildIcon() {
-    const svgNs = "http://www.w3.org/2000/svg";
-    const svg = document.createElementNS(svgNs, "svg");
-    svg.setAttribute("class", "icon icon-sm");
-    svg.setAttribute("aria-hidden", "true");
-    svg.setAttribute("focusable", "false");
-    const use = document.createElementNS(svgNs, "use");
-    use.setAttribute("href", chevron);
-    svg.appendChild(use);
-    return svg;
-  }
-
   function closeRow(entry, animate) {
     if (entry.row.hidden) return;
     entry.trigger.setAttribute("aria-expanded", "false");
@@ -50,9 +38,13 @@
     trigger.setAttribute("aria-expanded", "false");
     trigger.setAttribute("aria-controls", select.id + "-choices");
     trigger.setAttribute("aria-label", label);
+    const triggerKey = document.createElement("span");
+    triggerKey.className = "choice-trigger-key";
+    triggerKey.textContent = label;
     const triggerText = document.createElement("span");
+    trigger.appendChild(triggerKey);
     trigger.appendChild(triggerText);
-    trigger.appendChild(buildIcon());
+    trigger.appendChild(AppUtils.buildIcon(chevron, "icon-sm"));
     select.insertAdjacentElement("afterend", trigger);
 
     const row = document.createElement("div");
@@ -85,7 +77,8 @@
       const current = valueProperty.get.call(select);
       const selected = select.options[select.selectedIndex];
       triggerText.textContent =
-        selected && selected.value !== "" ? selected.textContent : label;
+        selected && selected.value !== "" ? selected.textContent : "";
+      triggerText.hidden = triggerText.textContent === "";
       choices.forEach(function (choice) {
         choice.setAttribute(
           "aria-pressed",
