@@ -643,6 +643,9 @@
       render();
     });
 
+    window.addEventListener("resize", calendarView.fitTimeGrid);
+    if (document.fonts) document.fonts.ready.then(calendarView.fitTimeGrid);
+
     if (viewSelect) {
       viewSelect.addEventListener("change", function () {
         state.view = viewSelect.value;
