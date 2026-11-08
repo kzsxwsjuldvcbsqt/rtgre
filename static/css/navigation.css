@@ -45,13 +45,10 @@
   font-size: var(--text-base);
   font-weight: var(--weight-semibold);
 }
-.app-nav-group {
-  margin: var(--space-sm) var(--space-sm) var(--space-3xs);
-  color: var(--color-navbar-faint);
-  font-size: var(--text-xs);
-  font-weight: var(--weight-semibold);
-  letter-spacing: var(--tracking-eyebrow);
-  text-transform: uppercase;
+.app-nav-classes + .app-nav-classes::before {
+  content: "";
+  margin: var(--space-xs) var(--space-sm);
+  border-block-start: var(--rule-width) solid var(--color-navbar-divider);
 }
 .app-nav-links a {
   justify-content: space-between;
