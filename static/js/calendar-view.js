@@ -308,6 +308,7 @@
         hours.appendChild(hour);
       }
       viewContainer.insertBefore(hours, viewContainer.firstChild);
+      fitTimeGrid();
 
       viewContainer
         .querySelectorAll(".day-section")
@@ -681,7 +682,16 @@
       return li;
     }
 
-    return { render: renderCalendarView };
+    function fitTimeGrid() {
+      var hours = viewContainer.querySelector(".calendar-hours");
+      if (!hours) return;
+      viewContainer.style.setProperty(
+        "--calendar-grid-top",
+        hours.getBoundingClientRect().top + window.scrollY + "px",
+      );
+    }
+
+    return { render: renderCalendarView, fitTimeGrid: fitTimeGrid };
   }
   global.CalendarView = { create };
 })(globalThis);

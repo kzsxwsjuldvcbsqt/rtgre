@@ -292,6 +292,18 @@
   grid-row: after;
   margin-block: var(--space-md) 0;
 }
+.calendar-view-container.is-grid {
+  --calendar-fit-height: calc(
+    (100dvh - var(--calendar-grid-top) - var(--space-lg)) * 60 /
+      var(--calendar-grid-minutes)
+  );
+  --calendar-hour-height: clamp(
+    var(--calendar-hour-height-min),
+    var(--calendar-fit-height),
+    var(--calendar-hour-height-max)
+  );
+  --calendar-minute-height: calc(var(--calendar-hour-height) / 60);
+}
 .calendar-hours {
   position: relative;
   grid-row: body;
