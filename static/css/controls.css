@@ -269,28 +269,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background: var(--color-surface);
   box-shadow: var(--shadow-menu);
 }
-.is-revealing,
-.is-concealing {
-  overflow: clip;
-}
-.is-revealing {
-  animation: reveal var(--motion-reveal);
-}
-.is-concealing {
-  animation: reveal var(--motion-reveal) reverse forwards;
-}
-@keyframes reveal {
-  from {
-    height: 0;
-    opacity: 0;
-    clip-path: inset(0 0 100% 0);
-  }
-  to {
-    height: auto;
-    opacity: 1;
-    clip-path: inset(0);
-  }
-}
 .menu[open] > summary {
   background: var(--color-canvas);
   color: var(--color-text);

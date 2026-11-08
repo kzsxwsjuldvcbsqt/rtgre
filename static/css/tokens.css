@@ -139,7 +139,6 @@
   --transition-fast: 180ms ease;
   --transition-undim: opacity 0s 150ms;
   --motion-spotlight: 1400ms linear 250ms;
-  --motion-reveal: 220ms cubic-bezier(0.2, 0, 0, 1);
   --size-spotlight-halo: 0.25rem;
   --size-spotlight-ping: 0.625rem;
   --scale-spotlight-line: 2;

@@ -6,25 +6,17 @@
   );
   const rows = [];
 
-  function closeRow(entry, animate) {
-    if (entry.row.hidden) return;
+  function closeRow(entry) {
     entry.trigger.setAttribute("aria-expanded", "false");
-    if (!animate) {
-      entry.row.hidden = true;
-      return;
-    }
-    AppUtils.playMotion(entry.row, "is-concealing", function () {
-      entry.row.hidden = entry.trigger.getAttribute("aria-expanded") !== "true";
-    });
+    entry.row.hidden = true;
   }
 
   function openRow(entry) {
     rows.forEach(function (other) {
-      if (other !== entry) closeRow(other, false);
+      if (other !== entry) closeRow(other);
     });
     entry.trigger.setAttribute("aria-expanded", "true");
     entry.row.hidden = false;
-    AppUtils.playMotion(entry.row, "is-revealing");
   }
 
   function enhance(select) {
@@ -101,7 +93,7 @@
 
     trigger.addEventListener("click", function () {
       if (trigger.getAttribute("aria-expanded") === "true") {
-        closeRow(entry, true);
+        closeRow(entry);
       } else {
         openRow(entry);
       }
@@ -114,13 +106,13 @@
         valueProperty.set.call(select, choice.dataset.value);
         select.dispatchEvent(new Event("change", { bubbles: true }));
       }
-      closeRow(entry, true);
+      closeRow(entry);
       trigger.focus();
     });
 
     if (select.parentElement) {
       new MutationObserver(function () {
-        if (select.parentElement.hidden) closeRow(entry, false);
+        if (select.parentElement.hidden) closeRow(entry);
       }).observe(select.parentElement, {
         attributes: true,
         attributeFilter: ["hidden"],
@@ -138,7 +130,7 @@
     document.addEventListener("click", function (event) {
       if (event.target.closest(".choice-trigger, .choice-row")) return;
       rows.forEach(function (entry) {
-        closeRow(entry, true);
+        closeRow(entry);
       });
     });
 
@@ -146,7 +138,7 @@
       if (event.key !== "Escape") return;
       rows.forEach(function (entry) {
         if (entry.row.hidden) return;
-        closeRow(entry, true);
+        closeRow(entry);
         entry.trigger.focus();
       });
     });
