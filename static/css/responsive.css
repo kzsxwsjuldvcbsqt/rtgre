@@ -429,4 +429,23 @@
   .app-main {
     grid-column: 2;
   }
+  .app-sidebar-head,
+  .app-nav-heading,
+  .app-nav .app-nav-foot {
+    margin-inline: calc(-1 * var(--space-sm));
+    padding-inline: var(--space-sm);
+  }
+  .app-sidebar-head {
+    padding-block-end: var(--space-md);
+    border-block-end: var(--rule-width) solid var(--color-navbar-divider);
+  }
+  .app-nav-heading {
+    margin-block-start: var(--space-md);
+    padding: var(--space-md) calc(2 * var(--space-sm)) 0;
+    border-block-start: var(--rule-width) solid var(--color-navbar-divider);
+  }
+  .app-nav .app-nav-foot {
+    padding-block-start: var(--space-sm);
+    border-block-start: var(--rule-width) solid var(--color-navbar-divider);
+  }
 }
