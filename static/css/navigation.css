@@ -36,6 +36,9 @@
 .app-nav a[aria-current="page"] .icon {
   color: var(--color-highlight);
 }
+.app-nav-classes a[aria-current="page"] {
+  color: var(--color-highlight);
+}
 .app-nav-heading {
   margin: var(--space-lg) var(--space-sm) var(--space-2xs);
   color: var(--color-navbar-text);
