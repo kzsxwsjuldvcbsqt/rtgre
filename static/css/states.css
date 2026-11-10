@@ -52,7 +52,11 @@ select:disabled {
   tbody tr:hover {
     background: var(--color-canvas);
   }
-  button:hover:not(:disabled):not(.heading-toggle-btn, .picker-back),
+  button:hover:not(:disabled):not(
+      .heading-toggle-btn,
+      .picker-back,
+      .segmented button
+    ),
   select:hover:not(:disabled):not(:focus):not([aria-invalid="true"]),
   input:hover:not(:disabled):not(:focus):not([aria-invalid="true"]),
   textarea:hover:not(:disabled):not(:focus):not([aria-invalid="true"]),
@@ -62,6 +66,10 @@ select:disabled {
     border-color: var(--color-text-faint);
     background: var(--color-surface-hover);
     text-decoration: none;
+  }
+  .filter-form .segmented button:not([aria-pressed="true"]):hover {
+    background: var(--color-canvas);
+    color: var(--color-text);
   }
   .menu-list button:hover,
   .menu-list a:hover {

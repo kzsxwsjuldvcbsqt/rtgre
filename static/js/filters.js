@@ -41,6 +41,7 @@ AppUtils.onDOMReady(function () {
 
   const periodSelect = document.createElement("select");
   periodSelect.id = "filter-period";
+  periodSelect.dataset.control = "segmented";
   periodSelect.setAttribute("aria-label", labelPeriod);
 
   const periodOptGroup = document.createElement("optgroup");
@@ -69,23 +70,33 @@ AppUtils.onDOMReady(function () {
 
     const modSelect = document.createElement("select");
     modSelect.id = "filter-module";
+    modSelect.dataset.control = "menu";
+    modSelect.dataset.searchLabel = dataset.labelModuleSearch;
+    modSelect.dataset.emptyLabel = dataset.labelModuleEmpty;
     modSelect.setAttribute("aria-label", labelModule);
-
-    const modOptGroup = document.createElement("optgroup");
-    modOptGroup.label = labelModule;
 
     const defaultOpt = document.createElement("option");
     defaultOpt.value = "";
     defaultOpt.textContent = dataset.labelModuleAll;
-    modOptGroup.appendChild(defaultOpt);
+    modSelect.appendChild(defaultOpt);
 
+    const modGroups = new Map();
     modules.forEach(function (mod) {
+      if (!modGroups.has(mod.group)) {
+        const group = document.createElement("optgroup");
+        group.label = mod.group || labelModule;
+        modGroups.set(mod.group, group);
+        modSelect.appendChild(group);
+      }
       const opt = document.createElement("option");
-      opt.value = mod;
-      opt.textContent = mod;
-      modOptGroup.appendChild(opt);
+      opt.value = mod.code;
+      opt.dataset.code = mod.code;
+      opt.dataset.label = mod.label;
+      opt.textContent = mod.label
+        ? mod.code + dataset.labelModuleSeparator + mod.label
+        : mod.code;
+      modGroups.get(mod.group).appendChild(opt);
     });
-    modSelect.appendChild(modOptGroup);
     modItem.appendChild(makeFieldTitle(labelModule));
     modItem.appendChild(modSelect);
     scrollGroup.appendChild(modItem);
@@ -168,7 +179,11 @@ AppUtils.onDOMReady(function () {
     }
 
     if (state.mod !== undefined && moduleSelect) {
-      if (modules.includes(state.mod)) {
+      if (
+        modules.some(function (mod) {
+          return mod.code === state.mod;
+        })
+      ) {
         moduleSelect.value = state.mod;
       } else {
         moduleSelect.value = "";

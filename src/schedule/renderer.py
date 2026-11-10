@@ -94,8 +94,13 @@ def render_site(
 
     cat_map = {c.id: c.label for c in app_config.categories}
     module_labels: dict[str, str] = {}
+    module_kinds: dict[str, str] = {}
     for code, module in module_code_variants(app_config.curriculum):
         module_labels.setdefault(code, module["label"])
+        module_kinds.setdefault(code, module["kind"])
+    kinds = app_config.curriculum.get("kinds", [])
+    kind_labels = {kind["id"]: kind["label"] for kind in kinds}
+    kind_rank = {kind["id"]: index for index, kind in enumerate(kinds)}
     module_styles = resolve_module_styles(
         app_config.curriculum,
         sorted(
@@ -221,7 +226,20 @@ def render_site(
             active_categories = [
                 c for c in app_config.categories if c.id in present_cat_ids and c.enabled
             ]
-            active_modules = sorted(list({ev.module_code for ev in evals if ev.module_code}))
+            active_modules = sorted(
+                (
+                    {
+                        "code": code,
+                        "label": module_labels.get(code, ""),
+                        "group": kind_labels.get(module_kinds.get(code), ""),
+                    }
+                    for code in {ev.module_code for ev in evals if ev.module_code}
+                ),
+                key=lambda option: (
+                    kind_rank.get(module_kinds.get(option["code"]), len(kind_rank)),
+                    option["code"],
+                ),
+            )
 
             cls_evals_page_path = f"classes/{cls.id}/{section_files['evaluations']}"
             cls_evals_html = class_evals_tpl.render(
