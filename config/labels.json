@@ -16,19 +16,6 @@
     "class_switcher": "Changer de classe",
     "more": "Plus de liens"
   },
-  "dashboard": {
-    "today": "Aujourd’hui",
-    "upcoming": "Prochains cours",
-    "no_courses": "Aucun cours à venir.",
-    "see_calendar": "Emploi du temps",
-    "next_evaluation": "Prochaine évaluation",
-    "no_evaluation": "Aucune évaluation à venir.",
-    "see_evaluations": "Toutes les évaluations",
-    "averages": "Moyennes",
-    "no_grades": "Aucune note saisie pour l’instant.",
-    "see_grades": "Saisir mes notes",
-    "noscript": "Activez JavaScript pour afficher le tableau de bord."
-  },
   "resources": {
     "title": "Modules",
     "chamilo_space": "Espace Chamilo",

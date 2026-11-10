@@ -210,7 +210,8 @@ class ScheduleTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             render_site(config, {self.classes[0].id: [event]}, output_dir=directory)
             root = Path(directory) / "classes" / self.classes[0].id
-            calendar = (root / "calendar.html").read_text()
+            calendar = (root / "index.html").read_text()
+            self.assertIn('content="0; url=index.html"', (root / "calendar.html").read_text())
             self.assertNotIn("</script><script>window.injected=1</script>", calendar)
             embedded = calendar.split('id="class-events-data">', 1)[1].split("</script>", 1)[0]
             self.assertEqual(

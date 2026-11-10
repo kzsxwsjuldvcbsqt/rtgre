@@ -14,7 +14,6 @@
 @import url("lists.css") layer(components);
 @import url("calendar.css") layer(components);
 @import url("grades.css") layer(components);
-@import url("dashboard.css") layer(components);
 @import url("boxes.css") layer(components);
 @import url("picker.css") layer(components);
 @import url("states.css") layer(states);

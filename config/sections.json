@@ -1,25 +1,21 @@
 {
   "sections": [
     {
-      "id": "home",
-      "icon": "home",
-      "label": "Accueil",
+      "id": "calendar",
+      "icon": "calendar",
+      "label": "Emploi du temps",
+      "short_label": "Planning",
       "file": "index.html",
-      "kind": "internal"
+      "kind": "internal",
+      "previous_files": [
+        "calendar.html"
+      ]
     },
     {
       "id": "resources",
       "icon": "book",
       "label": "Modules",
       "file": "ressources.html",
-      "kind": "internal"
-    },
-    {
-      "id": "calendar",
-      "icon": "calendar",
-      "label": "Emploi du temps",
-      "short_label": "Planning",
-      "file": "calendar.html",
       "kind": "internal"
     },
     {

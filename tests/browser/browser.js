@@ -3,7 +3,7 @@
   try {
     for (const width of [320, 390, 768, 959, 960, 1440]) {
       for (const page of [
-        "calendar.html#view=week&date=2026-09-08",
+        "index.html#view=week&date=2026-09-08",
         "notes.html",
         "evaluations.html#period=all",
       ]) {
@@ -42,7 +42,7 @@
       [960, "week"],
     ]) {
       sessionStorage.removeItem("calendar_settings");
-      const cal = await frame("classes/b3cya/calendar.html", width);
+      const cal = await frame("classes/b3cya/index.html", width);
       assert(
         cal.contentDocument.getElementById("cal-view-select").value ===
           expected,
@@ -320,7 +320,7 @@
     localStorage.setItem("grades_b3cya", JSON.stringify({ R501: 16.5 }));
 
     const calendar = await frame(
-      "classes/b3cya/calendar.html#view=week&date=2026-09-08&now=2026-09-08T09:00",
+      "classes/b3cya/index.html#view=week&date=2026-09-08&now=2026-09-08T09:00",
     );
     const cd = calendar.contentDocument,
       cw = calendar.contentWindow;
@@ -361,7 +361,7 @@
       "Current day is not highlighted in day view",
     );
     calendar.remove();
-    const malformed = await frame("classes/b3cya/calendar.html#search=%");
+    const malformed = await frame("classes/b3cya/index.html#search=%");
     assert(
       malformed.contentDocument.getElementById("cal-results-count").textContent
         .length > 0,
@@ -370,7 +370,7 @@
     malformed.remove();
     sessionStorage.removeItem("calendar_settings");
     const custom = await frame(
-      "custom/classes/b3cya/calendar.html#date=2026-09-08",
+      "custom/classes/b3cya/index.html#date=2026-09-08",
     );
     const ud = custom.contentDocument,
       uw = custom.contentWindow;

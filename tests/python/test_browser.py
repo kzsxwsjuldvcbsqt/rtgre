@@ -56,7 +56,7 @@ class BrowserTests(unittest.TestCase):
                 '<script src="harness.js"></script><script src="browser-report.js"></script>'
                 '<script src="cross-browser.js"></script></body></html>'
             )
-            calendar = root / "classes" / classes[0].id / "calendar.html"
+            calendar = root / "classes" / classes[0].id / "index.html"
             disabled = calendar.read_text().replace(
                 "<script ", '<script type="application/disabled" '
             )
