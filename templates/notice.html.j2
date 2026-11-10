@@ -2,8 +2,8 @@
 {% from "_nav.html.j2" import app_sidebar, app_topbar %}
 {% from "_icons.html.j2" import icon %}
 {% block title %}{{ labels.notice.title }} - {{ site.title }}{% endblock %}
-{% block sidebar %}{{ app_sidebar(sections, 'notice', none, none, url_for, labels, site) }}{% endblock %}
-{% block topbar %}{{ app_topbar([], labels.notice.title, labels) }}{% endblock %}
+{% block sidebar %}{{ app_sidebar(sections, 'notice', class_config, section_files.notice, url_for, labels, site) }}{% endblock %}
+{% block topbar %}{% if class_config %}{{ app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.calendar))], labels.notice.title, labels) }}{% else %}{{ app_topbar([(labels.index.heading, url_for('index.html'))], labels.notice.title, labels) }}{% endif %}{% endblock %}
 {% block content %}
 <div class="page-container">
 <div class="text-block">

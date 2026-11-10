@@ -143,10 +143,10 @@
   }
 }
 @media (max-width: 59.99em) {
-  .app-breadcrumb li:first-child:not(:last-child) {
+  .app:has(.class-switcher) .app-breadcrumb li:first-child:not(:last-child) {
     display: none;
   }
-  .app-breadcrumb li:nth-child(2)::before {
+  .app:has(.class-switcher) .app-breadcrumb li:nth-child(2)::before {
     content: none;
   }
   .data-box table:not(.grades-summary-table) tbody tr {
