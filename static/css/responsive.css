@@ -337,20 +337,12 @@
   .filters-toggle {
     display: none;
   }
-  .has-filter-sidebar .filter-form select:has(+ .choice-trigger) {
+  .has-filter-sidebar .filter-form select[data-control] {
     display: none;
   }
-  .filter-form .choice-trigger {
+  .filter-form .choice-trigger,
+  .segmented {
     display: inline-flex;
-  }
-  .choice-row:not([hidden]) {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-xs);
-    margin-block-start: var(--space-sm);
-    padding-block-start: var(--space-sm);
-    border-block-start: var(--rule-width) solid var(--color-border-muted);
   }
   .has-filter-sidebar > .filter-sidebar,
   .page-band {
