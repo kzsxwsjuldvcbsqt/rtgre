@@ -353,6 +353,7 @@ def load_config(config_dir: str = "config") -> AppConfig:
             icon=s.get("icon"),
             short_label=s.get("short_label"),
             statuses=tuple(s.get("statuses", [])),
+            previous_files=tuple(s.get("previous_files", [])),
         )
         for s in sections_data.get("sections", [])
     ]
@@ -372,7 +373,13 @@ def load_config(config_dir: str = "config") -> AppConfig:
         for section in sections
     ):
         raise ValueError("Invalid section short label")
-    section_files = [section.file for section in sections if section.file]
+    if any(section.previous_files and section.kind != "internal" for section in sections):
+        raise ValueError("Previous files require an internal section")
+    section_files = [
+        filename
+        for section in sections
+        for filename in ((section.file,) if section.file else ()) + section.previous_files
+    ]
     if len(set(section_files)) != len(section_files) or any(
         not valid_relative_file(filename) for filename in section_files
     ):

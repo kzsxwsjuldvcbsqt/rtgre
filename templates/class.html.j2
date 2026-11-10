@@ -4,7 +4,7 @@
 {% from "_icons.html.j2" import icon %}
 {% block title %}{% for s in sections %}{% if s.id == 'evaluations' %}{{ s.label }}{% endif %}{% endfor %} - {{ class_config.label }} - {{ site.title }}{% endblock %}
 {% block sidebar %}{{ app_sidebar(sections, 'evaluations', class_config, section_files.evaluations, url_for, labels, site) }}{% endblock %}
-{% block topbar %}{% call app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.home))], (sections | selectattr('id', 'equalto', 'evaluations') | first).label, labels) %}<button type="button" class="heading-toggle-btn filters-toggle" aria-expanded="true" aria-controls="filters-container" aria-label="{{ labels.calendar.toggle_controls }}">{{ icon('filter', url_for, site.icons) }}</button>{% endcall %}{% endblock %}
+{% block topbar %}{% call app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.calendar))], (sections | selectattr('id', 'equalto', 'evaluations') | first).label, labels) %}<button type="button" class="heading-toggle-btn filters-toggle" aria-expanded="true" aria-controls="filters-container" aria-label="{{ labels.calendar.toggle_controls }}">{{ icon('filter', url_for, site.icons) }}</button>{% endcall %}{% endblock %}
 {% block head_scripts %}
 <script defer src="{{ url_for('static/js/filters.js') }}"></script>
 <script defer src="{{ url_for('static/js/choice-rows.js') }}" data-chevron="{{ url_for('static/' ~ site.icons.sprite) }}#chevron-down"></script>

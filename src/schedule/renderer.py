@@ -128,6 +128,7 @@ def render_site(
     tpl_index = env.get_template("index.html.j2")
     tpl_notice = env.get_template("notice.html.j2")
     tpl_404 = env.get_template("404.html.j2")
+    tpl_redirect = env.get_template("redirect.html.j2")
 
     index_page_path = "index.html"
     html_index = tpl_index.render(
@@ -183,7 +184,6 @@ def render_site(
     elif cname_path.is_file():
         cname_path.unlink()
 
-    class_home_tpl = env.get_template("class_home.html.j2")
     class_evals_tpl = env.get_template("class.html.j2")
     calendar_tpl = env.get_template("calendar.html.j2")
     grades_tpl = env.get_template("grades.html.j2")
@@ -273,42 +273,15 @@ def render_site(
             with open(class_dir / section_files["calendar"], "w", encoding="utf-8") as f:
                 f.write(cal_html)
 
-            grades_data = get_class_grades_data(cls, app_config.curriculum, app_config.labels)
-            grade_settings = app_config.site["grades"]
-            cls_home_page_path = f"classes/{cls.id}/{section_files['home']}"
-            cls_home_html = class_home_tpl.render(
-                site=app_config.site,
-                labels=app_config.labels,
-                class_config=cls,
-                sections=class_sections,
-                favicons=active_favicons,
-                generated_at=now_str,
-                dashboard_payload={
-                    "events": initial_payload,
-                    "categories": cat_map,
-                    "breaks": app_config.calendar_config.get("breaks", []),
-                    "timezone": app_config.site["timezone"],
-                    "grades": grades_data,
-                    "gradeLimits": {
-                        "minimum": grade_settings["minimum"],
-                        "maximum": grade_settings["maximum"],
-                        "maxEntries": grade_settings["max_entries"],
-                        "decimals": grade_settings["decimals"],
-                        "storageKey": f"{grade_settings['storage_key_prefix']}_{cls.id}",
-                        "detailStorageKey": (
-                            f"{grade_settings['detail_storage_key_prefix']}_{cls.id}"
-                        ),
-                    },
-                    "days": app_config.labels["days"],
-                    "months": app_config.labels["months"],
-                    "dayTitle": app_config.labels["calendar"]["day_title"],
-                    "labels": app_config.labels["dashboard"],
-                },
-                url_for=lambda target, p=cls_home_page_path: get_rel_path(p, target),
-            )
-            with open(class_dir / section_files["home"], "w", encoding="utf-8") as f:
-                f.write(cls_home_html)
+            for section in class_sections:
+                for previous_file in section.previous_files:
+                    redirect_html = tpl_redirect.render(
+                        site=app_config.site, section=section, target=section.file
+                    )
+                    with open(class_dir / previous_file, "w", encoding="utf-8") as f:
+                        f.write(redirect_html)
 
+            grades_data = get_class_grades_data(cls, app_config.curriculum, app_config.labels)
             grades_page_path = f"classes/{cls.id}/{section_files['grades']}"
             grades_html = grades_tpl.render(
                 site=app_config.site,

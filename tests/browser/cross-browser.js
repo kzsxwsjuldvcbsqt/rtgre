@@ -7,7 +7,7 @@
       throw new Error("Color scheme preference was not applied");
     }
     for (const width of [320, 390, 768, 959, 960, 1440]) {
-      for (const page of ["calendar.html", "notes.html"]) {
+      for (const page of ["index.html", "notes.html"]) {
         const current = await frame("classes/b3cya/" + page, width);
         if (current.contentDocument.documentElement.scrollWidth > width) {
           throw new Error("Horizontal overflow on " + page);

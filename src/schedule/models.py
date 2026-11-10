@@ -126,6 +126,7 @@ class SectionConfig:
     icon: str | None = None
     short_label: str | None = None
     statuses: tuple[str, ...] = ()
+    previous_files: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)

@@ -4,7 +4,7 @@
 {% block title %}{{ labels.index.heading }} - {{ site.title }}{% endblock %}
 {% block head_scripts %}
 {% set ns = namespace(urls={}) %}
-{% for prog in programs %}{% for cls in prog.classes %}{% set _ = ns.urls.update({cls.id: url_for('classes/' ~ cls.id ~ '/' ~ section_files.home)}) %}{% endfor %}{% endfor %}
+{% for prog in programs %}{% for cls in prog.classes %}{% set _ = ns.urls.update({cls.id: url_for('classes/' ~ cls.id ~ '/' ~ section_files.calendar)}) %}{% endfor %}{% endfor %}
 <script src="{{ url_for('static/js/remember-class.js') }}" data-class-urls='{{ ns.urls | tojson }}'></script>
 <script defer src="{{ url_for('static/js/class-picker.js') }}"></script>
 {% endblock %}
@@ -29,7 +29,7 @@
 <h2 class="picker-title" id="picker-title-{{ prog.id }}">{{ labels.index.class_question }}</h2>
 <ul class="picker-options">
 {% for cls in prog.classes %}
-<li><a class="picker-option" href="{{ url_for('classes/' ~ cls.id ~ '/' ~ section_files.home) }}"><span class="picker-option-label">{{ cls.label }}</span>{{ icon('chevron-right', url_for, site.icons, 'picker-chevron') }}</a></li>
+<li><a class="picker-option" href="{{ url_for('classes/' ~ cls.id ~ '/' ~ section_files.calendar) }}"><span class="picker-option-label">{{ cls.label }}</span>{{ icon('chevron-right', url_for, site.icons, 'picker-chevron') }}</a></li>
 {% endfor %}
 </ul>
 </section>
