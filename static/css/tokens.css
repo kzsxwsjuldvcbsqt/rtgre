@@ -31,7 +31,7 @@
 
   --color-danger: #9b1c1c;
   --color-danger-soft: #fde8e8;
-  --color-kind-resource: var(--color-surface);
+  --color-kind-resource: var(--color-canvas);
   --color-kind-special: #fcefd8;
   --color-sae-1: #e3edfc;
   --color-sae-2: #e1f3e5;
