@@ -44,10 +44,3 @@
   --label-bg: var(--color-label-slate-bg);
   --label-fg: var(--color-label-slate-fg);
 }
-.label-dot {
-  flex: none;
-  width: var(--size-label-dot);
-  height: var(--size-label-dot);
-  border-radius: var(--radius-pill);
-  background: var(--label-fg);
-}

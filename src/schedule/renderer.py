@@ -253,9 +253,7 @@ def render_site(
                 sections=class_sections,
                 evaluations=evals,
                 months_grouped=months_grouped,
-                active_categories=[
-                    {"id": c.id, "label": c.label, "tone": c.tone} for c in active_categories
-                ],
+                active_categories=[{"id": c.id, "label": c.label} for c in active_categories],
                 active_modules=active_modules,
                 module_labels=module_labels,
                 category_map=cat_map,
