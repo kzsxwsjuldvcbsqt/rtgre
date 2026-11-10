@@ -4,9 +4,6 @@
 {% block title %}{% for s in sections %}{% if s.id == 'grades' %}{{ s.label }}{% endif %}{% endfor %} - {{ class_config.label }} - {{ site.title }}{% endblock %}
 {% block sidebar %}{{ app_sidebar(sections, 'grades', class_config, section_files.grades, url_for, labels, site) }}{% endblock %}
 {% block topbar %}{% call app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.calendar))], (sections | selectattr('id', 'equalto', 'grades') | first).label, labels) %}
-{% if grades_data.has_details %}
-<label class="toggle-pill" for="grades-detail-toggle" id="grades-detail-option" hidden><input type="checkbox" id="grades-detail-toggle">{{ icon('check', url_for, site.icons, 'icon-sm') }}<span class="label-full">{{ labels.grades.detail_toggle }}</span><span class="label-short" aria-hidden="true">{{ labels.grades.detail_toggle_short }}</span></label>
-{% endif %}
 <div class="grades-actions" id="grades-actions" role="group" aria-label="{{ labels.grades.actions }}" hidden>
 <button type="button" class="btn" id="grades-import-btn">{{ icon('upload', url_for, site.icons) }}<span class="btn-label">{{ labels.grades.import_btn }}</span></button>
 <button type="button" class="btn" id="grades-export-btn">{{ icon('download', url_for, site.icons) }}<span class="btn-label">{{ labels.grades.export_btn }}</span></button>
@@ -16,10 +13,15 @@
 {% endcall %}{% endblock %}
 {% block content %}
 <div class="page-container grades-page">
+<div class="page-band grades-band">
+<p class="privacy-notice">{{ labels.grades.privacy_notice }}</p>
+{% if grades_data.has_details %}
+<label class="toggle-pill" for="grades-detail-toggle" id="grades-detail-option" hidden><input type="checkbox" id="grades-detail-toggle">{{ icon('check', url_for, site.icons, 'icon-sm') }}{{ labels.grades.detail_toggle }}</label>
+{% endif %}
+</div>
 <noscript>
 <p class="noscript-notice">{{ labels.grades.noscript_notice }}</p>
 </noscript>
-<p class="privacy-notice">{{ labels.grades.privacy_notice }}</p>
 <div id="grades-message" class="grades-message" role="status" aria-live="polite" hidden></div>
 
 {% if grades_data.annual_units %}
