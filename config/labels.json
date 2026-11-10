@@ -52,6 +52,7 @@
     "semester_column": "Semestre",
     "average_column": "Moyenne",
     "detail_toggle": "Détail des évaluations",
+    "detail_toggle_short": "Détail",
     "evaluation_weight": "coef. {weight}",
     "evaluation_label": "Évaluation",
     "computed_grade": "Note calculée"
