@@ -299,6 +299,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .menu-list .icon {
   color: var(--color-text-faint);
 }
+.btn-danger,
+.btn-danger .icon {
+  color: var(--color-danger);
+}
 .menu-list .menu-item-danger {
   color: var(--color-danger);
 }

@@ -35,23 +35,30 @@
   font-weight: var(--weight-semibold);
 }
 .grades-page .privacy-notice {
-  margin-block: 0;
+  margin-block: 0 var(--space-md);
 }
-.grades-toolbar {
-  align-items: center;
+.grades-actions {
+  display: flex;
+  gap: var(--space-xs);
+}
+.app-topbar .toggle-pill .label-short {
+  display: none;
 }
 @media (max-width: 59.99em) {
-  .grades-toolbar {
-    flex-wrap: wrap;
+  .grades-actions .btn {
+    padding-inline: var(--space-sm);
   }
-  .grades-toolbar .privacy-notice {
-    flex-basis: 100%;
+  .grades-actions .btn-label,
+  .app-topbar .toggle-pill .label-full {
+    position: absolute;
+    width: var(--visually-hidden-size);
+    height: var(--visually-hidden-size);
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
   }
-  .grades-page .grades-toolbar .toggle-pill {
-    margin-inline-start: 0;
-  }
-  .grades-toolbar .grades-menu {
-    margin-inline-start: auto;
+  .app-topbar .toggle-pill .label-short {
+    display: inline;
   }
   .grades-summary-table {
     table-layout: auto;
@@ -62,10 +69,6 @@
   .grades-summary-table tbody > tr > * {
     font-size: var(--text-xs);
   }
-}
-.grades-toolbar .toggle-pill {
-  flex: none;
-  margin-inline-start: auto;
 }
 .evaluation-row .col-subject {
   padding-inline-start: var(--space-xl);
