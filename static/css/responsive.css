@@ -178,7 +178,8 @@
   }
   .has-filter-sidebar
     > .filter-sidebar
-    > :is(#calendar-controls, #filters-container) {
+    > :is(#calendar-controls, #filters-container),
+  .page-band {
     margin: calc(-1 * var(--space-lg)) calc(-1 * var(--page-gutter))
       var(--space-lg);
     width: auto;
@@ -351,7 +352,8 @@
     padding-block-start: var(--space-sm);
     border-block-start: var(--rule-width) solid var(--color-border-muted);
   }
-  .has-filter-sidebar > .filter-sidebar {
+  .has-filter-sidebar > .filter-sidebar,
+  .page-band {
     margin: calc(-1 * var(--space-lg)) calc(-1 * var(--page-gutter))
       var(--space-lg);
     padding: var(--space-sm) var(--page-gutter);

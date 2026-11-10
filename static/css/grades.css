@@ -35,21 +35,31 @@
   font-weight: var(--weight-semibold);
 }
 .grades-page .privacy-notice {
-  margin-block: 0 var(--space-md);
+  margin-block: 0;
+}
+.grades-band {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+.grades-band .toggle-pill {
+  flex: none;
+}
+.grades-band .privacy-notice {
+  display: flex;
+  align-items: center;
+  min-height: var(--control-height);
 }
 .grades-actions {
   display: flex;
   gap: var(--space-xs);
 }
-.app-topbar .toggle-pill .label-short {
-  display: none;
-}
 @media (max-width: 59.99em) {
   .grades-actions .btn {
     padding-inline: var(--space-sm);
   }
-  .grades-actions .btn-label,
-  .app-topbar .toggle-pill .label-full {
+  .grades-actions .btn-label {
     position: absolute;
     width: var(--visually-hidden-size);
     height: var(--visually-hidden-size);
@@ -57,8 +67,8 @@
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
   }
-  .app-topbar .toggle-pill .label-short {
-    display: inline;
+  .grades-band {
+    flex-wrap: wrap;
   }
   .grades-summary-table {
     table-layout: auto;
