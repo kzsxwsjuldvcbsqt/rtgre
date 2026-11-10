@@ -50,6 +50,8 @@
   display: flex;
   align-items: center;
   min-height: var(--control-height);
+  margin-inline-start: auto;
+  text-align: end;
 }
 .grades-actions {
   display: flex;
@@ -69,6 +71,10 @@
   }
   .grades-band {
     flex-wrap: wrap;
+  }
+  .grades-band .privacy-notice {
+    margin-inline-start: 0;
+    text-align: start;
   }
   .grades-summary-table {
     table-layout: auto;
