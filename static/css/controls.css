@@ -299,6 +299,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
   opacity: 0.6;
 }
+.cal-nav-start {
+  display: contents;
+}
 .cal-nav-center {
   display: flex;
   align-items: center;

@@ -75,12 +75,14 @@
 
 <div class="section-main">
 <div id="calendar-nav-bar" class="calendar-nav-bar" hidden>
+<div class="cal-nav-start">
 <div class="filter-group-item" id="cal-date-input-group">
 <label for="cal-date-input" class="visually-hidden">{{ labels.fields.date }}</label>
 <span class="filter-field-title" aria-hidden="true">{{ labels.fields.date }}</span>
 <input type="date" id="cal-date-input" min="{{ site.school_year.first_date }}" max="{{ site.school_year.last_date }}">
 </div>
 <button type="button" id="cal-today-btn">{{ labels.calendar.today_btn }}</button>
+</div>
 <div class="cal-nav-center">
 <button type="button" id="cal-prev-btn" aria-label="{{ labels.calendar.prev_btn }}"><span class="btn-text">{{ labels.calendar.prev_btn }}</span><span class="btn-symbol">{{ icon('chevron-left', url_for, site.icons) }}</span></button>
 <button type="button" id="cal-next-btn" aria-label="{{ labels.calendar.next_btn }}"><span class="btn-text">{{ labels.calendar.next_btn }}</span><span class="btn-symbol">{{ icon('chevron-right', url_for, site.icons) }}</span></button>
