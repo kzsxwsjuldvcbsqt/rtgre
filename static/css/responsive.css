@@ -337,6 +337,22 @@
   .filters-toggle {
     display: none;
   }
+  .calendar-nav-bar:not([hidden]) {
+    display: grid;
+    grid-template-columns: minmax(max-content, 1fr) auto minmax(0, 1fr);
+  }
+  .cal-nav-start {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+  }
+  .cal-nav-center #cal-next-btn {
+    order: 1;
+  }
+  .cal-period-heading {
+    min-width: var(--width-period-heading);
+    text-align: center;
+  }
   .has-filter-sidebar .filter-form select[data-control] {
     display: none;
   }
