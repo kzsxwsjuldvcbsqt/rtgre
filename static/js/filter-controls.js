@@ -151,7 +151,11 @@
     search.placeholder = select.dataset.searchLabel || label;
     search.setAttribute("aria-label", search.placeholder);
     search.autocomplete = "off";
-    panel.appendChild(search);
+    const searchField = document.createElement("span");
+    searchField.className = "search-field choice-menu-search-field";
+    searchField.appendChild(AppUtils.buildIcon(sprite + "#search", "icon-sm"));
+    searchField.appendChild(search);
+    panel.appendChild(searchField);
 
     const list = document.createElement("div");
     list.className = "choice-menu-list";

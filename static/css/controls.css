@@ -203,11 +203,16 @@
   padding: 0;
   overflow: hidden;
 }
-.choice-menu-search {
+.choice-menu-search-field {
   flex: none;
-  margin: var(--space-2xs);
+  width: auto;
+  margin: var(--space-sm) var(--space-sm) var(--space-xs);
+}
+.choice-menu-search {
+  width: 100%;
   min-height: var(--control-height);
-  padding-inline: var(--space-sm);
+  padding-inline: calc(2 * var(--space-sm) + var(--icon-size-sm))
+    var(--space-sm);
   border: var(--rule-width) solid var(--color-border-muted);
   border-radius: var(--radius-control);
   background: var(--color-canvas);
