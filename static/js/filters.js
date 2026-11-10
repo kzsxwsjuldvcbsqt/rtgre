@@ -62,7 +62,6 @@ AppUtils.onDOMReady(function () {
   periodSelect.appendChild(periodOptGroup);
   periodItem.appendChild(makeFieldTitle(labelPeriod));
   periodItem.appendChild(periodSelect);
-  scrollGroup.appendChild(periodItem);
 
   if (modules.length > 0) {
     const modItem = document.createElement("div");
@@ -101,6 +100,7 @@ AppUtils.onDOMReady(function () {
     modItem.appendChild(modSelect);
     scrollGroup.appendChild(modItem);
   }
+  scrollGroup.appendChild(periodItem);
 
   if (categories.length > 0) {
     scrollGroup.appendChild(makeFieldTitle(labelCategory));
