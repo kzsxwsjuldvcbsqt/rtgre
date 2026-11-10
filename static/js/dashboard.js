@@ -155,7 +155,23 @@
       } catch (error) {
         grades = {};
       }
-      var averages = GradesModel.calculate(grades, data.grades);
+      var detail = null;
+      try {
+        var rawDetail = localStorage.getItem(limits.detailStorageKey);
+        if (rawDetail) {
+          detail = GradesModel.normalizeDetail(
+            JSON.parse(rawDetail),
+            data.grades,
+            limits,
+          ).detail;
+        }
+      } catch (error) {
+        detail = null;
+      }
+      var averages = GradesModel.calculate(
+        GradesModel.effectiveGrades(grades, detail, data.grades),
+        data.grades,
+      );
       var hasAverage = data.grades.semesters.some(function (semester) {
         return averages.semesters[semester.id] !== null;
       });

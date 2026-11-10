@@ -57,6 +57,7 @@ select:disabled {
   input:hover:not(:disabled):not(:focus):not([aria-invalid="true"]),
   textarea:hover:not(:disabled):not(:focus):not([aria-invalid="true"]),
   .filter-form label:has(input):hover,
+  .toggle-pill:has(input):hover,
   .detail-link:hover {
     border-color: var(--color-text-faint);
     background: var(--color-surface-hover);

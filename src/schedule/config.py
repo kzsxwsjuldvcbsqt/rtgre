@@ -80,6 +80,38 @@ def valid_public_id(value: object) -> bool:
     return isinstance(value, str) and re.fullmatch(r"[a-z0-9][a-z0-9_-]*", value) is not None
 
 
+def validate_evaluation_details(curriculum_data: dict):
+    details = curriculum_data.get("evaluation_details", {})
+    coefficients = curriculum_data["coefficients"]
+    if not isinstance(details, dict) or not details.keys() <= coefficients.keys():
+        raise ValueError("Unknown evaluation detail track")
+    for track, by_status in details.items():
+        if not isinstance(by_status, dict) or not by_status.keys() <= coefficients[track].keys():
+            raise ValueError(f"Unknown evaluation detail status for {track}")
+        for status, by_module in by_status.items():
+            if not isinstance(by_module, dict):
+                raise ValueError(f"Invalid evaluation details for {track}/{status}")
+            for code, evaluations in by_module.items():
+                if code not in coefficients[track][status]:
+                    raise ValueError(f"Evaluation details for ungraded {code} in {track}/{status}")
+                if not isinstance(evaluations, list) or not evaluations:
+                    raise ValueError(f"No evaluations for {code} in {track}/{status}")
+                ids = [item.get("id") if isinstance(item, dict) else None for item in evaluations]
+                if len(set(ids)) != len(ids) or not all(valid_public_id(i) for i in ids):
+                    raise ValueError(f"Invalid evaluation ids for {code} in {track}/{status}")
+                for item in evaluations:
+                    weight = item.get("weight")
+                    label = item.get("label")
+                    if (
+                        not isinstance(label, str)
+                        or not label.strip()
+                        or type(weight) not in (int, float)
+                        or not math.isfinite(weight)
+                        or weight <= 0
+                    ):
+                        raise ValueError(f"Invalid evaluation {item['id']} for {code}")
+
+
 def valid_relative_file(value: object) -> bool:
     if not isinstance(value, str):
         return False
@@ -212,6 +244,7 @@ def load_config(config_dir: str = "config") -> AppConfig:
     with open(path / "corrections.json", encoding="utf-8") as f:
         corrections_data = json.load(f)
     validate_curriculum_config(curriculum_data)
+    validate_evaluation_details(curriculum_data)
     validate_calendar_config(calendar_data)
     first_date = date.fromisoformat(site["school_year"]["first_date"])
     last_date = date.fromisoformat(site["school_year"]["last_date"])

@@ -66,3 +66,95 @@ test("grade data accepts compatible values and rejects unsafe structures", () =>
     /format/,
   );
 });
+
+const detailConfig = {
+  semesters: [
+    {
+      id: "s5",
+      units: [{ id: "ue1", weight: 1 }],
+      subjects: [
+        {
+          code: "R1",
+          coeffs: { ue1: 1 },
+          evaluations: [
+            { id: "tp", weight: 1 },
+            { id: "ds", weight: 3 },
+          ],
+        },
+        { code: "R2", coeffs: { ue1: 1 }, evaluations: [] },
+      ],
+    },
+  ],
+  annual_units: [],
+};
+const detailLimits = { minimum: 0, maximum: 20, maxEntries: 10 };
+
+test("detailed module grades are weighted averages of entered evaluations", () => {
+  assert.deepEqual(
+    model.moduleGradesFromDetail({ R1: { tp: 8, ds: 16 } }, detailConfig),
+    { R1: 14 },
+  );
+  assert.deepEqual(
+    model.moduleGradesFromDetail({ R1: { ds: 12 } }, detailConfig),
+    { R1: 12 },
+  );
+  assert.deepEqual(model.moduleGradesFromDetail({}, detailConfig), {});
+});
+
+test("detail mode replaces direct grades only for detailed modules", () => {
+  const direct = { R1: 5, R2: 9 };
+  const detail = { enabled: true, evaluations: { R1: { tp: 10, ds: 10 } } };
+  assert.deepEqual(model.effectiveGrades(direct, detail, detailConfig), {
+    R1: 10,
+    R2: 9,
+  });
+  assert.deepEqual(
+    model.effectiveGrades(
+      direct,
+      { enabled: true, evaluations: {} },
+      detailConfig,
+    ),
+    { R2: 9 },
+  );
+  assert.equal(
+    model.effectiveGrades(
+      direct,
+      { enabled: false, evaluations: {} },
+      detailConfig,
+    ),
+    direct,
+  );
+});
+
+test("detail data keeps known evaluations and counts the rest as ignored", () => {
+  const result = model.normalizeDetail(
+    {
+      enabled: true,
+      evaluations: { R1: { tp: "12,5", other: 4, ds: 25 }, R9: { x: 3 } },
+    },
+    detailConfig,
+    detailLimits,
+  );
+  assert.deepEqual(result.detail, {
+    enabled: true,
+    evaluations: { R1: { tp: 12.5 } },
+  });
+  assert.equal(result.ignored, 3);
+  assert.equal(result.entries, 4);
+  assert.equal(
+    model.normalizeDetail(
+      { enabled: true },
+      { semesters: [{ subjects: [] }] },
+      detailLimits,
+    ).detail.enabled,
+    false,
+  );
+  assert.throws(() => model.normalizeDetail([], detailConfig, detailLimits));
+  assert.throws(() =>
+    model.normalizeDetail(
+      { evaluations: { R1: { tp: {} } } },
+      detailConfig,
+      detailLimits,
+    ),
+  );
+});

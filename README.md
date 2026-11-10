@@ -57,6 +57,8 @@ La page des modules regroupe les enseignements par semestre, type de module, par
 
 Le site propose une saisie locale des notes. Les calculs s'appuient sur les coefficients décrits dans `config/curriculum.json` pour produire les moyennes par UE, par semestre, les synthèses annuelles et la moyenne annuelle globale. Les valeurs saisies sont enregistrées dans le stockage local du navigateur et peuvent être exportées ou importées au format JSON.
 
+Pour les classes dont le détail est décrit dans la section `evaluation_details` de `config/curriculum.json`, un réglage « Détail des évaluations » permet de saisir chaque évaluation d'un module avec son coefficient ; la note du module devient alors la moyenne pondérée des évaluations saisies. Les notes de module saisies directement et les notes d'évaluations sont conservées séparément : activer ou désactiver le réglage ne supprime rien. L'export (format version 2) contient les deux jeux de notes et l'état du réglage ; l'import d'un fichier version 1 désactive le détail, et les notes d'évaluations d'une classe sans détail sont ignorées.
+
 Ces résultats ne sont pas des notes officielles. Ce sont des estimations basées sur les coefficients configurés et sur les valeurs saisies par l'utilisateur.
 
 ### Interface

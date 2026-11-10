@@ -202,6 +202,7 @@ def get_class_grades_data(class_config: ClassConfig, curriculum_data: dict, labe
     track = class_config.track
     status = class_config.status
     coeffs_map = curriculum_data.get("coefficients", {}).get(track, {}).get(status, {})
+    details_map = curriculum_data.get("evaluation_details", {}).get(track, {}).get(status, {})
     all_units = curriculum_data.get("units", [])
     annual_units = curriculum_data.get("annual_units", [])
     semesters = curriculum_data.get("semesters", [])
@@ -234,7 +235,13 @@ def get_class_grades_data(class_config: ClassConfig, curriculum_data: dict, labe
                 coeffs_by_unit[u_id] = subj_coeffs.get(u_id, None)
 
             subjects.append(
-                {"code": code, "label": m["label"], "kind": m.get("kind"), "coeffs": coeffs_by_unit}
+                {
+                    "code": code,
+                    "label": m["label"],
+                    "kind": m.get("kind"),
+                    "coeffs": coeffs_by_unit,
+                    "evaluations": details_map.get(code, []),
+                }
             )
 
         semesters_data.append(
@@ -282,4 +289,5 @@ def get_class_grades_data(class_config: ClassConfig, curriculum_data: dict, labe
         "semesters": semesters_data,
         "annual_units": annual_units_data,
         "coefficients_raw": coeffs_map,
+        "has_details": bool(details_map),
     }

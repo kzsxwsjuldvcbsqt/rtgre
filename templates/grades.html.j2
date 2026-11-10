@@ -11,6 +11,9 @@
 </noscript>
 <div class="section-head grades-toolbar">
 <p class="privacy-notice">{{ labels.grades.privacy_notice }}</p>
+{% if grades_data.has_details %}
+<label class="toggle-pill" for="grades-detail-toggle" id="grades-detail-option" hidden><input type="checkbox" id="grades-detail-toggle">{{ icon('check', url_for, site.icons, 'icon-sm') }}{{ labels.grades.detail_toggle }}</label>
+{% endif %}
 <details class="menu grades-menu" id="grades-actions" hidden>
 <summary aria-label="{{ labels.grades.actions }}">{{ icon('kebab-horizontal', url_for, site.icons) }}</summary>
 <div class="menu-list">
@@ -102,8 +105,30 @@
        inputmode="decimal"
        aria-label="{{ grade_label }} - {{ subj.code }}"
 >
+{% if subj.evaluations %}
+<output class="grade-computed" data-computed-module="{{ subj.code }}" aria-label="{{ labels.grades.computed_grade }} - {{ subj.code }}" hidden></output>
+{% endif %}
 </td>
 </tr>
+{% for ev in subj.evaluations %}
+<tr class="evaluation-row" data-parent-module="{{ subj.code }}" hidden>
+<td class="col-code" data-empty="true"></td>
+<td class="col-subject" data-label="{{ labels.grades.evaluation_label }}"><span class="evaluation-name">{{ ev.label }}</span> <span class="evaluation-weight">{{ labels.grades.evaluation_weight.format(weight=ev.weight) }}</span></td>
+{% for u in sem.units %}
+<td class="col-ue-cell" data-empty="true"></td>
+{% endfor %}
+<td class="col-grade-input" data-label="{{ grade_label }}">
+<input type="text"
+       class="grade-input"
+       data-evaluation-module="{{ subj.code }}"
+       data-evaluation="{{ ev.id }}"
+       placeholder="{{ grade_empty }}"
+       inputmode="decimal"
+       aria-label="{{ grade_label }} - {{ subj.code }} - {{ ev.label }}"
+>
+</td>
+</tr>
+{% endfor %}
 {% endfor %}
 </tbody>
 </table>
@@ -121,6 +146,7 @@
   data-max="{{ site.grades.maximum }}"
   data-decimals="{{ site.grades.decimals }}"
   data-storage-prefix="{{ site.grades.storage_key_prefix }}"
+  data-detail-storage-prefix="{{ site.grades.detail_storage_key_prefix }}"
   data-format-version="{{ site.grades.export_format_version }}"
   data-export-format="{{ site.grades.export_format }}"
   data-export-filename="{{ site.grades.export_filename }}"

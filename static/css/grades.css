@@ -41,6 +41,18 @@
   align-items: center;
 }
 @media (max-width: 59.99em) {
+  .grades-toolbar {
+    flex-wrap: wrap;
+  }
+  .grades-toolbar .privacy-notice {
+    flex-basis: 100%;
+  }
+  .grades-page .grades-toolbar .toggle-pill {
+    margin-inline-start: 0;
+  }
+  .grades-toolbar .grades-menu {
+    margin-inline-start: auto;
+  }
   .grades-summary-table {
     table-layout: auto;
   }
@@ -50,4 +62,33 @@
   .grades-summary-table tbody > tr > * {
     font-size: var(--text-xs);
   }
+}
+.grades-toolbar .toggle-pill {
+  flex: none;
+  margin-inline-start: auto;
+}
+.evaluation-row .col-subject {
+  padding-inline-start: var(--space-xl);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+.evaluation-weight {
+  color: var(--color-text-faint);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+}
+.grade-computed {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: var(--width-grade-input);
+  min-height: var(--control-height);
+  padding-inline: var(--space-sm);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--weight-semibold);
+}
+.grade-computed.is-empty {
+  color: var(--color-text-faint);
+  font-weight: var(--weight-normal);
 }
