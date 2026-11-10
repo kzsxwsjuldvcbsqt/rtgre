@@ -13,9 +13,41 @@
   align-items: center;
   padding: var(--space-2xs) var(--space-sm);
   border-radius: var(--radius-pill);
-  background: var(--color-badge);
-  color: var(--color-text-muted);
+  background: var(--label-bg, var(--color-badge));
+  color: var(--label-fg, var(--color-text-muted));
   font-size: var(--text-xs);
   font-weight: var(--weight-semibold);
   white-space: nowrap;
+}
+
+.label-orange {
+  --label-bg: var(--color-label-orange-bg);
+  --label-fg: var(--color-label-orange-fg);
+}
+.label-blue {
+  --label-bg: var(--color-label-blue-bg);
+  --label-fg: var(--color-label-blue-fg);
+}
+.label-red {
+  --label-bg: var(--color-label-red-bg);
+  --label-fg: var(--color-label-red-fg);
+}
+.label-purple {
+  --label-bg: var(--color-label-purple-bg);
+  --label-fg: var(--color-label-purple-fg);
+}
+.label-green {
+  --label-bg: var(--color-label-green-bg);
+  --label-fg: var(--color-label-green-fg);
+}
+.label-slate {
+  --label-bg: var(--color-label-slate-bg);
+  --label-fg: var(--color-label-slate-fg);
+}
+.label-dot {
+  flex: none;
+  width: var(--size-label-dot);
+  height: var(--size-label-dot);
+  border-radius: var(--radius-pill);
+  background: var(--label-fg);
 }

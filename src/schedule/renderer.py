@@ -75,6 +75,9 @@ def render_site(
     env.globals.update(
         section_files=section_files,
         programs=app_config.programs,
+        category_tones={
+            category.id: category.tone for category in app_config.categories if category.tone
+        },
         content_security_policy="; ".join(
             f"{directive} {' '.join(sources)}"
             for directive, sources in app_config.site["content_security_policy"].items()
@@ -250,7 +253,9 @@ def render_site(
                 sections=class_sections,
                 evaluations=evals,
                 months_grouped=months_grouped,
-                active_categories=[{"id": c.id, "label": c.label} for c in active_categories],
+                active_categories=[
+                    {"id": c.id, "label": c.label, "tone": c.tone} for c in active_categories
+                ],
                 active_modules=active_modules,
                 module_labels=module_labels,
                 category_map=cat_map,

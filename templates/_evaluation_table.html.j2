@@ -48,7 +48,7 @@
 {{ ev.time_range }}
 </td>
 <td class="col-category" data-label="{{ labels.fields.category }}">
-<span class="category-badge cat-{{ ev.category_id }}">{{ ev.category_label }}</span>
+<span class="category-badge cat-{{ ev.category_id }}{% if category_tones.get(ev.category_id) %} label-{{ category_tones[ev.category_id] }}{% endif %}">{{ ev.category_label }}</span>
 </td>
 <td class="col-module" data-label="{{ labels.fields.module }}">{{ ev.module_code }}</td>
 <td class="col-module-name" data-label="{{ labels.fields.module_name }}">{{ module_labels.get(ev.module_code, "") }}</td>

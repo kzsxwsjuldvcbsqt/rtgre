@@ -113,6 +113,12 @@ AppUtils.onDOMReady(function () {
       cb.checked = true;
       lbl.appendChild(cb);
       lbl.appendChild(AppUtils.buildIcon(dataset.iconCheck, "icon-sm"));
+      if (cat.tone) {
+        const dot = document.createElement("span");
+        dot.className = "label-dot label-" + cat.tone;
+        dot.setAttribute("aria-hidden", "true");
+        lbl.appendChild(dot);
+      }
       lbl.appendChild(document.createTextNode(cat.label));
       scrollGroup.appendChild(lbl);
     });

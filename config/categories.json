@@ -26,6 +26,7 @@
     {
       "id": "ds",
       "label": "DS surveillé",
+      "tone": "orange",
       "enabled": true,
       "exact_titles": [],
       "patterns": ["(?:^|[-_ ])DS(?:[-_ ]|$)"]
@@ -33,6 +34,7 @@
     {
       "id": "partiel-machine",
       "label": "Partiel machine",
+      "tone": "blue",
       "enabled": true,
       "exact_titles": [],
       "patterns": ["(?:^|[-_ ])Part(?:iel)?TP(?:[-_ ]|$)"]
@@ -40,6 +42,7 @@
     {
       "id": "partiel",
       "label": "Partiel",
+      "tone": "red",
       "enabled": true,
       "exact_titles": [],
       "patterns": ["(?:^|[-_ ])Partiel(?:[-_ ]|$)", "(?:^|[-_ ])Examen(?:[-_ ]|$)"]
@@ -47,6 +50,7 @@
     {
       "id": "soutenance",
       "label": "Soutenance",
+      "tone": "purple",
       "enabled": true,
       "exact_titles": [],
       "patterns": ["Soutenance"]
@@ -54,6 +58,7 @@
     {
       "id": "oral",
       "label": "Oral noté",
+      "tone": "green",
       "enabled": true,
       "exact_titles": ["R505-Discussion Test", "R601-Persuasive Speech"],
       "patterns": []
@@ -61,6 +66,7 @@
     {
       "id": "revue",
       "label": "Revue",
+      "tone": "slate",
       "enabled": true,
       "exact_titles": [],
       "patterns": ["Revue"]
