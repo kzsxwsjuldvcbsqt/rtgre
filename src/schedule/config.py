@@ -313,6 +313,7 @@ def load_config(config_dir: str = "config") -> AppConfig:
             enabled=c["enabled"],
             exact_titles=tuple(c.get("exact_titles", [])),
             patterns=tuple(c.get("patterns", [])),
+            tone=c.get("tone"),
         )
         for c in categories_data["categories"]
     ]
@@ -320,6 +321,10 @@ def load_config(config_dir: str = "config") -> AppConfig:
         not valid_public_id(category.id) for category in categories
     ):
         raise ValueError("Invalid or duplicate category IDs")
+    if any(
+        category.tone is not None and not valid_public_id(category.tone) for category in categories
+    ):
+        raise ValueError("Invalid category tone")
 
     validate_corrections_config(corrections_data, {category.id for category in categories})
 

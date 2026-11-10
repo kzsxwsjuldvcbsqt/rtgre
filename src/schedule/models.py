@@ -94,6 +94,7 @@ class CategoryConfig:
     enabled: bool
     exact_titles: tuple[str, ...]
     patterns: tuple[str, ...]
+    tone: str | None = None
 
 
 @dataclass(frozen=True)

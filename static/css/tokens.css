@@ -39,6 +39,18 @@
   --color-sae-4: #c2e6e8;
   --color-sae-5: #f7cfe0;
   --color-sae-6: #dce8b8;
+  --color-label-orange-bg: #fff0e0;
+  --color-label-orange-fg: #9a4700;
+  --color-label-blue-bg: #e2eeff;
+  --color-label-blue-fg: #0b4fa8;
+  --color-label-red-bg: #ffe7e7;
+  --color-label-red-fg: #a3191f;
+  --color-label-purple-bg: #f0e7ff;
+  --color-label-purple-fg: #6a2bb3;
+  --color-label-green-bg: #e0f4e5;
+  --color-label-green-fg: #1d6b34;
+  --color-label-slate-bg: #e7ecf2;
+  --color-label-slate-fg: #3f5266;
   --color-now: var(--color-field-invalid);
   --color-veil: rgba(255, 255, 255, 0.6);
   --color-now-soft: rgba(229, 72, 77, 0.16);
@@ -135,6 +147,7 @@
   --width-col-chevron: 3rem;
   --width-col-class: 12rem;
   --menu-min-width: 13rem;
+  --size-label-dot: 0.5rem;
   --width-choice-menu: 26rem;
   --width-select-menu: 11rem;
   --height-choice-menu: 24rem;
