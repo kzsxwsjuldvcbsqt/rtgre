@@ -17,6 +17,7 @@ from schedule.classifier import match_session_marks
 from schedule.config import (
     load_config,
     validate_calendar_config,
+    validate_evaluation_details,
     validate_session_marks,
     validate_site_config,
 )
@@ -85,6 +86,34 @@ class ScheduleTests(unittest.TestCase):
                 config["coefficients"]["dc"]["fi"]["R501"] = mapping
                 with self.assertRaises(ValueError):
                     validate_curriculum_config(config)
+
+    def test_evaluation_details_are_validated(self):
+        valid = [{"id": "ds", "label": "DS", "weight": 1}]
+        for track, status, code, evaluations in (
+            ("xx", "fi", "R501", valid),
+            ("dc", "xx", "R501", valid),
+            ("dc", "fi", "R6cy04", valid),
+            ("dc", "fi", "R501", []),
+            ("dc", "fi", "R501", [{"id": "ds", "label": "DS", "weight": 0}]),
+            ("dc", "fi", "R501", [{"id": "DS!", "label": "DS", "weight": 1}]),
+            ("dc", "fi", "R501", [{"id": "ds", "label": " ", "weight": 1}]),
+            ("dc", "fi", "R501", valid + valid),
+        ):
+            with self.subTest(track=track, status=status, code=code, evaluations=evaluations):
+                config = copy.deepcopy(self.config.curriculum)
+                config["evaluation_details"] = {track: {status: {code: evaluations}}}
+                with self.assertRaises(ValueError):
+                    validate_evaluation_details(config)
+
+    def test_only_detailed_classes_expose_evaluations(self):
+        detailed = {
+            cls.id: get_class_grades_data(cls, self.config.curriculum, self.config.labels)[
+                "has_details"
+            ]
+            for cls in self.classes
+        }
+        self.assertTrue(detailed["b3dc3"])
+        self.assertFalse(detailed["b3dcc"])
 
     def test_rejects_duplicate_modules(self):
         config = copy.deepcopy(self.config.curriculum)

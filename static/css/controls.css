@@ -76,7 +76,8 @@
 .filter-group-last {
   min-width: 12rem;
 }
-.filter-form label:has(input) {
+.filter-form label:has(input),
+.toggle-pill:has(input) {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -93,11 +94,13 @@
 }
 .filter-form select,
 .filter-form label:has(input),
+.toggle-pill:has(input),
 .choice-trigger,
 .choice {
   border-radius: var(--radius-pill);
 }
-.filter-form label:has(input) input {
+.filter-form label:has(input) input,
+.toggle-pill:has(input) input {
   position: absolute;
   width: var(--visually-hidden-size);
   height: var(--visually-hidden-size);
@@ -105,14 +108,17 @@
   opacity: 0;
   pointer-events: none;
 }
-.filter-form label:has(input:focus-visible) {
+.filter-form label:has(input:focus-visible),
+.toggle-pill:has(input:focus-visible) {
   outline: var(--focus-ring-width) solid var(--color-accent);
   outline-offset: var(--focus-ring-width);
 }
-.filter-form label:has(input) .icon {
+.filter-form label:has(input) .icon,
+.toggle-pill:has(input) .icon {
   display: none;
 }
-.filter-form label:has(input:checked) .icon {
+.filter-form label:has(input:checked) .icon,
+.toggle-pill:has(input:checked) .icon {
   display: inline-block;
 }
 .choice-trigger-key {
@@ -139,7 +145,8 @@
 .filter-form .search-field input:focus {
   background: var(--color-surface);
 }
-.filter-form label:has(input:checked) {
+.filter-form label:has(input:checked),
+.toggle-pill:has(input:checked) {
   border-color: var(--color-highlight);
   background: var(--color-accent-soft);
   color: var(--color-on-highlight);

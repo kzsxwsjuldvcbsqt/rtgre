@@ -179,7 +179,8 @@
     const exported = JSON.parse(await exportedBlob.text());
     assert(
       exported.format === "but3-grades" &&
-        exported.version === 1 &&
+        exported.version === 2 &&
+        exported.detail === undefined &&
         exported.grades.R501 === 10 &&
         exported.grades.R502 === 20,
       "Export stays compatible with existing files",

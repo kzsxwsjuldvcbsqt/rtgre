@@ -63,7 +63,11 @@
     "err_empty_import": "Aucune note compatible à importer.",
     "err_conflict": "Les notes sont ouvertes en modification dans un autre onglet, ou leur sauvegarde a changé. Ferme l’autre onglet puis recharge cette page. Tu peux exporter les valeurs affichées.",
     "semester_column": "Semestre",
-    "average_column": "Moyenne"
+    "average_column": "Moyenne",
+    "detail_toggle": "Détail des évaluations",
+    "evaluation_weight": "coef. {weight}",
+    "evaluation_label": "Évaluation",
+    "computed_grade": "Note calculée"
   },
   "calendar": {
     "title": "Emploi du temps",

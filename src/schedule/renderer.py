@@ -295,6 +295,9 @@ def render_site(
                         "maxEntries": grade_settings["max_entries"],
                         "decimals": grade_settings["decimals"],
                         "storageKey": f"{grade_settings['storage_key_prefix']}_{cls.id}",
+                        "detailStorageKey": (
+                            f"{grade_settings['detail_storage_key_prefix']}_{cls.id}"
+                        ),
                     },
                     "days": app_config.labels["days"],
                     "months": app_config.labels["months"],

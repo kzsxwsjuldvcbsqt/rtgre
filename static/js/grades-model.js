@@ -94,7 +94,99 @@
     return { units, semesters, annualUnits };
   }
 
-  const api = { calculate, normalizeGrades };
+  function detailedSubjects(config) {
+    const subjects = [];
+    config.semesters.forEach(function (semester) {
+      semester.subjects.forEach(function (subject) {
+        if (subject.evaluations && subject.evaluations.length > 0) {
+          subjects.push(subject);
+        }
+      });
+    });
+    return subjects;
+  }
+
+  function normalizeDetail(source, config, limits) {
+    if (!isObject(source)) throw new Error("format");
+    const rawEvaluations =
+      source.evaluations === undefined ? {} : source.evaluations;
+    if (!isObject(rawEvaluations)) throw new Error("format");
+    const allowed = {};
+    detailedSubjects(config).forEach(function (subject) {
+      allowed[subject.code] = new Set(
+        subject.evaluations.map(function (evaluation) {
+          return evaluation.id;
+        }),
+      );
+    });
+    const evaluations = {};
+    let ignored = 0;
+    let entries = 0;
+    Object.keys(rawEvaluations).forEach(function (code) {
+      const values = rawEvaluations[code];
+      if (!isObject(values)) throw new Error("format");
+      Object.keys(values).forEach(function (id) {
+        entries += 1;
+        if (entries > limits.maxEntries) throw new Error("format");
+        const value = values[id];
+        if (typeof value !== "string" && typeof value !== "number") {
+          throw new Error("format");
+        }
+        if (!allowed[code] || !allowed[code].has(id)) {
+          ignored += 1;
+          return;
+        }
+        const grade = global.AppUtils.parseGrade(
+          value,
+          limits.minimum,
+          limits.maximum,
+        );
+        if (grade === null) {
+          ignored += 1;
+          return;
+        }
+        evaluations[code] = evaluations[code] || {};
+        evaluations[code][id] = grade;
+      });
+    });
+    const enabled = source.enabled === true && Object.keys(allowed).length > 0;
+    return { detail: { enabled, evaluations }, ignored, entries };
+  }
+
+  function moduleGradesFromDetail(evaluations, config) {
+    const grades = {};
+    detailedSubjects(config).forEach(function (subject) {
+      const values = evaluations[subject.code] || {};
+      const average = weightedAverage(
+        subject.evaluations.map(function (evaluation) {
+          return { value: values[evaluation.id], weight: evaluation.weight };
+        }),
+      );
+      if (average !== null) grades[subject.code] = average;
+    });
+    return grades;
+  }
+
+  function effectiveGrades(grades, detail, config) {
+    if (!detail || !detail.enabled) return grades;
+    const result = Object.assign({}, grades);
+    const computed = moduleGradesFromDetail(detail.evaluations, config);
+    detailedSubjects(config).forEach(function (subject) {
+      delete result[subject.code];
+      if (computed[subject.code] !== undefined) {
+        result[subject.code] = computed[subject.code];
+      }
+    });
+    return result;
+  }
+
+  const api = {
+    calculate,
+    normalizeGrades,
+    normalizeDetail,
+    moduleGradesFromDetail,
+    effectiveGrades,
+  };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else global.GradesModel = api;
 })(globalThis);

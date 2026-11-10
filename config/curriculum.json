@@ -183,5 +183,25 @@
         "SAE6dc01": { "ue6.1": 4, "ue6.2": 2, "ue6.3": 4, "ue6.dc.4": 20, "ue6.dc.5": 20 }
       }
     }
+  },
+  "evaluation_details": {
+    "dc": {
+      "fi": {
+        "R501": [{ "id": "tp-wifi-extremen", "label": "TP Wifi ExtremeN", "weight": 1 }, { "id": "tp-controleur", "label": "TP Controleur", "weight": 1 }, { "id": "ds-wifi", "label": "DS Wifi", "weight": 3 }],
+        "R502": [{ "id": "tp-grafana-aws", "label": "Avancement de TPs (Grafana, AWS)", "weight": 1 }, { "id": "tp-prtg-zabbix", "label": "Avancement de TPs (PRTG, Zabbix)", "weight": 1 }],
+        "R503": [{ "id": "ds-fo", "label": "DS FO", "weight": 1 }, { "id": "ds-ant", "label": "DS Ant", "weight": 1 }, { "id": "partiel-tp", "label": "Partiel TP sur table", "weight": 1 }],
+        "R504": [{ "id": "travail-tp", "label": "Travail en TP", "weight": 1 }, { "id": "examen-tp", "label": "Examen de TP", "weight": 2 }],
+        "R505": [{ "id": "discussion-test", "label": "Discussion Test", "weight": 0.5 }, { "id": "continuous-assessment", "label": "Continuous Assessment", "weight": 0.2 }, { "id": "meetings-test", "label": "\"Meetings\" Listening & Speaking Test", "weight": 0.3 }],
+        "R506": [{ "id": "mail-pro", "label": "Mail pro \"Les jeunes et le travail\"", "weight": 1 }, { "id": "test-mbti", "label": "Test personnalité MBTI", "weight": 1 }, { "id": "eval-orale", "label": "Eval orale groupe (Présentation projet RT)", "weight": 0.5 }],
+        "R508": [{ "id": "exam-cc", "label": "Exam + CC", "weight": 1 }],
+        "R513": [{ "id": "examen", "label": "Examen", "weight": 1 }],
+        "R5dc09": [{ "id": "partiel-tp", "label": "Partiel TP", "weight": 1 }],
+        "R5dc10": [{ "id": "tp-kubernetes", "label": "TP Infrastructure Kubernetes", "weight": 1 }, { "id": "eval-kubernetes", "label": "Eval Kubernetes", "weight": 1 }],
+        "R5dc11": [{ "id": "avancement-tp", "label": "Avancement de TP", "weight": 0.5 }, { "id": "examen-tp", "label": "Examen de TP", "weight": 1 }],
+        "SAE501": [{ "id": "soutenance-mi-parcours", "label": "Soutenance mi-parcours", "weight": 0.3 }, { "id": "ds-gnu-radio", "label": "DS Gnu Radio", "weight": 0.3 }, { "id": "soutenance-finale", "label": "Soutenance finale", "weight": 0.3 }, { "id": "suivi-comptes-rendus", "label": "Suivi Compte-rendus", "weight": 0.1 }],
+        "SAE502": [{ "id": "cahier-des-charges", "label": "Cahier des charges", "weight": 0.6 }, { "id": "conduite-projet", "label": "Conduite de projet (régularité du travail)", "weight": 0.4 }, { "id": "realisation-technique", "label": "Réalisation technique (travail rendu et intéressement)", "weight": 2 }, { "id": "revue-projet", "label": "Présentation du projet en revue de projet", "weight": 1 }],
+        "SAE5dc03": [{ "id": "gestion-projet", "label": "Gestion de projet", "weight": 0.5 }, { "id": "developpement", "label": "Développement", "weight": 2 }, { "id": "mise-en-production", "label": "Mise en production", "weight": 2.5 }, { "id": "soutenance", "label": "Projet (soutenance)", "weight": 2 }]
+      }
+    }
   }
 }

@@ -53,13 +53,70 @@
     var lastValidByCode = {};
 
     var inputs = Array.prototype.slice.call(
-      document.querySelectorAll(".grade-input"),
+      document.querySelectorAll(".grade-input[data-module]"),
     );
     var inputsByCode = {};
     inputs.forEach(function (input) {
       var code = input.getAttribute("data-module");
       inputsByCode[code] = input;
     });
+
+    var hasDetails = gradesConfig.has_details === true;
+    var detailKey =
+      scriptEl.getAttribute("data-detail-storage-prefix") + "_" + classId;
+    var detailToggle = document.getElementById("grades-detail-toggle");
+    var detailOption = document.getElementById("grades-detail-option");
+    var evaluationInputs = Array.prototype.slice.call(
+      document.querySelectorAll(".grade-input[data-evaluation]"),
+    );
+    var evaluationRows = Array.prototype.slice.call(
+      document.querySelectorAll(".evaluation-row"),
+    );
+    var computedOutputs = Array.prototype.slice.call(
+      document.querySelectorAll(".grade-computed"),
+    );
+    var detailLimits = {
+      minimum: minVal,
+      maximum: maxVal,
+      maxEntries: maxEntries,
+    };
+    var detailEnabled = false;
+    var detailBaseline;
+    var lastValidDetail = {};
+
+    function currentEvaluations() {
+      var evaluations = {};
+      evaluationInputs.forEach(function (input) {
+        var grade = getValidGrade(input);
+        if (grade === null) return;
+        var code = input.getAttribute("data-evaluation-module");
+        evaluations[code] = evaluations[code] || {};
+        evaluations[code][input.getAttribute("data-evaluation")] = grade;
+      });
+      return evaluations;
+    }
+
+    function currentDetail() {
+      return { enabled: detailEnabled, evaluations: currentEvaluations() };
+    }
+
+    function countEvaluations(evaluations) {
+      return Object.keys(evaluations).reduce(function (total, code) {
+        return total + Object.keys(evaluations[code]).length;
+      }, 0);
+    }
+
+    function applyMode() {
+      if (detailToggle) detailToggle.checked = detailEnabled;
+      evaluationRows.forEach(function (row) {
+        row.hidden = !detailEnabled;
+      });
+      computedOutputs.forEach(function (output) {
+        output.hidden = !detailEnabled;
+        var input = inputsByCode[output.getAttribute("data-computed-module")];
+        if (input) input.hidden = detailEnabled;
+      });
+    }
 
     function getValidGrade(input) {
       var valStr = input.value.trim();
@@ -94,8 +151,29 @@
         value !== null && value !== undefined ? value.toFixed(decimals) : "";
     }
 
+    function showComputed(detail) {
+      var computed = GradesModel.moduleGradesFromDetail(
+        detail.evaluations,
+        gradesConfig,
+      );
+      computedOutputs.forEach(function (output) {
+        var code = output.getAttribute("data-computed-module");
+        var value = computed[code];
+        output.classList.toggle("is-empty", value === undefined);
+        output.textContent =
+          value === undefined
+            ? inputsByCode[code].placeholder
+            : value.toFixed(decimals);
+      });
+    }
+
     function calculate() {
-      var averages = GradesModel.calculate(currentGrades(), gradesConfig);
+      var detail = currentDetail();
+      showComputed(detail);
+      var averages = GradesModel.calculate(
+        GradesModel.effectiveGrades(currentGrades(), detail, gradesConfig),
+        gradesConfig,
+      );
       gradesConfig.semesters.forEach(function (sem) {
         showAverage(
           document.getElementById("avg-" + sem.id),
@@ -131,6 +209,44 @@
       gradesBaseline = serialized;
     }
 
+    function assertDetailUnchanged() {
+      if (!hasDetails) return;
+      var current = localStorage.getItem(detailKey);
+      if (detailBaseline !== undefined && current !== detailBaseline) {
+        throw new Error("conflict");
+      }
+    }
+
+    function writeDetail(detail) {
+      if (!hasDetails) return;
+      writeAccess.assertWritable();
+      assertDetailUnchanged();
+      if (!detail.enabled && countEvaluations(detail.evaluations) === 0) {
+        localStorage.removeItem(detailKey);
+        detailBaseline = null;
+        return;
+      }
+      var serialized = JSON.stringify(detail);
+      localStorage.setItem(detailKey, serialized);
+      detailBaseline = serialized;
+    }
+
+    function applyDetail(detail) {
+      evaluationInputs.forEach(function (input) {
+        var values =
+          detail.evaluations[input.getAttribute("data-evaluation-module")] ||
+          {};
+        var id = input.getAttribute("data-evaluation");
+        input.value = Object.prototype.hasOwnProperty.call(values, id)
+          ? String(values[id])
+          : "";
+        input.removeAttribute("aria-invalid");
+      });
+      detailEnabled = detail.enabled;
+      applyMode();
+      calculate();
+    }
+
     function applyGrades(grades) {
       inputs.forEach(function (input) {
         var code = input.getAttribute("data-module");
@@ -156,8 +272,27 @@
           delete lastValidByCode[code];
         }
       });
+      evaluationInputs.forEach(function (input) {
+        var code = input.getAttribute("data-evaluation-module");
+        var id = input.getAttribute("data-evaluation");
+        var g = getValidGrade(input);
+        if (g !== null) {
+          lastValidDetail[code] = lastValidDetail[code] || {};
+          lastValidDetail[code][id] = g;
+        } else if (
+          input.getAttribute("aria-invalid") !== "true" &&
+          lastValidDetail[code]
+        ) {
+          delete lastValidDetail[code][id];
+          if (Object.keys(lastValidDetail[code]).length === 0) {
+            delete lastValidDetail[code];
+          }
+        }
+      });
       try {
+        assertDetailUnchanged();
         writeGrades(lastValidByCode);
+        writeDetail({ enabled: detailEnabled, evaluations: lastValidDetail });
         return true;
       } catch (e) {
         showMessage(e.message === "conflict" ? errConflict : errStorage, true);
@@ -196,7 +331,37 @@
       }
     }
 
-    inputs.forEach(function (input) {
+    function restoreDetail() {
+      if (!hasDetails) return;
+      try {
+        var raw = localStorage.getItem(detailKey);
+        detailBaseline = raw;
+        if (!raw) return;
+        var restored = GradesModel.normalizeDetail(
+          JSON.parse(raw),
+          gradesConfig,
+          detailLimits,
+        );
+        lastValidDetail = JSON.parse(
+          JSON.stringify(restored.detail.evaluations),
+        );
+        applyDetail(restored.detail);
+        if (restored.ignored) {
+          restoreFailed = true;
+          showMessage(errRestore, true);
+        }
+      } catch (error) {
+        restoreFailed = true;
+        showMessage(
+          error instanceof SyntaxError || error.message === "format"
+            ? errRestore
+            : errStorage,
+          true,
+        );
+      }
+    }
+
+    inputs.concat(evaluationInputs).forEach(function (input) {
       input.addEventListener("input", function () {
         calculate();
         saveToStorage();
@@ -204,10 +369,22 @@
       });
     });
 
-    AppUtils.bindBlurKeys(inputs);
+    AppUtils.bindBlurKeys(inputs.concat(evaluationInputs));
 
     restoreFromStorage();
+    restoreDetail();
+    applyMode();
     calculate();
+
+    if (detailToggle && detailOption) {
+      detailOption.hidden = false;
+      detailToggle.addEventListener("change", function () {
+        detailEnabled = detailToggle.checked;
+        applyMode();
+        calculate();
+        saveToStorage();
+      });
+    }
     if (!writeAccess.writable) showMessage(errConflict, true);
     document.documentElement.dataset.storageReady = "true";
 
@@ -232,6 +409,7 @@
           exported_at: new Date().toISOString(),
           grades: exportedGrades,
         };
+        if (hasDetails) exportObject.detail = currentDetail();
 
         var blob = new Blob([JSON.stringify(exportObject, null, 2)], {
           type: "application/json",
@@ -259,9 +437,11 @@
             writeAccess.assertWritable();
             if (localStorage.getItem(storageKey) !== gradesBaseline)
               throw new Error("conflict");
+            assertDetailUnchanged();
             localStorage.removeItem(storageKey);
-            restoreFailed = false;
             gradesBaseline = null;
+            writeDetail({ enabled: detailEnabled, evaluations: {} });
+            restoreFailed = false;
           } catch (error) {
             showMessage(
               error.message === "conflict" ? errConflict : errStorage,
@@ -270,7 +450,9 @@
             return;
           }
           lastValidByCode = {};
+          lastValidDetail = {};
           applyGrades({});
+          applyDetail({ enabled: detailEnabled, evaluations: {} });
           updateActionState();
           showMessage("");
         }
@@ -278,7 +460,9 @@
     }
 
     function updateActionState() {
-      var isEmpty = Object.keys(lastValidByCode).length === 0;
+      var isEmpty =
+        Object.keys(lastValidByCode).length === 0 &&
+        Object.keys(lastValidDetail).length === 0;
       if (exportBtn) exportBtn.disabled = isEmpty;
       if (resetBtn) resetBtn.disabled = isEmpty && !restoreFailed;
     }
@@ -329,7 +513,11 @@
               typeof data.grades !== "object" ||
               Array.isArray(data.grades) ||
               !Number.isInteger(data.version) ||
-              data.version < 1
+              data.version < 1 ||
+              (data.detail !== undefined &&
+                (!data.detail ||
+                  typeof data.detail !== "object" ||
+                  Array.isArray(data.detail)))
             ) {
               showMessage(errBadFormat, true);
               return;
@@ -358,16 +546,30 @@
             var importedGrades = data.grades;
             var ignoredCount = normalized.ignored;
             var newValues = normalized.grades;
+            var newDetail = { enabled: false, evaluations: {} };
+            var detailEntries = 0;
+            if (data.detail !== undefined) {
+              var normalizedDetail = GradesModel.normalizeDetail(
+                data.detail,
+                gradesConfig,
+                detailLimits,
+              );
+              newDetail = normalizedDetail.detail;
+              detailEntries = normalizedDetail.entries;
+              ignoredCount += normalizedDetail.ignored;
+            }
 
             if (
-              Object.keys(importedGrades).length > 0 &&
-              Object.keys(newValues).length === 0
+              Object.keys(importedGrades).length + detailEntries > 0 &&
+              Object.keys(newValues).length +
+                countEvaluations(newDetail.evaluations) ===
+                0
             ) {
               showMessage(errEmptyImport, true);
               return;
             }
             if (
-              inputs.some(function (input) {
+              inputs.concat(evaluationInputs).some(function (input) {
                 return input.value.trim() !== "";
               }) &&
               !window.confirm(importReplaceConfirm)
@@ -375,7 +577,9 @@
               return;
 
             try {
+              assertDetailUnchanged();
               writeGrades(newValues);
+              writeDetail(newDetail);
             } catch (error) {
               showMessage(
                 error.message === "conflict" ? errConflict : errStorage,
@@ -385,7 +589,9 @@
             }
             restoreFailed = false;
             lastValidByCode = Object.assign({}, newValues);
+            lastValidDetail = JSON.parse(JSON.stringify(newDetail.evaluations));
             applyGrades(newValues);
+            applyDetail(newDetail);
             updateActionState();
 
             var statusMsg = importSuccessMsg;
