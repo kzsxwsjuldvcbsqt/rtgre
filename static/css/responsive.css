@@ -149,15 +149,17 @@
   .app:has(.class-switcher) .app-breadcrumb li:nth-child(2)::before {
     content: none;
   }
-  .data-box table:not(.grades-summary-table) tbody tr {
+  .data-box table:not(.grades-summary-table, .grades-table) tbody tr {
     padding-inline: var(--space-md);
   }
-  .data-box table:not(.grades-summary-table) td,
-  .data-box table:not(.grades-summary-table) th {
+  .data-box table:not(.grades-summary-table, .grades-table) td,
+  .data-box table:not(.grades-summary-table, .grades-table) th {
     padding-inline: 0;
   }
   .grades-summary-table,
-  .grades-summary-table * {
+  .grades-summary-table *,
+  .grades-table,
+  .grades-table * {
     all: revert-layer;
   }
   :root {
@@ -312,9 +314,6 @@
   .detail-link {
     justify-content: center;
     width: 100%;
-  }
-  .grades-table td.col-ue-cell[data-empty="true"] {
-    display: none;
   }
 }
 @media (max-width: 39.99em) {

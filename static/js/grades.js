@@ -12,6 +12,7 @@
     var minVal = parseFloat(scriptEl.getAttribute("data-min"));
     var maxVal = parseFloat(scriptEl.getAttribute("data-max"));
     var decimals = parseInt(scriptEl.getAttribute("data-decimals"), 10);
+    var passMark = parseFloat(scriptEl.getAttribute("data-pass-mark"));
     var storagePrefix = scriptEl.getAttribute("data-storage-prefix");
     var formatVersion = parseInt(
       scriptEl.getAttribute("data-format-version"),
@@ -145,10 +146,17 @@
       return gradesByCode;
     }
 
+    function markResult(element, value) {
+      var known = value !== null && value !== undefined;
+      element.classList.toggle("is-pass", known && value >= passMark);
+      element.classList.toggle("is-fail", known && value < passMark);
+    }
+
     function showAverage(element, value) {
       if (!element) return;
       element.textContent =
         value !== null && value !== undefined ? value.toFixed(decimals) : "";
+      markResult(element, value);
     }
 
     function showComputed(detail) {
@@ -160,6 +168,7 @@
         var code = output.getAttribute("data-computed-module");
         var value = computed[code];
         output.classList.toggle("is-empty", value === undefined);
+        markResult(output, value);
         output.textContent =
           value === undefined
             ? inputsByCode[code].placeholder
@@ -174,12 +183,28 @@
         GradesModel.effectiveGrades(currentGrades(), detail, gradesConfig),
         gradesConfig,
       );
+      inputs.concat(evaluationInputs).forEach(function (input) {
+        markResult(input, getValidGrade(input));
+      });
       gradesConfig.semesters.forEach(function (sem) {
         showAverage(
           document.getElementById("avg-" + sem.id),
           averages.semesters[sem.id],
         );
+        showAverage(
+          document.getElementById("sem-avg-" + sem.id),
+          averages.semesters[sem.id],
+        );
       });
+      var panelTable = document.getElementById("grades-panel-table");
+      var panelEmpty = document.getElementById("grades-panel-empty");
+      if (panelTable && panelEmpty) {
+        var hasAverage = Object.keys(averages.units).some(function (id) {
+          return averages.units[id] !== null;
+        });
+        panelTable.hidden = !hasAverage;
+        panelEmpty.hidden = hasAverage;
+      }
       gradesConfig.annual_units.forEach(function (au) {
         gradesConfig.semesters.forEach(function (sem) {
           showAverage(

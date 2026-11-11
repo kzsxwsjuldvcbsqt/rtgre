@@ -42,11 +42,6 @@ tbody tr:last-child > * {
 .col-grade-input {
   text-align: end;
 }
-.col-ue-header,
-.col-ue-cell {
-  padding-inline: var(--space-xs);
-  text-align: center;
-}
 .grade-input {
   width: var(--width-grade-input);
   text-align: end;

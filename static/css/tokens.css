@@ -56,6 +56,8 @@
   --color-now-soft: rgba(229, 72, 77, 0.16);
   --color-now-glow: rgba(229, 72, 77, 0.45);
   --color-field-invalid: #e5484d;
+  --color-pass: var(--color-label-green-fg);
+  --color-fail: var(--color-danger);
 
   --color-link: #000000;
   --color-field-focus: #0b63ce;
@@ -131,7 +133,8 @@
   --width-grade-input: 6.5rem;
   --width-event-time: 6.5rem;
   --width-event-card: 18rem;
-  --width-summary-label: 5rem;
+  --width-summary-label: 6.5rem;
+  --width-grades-panel: 22rem;
   --width-hour-axis: 3.5rem;
   --calendar-hour-height-max: 4.5rem;
   --calendar-hour-height-min: 3.25rem;
