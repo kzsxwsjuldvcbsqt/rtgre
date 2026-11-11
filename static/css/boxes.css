@@ -1,5 +1,7 @@
 .data-box {
-  margin-block-end: var(--space-lg);
+  margin-block-end: var(--space-xl);
+}
+.data-box > :not(.data-box-head) {
   border: var(--rule-width) solid var(--color-border);
   border-radius: var(--radius-control);
   background: var(--color-surface);
@@ -9,16 +11,13 @@
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  min-height: var(--height-box-head);
-  padding: var(--space-xs) var(--space-md);
-  border-block-end: var(--rule-width) solid var(--color-border);
-  background: var(--color-canvas);
+  margin-block-end: var(--space-sm);
 }
 .data-box-head > h2,
 .data-box-head > h3 {
   margin: 0;
   color: var(--color-text);
-  font-size: var(--text-sm);
+  font-size: var(--text-md);
   font-weight: var(--weight-semibold);
 }
 .data-box-head > a {
@@ -31,7 +30,6 @@
   white-space: nowrap;
 }
 .data-box-meta {
-  margin-inline-start: auto;
   padding: 0 var(--space-xs);
   border-radius: var(--radius-pill);
   background: var(--color-badge);
