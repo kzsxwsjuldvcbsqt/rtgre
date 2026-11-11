@@ -156,23 +156,15 @@
   }
 }
 .grades-page .privacy-notice {
-  margin-block: 0;
+  margin-block: 0 var(--space-lg);
 }
 .grades-band {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--space-md);
+  gap: var(--space-sm);
 }
 .grades-band .toggle-pill {
   flex: none;
-}
-.grades-band .privacy-notice {
-  display: flex;
-  align-items: center;
-  min-height: var(--control-height);
-  margin-inline-start: auto;
-  text-align: end;
 }
 .grades-actions {
   display: flex;
@@ -192,10 +184,6 @@
   }
   .grades-band {
     flex-wrap: wrap;
-  }
-  .grades-band .privacy-notice {
-    margin-inline-start: 0;
-    text-align: start;
   }
   .grades-table .grade-input,
   .grade-computed {
