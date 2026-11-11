@@ -112,7 +112,10 @@
 </tr>
 {% for ev in subj.evaluations %}
 <tr class="evaluation-row" data-parent-module="{{ subj.code }}" hidden>
-<td class="col-module" colspan="{{ sem.units | length + 1 }}"><span class="evaluation-name">{{ ev.label }}</span> <span class="evaluation-weight">{{ labels.grades.evaluation_weight.format(weight=ev.weight) }}</span></td>
+<td class="col-module"><span class="evaluation-name">{{ ev.label }}</span> <span class="evaluation-weight">{{ labels.grades.evaluation_weight.format(weight=ev.weight) }}</span></td>
+{% for u in sem.units %}
+<td class="col-coef"></td>
+{% endfor %}
 <td class="col-grade-input">
 <input type="text"
        class="grade-input"
