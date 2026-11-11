@@ -13,6 +13,11 @@
     var maxVal = parseFloat(scriptEl.getAttribute("data-max"));
     var decimals = parseInt(scriptEl.getAttribute("data-decimals"), 10);
     var passMark = parseFloat(scriptEl.getAttribute("data-pass-mark"));
+    var messageDuration = parseInt(
+      scriptEl.getAttribute("data-message-duration"),
+      10,
+    );
+    var messageTimer = null;
     var storagePrefix = scriptEl.getAttribute("data-storage-prefix");
     var formatVersion = parseInt(
       scriptEl.getAttribute("data-format-version"),
@@ -494,6 +499,7 @@
 
     function showMessage(msg, isError, isPending) {
       if (!messageEl) return;
+      clearTimeout(messageTimer);
       if (!msg) {
         messageEl.hidden = true;
         messageEl.textContent = "";
@@ -503,6 +509,11 @@
       messageEl.setAttribute("role", isError ? "alert" : "status");
       messageEl.classList.toggle("is-pending", isPending === true);
       messageEl.textContent = msg;
+      if (isPending !== true) {
+        messageTimer = setTimeout(function () {
+          showMessage("", false);
+        }, messageDuration);
+      }
     }
 
     var bulletinBtn = document.getElementById("grades-bulletin-btn");

@@ -85,6 +85,7 @@
     "export_filename": "grades-{class}-{date}.json",
     "max_import_bytes": 200000,
     "max_entries": 500,
+    "message_duration_ms": 5000,
     "bulletin": {
       "max_bytes": 2000000,
       "max_pages": 10,

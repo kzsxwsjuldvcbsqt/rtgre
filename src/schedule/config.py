@@ -310,7 +310,12 @@ def load_config(config_dir: str = "config") -> AppConfig:
         raise ValueError("Invalid grade precision")
     if any(
         type(grades[key]) is not int or grades[key] <= 0
-        for key in ("max_import_bytes", "max_entries", "export_format_version")
+        for key in (
+            "max_import_bytes",
+            "max_entries",
+            "export_format_version",
+            "message_duration_ms",
+        )
     ):
         raise ValueError("Invalid grade limits")
     validate_bulletin_config(grades["bulletin"])
