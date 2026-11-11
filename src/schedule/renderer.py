@@ -82,7 +82,7 @@ def render_site(
             f"{directive} {' '.join(sources)}"
             for directive, sources in app_config.site["content_security_policy"].items()
         ),
-        grade_empty=app_config.labels["grades"]["empty_value"].format(**app_config.site["grades"]),
+        grade_empty=app_config.labels["grades"]["empty_mark"],
         grade_label=app_config.labels["grades"]["grade_input_column"].format(
             **app_config.site["grades"]
         ),
