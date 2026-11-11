@@ -23,7 +23,8 @@
   },
   "grades": {
     "title": "Suivi des notes et calcul des moyennes",
-    "privacy_notice": "Tes notes restent dans ce navigateur : exporte-les pour les sauvegarder. Importe ton relevé PDF provisoire pour remplir automatiquement tes notes à ta place : il est lu sur place et n'est envoyé nulle part.",
+    "privacy_notice": "Tes notes restent dans ce navigateur : exporte-les pour les sauvegarder.",
+    "bulletin_notice": "Importe ton relevé PDF provisoire pour remplir automatiquement tes notes à ta place : il est lu sur place et n'est envoyé nulle part.",
     "noscript_notice": "Activez JavaScript pour calculer vos moyennes, sauvegarder vos notes et exporter vos données.",
     "annual_synthesis": "Synthèse annuelle",
     "actions": "Actions",
