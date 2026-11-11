@@ -49,10 +49,10 @@
     }
   ],
   "icons": {
-    "set": "octicons",
-    "version": "19.15.1",
+    "set": "phosphor",
+    "version": "2.1.1",
     "license": "MIT",
-    "sprite": "icons/octicons.svg"
+    "sprite": "icons/phosphor.svg"
   },
   "school_year": {
     "label": "2026-2027",
