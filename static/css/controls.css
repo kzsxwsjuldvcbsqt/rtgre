@@ -165,26 +165,31 @@
   transform: rotate(180deg);
 }
 .segmented {
-  align-items: center;
+  align-items: stretch;
   border-radius: var(--radius-control);
-  gap: var(--space-3xs);
   min-height: var(--control-height);
-  padding: var(--space-3xs);
   border: var(--rule-width) solid var(--color-field-border);
   background: var(--color-inset);
+  overflow: hidden;
 }
 .filter-form .segmented button {
-  border-radius: calc(var(--radius-control) - var(--space-3xs));
-  min-height: calc(
-    var(--control-height) - 2 * (var(--space-3xs) + var(--rule-width))
-  );
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--radius-control);
+  min-height: calc(var(--control-height) - 2 * var(--rule-width));
   padding-inline: var(--space-sm);
   border-color: transparent;
   background: transparent;
   color: var(--color-text-muted);
 }
+.filter-form .segmented button::before {
+  content: "";
+  position: absolute;
+  inset: var(--space-3xs);
+  z-index: -1;
+  border-radius: calc(var(--radius-control) - var(--space-3xs));
+}
 .filter-form .segmented button[aria-pressed="true"] {
-  border-color: var(--color-highlight);
   background: var(--color-accent-soft);
   color: var(--color-on-highlight);
   font-weight: var(--weight-semibold);
