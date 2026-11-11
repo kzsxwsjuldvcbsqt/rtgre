@@ -12,11 +12,12 @@
 </div>
 {% endcall %}{% endblock %}
 {% block content %}
-<div class="page-container grades-page">
+<div class="page-container grades-page" id="grades-page">
 <div class="page-band grades-band">
 {% if grades_data.has_details %}
 <label class="toggle-pill" for="grades-detail-toggle" id="grades-detail-option" hidden><input type="checkbox" id="grades-detail-toggle">{{ icon('check', url_for, site.icons, 'icon-sm') }}{{ labels.grades.detail_toggle }}</label>
 {% endif %}
+<label class="toggle-pill" for="grades-coef-toggle" id="grades-coef-option" hidden><input type="checkbox" id="grades-coef-toggle">{{ icon('check', url_for, site.icons, 'icon-sm') }}{{ labels.grades.coef_toggle }}</label>
 <p class="privacy-notice">{{ labels.grades.privacy_notice }}</p>
 </div>
 <noscript>
@@ -76,9 +77,12 @@
 </header>
 <div class="table-card">
 <table id="semester-table-{{ sem.id }}" class="grades-table" data-semester="{{ sem.id }}">
-<thead class="visually-hidden">
+<thead>
 <tr>
 <th class="col-module">{{ labels.grades.subject_code }}</th>
+{% for u in sem.units %}
+<th class="col-coef" scope="col">{{ u.label }}</th>
+{% endfor %}
 <th class="col-grade-input">{{ grade_label }}</th>
 </tr>
 </thead>
@@ -87,8 +91,12 @@
 <tr class="subject-row" data-module-code="{{ subj.code }}">
 <td class="col-module">
 <span class="module-title"><strong>{{ subj.code }}</strong> - {{ subj.label }}</span>
-<span class="coef-list">{% for u in sem.units %}{% set coeff = subj.coeffs.get(u.id) %}<span class="coef">{% if coeff %}<span class="visually-hidden">{{ u.label }}</span>{{ coeff }}{% endif %}</span>{% endfor %}</span>
+{% set coef = namespace(units=[]) %}{% for u in sem.units %}{% if subj.coeffs.get(u.id) %}{% set coef.units = coef.units + [u] %}{% endif %}{% endfor %}
+<span class="coef-list" aria-hidden="true">{% for u in coef.units %}{% if not loop.first %}<span class="coef-sep">{{ labels.grades.coefficient_separator }}</span>{% endif %}<span class="coef"><span class="coef-unit">{{ u.label }}</span> <strong>{{ subj.coeffs[u.id] }}</strong></span>{% endfor %}</span>
 </td>
+{% for u in sem.units %}
+<td class="col-coef">{{ subj.coeffs.get(u.id) or "" }}</td>
+{% endfor %}
 <td class="col-grade-input">
 <input type="text"
        class="grade-input"
@@ -104,7 +112,7 @@
 </tr>
 {% for ev in subj.evaluations %}
 <tr class="evaluation-row" data-parent-module="{{ subj.code }}" hidden>
-<td class="col-module"><span class="evaluation-name">{{ ev.label }}</span> <span class="evaluation-weight">{{ labels.grades.evaluation_weight.format(weight=ev.weight) }}</span></td>
+<td class="col-module" colspan="{{ sem.units | length + 1 }}"><span class="evaluation-name">{{ ev.label }}</span> <span class="evaluation-weight">{{ labels.grades.evaluation_weight.format(weight=ev.weight) }}</span></td>
 <td class="col-grade-input">
 <input type="text"
        class="grade-input"

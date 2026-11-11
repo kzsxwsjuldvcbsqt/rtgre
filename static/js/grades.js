@@ -672,6 +672,31 @@
       });
     }
 
+    function initCoefficientToggle() {
+      var page = document.getElementById("grades-page");
+      var option = document.getElementById("grades-coef-option");
+      var toggle = document.getElementById("grades-coef-toggle");
+      if (!page || !option || !toggle) return;
+      var coefStorageKey = "coefs_visible_" + classId;
+
+      function setVisible(visible) {
+        toggle.checked = visible;
+        page.classList.toggle("show-coefs", visible);
+      }
+
+      setVisible(AppUtils.safeStorageGet(coefStorageKey, true) === "1");
+      option.hidden = false;
+      toggle.addEventListener("change", function () {
+        setVisible(toggle.checked);
+        AppUtils.safeStorageSet(
+          coefStorageKey,
+          toggle.checked ? "1" : "0",
+          true,
+        );
+      });
+    }
+
     initCollapsibleSemesters();
+    initCoefficientToggle();
   });
 })();

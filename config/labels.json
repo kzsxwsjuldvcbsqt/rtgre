@@ -51,9 +51,11 @@
     "semester_column": "Semestre",
     "average_column": "Moyenne",
     "unit_column": "Unité d'enseignement",
+    "coefficient_separator": "·",
     "panel_empty": "Saisis une note pour voir tes moyennes.",
     "empty_mark": "—",
     "detail_toggle": "Détail des évaluations",
+    "coef_toggle": "Coefficients",
     "evaluation_weight": "coef. {weight}",
     "evaluation_label": "Évaluation",
     "computed_grade": "Note calculée"
