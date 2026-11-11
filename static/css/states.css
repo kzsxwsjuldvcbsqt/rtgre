@@ -68,8 +68,10 @@ select:disabled {
     text-decoration: none;
   }
   .filter-form .segmented button:not([aria-pressed="true"]):hover {
-    background: var(--color-canvas);
     color: var(--color-text);
+  }
+  .filter-form .segmented button:not([aria-pressed="true"]):hover::before {
+    background: var(--color-canvas);
   }
   .menu-list button:hover,
   .menu-list a:hover {
