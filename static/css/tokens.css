@@ -57,6 +57,7 @@
   --color-now-glow: rgba(229, 72, 77, 0.45);
   --color-field-invalid: #e5484d;
   --color-pass: var(--color-label-green-fg);
+  --color-pass-soft: var(--color-label-green-bg);
   --color-fail: var(--color-danger);
 
   --color-link: #000000;

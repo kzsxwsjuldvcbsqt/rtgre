@@ -6,7 +6,7 @@
 {% block topbar %}{% call app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.calendar))], (sections | selectattr('id', 'equalto', 'grades') | first).label, labels) %}
 <div class="grades-actions" id="grades-actions" role="group" aria-label="{{ labels.grades.actions }}" hidden>
 <button type="button" class="btn" id="grades-import-btn">{{ icon('upload', url_for, site.icons) }}<span class="btn-label">{{ labels.grades.import_btn }}</span></button>
-<button type="button" class="btn" id="grades-bulletin-btn">{{ icon('checklist', url_for, site.icons) }}<span class="btn-label">{{ labels.grades.bulletin_btn }}</span></button>
+<button type="button" class="btn" id="grades-bulletin-btn">{{ icon('file-pdf', url_for, site.icons) }}<span class="btn-label">{{ labels.grades.bulletin_btn }}</span></button>
 <input type="file" id="grades-bulletin-file" accept="application/pdf,.pdf" hidden>
 <button type="button" class="btn" id="grades-export-btn">{{ icon('download', url_for, site.icons) }}<span class="btn-label">{{ labels.grades.export_btn }}</span></button>
 <button type="button" class="btn btn-danger" id="grades-reset-btn">{{ icon('trash', url_for, site.icons) }}<span class="btn-label">{{ labels.grades.reset_btn }}</span></button>

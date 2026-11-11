@@ -38,12 +38,16 @@
   max-width: none;
   margin-block: var(--space-md);
   padding: var(--space-sm) var(--space-md);
-  border: var(--rule-width) solid var(--color-border-muted);
-  border-inline-start: var(--rule-accent-width) solid var(--color-accent);
-  border-radius: var(--radius-medium);
-  background: var(--color-surface);
+  border: var(--rule-width) solid var(--color-pass);
+  border-radius: var(--radius-control);
+  background: var(--color-pass-soft);
   color: var(--color-text);
   font-size: var(--text-sm);
+}
+.grades-message.is-pending {
+  border-color: var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
 }
 .grades-message[role="alert"] {
   border-color: var(--color-danger);
