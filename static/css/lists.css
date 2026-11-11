@@ -58,11 +58,9 @@
   font-size: var(--text-sm);
   text-align: center;
 }
-.text-block {
-  max-width: var(--measure);
-  margin-block-start: var(--space-lg);
-  padding: var(--space-lg);
-  border: var(--rule-width) solid var(--color-border-muted);
-  border-radius: var(--radius-medium);
-  background: var(--color-surface);
+.text-block > p {
+  max-width: none;
+}
+.text-block > :first-child {
+  margin-block-start: 0;
 }
