@@ -324,6 +324,7 @@ def render_site(
                 class_config=cls,
                 sections=class_sections,
                 grades_data=grades_data,
+                mobile_media_query=app_config.calendar_config["mobile_media_query"],
                 categories=app_config.categories,
                 favicons=active_favicons,
                 generated_at=now_str,

@@ -885,7 +885,13 @@
         page.classList.toggle("show-coefs", visible);
       }
 
-      setVisible(AppUtils.safeStorageGet(coefStorageKey, true) === "1");
+      var saved = AppUtils.safeStorageGet(coefStorageKey, true);
+      setVisible(
+        saved === null
+          ? !window.matchMedia(scriptEl.getAttribute("data-mobile-query"))
+              .matches
+          : saved === "1",
+      );
       option.hidden = false;
       toggle.addEventListener("change", function () {
         setVisible(toggle.checked);
