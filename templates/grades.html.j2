@@ -24,41 +24,43 @@
 </noscript>
 <div id="grades-message" class="grades-message" role="status" aria-live="polite" hidden></div>
 
+<div class="grades-layout">
 {% if grades_data.annual_units %}
-<section class="data-box grades-summary" aria-labelledby="grades-summary-title">
+<aside class="data-box grades-panel" aria-labelledby="grades-summary-title">
 <header class="data-box-head"><h2 id="grades-summary-title">{{ labels.grades.annual_synthesis }}</h2></header>
-<div class="table-card">
+<p class="grades-panel-empty" id="grades-panel-empty">{{ labels.grades.panel_empty }}</p>
+<div class="table-card" id="grades-panel-table" hidden>
 <table class="grades-summary-table">
 <thead>
 <tr>
-<th scope="col"><span class="visually-hidden">{{ labels.grades.semester_column }}</span></th>
-{% for au in grades_data.annual_units %}
-<th scope="col"><abbr title="{{ au.label }}">{{ au.short_label }}</abbr></th>
+<th scope="col"><span class="visually-hidden">{{ labels.grades.unit_column }}</span></th>
+{% for sem in grades_data.semesters %}
+<th scope="col"><abbr title="{{ sem.label }}">{{ sem.short_label }}</abbr></th>
 {% endfor %}
-<th scope="col">{{ labels.grades.average_column }}</th>
+<th scope="col">{{ labels.grades.annual_header_annual }}</th>
 </tr>
 </thead>
 <tbody>
-{% for sem in grades_data.semesters %}
-<tr>
-<th scope="row"><abbr title="{{ sem.label }}">{{ sem.short_label }}</abbr></th>
 {% for au in grades_data.annual_units %}
-<td id="synth-{{ sem.id }}-{{ au.id }}"></td>
+<tr>
+<th scope="row"><abbr title="{{ au.label }}">{{ au.short_label }}</abbr></th>
+{% for sem in grades_data.semesters %}
+<td id="synth-{{ sem.id }}-{{ au.id }}" data-empty-mark="{{ labels.grades.empty_mark }}"></td>
 {% endfor %}
-<td id="avg-{{ sem.id }}"></td>
+<td id="synth-annual-{{ au.id }}" data-empty-mark="{{ labels.grades.empty_mark }}"></td>
 </tr>
 {% endfor %}
-<tr class="grades-summary-annual">
-<th scope="row">{{ labels.grades.annual_header_annual }}</th>
-{% for au in grades_data.annual_units %}
-<td id="synth-annual-{{ au.id }}"></td>
+<tr class="grades-summary-total">
+<th scope="row">{{ labels.grades.average_column }}</th>
+{% for sem in grades_data.semesters %}
+<td id="avg-{{ sem.id }}" data-empty-mark="{{ labels.grades.empty_mark }}"></td>
 {% endfor %}
 <td></td>
 </tr>
 </tbody>
 </table>
 </div>
-</section>
+</aside>
 {% endif %}
 
 <div id="notes-content">
@@ -71,31 +73,25 @@
     <span class="toggle-arrow">{{ icon('chevron-down', url_for, site.icons) }}</span>
   </button>
 </h3>
+<span class="semester-average">{{ labels.grades.average_column }} <strong id="sem-avg-{{ sem.id }}" data-empty-mark="{{ labels.grades.empty_mark }}"></strong></span>
 </header>
 <div class="table-card">
 <table id="semester-table-{{ sem.id }}" class="grades-table" data-semester="{{ sem.id }}">
 <thead>
 <tr>
-<th class="col-code">{{ labels.grades.subject_code }}</th>
-<th class="col-subject">{{ labels.grades.subject_label }}</th>
-{% for u in sem.units %}
-<th class="col-ue-header">{{ u.label }}</th>
-{% endfor %}
+<th class="col-module">{{ labels.grades.subject_code }}</th>
 <th class="col-grade-input">{{ grade_label }}</th>
 </tr>
 </thead>
 <tbody>
 {% for subj in sem.subjects %}
 <tr class="subject-row" data-module-code="{{ subj.code }}">
-<td class="col-code" data-label="{{ labels.grades.subject_code }}"><strong>{{ subj.code }}</strong></td>
-<td class="col-subject" data-label="{{ labels.grades.subject_label }}">{{ subj.label }}</td>
-{% for u in sem.units %}
-{% set coeff = subj.coeffs.get(u.id) %}
-<td class="col-ue-cell" data-label="{{ u.label }}"{% if not coeff %} data-empty="true"{% endif %}>
-{% if coeff %}{{ coeff }}{% endif %}
+<td class="col-module">
+<span class="module-title"><span class="module-code">{{ subj.code }}</span> <span class="module-name">{{ subj.label }}</span></span>
+{% set coef = namespace(units=[]) %}{% for u in sem.units %}{% if subj.coeffs.get(u.id) %}{% set coef.units = coef.units + [u] %}{% endif %}{% endfor %}
+<span class="coef-list">{% for u in coef.units %}{% if not loop.first %}<span class="coef-sep" aria-hidden="true">{{ labels.grades.coefficient_separator }}</span>{% endif %}<span class="coef"><span class="coef-unit">{{ u.label }}</span> <strong>{{ subj.coeffs[u.id] }}</strong></span>{% endfor %}</span>
 </td>
-{% endfor %}
-<td class="col-grade-input" data-label="{{ grade_label }}">
+<td class="col-grade-input">
 <input type="text"
        class="grade-input"
        data-module="{{ subj.code }}"
@@ -110,12 +106,8 @@
 </tr>
 {% for ev in subj.evaluations %}
 <tr class="evaluation-row" data-parent-module="{{ subj.code }}" hidden>
-<td class="col-code" data-empty="true"></td>
-<td class="col-subject" data-label="{{ labels.grades.evaluation_label }}"><span class="evaluation-name">{{ ev.label }}</span> <span class="evaluation-weight">{{ labels.grades.evaluation_weight.format(weight=ev.weight) }}</span></td>
-{% for u in sem.units %}
-<td class="col-ue-cell" data-empty="true"></td>
-{% endfor %}
-<td class="col-grade-input" data-label="{{ grade_label }}">
+<td class="col-module"><span class="evaluation-name">{{ ev.label }}</span> <span class="evaluation-weight">{{ labels.grades.evaluation_weight.format(weight=ev.weight) }}</span></td>
+<td class="col-grade-input">
 <input type="text"
        class="grade-input"
        data-evaluation-module="{{ subj.code }}"
@@ -135,6 +127,7 @@
 {% endfor %}
 </div>
 </div>
+</div>
 
 <script defer src="{{ url_for('static/js/write-access.js') }}"></script>
 <script defer src="{{ url_for('static/js/grades-model.js') }}"></script>
@@ -143,6 +136,7 @@
   data-min="{{ site.grades.minimum }}"
   data-max="{{ site.grades.maximum }}"
   data-decimals="{{ site.grades.decimals }}"
+  data-pass-mark="{{ site.grades.pass_mark }}"
   data-storage-prefix="{{ site.grades.storage_key_prefix }}"
   data-detail-storage-prefix="{{ site.grades.detail_storage_key_prefix }}"
   data-format-version="{{ site.grades.export_format_version }}"

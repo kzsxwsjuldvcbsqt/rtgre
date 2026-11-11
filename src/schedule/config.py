@@ -259,6 +259,12 @@ def load_config(config_dir: str = "config") -> AppConfig:
         or grades["minimum"] >= grades["maximum"]
     ):
         raise ValueError("Invalid grade bounds")
+    if (
+        type(grades["pass_mark"]) not in (int, float)
+        or not math.isfinite(grades["pass_mark"])
+        or not grades["minimum"] <= grades["pass_mark"] <= grades["maximum"]
+    ):
+        raise ValueError("Invalid grade pass mark")
     if type(grades["decimals"]) is not int or not 0 <= grades["decimals"] <= 100:
         raise ValueError("Invalid grade precision")
     if any(

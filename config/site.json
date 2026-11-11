@@ -76,6 +76,7 @@
   "grades": {
     "minimum": 0,
     "maximum": 20,
+    "pass_mark": 10,
     "decimals": 2,
     "storage_key_prefix": "grades",
     "detail_storage_key_prefix": "grades_detail",
