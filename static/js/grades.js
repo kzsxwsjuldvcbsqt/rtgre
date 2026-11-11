@@ -191,10 +191,6 @@
           document.getElementById("avg-" + sem.id),
           averages.semesters[sem.id],
         );
-        showAverage(
-          document.getElementById("sem-avg-" + sem.id),
-          averages.semesters[sem.id],
-        );
       });
       var panelTable = document.getElementById("grades-panel-table");
       var panelEmpty = document.getElementById("grades-panel-empty");

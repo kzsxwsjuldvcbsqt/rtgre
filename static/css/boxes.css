@@ -11,6 +11,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-sm);
+  min-height: var(--height-box-title);
   margin-block-end: var(--space-sm);
 }
 .data-box-head > h2,
