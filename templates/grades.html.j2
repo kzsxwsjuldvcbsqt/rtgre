@@ -88,8 +88,7 @@
 <tr class="subject-row" data-module-code="{{ subj.code }}">
 <td class="col-module">
 <span class="module-title"><span class="module-code">{{ subj.code }}</span> <span class="module-name">{{ subj.label }}</span></span>
-{% set coef = namespace(units=[]) %}{% for u in sem.units %}{% if subj.coeffs.get(u.id) %}{% set coef.units = coef.units + [u] %}{% endif %}{% endfor %}
-<span class="coef-list">{% for u in coef.units %}{% if not loop.first %}<span class="coef-sep" aria-hidden="true">{{ labels.grades.coefficient_separator }}</span>{% endif %}<span class="coef"><span class="coef-unit">{{ u.label }}</span> <strong>{{ subj.coeffs[u.id] }}</strong></span>{% endfor %}</span>
+<span class="coef-list">{% for u in sem.units %}{% set coeff = subj.coeffs.get(u.id) %}<span class="coef">{% if coeff %}<span class="visually-hidden">{{ u.label }}</span>{{ coeff }}{% endif %}</span>{% endfor %}</span>
 </td>
 <td class="col-grade-input">
 <input type="text"
