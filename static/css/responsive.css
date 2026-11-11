@@ -480,3 +480,16 @@
     border-block-start: var(--rule-width) solid var(--color-navbar-divider);
   }
 }
+
+.app:has(:where(.page-band, .filter-sidebar > .filter-panel:not([hidden])))
+  .app-topbar {
+  border-block-end-color: transparent;
+}
+@media (min-width: 60em) {
+  .app:has(:where(.filter-sidebar)) .app-topbar {
+    border-block-end-color: transparent;
+  }
+}
+html.is-scrolled .app-topbar {
+  border-block-end-color: var(--color-border-muted);
+}
