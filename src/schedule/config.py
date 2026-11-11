@@ -80,6 +80,47 @@ def valid_public_id(value: object) -> bool:
     return isinstance(value, str) and re.fullmatch(r"[a-z0-9][a-z0-9_-]*", value) is not None
 
 
+def validate_bulletin_config(bulletin):
+    text_keys = (
+        "producer_marker",
+        "title_marker",
+        "formation_marker",
+        "program_marker",
+        "ue_section",
+        "note_header",
+        "footer_marker",
+        "missing_grade",
+        "module_pattern",
+    )
+    if (
+        not isinstance(bulletin, dict)
+        or any(
+            not isinstance(bulletin.get(key), str) or not bulletin[key].strip() for key in text_keys
+        )
+        or any(
+            not isinstance(bulletin.get(key), list)
+            or not all(isinstance(item, str) and item.strip() for item in bulletin[key])
+            for key in ("evaluation_sections", "ignored_texts")
+        )
+        or not bulletin["evaluation_sections"]
+        or any(
+            type(bulletin.get(key)) is not int or bulletin[key] <= 0
+            for key in ("max_bytes", "max_pages")
+        )
+        or any(
+            type(bulletin.get(key)) not in (int, float)
+            or not math.isfinite(bulletin[key])
+            or bulletin[key] < 0
+            for key in ("row_tolerance", "column_tolerance", "wrap_gap")
+        )
+    ):
+        raise ValueError("Invalid bulletin configuration")
+    try:
+        re.compile(bulletin["module_pattern"])
+    except re.error as error:
+        raise ValueError("Invalid bulletin module pattern") from error
+
+
 def validate_evaluation_details(curriculum_data: dict):
     details = curriculum_data.get("evaluation_details", {})
     coefficients = curriculum_data["coefficients"]
@@ -272,6 +313,7 @@ def load_config(config_dir: str = "config") -> AppConfig:
         for key in ("max_import_bytes", "max_entries", "export_format_version")
     ):
         raise ValueError("Invalid grade limits")
+    validate_bulletin_config(grades["bulletin"])
     if (
         site["ade"]["retry_attempts"] < 1
         or site["ade"]["request_timeout_seconds"] <= 0

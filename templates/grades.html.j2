@@ -6,6 +6,8 @@
 {% block topbar %}{% call app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.calendar))], (sections | selectattr('id', 'equalto', 'grades') | first).label, labels) %}
 <div class="grades-actions" id="grades-actions" role="group" aria-label="{{ labels.grades.actions }}" hidden>
 <button type="button" class="btn" id="grades-import-btn">{{ icon('upload', url_for, site.icons) }}<span class="btn-label">{{ labels.grades.import_btn }}</span></button>
+<button type="button" class="btn" id="grades-bulletin-btn">{{ icon('checklist', url_for, site.icons) }}<span class="btn-label">{{ labels.grades.bulletin_btn }}</span></button>
+<input type="file" id="grades-bulletin-file" accept="application/pdf,.pdf" hidden>
 <button type="button" class="btn" id="grades-export-btn">{{ icon('download', url_for, site.icons) }}<span class="btn-label">{{ labels.grades.export_btn }}</span></button>
 <button type="button" class="btn btn-danger" id="grades-reset-btn">{{ icon('trash', url_for, site.icons) }}<span class="btn-label">{{ labels.grades.reset_btn }}</span></button>
 <input type="file" id="grades-import-file" accept=".json" hidden>
@@ -140,6 +142,7 @@
 
 <script defer src="{{ url_for('static/js/write-access.js') }}"></script>
 <script defer src="{{ url_for('static/js/grades-model.js') }}"></script>
+<script defer src="{{ url_for('static/js/bulletin-model.js') }}"></script>
 <script defer src="{{ url_for('static/js/grades.js') }}"
   data-class-id="{{ class_config.id }}"
   data-min="{{ site.grades.minimum }}"
@@ -167,5 +170,17 @@
   data-import-success="{{ labels.grades.import_success }}"
   data-entries-ignored="{{ labels.grades.entries_ignored }}"
   data-grades-config='{{ grades_data | tojson }}'
+  data-bulletin-config='{{ site.grades.bulletin | tojson }}'
+  data-pdfjs="{{ url_for('static/vendor/pdfjs/pdf.min.mjs') }}"
+  data-pdfjs-worker="{{ url_for('static/vendor/pdfjs/pdf.worker.min.mjs') }}"
+  data-bulletin-reading="{{ labels.grades.bulletin_reading }}"
+  data-err-bulletin-unreadable="{{ labels.grades.err_bulletin_unreadable }}"
+  data-err-bulletin-not-recognized="{{ labels.grades.err_bulletin_not_recognized }}"
+  data-err-bulletin-track="{{ labels.grades.err_bulletin_track }}"
+  data-err-bulletin-status="{{ labels.grades.err_bulletin_status }}"
+  data-err-bulletin-modules="{{ labels.grades.err_bulletin_modules }}"
+  data-err-bulletin-empty="{{ labels.grades.err_bulletin_empty }}"
+  data-bulletin-replace-confirm="{{ labels.grades.bulletin_replace_confirm }}"
+  data-bulletin-success="{{ labels.grades.bulletin_success }}"
 ></script>
 {% endblock %}

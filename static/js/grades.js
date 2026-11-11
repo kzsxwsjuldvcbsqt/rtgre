@@ -504,6 +504,195 @@
       messageEl.textContent = msg;
     }
 
+    var bulletinBtn = document.getElementById("grades-bulletin-btn");
+    var bulletinFile = document.getElementById("grades-bulletin-file");
+    var bulletinConfig = JSON.parse(
+      scriptEl.getAttribute("data-bulletin-config"),
+    );
+
+    function bulletinText(name) {
+      return scriptEl.getAttribute("data-" + name);
+    }
+
+    function fillTemplate(template, values) {
+      return Object.keys(values).reduce(function (text, key) {
+        return text.split("{" + key + "}").join(String(values[key]));
+      }, template);
+    }
+
+    async function readBulletinPages(file) {
+      var pdfjs = await import(
+        new URL(scriptEl.getAttribute("data-pdfjs"), document.baseURI).href
+      );
+      pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+        scriptEl.getAttribute("data-pdfjs-worker"),
+        document.baseURI,
+      ).href;
+      var task = pdfjs.getDocument({
+        data: new Uint8Array(await file.arrayBuffer()),
+        isEvalSupported: false,
+        disableFontFace: true,
+        enableXfa: false,
+        verbosity: 0,
+      });
+      var doc = await task.promise;
+      try {
+        if (doc.numPages > bulletinConfig.max_pages) {
+          throw new Error("not_recognized");
+        }
+        var info = (await doc.getMetadata()).info || {};
+        var pages = [];
+        for (var number = 1; number <= doc.numPages; number++) {
+          var page = await doc.getPage(number);
+          var content = await page.getTextContent();
+          pages.push(
+            content.items.map(function (item) {
+              return {
+                x: item.transform[4],
+                y: item.transform[5],
+                text: item.str,
+              };
+            }),
+          );
+        }
+        return { info: info, pages: pages };
+      } finally {
+        await task.destroy();
+      }
+    }
+
+    function mergeBulletin(result) {
+      var counts = { added: 0, replaced: 0, unchanged: 0 };
+      function count(previous, next) {
+        if (previous === undefined) counts.added++;
+        else if (previous === next) counts.unchanged++;
+        else counts.replaced++;
+      }
+      var grades = Object.assign({}, lastValidByCode);
+      Object.keys(result.grades).forEach(function (code) {
+        count(lastValidByCode[code], result.grades[code]);
+        grades[code] = result.grades[code];
+      });
+      var evaluations = JSON.parse(JSON.stringify(lastValidDetail));
+      Object.keys(result.evaluations).forEach(function (code) {
+        evaluations[code] = evaluations[code] || {};
+        Object.keys(result.evaluations[code]).forEach(function (id) {
+          count(
+            lastValidDetail[code] && lastValidDetail[code][id],
+            result.evaluations[code][id],
+          );
+          evaluations[code][id] = result.evaluations[code][id];
+        });
+      });
+      return { grades: grades, evaluations: evaluations, counts: counts };
+    }
+
+    async function importBulletin(file) {
+      if (file.size > bulletinConfig.max_bytes) {
+        showMessage(errFileSize, true);
+        return;
+      }
+      if (restoreFailed) {
+        showMessage(errRestore, true);
+        return;
+      }
+      showMessage(bulletinText("bulletin-reading"), false);
+      var result;
+      try {
+        var source = await readBulletinPages(file);
+        var parsed = BulletinModel.read(
+          source.pages,
+          source.info,
+          bulletinConfig,
+        );
+        result = BulletinModel.match(parsed, gradesConfig);
+      } catch (error) {
+        showMessage(
+          bulletinText(
+            error && error.message === "not_recognized"
+              ? "err-bulletin-not-recognized"
+              : "err-bulletin-unreadable",
+          ),
+          true,
+        );
+        return;
+      }
+      if (result.known === 0) {
+        showMessage(bulletinText("err-bulletin-modules"), true);
+        return;
+      }
+      if (
+        result.tracks.length !== 1 ||
+        result.tracks[0] !== gradesConfig.track
+      ) {
+        showMessage(bulletinText("err-bulletin-track"), true);
+        return;
+      }
+      if (
+        result.statuses.length !== 1 ||
+        result.statuses[0] !== gradesConfig.status
+      ) {
+        showMessage(bulletinText("err-bulletin-status"), true);
+        return;
+      }
+      if (
+        Object.keys(result.grades).length +
+          countEvaluations(result.evaluations) ===
+        0
+      ) {
+        showMessage(bulletinText("err-bulletin-empty"), true);
+        return;
+      }
+      var merged = mergeBulletin(result);
+      if (
+        merged.counts.replaced > 0 &&
+        !window.confirm(
+          fillTemplate(bulletinText("bulletin-replace-confirm"), {
+            count: merged.counts.replaced,
+          }),
+        )
+      ) {
+        showMessage("", false);
+        return;
+      }
+      var detail = { enabled: detailEnabled, evaluations: merged.evaluations };
+      try {
+        assertDetailUnchanged();
+        writeGrades(merged.grades);
+        writeDetail(detail);
+      } catch (error) {
+        showMessage(
+          error.message === "conflict" ? errConflict : errStorage,
+          true,
+        );
+        return;
+      }
+      lastValidByCode = Object.assign({}, merged.grades);
+      lastValidDetail = JSON.parse(JSON.stringify(merged.evaluations));
+      applyGrades(merged.grades);
+      applyDetail(detail);
+      updateActionState();
+      var message = fillTemplate(
+        bulletinText("bulletin-success"),
+        merged.counts,
+      );
+      if (result.ignored > 0) {
+        message += " (" + result.ignored + " " + entriesIgnoredMsg + ")";
+      }
+      showMessage(message, false);
+    }
+
+    if (bulletinBtn && bulletinFile) {
+      bulletinBtn.addEventListener("click", function () {
+        bulletinFile.value = "";
+        bulletinFile.click();
+      });
+      bulletinFile.addEventListener("change", function (evt) {
+        var file = evt.target.files[0];
+        if (file) importBulletin(file);
+      });
+    }
+
     if (importBtn && importFile) {
       importBtn.addEventListener("click", function () {
         importFile.value = "";

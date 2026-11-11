@@ -16,6 +16,7 @@ from schedule.build import build_lock, output_path, publish_site
 from schedule.classifier import match_session_marks
 from schedule.config import (
     load_config,
+    validate_bulletin_config,
     validate_calendar_config,
     validate_evaluation_details,
     validate_session_marks,
@@ -86,6 +87,21 @@ class ScheduleTests(unittest.TestCase):
                 config["coefficients"]["dc"]["fi"]["R501"] = mapping
                 with self.assertRaises(ValueError):
                     validate_curriculum_config(config)
+
+    def test_bulletin_config_is_validated(self):
+        valid = load_config().site["grades"]["bulletin"]
+        validate_bulletin_config(copy.deepcopy(valid))
+        for key, value in (
+            ("module_pattern", "("),
+            ("note_header", " "),
+            ("evaluation_sections", []),
+            ("max_pages", 0),
+            ("wrap_gap", -1),
+        ):
+            broken = copy.deepcopy(valid)
+            broken[key] = value
+            with self.subTest(key=key), self.assertRaises(ValueError):
+                validate_bulletin_config(broken)
 
     def test_evaluation_details_are_validated(self):
         valid = [{"id": "ds", "label": "DS", "weight": 1}]

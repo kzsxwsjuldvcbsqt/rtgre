@@ -84,7 +84,25 @@
     "export_format": "but3-grades",
     "export_filename": "grades-{class}-{date}.json",
     "max_import_bytes": 200000,
-    "max_entries": 500
+    "max_entries": 500,
+    "bulletin": {
+      "max_bytes": 2000000,
+      "max_pages": 10,
+      "producer_marker": "ScoDoc",
+      "title_marker": "RELEVÉ DE NOTES",
+      "formation_marker": "Formation:",
+      "program_marker": "Réseaux et Télécommunications",
+      "ue_section": "Unités d'enseignement",
+      "evaluation_sections": ["Ressources", "Situations d'apprentissage et d'évaluation"],
+      "note_header": "Note/20",
+      "footer_marker": "Édité par ScoDoc",
+      "missing_grade": "~",
+      "ignored_texts": ["Provisoire"],
+      "module_pattern": "^(?:R|SAE)\\d+(?:\\.[A-Za-z0-9]+)+",
+      "row_tolerance": 3,
+      "column_tolerance": 5,
+      "wrap_gap": 12
+    }
   },
   "rooms": {
     "strip_prefixes": [
