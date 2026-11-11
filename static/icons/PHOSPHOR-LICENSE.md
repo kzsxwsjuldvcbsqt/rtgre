@@ -1,6 +1,6 @@
 # Phosphor Icons
 
-Icons in `phosphor.svg` are from Phosphor Icons (@phosphor-icons/core v2.1.1, duotone and regular weights), used under the MIT License.
+Icons in `phosphor.svg` are from Phosphor Icons (@phosphor-icons/core v2.1.1, regular weight, drawn from the duotone and regular sets), used under the MIT License.
 
 Source: https://github.com/phosphor-icons/core
 

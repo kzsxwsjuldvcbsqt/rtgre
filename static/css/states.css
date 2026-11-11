@@ -32,9 +32,6 @@ select:disabled {
     background: var(--color-navbar-active);
     color: var(--color-navbar-text);
   }
-  .app-nav a:hover .icon {
-    --icon-tone: transparent;
-  }
   .picker-option:hover {
     border-color: var(--color-text-faint);
     background: var(--color-canvas);

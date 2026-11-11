@@ -34,7 +34,6 @@
   font-weight: var(--weight-semibold);
 }
 .app-nav a[aria-current="page"] .icon {
-  --icon-tone: transparent;
   color: var(--color-highlight);
 }
 .app-nav-classes a[aria-current="page"] {
