@@ -76,6 +76,9 @@
   font-size: var(--text-base);
 }
 .grades-table tbody tr:has(.grade-input:not([hidden])) {
+  cursor: pointer;
+}
+.grades-table .grade-input {
   cursor: text;
 }
 .grades-table tbody tr:first-child > td {
