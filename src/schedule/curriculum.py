@@ -290,4 +290,8 @@ def get_class_grades_data(class_config: ClassConfig, curriculum_data: dict, labe
         "annual_units": annual_units_data,
         "coefficients_raw": coeffs_map,
         "has_details": bool(details_map),
+        "track": track,
+        "status": status,
+        "track_ids": [item["id"] for item in curriculum_data.get("tracks", [])],
+        "status_ids": [item["id"] for item in curriculum_data.get("statuses", [])],
     }

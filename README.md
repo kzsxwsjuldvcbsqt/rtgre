@@ -55,6 +55,8 @@ Le site propose une saisie locale des notes. Les calculs s'appuient sur les coef
 
 Pour les classes dont le détail est décrit dans la section `evaluation_details` de `config/curriculum.json`, un réglage « Détail des évaluations » permet de saisir chaque évaluation d'un module avec son coefficient ; la note du module devient alors la moyenne pondérée des évaluations saisies. Les notes de module saisies directement et les notes d'évaluations sont conservées séparément : activer ou désactiver le réglage ne supprime rien. L'export (format version 2) contient les deux jeux de notes et l'état du réglage ; l'import d'un fichier version 1 désactive le détail, et les notes d'évaluations d'une classe sans détail sont ignorées.
 
+Le bouton « Relevé PDF » importe le relevé de notes provisoire édité par ScoDoc. Le fichier est lu entièrement dans le navigateur avec pdf.js, chargé uniquement à ce moment-là : il n'est envoyé nulle part et n'est pas conservé, seules les notes en sont extraites. Le relevé doit correspondre au parcours et au statut (formation initiale ou alternance) de la classe ouverte, sinon il est refusé. Les notes de module et les notes d'évaluations sont reprises, même si le détail des évaluations est désactivé ; les notes encore absentes du relevé (« ~ ») ne modifient rien. Une confirmation est demandée avant de remplacer une note déjà saisie qui diffère. Les repères de lecture du relevé sont réglables dans la section `grades.bulletin` de `config/site.json`.
+
 Ces résultats ne sont pas des notes officielles. Ce sont des estimations basées sur les coefficients configurés et sur les valeurs saisies par l'utilisateur.
 
 ### Interface
@@ -115,7 +117,8 @@ Il n'y a pas de serveur applicatif, pas d'API privée, pas de base de données, 
 ├── static/
 │   ├── css/             # styles
 │   ├── js/              # logique exécutée dans le navigateur
-│   └── icons/           # icônes Octicons
+│   ├── icons/           # icônes Phosphor
+│   └── vendor/pdfjs/    # lecture des relevés PDF (pdf.js)
 ├── tests/
 │   ├── python/
 │   ├── javascript/
@@ -283,4 +286,5 @@ Le projet est distribué sous licence MIT. Voir [LICENSE](LICENSE).
 
 Certaines ressources distribuées avec le dépôt conservent leur propre licence :
 
-- Octicons : [static/icons/OCTICONS-LICENSE.md](static/icons/OCTICONS-LICENSE.md)
+- Phosphor Icons : [static/icons/PHOSPHOR-LICENSE.md](static/icons/PHOSPHOR-LICENSE.md)
+- pdf.js (Mozilla, Apache 2.0) : [static/vendor/pdfjs/LICENSE](static/vendor/pdfjs/LICENSE)
