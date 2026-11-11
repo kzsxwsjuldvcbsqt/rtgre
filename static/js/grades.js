@@ -492,7 +492,7 @@
     var importBtn = document.getElementById("grades-import-btn");
     var importFile = document.getElementById("grades-import-file");
 
-    function showMessage(msg, isError) {
+    function showMessage(msg, isError, isPending) {
       if (!messageEl) return;
       if (!msg) {
         messageEl.hidden = true;
@@ -501,6 +501,7 @@
       }
       messageEl.hidden = false;
       messageEl.setAttribute("role", isError ? "alert" : "status");
+      messageEl.classList.toggle("is-pending", isPending === true);
       messageEl.textContent = msg;
     }
 
@@ -596,7 +597,7 @@
         showMessage(errRestore, true);
         return;
       }
-      showMessage(bulletinText("bulletin-reading"), false);
+      showMessage(bulletinText("bulletin-reading"), false, true);
       var result;
       try {
         var source = await readBulletinPages(file);
