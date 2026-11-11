@@ -1,12 +1,12 @@
-# Octicons
+# Phosphor Icons
 
-Icons in `octicons.svg` are from GitHub Octicons (v19.15.1), used under the MIT License.
+Icons in `phosphor.svg` are from Phosphor Icons (@phosphor-icons/core v2.1.1, duotone and regular weights), used under the MIT License.
 
-Source: https://github.com/primer/octicons
+Source: https://github.com/phosphor-icons/core
 
 MIT License
 
-Copyright (c) GitHub, Inc.
+Copyright (c) 2023 Phosphor Icons
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
