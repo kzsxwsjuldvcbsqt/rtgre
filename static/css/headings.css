@@ -39,7 +39,7 @@
   justify-content: center;
   width: var(--touch-target);
   height: var(--touch-target);
-  margin: calc((var(--touch-target) - 1.5rem) / -2);
+  margin: calc((var(--touch-target) - var(--height-box-title)) / -2);
   border: 0;
   background: transparent;
   color: var(--color-text-muted);

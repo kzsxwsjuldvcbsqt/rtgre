@@ -51,8 +51,7 @@
 .grades-summary-table tbody th {
   font-weight: var(--weight-semibold);
 }
-.grades-panel [data-empty-mark]:empty::before,
-.semester-average [data-empty-mark]:empty::before {
+.grades-panel [data-empty-mark]:empty::before {
   content: attr(data-empty-mark);
   color: var(--color-text-faint);
   font-weight: var(--weight-normal);
@@ -63,35 +62,22 @@
 .is-fail {
   color: var(--color-fail);
 }
-.semester-average {
-  margin-inline-start: auto;
-  color: var(--color-text-muted);
-  font-size: var(--text-sm);
-}
-.semester-average strong {
-  margin-inline-start: var(--space-2xs);
-  font-family: var(--font-mono);
-  font-size: var(--text-md);
-  font-variant-numeric: tabular-nums;
-}
 .grades-table {
   margin: 0;
 }
 .grades-table th,
 .grades-table td {
   padding: var(--space-xs) var(--space-md);
+  font-size: var(--text-base);
+}
+.grades-table tbody tr {
+  height: var(--height-box-row);
 }
 .grades-table .col-module {
   min-width: 0;
 }
 .module-title {
   display: block;
-}
-.module-code {
-  font-weight: var(--weight-semibold);
-}
-.module-name {
-  color: var(--color-text-muted);
 }
 .coef-list {
   display: flex;

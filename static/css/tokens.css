@@ -118,6 +118,7 @@
   --control-height: 2.25rem;
   --control-font-size: var(--text-sm);
   --touch-target: 2.75rem;
+  --height-box-title: 1.5rem;
 
   --rule-width: 1px;
   --rule-accent-width: 2px;
