@@ -168,17 +168,16 @@
   align-items: stretch;
   border-radius: var(--radius-control);
   min-height: var(--control-height);
-  border: var(--rule-width) solid var(--color-field-border);
+  box-shadow: inset 0 0 0 var(--rule-width) var(--color-field-border);
   background: var(--color-inset);
-  overflow: hidden;
 }
 .filter-form .segmented button {
   position: relative;
   isolation: isolate;
   border-radius: var(--radius-control);
-  min-height: calc(var(--control-height) - 2 * var(--rule-width));
+  min-height: var(--control-height);
   padding-inline: var(--space-sm);
-  border-color: transparent;
+  border: 0;
   background: transparent;
   color: var(--color-text-muted);
 }
@@ -190,6 +189,7 @@
   border-radius: calc(var(--radius-control) - var(--space-3xs));
 }
 .filter-form .segmented button[aria-pressed="true"] {
+  box-shadow: inset 0 0 0 var(--rule-width) var(--color-field-border);
   background: var(--color-accent-soft);
   color: var(--color-on-highlight);
   font-weight: var(--weight-semibold);
