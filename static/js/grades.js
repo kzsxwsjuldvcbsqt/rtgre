@@ -192,7 +192,7 @@
           averages.semesters[sem.id],
         );
       });
-      var panelTable = document.getElementById("grades-panel-table");
+      var panelTable = document.getElementById("grades-panel-body");
       var panelEmpty = document.getElementById("grades-panel-empty");
       if (panelTable && panelEmpty) {
         var hasAverage = Object.keys(averages.units).some(function (id) {
@@ -885,6 +885,15 @@
         );
       });
     }
+
+    document.querySelectorAll(".grades-table tbody").forEach(function (body) {
+      body.addEventListener("click", function (event) {
+        if (event.target.closest("input, button, a")) return;
+        var row = event.target.closest("tr");
+        var input = row && row.querySelector(".grade-input:not([hidden])");
+        if (input) input.focus();
+      });
+    });
 
     initCollapsibleSemesters();
     initCoefficientToggle();

@@ -31,8 +31,7 @@
 {% if grades_data.annual_units %}
 <aside class="data-box grades-panel" aria-labelledby="grades-summary-title">
 <header class="data-box-head"><h2 id="grades-summary-title">{{ labels.grades.annual_synthesis }}</h2></header>
-<p class="grades-panel-empty" id="grades-panel-empty">{{ labels.grades.panel_empty }}</p>
-<div class="table-card" id="grades-panel-table" hidden>
+<div class="table-card">
 <table class="grades-summary-table">
 <thead>
 <tr>
@@ -43,7 +42,7 @@
 <th scope="col">{{ labels.grades.annual_header_annual }}</th>
 </tr>
 </thead>
-<tbody>
+<tbody id="grades-panel-body" hidden>
 {% for au in grades_data.annual_units %}
 <tr>
 <th scope="row"><abbr title="{{ au.label }}">{{ au.short_label }}</abbr></th>
@@ -62,6 +61,7 @@
 </tr>
 </tbody>
 </table>
+<p class="grades-panel-empty" id="grades-panel-empty">{{ labels.grades.panel_empty }}</p>
 </div>
 </aside>
 {% endif %}
