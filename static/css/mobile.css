@@ -1,3 +1,4 @@
+.heading-short,
 .nav-toggle,
 .nav-class-chip,
 .nav-close,
@@ -235,11 +236,38 @@
     padding: 0;
   }
   .cal-nav-center #cal-next-btn {
-    order: 1;
+    grid-column: 3;
+    grid-row: 1;
   }
   .cal-period-heading {
     font-size: var(--text-base);
     text-align: center;
+  }
+  .cal-period-heading .heading-full {
+    position: absolute;
+    width: var(--visually-hidden-size);
+    height: var(--visually-hidden-size);
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .cal-period-heading .heading-short {
+    display: block;
+    line-height: var(--leading-tight);
+  }
+  .heading-eyebrow {
+    display: block;
+    color: var(--color-text-muted);
+    font-family: var(--font-family);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-normal);
+  }
+  .cal-nav-center #cal-prev-btn {
+    grid-column: 1;
+  }
+  .cal-nav-center .cal-period-heading {
+    grid-column: 2;
+    grid-row: 1;
   }
   html.js-enabled .filter-panel {
     display: none;

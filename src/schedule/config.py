@@ -323,7 +323,12 @@ def load_config(config_dir: str = "config") -> AppConfig:
         raise ValueError("Invalid ADE retry configuration")
     if site["teachers"]["display_mode"] not in ("full", "initials", "given_name_initial", "hidden"):
         raise ValueError("Invalid teacher display mode")
-    if len(labels["days"]) != 7 or len(labels["months"]) != 12:
+    if (
+        len(labels["days"]) != 7
+        or len(labels["months"]) != 12
+        or len(labels["days_short"]) != 7
+        or len(labels["months_short"]) != 12
+    ):
         raise ValueError("Invalid calendar labels")
 
     programs = []
