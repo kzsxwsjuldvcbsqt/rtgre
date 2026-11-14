@@ -57,8 +57,8 @@ def prepare_evaluation_comparison(app_config, class_config, evaluation, match_st
             "time": state.evaluation.time_range != evaluation.time_range,
             "rooms": sorted(state.evaluation.rooms) != sorted(evaluation.rooms),
             "teachers": app_config.site["teachers"]["display_mode"] != "hidden"
-            and (state.evaluation.teachers + state.evaluation.staff_markers)
-            != (evaluation.teachers + evaluation.staff_markers),
+            and sorted(state.evaluation.teachers + state.evaluation.staff_markers)
+            != sorted(evaluation.teachers + evaluation.staff_markers),
         }
         for key, value in flags.items():
             differences[key] = differences[key] or value

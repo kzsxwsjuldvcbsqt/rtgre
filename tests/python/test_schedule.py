@@ -68,6 +68,10 @@ class ScheduleTests(unittest.TestCase):
         self.assertFalse(self.compare_with(rooms=("T25", "T22"))["rooms"])
         self.assertTrue(self.compare_with(rooms=("T25", "T24"))["rooms"])
 
+    def test_comparison_ignores_teacher_order(self):
+        self.assertFalse(self.compare_with(teachers=("Cleo B.", "Jerome M."))["teachers"])
+        self.assertTrue(self.compare_with(teachers=("Cleo B.",))["teachers"])
+
     def test_nearest_alternate_match(self):
         from dataclasses import replace
 
