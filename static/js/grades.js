@@ -172,12 +172,8 @@
       computedOutputs.forEach(function (output) {
         var code = output.getAttribute("data-computed-module");
         var value = computed[code];
-        output.classList.toggle("is-empty", value === undefined);
         markResult(output, value);
-        output.textContent =
-          value === undefined
-            ? inputsByCode[code].placeholder
-            : value.toFixed(decimals);
+        output.textContent = value === undefined ? "" : value.toFixed(decimals);
       });
     }
 

@@ -211,7 +211,3 @@
   font-variant-numeric: tabular-nums;
   font-weight: var(--weight-semibold);
 }
-.grade-computed.is-empty {
-  color: var(--color-text-faint);
-  font-weight: var(--weight-normal);
-}
