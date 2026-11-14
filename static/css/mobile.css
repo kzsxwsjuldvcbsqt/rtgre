@@ -334,9 +334,6 @@
     flex-wrap: wrap;
     gap: var(--space-xs);
   }
-  .filter-panel .filter-group-item + label {
-    margin-block-start: var(--space-xs);
-  }
   .filter-panel select,
   .filter-panel input[type="text"] {
     width: 100%;
