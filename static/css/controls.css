@@ -7,6 +7,7 @@
 .calendar-nav-bar input[type="date"],
 .filter-form button,
 .calendar-nav-bar button,
+.segmented button,
 .grade-input {
   min-height: var(--control-height);
   padding-inline: var(--space-sm);
@@ -21,7 +22,8 @@
 .detail-link,
 .choice-trigger,
 .filter-form button,
-.calendar-nav-bar button {
+.calendar-nav-bar button,
+.segmented button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -171,7 +173,7 @@
   box-shadow: inset 0 0 0 var(--rule-width) var(--color-field-border);
   background: var(--color-inset);
 }
-.filter-form .segmented button {
+.segmented .segmented-option {
   position: relative;
   isolation: isolate;
   border-radius: var(--radius-control);
@@ -181,14 +183,14 @@
   background: transparent;
   color: var(--color-text-muted);
 }
-.filter-form .segmented button::before {
+.segmented .segmented-option::before {
   content: "";
   position: absolute;
   inset: var(--space-2xs) var(--space-xs);
   z-index: -1;
   border-radius: calc(var(--radius-control) - var(--space-2xs));
 }
-.filter-form .segmented button[aria-pressed="true"] {
+.segmented .segmented-option[aria-pressed="true"] {
   box-shadow: inset 0 0 0 var(--rule-width) var(--color-field-border);
   background: var(--color-accent-soft);
   color: var(--color-on-highlight);

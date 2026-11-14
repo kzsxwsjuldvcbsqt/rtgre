@@ -3,7 +3,7 @@
 {% from "_icons.html.j2" import icon %}
 {% block title %}{% for s in sections %}{% if s.id == 'calendar' %}{{ s.label }}{% endif %}{% endfor %} - {{ class_config.label }} - {{ site.title }}{% endblock %}
 {% block sidebar %}{{ app_sidebar(sections, 'calendar', class_config, section_files.calendar, url_for, labels, site) }}{% endblock %}
-{% block topbar %}{% call app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.calendar))], (sections | selectattr('id', 'equalto', 'calendar') | first).label, labels) %}<button type="button" class="heading-toggle-btn filters-toggle" aria-expanded="false" aria-controls="calendar-controls" aria-label="{{ labels.calendar.toggle_controls }}">{{ icon('filter', url_for, site.icons) }}</button>{% endcall %}{% endblock %}
+{% block topbar %}{{ app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.calendar))], (sections | selectattr('id', 'equalto', 'calendar') | first).label, labels, url_for, site, class_config.label) }}{% endblock %}
 {% block head_scripts %}
 <script defer src="{{ url_for('static/js/calendar-model.js') }}"></script>
 <script defer src="{{ url_for('static/js/calendar-view.js') }}"></script>
@@ -31,6 +31,7 @@
 </noscript>
 
 <div id="calendar-controls" class="filter-form filter-panel" hidden>
+<div class="filter-group filter-mobile-slot" id="cal-date-slot"><span class="filter-field-title" aria-hidden="true">{{ labels.fields.date }}</span></div>
 <div class="filter-group filter-group-scroll" id="cal-filters-scroll">
 <div class="filter-group-item" id="cal-view-select-group">
 <label for="cal-view-select" class="visually-hidden">{{ labels.calendar.view_label }}</label>
@@ -75,7 +76,7 @@
 
 <div class="section-main">
 <div id="calendar-nav-bar" class="calendar-nav-bar" hidden>
-<div class="cal-nav-start">
+<div class="cal-nav-start" data-mobile-slot="cal-date-slot">
 <div class="filter-group-item" id="cal-date-input-group">
 <label for="cal-date-input" class="visually-hidden">{{ labels.fields.date }}</label>
 <span class="filter-field-title" aria-hidden="true">{{ labels.fields.date }}</span>
@@ -88,6 +89,7 @@
 <button type="button" id="cal-next-btn" aria-label="{{ labels.calendar.next_btn }}"><span class="btn-text">{{ labels.calendar.next_btn }}</span><span class="btn-symbol">{{ icon('chevron-right', url_for, site.icons) }}</span></button>
 <div id="cal-period-heading" class="cal-period-heading"></div>
 </div>
+<button type="button" class="filters-toggle" aria-expanded="false" aria-controls="calendar-controls" aria-label="{{ labels.calendar.toggle_controls }}">{{ icon('filter', url_for, site.icons) }}</button>
 </div>
 
 <div id="calendar-view-container" class="calendar-view-container">

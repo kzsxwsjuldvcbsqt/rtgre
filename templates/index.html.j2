@@ -9,7 +9,7 @@
 <script defer src="{{ url_for('static/js/class-picker.js') }}"></script>
 {% endblock %}
 {% block sidebar %}{{ app_sidebar(sections, 'index', none, none, url_for, labels, site) }}{% endblock %}
-{% block topbar %}{{ app_topbar([], labels.index.heading, labels) }}{% endblock %}
+{% block topbar %}{{ app_topbar([], labels.index.heading, labels, url_for, site) }}{% endblock %}
 {% block content %}
 <div class="page-container class-picker-page">
 <div class="class-picker">

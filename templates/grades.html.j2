@@ -3,7 +3,7 @@
 {% from "_icons.html.j2" import icon %}
 {% block title %}{% for s in sections %}{% if s.id == 'grades' %}{{ s.label }}{% endif %}{% endfor %} - {{ class_config.label }} - {{ site.title }}{% endblock %}
 {% block sidebar %}{{ app_sidebar(sections, 'grades', class_config, section_files.grades, url_for, labels, site) }}{% endblock %}
-{% block topbar %}{% call app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.calendar))], (sections | selectattr('id', 'equalto', 'grades') | first).label, labels) %}
+{% block topbar %}{% call app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.calendar))], (sections | selectattr('id', 'equalto', 'grades') | first).label, labels, url_for, site, class_config.label) %}
 <div class="grades-actions" id="grades-actions" role="group" aria-label="{{ labels.grades.actions }}" hidden>
 <button type="button" class="btn" id="grades-import-btn">{{ icon('upload', url_for, site.icons) }}<span class="btn-label">{{ labels.grades.import_btn }}</span></button>
 <button type="button" class="btn" id="grades-bulletin-btn">{{ icon('file-pdf', url_for, site.icons) }}<span class="btn-label">{{ labels.grades.bulletin_btn }}</span></button>
@@ -62,6 +62,7 @@
 </tbody>
 </table>
 <p class="grades-panel-empty" id="grades-panel-empty">{{ labels.grades.panel_empty }}</p>
+<button type="button" class="grades-panel-toggle" id="grades-panel-toggle" aria-expanded="false" aria-controls="grades-panel-body" hidden>{{ labels.grades.summary_detail }}{{ icon('chevron-down', url_for, site.icons, 'icon-sm') }}</button>
 </div>
 </aside>
 {% endif %}

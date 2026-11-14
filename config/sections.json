@@ -4,7 +4,6 @@
       "id": "calendar",
       "icon": "calendar",
       "label": "Emploi du temps",
-      "short_label": "Planning",
       "file": "index.html",
       "kind": "internal",
       "previous_files": [

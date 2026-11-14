@@ -38,6 +38,7 @@ AppUtils.onDOMReady(function () {
 
   const periodItem = document.createElement("div");
   periodItem.className = "filter-group-item";
+  periodItem.dataset.mobileSlot = "eval-period-slot";
 
   const periodSelect = document.createElement("select");
   periodSelect.id = "filter-period";

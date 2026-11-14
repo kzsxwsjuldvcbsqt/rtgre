@@ -24,14 +24,36 @@
             "Five configured days: " + width,
           );
         if (width < 960) {
+          const sidebar = d.getElementById("app-sidebar");
+          d.querySelector(".nav-burger").click();
           assert(
-            w.getComputedStyle(d.querySelector(".nav-menu")).display === "flex",
-            "Mobile navigation stays a visible bar: " + width,
+            w.getComputedStyle(sidebar).display === "flex" &&
+              !d.querySelector(".app-backdrop").hidden,
+            "Mobile menu opens the navigation drawer: " + width,
           );
+          d.querySelector(".nav-close").click();
           assert(
-            !d.querySelector(".nav-toggle"),
-            "No burger toggle on mobile: " + width,
+            w.getComputedStyle(sidebar).display === "none" &&
+              d.querySelector(".app-backdrop").hidden,
+            "Mobile menu closes the navigation drawer: " + width,
           );
+          const filtersToggle = d.querySelector(".filters-toggle");
+          if (filtersToggle) {
+            const panel = d.getElementById(
+              filtersToggle.getAttribute("aria-controls"),
+            );
+            filtersToggle.click();
+            assert(
+              w.getComputedStyle(panel).position === "fixed" &&
+                d.documentElement.scrollWidth <= width,
+              "Mobile filters open in a sheet: " + page + " at " + width,
+            );
+            panel.querySelector(".sheet-apply").click();
+            assert(
+              w.getComputedStyle(panel).display === "none",
+              "Mobile filter sheet closes: " + page + " at " + width,
+            );
+          }
         }
         assert(!w.injected, "Embedded event text is inert: " + page);
         f.remove();

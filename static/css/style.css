@@ -18,6 +18,7 @@
 @import url("picker.css") layer(components);
 @import url("states.css") layer(states);
 @import url("responsive.css") layer(responsive);
+@import url("mobile.css") layer(responsive);
 @import url("print.css") layer(print);
 @import url("utilities.css") layer(utilities);
 
