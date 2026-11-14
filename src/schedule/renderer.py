@@ -13,7 +13,7 @@ from .curriculum import (
 from .exporter import serialize_events
 from .matcher import build_matching_matrix
 from .models import slugify
-from .viewmodels import prepare_evaluation_comparison, prepare_initial_week
+from .viewmodels import prepare_evaluation_order, prepare_initial_week
 
 
 def get_rel_path(current_page: str, target: str) -> str:
@@ -360,7 +360,6 @@ def render_site(
 
             for ev in evals:
                 match_states = matching_matrix.get(ev.occurrence_id, [])
-                comparison = prepare_evaluation_comparison(app_config, cls, ev, match_states)
 
                 detail_page_path = f"classes/{cls.id}/evaluations/{ev.occurrence_id}.html"
                 eval_html = eval_detail_tpl.render(
@@ -369,8 +368,7 @@ def render_site(
                     class_config=cls,
                     sections=class_sections,
                     evaluation=ev,
-                    match_states_by_program=comparison["match_states_by_program"],
-                    diff_cols=comparison["diff_cols"],
+                    order_slots=prepare_evaluation_order(app_config, cls, ev, match_states),
                     module_labels=module_labels,
                     category_map=cat_map,
                     categories=app_config.categories,

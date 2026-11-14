@@ -512,6 +512,17 @@
   .grades-band {
     display: none;
   }
+  .order-slot {
+    flex-wrap: wrap;
+    gap: var(--space-2xs) var(--space-sm);
+  }
+  .order-time {
+    min-width: 0;
+  }
+  .order-classes {
+    flex-basis: 100%;
+    padding-inline-start: calc(var(--size-order-rank) + var(--space-sm));
+  }
   #evaluations-list .eval-row {
     position: relative;
     display: flex;

@@ -33,7 +33,7 @@ from schedule.matcher import build_matching_matrix
 from schedule.parser import parse_calendar
 from schedule.renderer import render_site
 from schedule.sitecheck import validate_site
-from schedule.viewmodels import prepare_evaluation_comparison
+from schedule.viewmodels import prepare_evaluation_order
 
 
 class ScheduleTests(unittest.TestCase):
@@ -51,7 +51,7 @@ class ScheduleTests(unittest.TestCase):
                 for match in matrix[event.occurrence_id]:
                     self.assertEqual(match.evaluation.start_dt, event.start_dt)
 
-    def compare_with(self, **changes):
+    def order_with(self, **changes):
         from schedule.models import ClassMatchState
 
         base = replace(
@@ -61,16 +61,33 @@ class ScheduleTests(unittest.TestCase):
         )
         other = replace(base, class_id=self.classes[1].id, **changes)
         state = ClassMatchState(self.classes[1], "same", other, None, None)
-        comparison = prepare_evaluation_comparison(self.config, self.classes[0], base, [state])
-        return comparison["diff_cols"]
+        return prepare_evaluation_order(self.config, self.classes[0], base, [state])
 
-    def test_comparison_ignores_room_order(self):
-        self.assertFalse(self.compare_with(rooms=("T25", "T22"))["rooms"])
-        self.assertTrue(self.compare_with(rooms=("T25", "T24"))["rooms"])
+    def test_order_ignores_room_order(self):
+        self.assertEqual(self.order_with(rooms=("T25", "T22"))[0]["notes"], [])
+        self.assertEqual(
+            self.order_with(rooms=("T25", "T24"))[0]["notes"],
+            [f"{self.classes[1].label} : salles T25, T24"],
+        )
 
-    def test_comparison_ignores_teacher_order(self):
-        self.assertFalse(self.compare_with(teachers=("Cleo B.", "Jerome M."))["teachers"])
-        self.assertTrue(self.compare_with(teachers=("Cleo B.",))["teachers"])
+    def test_order_ignores_teacher_order(self):
+        self.assertEqual(self.order_with(teachers=("Cleo B.", "Jerome M."))[0]["notes"], [])
+        self.assertEqual(
+            self.order_with(teachers=("Cleo B.",))[0]["notes"],
+            [f"{self.classes[1].label} : avec Cleo B."],
+        )
+
+    def test_order_sorts_slots_and_marks_current_class(self):
+        base = sample_events(self.config, self.classes[0])[0]
+        slots = self.order_with(
+            start_dt=base.start_dt - timedelta(hours=2),
+            end_dt=base.end_dt - timedelta(hours=2),
+            time_range="06:00 - 08:00",
+        )
+        self.assertEqual([slot["time_range"] for slot in slots], ["06:00 - 08:00", base.time_range])
+        self.assertEqual([slot["is_current"] for slot in slots], [False, True])
+        self.assertEqual(slots[0]["classes"][0]["label"], self.classes[1].label)
+        self.assertEqual(self.order_with()[0]["classes"][0]["is_current"], True)
 
     def test_nearest_alternate_match(self):
         from dataclasses import replace

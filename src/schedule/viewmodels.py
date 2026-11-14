@@ -43,49 +43,77 @@ def prepare_initial_week(app_config, events):
     return result
 
 
-def prepare_evaluation_comparison(app_config, class_config, evaluation, match_states):
-    active_states = [
+def prepare_evaluation_order(app_config, class_config, evaluation, match_states):
+    labels = app_config.labels["evaluation_page"]
+    separator = app_config.labels["list_separator"]
+    empty = app_config.labels["empty_value"]
+    show_teachers = app_config.site["teachers"]["display_mode"] != "hidden"
+    class_rank = {
+        item.id: index
+        for index, item in enumerate(
+            item for program in app_config.programs for item in program.classes
+        )
+    }
+    others = [
         state
         for state in match_states
         if state.class_config.id != class_config.id and state.status != "absent"
     ]
-    processed = {}
-    differences = {"date": False, "time": False, "rooms": False, "teachers": False}
-    for state in active_states:
-        flags = {
-            "date": state.status == "alternate",
-            "time": state.evaluation.time_range != evaluation.time_range,
-            "rooms": sorted(state.evaluation.rooms) != sorted(evaluation.rooms),
-            "teachers": app_config.site["teachers"]["display_mode"] != "hidden"
-            and sorted(state.evaluation.teachers + state.evaluation.staff_markers)
-            != sorted(evaluation.teachers + evaluation.staff_markers),
-        }
-        for key, value in flags.items():
-            differences[key] = differences[key] or value
-        fields = [app_config.labels["fields"][key] for key, value in flags.items() if value]
-        label = (
-            app_config.labels["list_separator"].join(fields)
-            if fields
-            else app_config.labels["evaluation_page"]["same_all"]
+    if not others:
+        return []
+
+    def staff(event):
+        return event.teachers + event.staff_markers
+
+    def difference(event):
+        parts = []
+        if sorted(event.rooms) != sorted(evaluation.rooms):
+            rooms = [room for room in event.rooms if room != empty]
+            if not rooms:
+                parts.append(labels["order_no_room"])
+            else:
+                key = "order_room_one" if len(rooms) == 1 else "order_room_many"
+                parts.append(labels[key].format(value=separator.join(rooms)))
+        if show_teachers and sorted(staff(event)) != sorted(staff(evaluation)):
+            parts.append(
+                labels["order_teachers"].format(value=separator.join(staff(event)))
+                if staff(event)
+                else labels["order_no_teacher"]
+            )
+        return labels["order_note_separator"].join(parts)
+
+    entries = [(class_config, evaluation)] + [
+        (state.class_config, state.evaluation) for state in others
+    ]
+    entries.sort(key=lambda entry: (entry[0].id != class_config.id, class_rank[entry[0].id]))
+    slots = {}
+    for cls, event in entries:
+        slot = slots.setdefault(
+            (event.start_dt, event.end_dt),
+            {
+                "time_range": event.time_range,
+                "date_label": event.date_formatted if event.date_iso != evaluation.date_iso else "",
+                "date_target": f"classes/{cls.id}/evaluations/{event.occurrence_id}.html",
+                "is_current": False,
+                "classes": [],
+                "differences": {},
+            },
         )
-        processed[state.class_config.id] = {
-            "state_obj": state,
-            "d_date": flags["date"],
-            "d_time": flags["time"],
-            "d_rooms": flags["rooms"],
-            "d_teachers": flags["teachers"],
-            "state_label": label,
-        }
-    by_program = []
-    for program in app_config.programs:
-        states = [
-            processed[item.id]
-            for item in program.classes
-            if item.id != class_config.id and item.id in processed
+        is_current = cls.id == class_config.id
+        slot["is_current"] = slot["is_current"] or is_current
+        slot["classes"].append({"label": cls.label, "is_current": is_current})
+        note = "" if is_current else difference(event)
+        if note:
+            slot["differences"].setdefault(note, []).append(cls.label)
+
+    result = []
+    for _, slot in sorted(slots.items(), key=lambda item: item[0]):
+        differences = slot.pop("differences")
+        slot["notes"] = [
+            note
+            if len(class_labels) == len(slot["classes"])
+            else labels["order_class_note"].format(classes=separator.join(class_labels), note=note)
+            for note, class_labels in differences.items()
         ]
-        if states:
-            by_program.append((program, states))
-    return {
-        "match_states_by_program": by_program,
-        "diff_cols": differences,
-    }
+        result.append(slot)
+    return result
