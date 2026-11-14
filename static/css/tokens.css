@@ -53,6 +53,7 @@
   --color-label-slate-fg: #3f5266;
   --color-now: var(--color-field-invalid);
   --color-veil: rgba(255, 255, 255, 0.6);
+  --color-backdrop: rgba(0, 0, 0, 0.45);
   --color-now-soft: rgba(229, 72, 77, 0.16);
   --color-now-glow: rgba(229, 72, 77, 0.45);
   --color-field-invalid: #e5484d;
@@ -110,7 +111,8 @@
   --height-box-row: 2.5rem;
   --sidebar-width: 18rem;
   --topbar-height: 3.5rem;
-  --height-tabbar: 3.5rem;
+  --width-drawer: min(20rem, calc(100vw - var(--touch-target)));
+  --height-sheet: 85dvh;
   --width-app-sidebar: 15rem;
   --width-picker: 28rem;
   --height-picker-option: 3.5rem;
@@ -178,4 +180,6 @@
   --z-raised: 1;
   --z-menu: 30;
   --z-header: 40;
+  --z-backdrop: 50;
+  --z-overlay: 60;
 }

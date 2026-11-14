@@ -18,6 +18,13 @@
 <script defer src="{{ url_for('static/js/utils.js') }}"></script>
 <script defer src="{{ url_for('static/js/menu.js') }}"></script>
 {% block head_scripts %}{% endblock %}
+<script defer src="{{ url_for('static/js/mobile-shell.js') }}"
+  data-icon-close="{{ url_for('static/' ~ site.icons.sprite) }}#x"
+  data-label-filters="{{ labels.sections.filters_title }}"
+  data-label-close="{{ labels.sections.filters_close }}"
+  data-label-apply="{{ labels.sections.filters_apply }}"
+  data-label-apply-empty="{{ labels.sections.filters_apply_empty }}"
+></script>
 </head>
 <body class="app">
 {% block sidebar %}{% endblock %}
@@ -31,6 +38,7 @@
 <span>{{ labels.footer.generated_at }} {{ generated_at }}</span>
 </footer>
 </div>
+<div class="app-backdrop" hidden></div>
 {% block scripts %}{% endblock %}
 </body>
 </html>

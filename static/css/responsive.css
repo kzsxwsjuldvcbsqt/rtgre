@@ -24,131 +24,7 @@
   }
 }
 
-@media (max-width: 74.99em) {
-  .app {
-    display: block;
-    padding-block-end: calc(var(--height-tabbar) + env(safe-area-inset-bottom));
-  }
-  .app-sidebar {
-    height: auto;
-    padding: var(--space-xs) var(--page-gutter);
-    overflow: visible;
-  }
-  .app-sidebar-head {
-    flex-direction: row;
-    align-items: center;
-    gap: var(--space-xs);
-  }
-  .app-brand {
-    margin-inline-end: auto;
-    padding-inline: 0;
-  }
-  .app-sidebar .class-switcher > summary {
-    width: auto;
-  }
-  .app-sidebar .class-switcher[open] > summary {
-    border-radius: var(--radius-control);
-  }
-  .app-sidebar .app-more {
-    display: inline-flex;
-  }
-  .app-sidebar .app-more > summary {
-    color: var(--color-navbar-text);
-  }
-  .app-sidebar .app-more[open] > summary {
-    background: var(--color-navbar-active);
-  }
-  .app-sidebar .menu {
-    position: static;
-  }
-  .app-sidebar .menu-list,
-  .app-sidebar .class-switcher .menu-list {
-    position: absolute;
-    inset: 100% 0 auto;
-    max-height: calc(
-      100dvh - 100% - var(--height-tabbar) - env(safe-area-inset-bottom)
-    );
-    padding: var(--space-2xs) var(--page-gutter) var(--space-sm);
-    overflow-y: auto;
-    border: 0;
-    border-block: var(--rule-width) solid var(--color-navbar-border);
-    border-radius: 0;
-    background: var(--color-navbar);
-    box-shadow: var(--shadow-menu);
-  }
-  .app-sidebar .menu-list a,
-  .app-sidebar .menu-list button {
-    min-height: var(--touch-target);
-    padding-inline: 0;
-    border-radius: 0;
-    font-size: var(--text-base);
-  }
-  .app-sidebar .menu-list a:not(:last-child) {
-    border-block-end: var(--rule-width) solid var(--color-navbar-border);
-  }
-  .app-sidebar .menu-list a[aria-current="true"] {
-    background: transparent;
-    color: var(--color-highlight);
-  }
-  .app-sidebar .menu-group {
-    margin-inline: 0;
-    margin-block-start: var(--space-sm);
-  }
-  .app-nav {
-    position: fixed;
-    inset: auto 0 0;
-    z-index: var(--z-header);
-    padding-block-end: env(safe-area-inset-bottom);
-    border-block-start: var(--rule-width) solid var(--color-navbar-border);
-    background: var(--color-navbar);
-  }
-  .app-nav .nav-menu {
-    flex-direction: row;
-    gap: 0;
-  }
-  .app-nav .nav-menu li {
-    flex: 1;
-    min-width: 0;
-  }
-  .app-nav .nav-menu a {
-    flex-direction: column;
-    justify-content: center;
-    gap: var(--space-3xs);
-    min-height: var(--height-tabbar);
-    padding: var(--space-2xs);
-    border-radius: 0;
-    font-size: var(--text-xs);
-    line-height: var(--leading-tight);
-    text-align: center;
-    white-space: normal;
-  }
-  .app-nav .nav-menu a[aria-current="page"] {
-    background: transparent;
-  }
-  .app-nav .nav-label-full {
-    display: none;
-  }
-  .app-nav .nav-label-short {
-    display: inline;
-  }
-  .app-nav-heading,
-  .app-nav-classes,
-  .app-nav-links,
-  .app-nav .app-nav-foot {
-    display: none;
-  }
-  .app-topbar {
-    position: static;
-    z-index: auto;
-  }
-}
 @media (max-width: 59.99em) {
-  .app:has(.class-switcher) .app-breadcrumb li:first-child:not(:last-child) {
-    display: none;
-  }
-  .app:has(.class-switcher) .app-breadcrumb li:nth-child(2)::before {
-    content: none;
-  }
   .data-box table:not(.grades-summary-table, .grades-table) tbody tr {
     padding-inline: var(--space-md);
   }
@@ -178,9 +54,6 @@
   select:focus-visible {
     outline: none;
   }
-  .has-filter-sidebar
-    > .filter-sidebar
-    > :is(#calendar-controls, #filters-container),
   .page-band {
     margin: calc(-1 * var(--space-lg)) calc(-1 * var(--page-gutter))
       var(--space-lg);
@@ -188,78 +61,6 @@
     padding: var(--space-sm) var(--page-gutter);
     border-block-end: var(--rule-width) solid var(--color-border);
     background: var(--color-surface);
-  }
-  .filter-form {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-sm);
-    padding: 0;
-    border: 0;
-    border-radius: 0;
-  }
-  .filter-group-scroll {
-    flex-basis: calc(100% + 2 * var(--page-gutter));
-    flex-shrink: 0;
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
-    gap: var(--space-xs);
-    margin-inline: calc(-1 * var(--page-gutter));
-    padding-inline: var(--page-gutter);
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .filter-group-scroll::-webkit-scrollbar {
-    display: none;
-  }
-  .filter-group-scroll > * {
-    flex: none;
-    width: auto;
-    min-width: 0;
-  }
-  .filter-group-last {
-    flex-basis: 100%;
-  }
-  .filter-group-last input,
-  .filter-form input[type="text"] {
-    width: 100%;
-  }
-  .filter-group-reset {
-    flex: 0 0 auto;
-  }
-  .results-count {
-    margin-inline-start: auto;
-    align-self: center;
-    padding-block-start: 0;
-    text-align: end;
-  }
-  .calendar-nav-bar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .calendar-nav-bar #cal-date-input-group,
-  .calendar-nav-bar #cal-date-input-group input,
-  #cal-today-btn {
-    width: 100%;
-  }
-  .cal-nav-center {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-sm) var(--space-xs);
-  }
-  .cal-period-heading {
-    order: -1;
-    flex-basis: 100%;
-    margin-inline-start: 0;
-    text-align: center;
-  }
-  .cal-nav-center button {
-    flex: 1;
-    min-width: 0;
-    padding: 0;
   }
   .calendar-view-week {
     grid-template-columns: 1fr;
@@ -450,33 +251,6 @@
   }
   .app-main {
     grid-column: 2;
-  }
-  .app-sidebar .class-switcher {
-    display: none;
-  }
-  .app-sidebar-head,
-  .app-nav-heading,
-  .app-nav .app-nav-foot {
-    margin-inline: calc(-1 * var(--space-sm));
-    padding-inline: var(--space-sm);
-  }
-  .app-sidebar-head {
-    padding-block-end: var(--space-md);
-    border-block-end: var(--rule-width) solid var(--color-navbar-divider);
-  }
-  .app-nav-heading {
-    margin-block-start: var(--space-md);
-    padding: var(--space-md) calc(2 * var(--space-sm)) 0;
-    border-block-start: var(--rule-width) solid var(--color-navbar-divider);
-  }
-  .app-nav > .app-nav-heading:first-child {
-    margin-block-start: 0;
-    padding-block-start: 0;
-    border-block-start: 0;
-  }
-  .app-nav .app-nav-foot {
-    padding-block-start: var(--space-sm);
-    border-block-start: var(--rule-width) solid var(--color-navbar-divider);
   }
 }
 

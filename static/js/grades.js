@@ -205,6 +205,8 @@
         });
         panelTable.hidden = !hasAverage;
         panelEmpty.hidden = hasAverage;
+        var panelToggle = document.getElementById("grades-panel-toggle");
+        if (panelToggle) panelToggle.hidden = !hasAverage;
       }
       gradesConfig.annual_units.forEach(function (au) {
         gradesConfig.semesters.forEach(function (sem) {
@@ -911,6 +913,20 @@
         if (input) input.focus();
       });
     });
+
+    var summaryToggle = document.getElementById("grades-panel-toggle");
+    if (summaryToggle) {
+      summaryToggle.addEventListener("click", function () {
+        var expanded = summaryToggle.getAttribute("aria-expanded") !== "true";
+        summaryToggle.setAttribute(
+          "aria-expanded",
+          expanded ? "true" : "false",
+        );
+        summaryToggle
+          .closest(".grades-panel")
+          .classList.toggle("is-expanded", expanded);
+      });
+    }
 
     initCollapsibleSemesters();
     initCoefficientToggle();

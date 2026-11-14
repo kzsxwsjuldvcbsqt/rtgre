@@ -407,12 +407,7 @@
     }
 
     function stickyBarHeight() {
-      var shell = document.querySelector(".app");
-      var bar = document.querySelector(
-        shell && getComputedStyle(shell).display === "grid"
-          ? ".app-topbar"
-          : ".app-sidebar",
-      );
+      var bar = document.querySelector(".app-topbar");
       return bar ? bar.getBoundingClientRect().height : 0;
     }
 
@@ -818,26 +813,9 @@
       }
     });
 
-    function anchorToSchedule() {
-      if (
-        !todayBtn ||
-        !window.matchMedia(calendarConfig.mobile_media_query).matches
-      )
-        return;
-      var target =
-        todayBtn.getBoundingClientRect().bottom +
-        window.scrollY -
-        stickyBarHeight();
-      var maxScroll =
-        document.documentElement.scrollHeight - window.innerHeight;
-      if (target > 0 && maxScroll >= target)
-        window.scrollTo({ top: target, behavior: "instant" });
-    }
-
     loadState();
     render();
     requestAnimationFrame(function () {
-      anchorToSchedule();
       var layout = document.querySelector(".has-filter-sidebar");
       if (layout) layout.classList.add("is-layout-ready");
     });

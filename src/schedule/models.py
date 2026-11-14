@@ -125,7 +125,6 @@ class SectionConfig:
     file: str | None = None
     url: str | None = None
     icon: str | None = None
-    short_label: str | None = None
     statuses: tuple[str, ...] = ()
     previous_files: tuple[str, ...] = ()
 

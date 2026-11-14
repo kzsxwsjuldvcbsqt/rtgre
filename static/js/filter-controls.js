@@ -34,6 +34,7 @@
     const buttons = Array.from(select.options).map(function (option) {
       const button = document.createElement("button");
       button.type = "button";
+      button.className = "segmented-option";
       button.textContent = option.textContent;
       button.dataset.value = option.value;
       group.appendChild(button);

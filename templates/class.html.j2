@@ -4,7 +4,7 @@
 {% from "_icons.html.j2" import icon %}
 {% block title %}{% for s in sections %}{% if s.id == 'evaluations' %}{{ s.label }}{% endif %}{% endfor %} - {{ class_config.label }} - {{ site.title }}{% endblock %}
 {% block sidebar %}{{ app_sidebar(sections, 'evaluations', class_config, section_files.evaluations, url_for, labels, site) }}{% endblock %}
-{% block topbar %}{% call app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.calendar))], (sections | selectattr('id', 'equalto', 'evaluations') | first).label, labels) %}<button type="button" class="heading-toggle-btn filters-toggle" aria-expanded="true" aria-controls="filters-container" aria-label="{{ labels.calendar.toggle_controls }}">{{ icon('filter', url_for, site.icons) }}</button>{% endcall %}{% endblock %}
+{% block topbar %}{{ app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.calendar))], (sections | selectattr('id', 'equalto', 'evaluations') | first).label, labels, url_for, site, class_config.label) }}{% endblock %}
 {% block head_scripts %}
 <script defer src="{{ url_for('static/js/filters.js') }}"></script>
 <script defer src="{{ url_for('static/js/filter-controls.js') }}" data-sprite="{{ url_for('static/' ~ site.icons.sprite) }}"></script>
@@ -12,6 +12,10 @@
 {% block content %}
 <div class="page-container has-filter-sidebar">
 <div class="filter-sidebar">
+<div class="filter-quick">
+<div class="filter-quick-slot" id="eval-period-slot"></div>
+<button type="button" class="filters-toggle" aria-expanded="false" aria-controls="filters-container" aria-label="{{ labels.calendar.toggle_controls }}">{{ icon('filter', url_for, site.icons) }}</button>
+</div>
 <div id="filters-container" class="filter-panel"
   data-label-filters-heading="{{ labels.class_page.filters_heading }}"
   data-label-category="{{ labels.class_page.category_filter }}"

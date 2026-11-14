@@ -14,7 +14,12 @@
     "external_heading": "Liens",
     "breadcrumb": "Fil d’Ariane",
     "class_switcher": "Changer de classe",
-    "more": "Plus de liens"
+    "menu_open": "Ouvrir le menu",
+    "menu_close": "Fermer le menu",
+    "filters_title": "Filtres",
+    "filters_close": "Fermer",
+    "filters_apply": "Voir {count}",
+    "filters_apply_empty": "Afficher"
   },
   "resources": {
     "title": "Modules",
@@ -62,6 +67,7 @@
     "average_column": "Moyenne",
     "unit_column": "Unité d'enseignement",
     "coefficient_separator": "·",
+    "summary_detail": "Détail par UE",
     "panel_empty": "Saisis une note pour voir tes moyennes.",
     "empty_mark": "—",
     "detail_toggle": "Détail des évaluations",
