@@ -8,7 +8,8 @@
 .match-badge {
   color: var(--color-text-muted);
 }
-.category-badge {
+.category-badge,
+.filter-panel.is-open .filter-tone {
   display: inline-flex;
   align-items: center;
   padding: var(--space-2xs) var(--space-sm);

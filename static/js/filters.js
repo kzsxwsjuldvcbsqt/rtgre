@@ -113,7 +113,12 @@ AppUtils.onDOMReady(function () {
       cb.checked = true;
       lbl.appendChild(cb);
       lbl.appendChild(AppUtils.buildIcon(dataset.iconCheck, "icon-sm"));
-      lbl.appendChild(document.createTextNode(cat.label));
+      const name = document.createElement("span");
+      name.className = cat.tone
+        ? "filter-tone label-" + cat.tone
+        : "filter-tone";
+      name.textContent = cat.label;
+      lbl.appendChild(name);
       scrollGroup.appendChild(lbl);
     });
   }

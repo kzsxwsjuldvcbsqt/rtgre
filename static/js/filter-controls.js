@@ -97,7 +97,8 @@
     applySearch(entry);
     entry.panel.hidden = false;
     entry.trigger.setAttribute("aria-expanded", "true");
-    entry.search.focus();
+    if (getComputedStyle(entry.head).display === "none") entry.search.focus();
+    else entry.back.focus();
   }
 
   function buildItem(option) {
@@ -133,8 +134,13 @@
     triggerKey.className = "choice-trigger-key";
     triggerKey.textContent = label;
     const triggerText = document.createElement("span");
+    const triggerDefault = document.createElement("span");
+    triggerDefault.className = "choice-trigger-default";
+    const emptyOption = select.querySelector('option[value=""]');
+    triggerDefault.textContent = emptyOption ? emptyOption.textContent : "";
     trigger.appendChild(triggerKey);
     trigger.appendChild(triggerText);
+    trigger.appendChild(triggerDefault);
     trigger.appendChild(
       AppUtils.buildIcon(sprite + "#chevron-down", "icon-sm"),
     );
@@ -145,6 +151,16 @@
     panel.setAttribute("role", "group");
     panel.setAttribute("aria-label", label);
     panel.hidden = true;
+
+    const head = document.createElement("div");
+    head.className = "choice-menu-head";
+    const back = document.createElement("button");
+    back.type = "button";
+    back.className = "choice-menu-back";
+    back.appendChild(AppUtils.buildIcon(sprite + "#chevron-left", ""));
+    back.appendChild(document.createTextNode(label));
+    head.appendChild(back);
+    panel.appendChild(head);
 
     const search = document.createElement("input");
     search.type = "search";
@@ -199,6 +215,8 @@
       trigger: trigger,
       panel: panel,
       search: search,
+      head: head,
+      back: back,
       items: items,
       headings: headings,
       empty: empty,
@@ -213,6 +231,7 @@
           ? selected.dataset.code || selected.textContent
           : "";
       triggerText.hidden = triggerText.textContent === "";
+      trigger.dataset.empty = triggerText.hidden ? "true" : "false";
       trigger.setAttribute(
         "aria-label",
         triggerText.hidden ? label : label + " " + triggerText.textContent,
@@ -224,6 +243,10 @@
         );
       });
     }
+
+    back.addEventListener("click", function () {
+      closeMenu(entry, true);
+    });
 
     trigger.addEventListener("click", function () {
       if (panel.hidden) {

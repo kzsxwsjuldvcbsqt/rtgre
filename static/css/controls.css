@@ -92,10 +92,8 @@
   cursor: pointer;
   user-select: none;
 }
-.filter-form select,
 .filter-form label:has(input),
-.toggle-pill:has(input),
-.choice-trigger {
+.toggle-pill:has(input) {
   border-radius: var(--radius-pill);
 }
 .filter-form label:has(input) input,

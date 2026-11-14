@@ -48,7 +48,7 @@
                 d.documentElement.scrollWidth <= width,
               "Mobile filters open in a sheet: " + page + " at " + width,
             );
-            panel.querySelector(".sheet-apply").click();
+            panel.querySelector(".sheet-close").click();
             assert(
               w.getComputedStyle(panel).display === "none",
               "Mobile filter sheet closes: " + page + " at " + width,

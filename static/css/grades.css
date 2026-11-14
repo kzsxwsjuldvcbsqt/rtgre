@@ -170,18 +170,11 @@
   display: flex;
   gap: var(--space-xs);
 }
+.grades-backup,
+.grades-toggles {
+  display: contents;
+}
 @media (max-width: 59.99em) {
-  .grades-actions .btn {
-    padding-inline: var(--space-sm);
-  }
-  .grades-actions .btn-label {
-    position: absolute;
-    width: var(--visually-hidden-size);
-    height: var(--visually-hidden-size);
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-  }
   .grades-band {
     flex-wrap: wrap;
   }
