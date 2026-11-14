@@ -1,25 +1,18 @@
 @media (min-width: 60em) and (max-width: 74.99em) {
-  .evaluations-table,
-  .comparison-table {
+  .evaluations-table {
     table-layout: fixed;
   }
   .evaluations-table th,
-  .evaluations-table td,
-  .comparison-table th,
-  .comparison-table td {
+  .evaluations-table td {
     padding-inline: var(--space-xs);
     overflow-wrap: anywhere;
   }
   .evaluations-table th:first-child,
-  .evaluations-table td:first-child,
-  .comparison-table th:first-child,
-  .comparison-table td:first-child {
+  .evaluations-table td:first-child {
     padding-inline-start: var(--space-md);
   }
   .evaluations-table th:last-child,
-  .evaluations-table td:last-child,
-  .comparison-table th:last-child,
-  .comparison-table td:last-child {
+  .evaluations-table td:last-child {
     padding-inline-end: var(--space-md);
   }
 }

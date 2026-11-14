@@ -27,8 +27,7 @@
 }
 
 .noscript-notice,
-.privacy-notice,
-.comparison-note {
+.privacy-notice {
   max-width: var(--measure);
   margin-block: var(--space-md);
   color: var(--color-text-muted);
