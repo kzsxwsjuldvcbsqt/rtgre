@@ -55,6 +55,19 @@
             );
           }
         }
+        if (page.startsWith("evaluations")) {
+          const period = d.getElementById("filter-period");
+          change(w, period, "upcoming");
+          assert(
+            Array.from(d.querySelectorAll(".month-card:not([hidden])")).every(
+              (card) =>
+                Number(card.querySelector(".data-box-meta").textContent) ===
+                card.querySelectorAll(".eval-row:not([hidden])").length,
+            ),
+            "Month counters follow the filters: " + width,
+          );
+          change(w, period, "all");
+        }
         assert(!w.injected, "Embedded event text is inert: " + page);
         f.remove();
       }
