@@ -107,7 +107,11 @@
   },
   "rooms": {
     "strip_prefixes": [
-      "IUT1_"
+      "IUT1_",
+      "Campus_"
+    ],
+    "strip_suffixes": [
+      "_RT"
     ],
     "drop_lowercase_suffix": true
   },
