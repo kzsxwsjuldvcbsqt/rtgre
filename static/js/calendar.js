@@ -407,7 +407,7 @@
     }
 
     function stickyBarHeight() {
-      var bar = document.querySelector(".app-topbar");
+      var bar = document.querySelector(".app-topbar-main");
       return bar ? bar.getBoundingClientRect().height : 0;
     }
 
