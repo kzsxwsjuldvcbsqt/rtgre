@@ -82,10 +82,26 @@
         }
       }
 
-      if (state.view === "year") {
-        if (periodHeading) {
-          periodHeading.textContent = schoolYearLabel;
+      function setHeading(full, short, eyebrow) {
+        if (!periodHeading) return;
+        var fullEl = document.createElement("span");
+        fullEl.className = "heading-full";
+        fullEl.textContent = full;
+        var shortEl = document.createElement("span");
+        shortEl.className = "heading-short";
+        shortEl.setAttribute("aria-hidden", "true");
+        if (eyebrow) {
+          var eyebrowEl = document.createElement("span");
+          eyebrowEl.className = "heading-eyebrow";
+          eyebrowEl.textContent = eyebrow;
+          shortEl.appendChild(eyebrowEl);
         }
+        shortEl.appendChild(document.createTextNode(short));
+        periodHeading.replaceChildren(fullEl, shortEl);
+      }
+
+      if (state.view === "year") {
+        setHeading(schoolYearLabel, schoolYearLabel);
       } else if (state.view === "week") {
         var wStart = getWeekStart(currDate);
         var wEnd = new Date(wStart.getTime());
@@ -93,8 +109,8 @@
         wStart.setDate(wStart.getDate() + allowedDays[0] - 1);
         var wNum = getISOWeekNumber(wStart);
 
-        if (periodHeading) {
-          periodHeading.textContent = AppUtils.formatText(labels.week_title, {
+        setHeading(
+          AppUtils.formatText(labels.week_title, {
             prefix: labels.week_prefix,
             week: wNum,
             start_day: wStart.getDate(),
@@ -102,18 +118,38 @@
             end_day: wEnd.getDate(),
             end_month: monthNames[wEnd.getMonth()],
             year: wEnd.getFullYear(),
-          });
-        }
+          }),
+          AppUtils.formatText(
+            wStart.getMonth() === wEnd.getMonth()
+              ? labels.week_title_short
+              : labels.week_title_short_split,
+            {
+              start_day: wStart.getDate(),
+              start_month: labels.months_short[wStart.getMonth()],
+              end_day: wEnd.getDate(),
+              end_month: labels.months_short[wEnd.getMonth()],
+            },
+          ),
+          AppUtils.formatText(labels.week_title_eyebrow, {
+            prefix: labels.week_prefix,
+            week: wNum,
+          }),
+        );
       } else {
-        if (periodHeading) {
-          var dayIdx = (currDate.getDay() + 6) % 7;
-          periodHeading.textContent = AppUtils.formatText(labels.day_title, {
+        var dayIdx = (currDate.getDay() + 6) % 7;
+        setHeading(
+          AppUtils.formatText(labels.day_title, {
             day_name: dayNames[dayIdx],
             day_num: currDate.getDate(),
             month_name: monthNames[currDate.getMonth()],
             year: currDate.getFullYear(),
-          });
-        }
+          }),
+          AppUtils.formatText(labels.day_title_short, {
+            day_name: labels.days_short[dayIdx],
+            day_num: currDate.getDate(),
+            month_name: labels.months_short[currDate.getMonth()],
+          }),
+        );
       }
 
       while (viewContainer.firstChild) {

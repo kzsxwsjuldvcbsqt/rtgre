@@ -103,7 +103,11 @@
     "year_title": "Année {year}",
     "week_title": "{prefix} {week} : {start_day} {start_month} - {end_day} {end_month} {year}",
     "day_title": "{day_name} {day_num} {month_name} {year}",
-    "week_day_date": "{day_num} {month_name}"
+    "week_day_date": "{day_num} {month_name}",
+    "week_title_eyebrow": "{prefix} {week}",
+    "week_title_short": "{start_day} - {end_day} {end_month}",
+    "week_title_short_split": "{start_day} {start_month} - {end_day} {end_month}",
+    "day_title_short": "{day_name} {day_num} {month_name}"
   },
   "class_page": {
     "back_link": "Retour au choix de la classe",
@@ -179,6 +183,21 @@
     "Vendredi",
     "Samedi",
     "Dimanche"
+  ],
+  "days_short": ["Lun.", "Mar.", "Mer.", "Jeu.", "Ven.", "Sam.", "Dim."],
+  "months_short": [
+    "janv.",
+    "févr.",
+    "mars",
+    "avr.",
+    "mai",
+    "juin",
+    "juil.",
+    "août",
+    "sept.",
+    "oct.",
+    "nov.",
+    "déc."
   ],
   "months": [
     "janvier",

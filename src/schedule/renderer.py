@@ -281,6 +281,8 @@ def render_site(
                     **app_config.labels["calendar"],
                     "days": app_config.labels["days"],
                     "months": app_config.labels["months"],
+                    "days_short": app_config.labels["days_short"],
+                    "months_short": app_config.labels["months_short"],
                     "list_separator": app_config.labels["list_separator"],
                     "groups_all": app_config.labels["groups_all"],
                 },
