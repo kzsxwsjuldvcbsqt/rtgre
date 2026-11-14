@@ -30,7 +30,7 @@ from schedule.curriculum import (
 from schedule.exporter import serialize_events
 from schedule.fetcher import fetch_calendar
 from schedule.matcher import build_matching_matrix
-from schedule.parser import parse_calendar
+from schedule.parser import normalize_room_name, parse_calendar
 from schedule.renderer import render_site
 from schedule.sitecheck import validate_site
 from schedule.viewmodels import prepare_evaluation_order
@@ -201,6 +201,19 @@ class ScheduleTests(unittest.TestCase):
         config["modules"][0]["ade_codes"] = [""]
         with self.assertRaises(ValueError):
             validate_curriculum_config(config)
+
+    def test_room_names_drop_configured_prefixes_and_suffixes(self):
+        rooms = self.config.site["rooms"]
+        for raw, expected in (
+            ("Campus_C215", "C215"),
+            ("IUT1_Campus_AMPHI CHARTREUSE", "AMPHI CHARTREUSE"),
+            ("121_RT", "121"),
+            ("T22", "T22"),
+            ("120b", "120b"),
+            ("Campus_", "Campus_"),
+        ):
+            with self.subTest(raw=raw):
+                self.assertEqual(normalize_room_name(raw, rooms), expected)
 
     def test_session_marks_match_title_and_rooms(self):
         self.assertEqual(

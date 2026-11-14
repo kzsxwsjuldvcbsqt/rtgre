@@ -16,15 +16,23 @@ def normalize_room_name(raw_room: str, rooms_config: dict) -> str:
 
     strip_prefixes = rooms_config.get("strip_prefixes", [])
     result = cleaned
-    for prefix in strip_prefixes:
-        if result.startswith(prefix):
-            result = result[len(prefix) :].strip()
-            break
+    matched = True
+    while matched:
+        matched = False
+        for prefix in strip_prefixes:
+            if prefix and result.startswith(prefix):
+                result = result[len(prefix) :].strip()
+                matched = True
 
     if rooms_config.get("drop_lowercase_suffix", False):
         parts = result.rsplit(" ", 1)
         if len(parts) == 2 and parts[1].islower():
             result = parts[0].strip()
+
+    for suffix in rooms_config.get("strip_suffixes", []):
+        if suffix and result.endswith(suffix):
+            result = result[: -len(suffix)].strip()
+            break
 
     if not result:
         return cleaned
