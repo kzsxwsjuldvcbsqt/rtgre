@@ -92,7 +92,7 @@ class ScheduleTests(unittest.TestCase):
         valid = load_config().site["grades"]["bulletin"]
         validate_bulletin_config(copy.deepcopy(valid))
         for key, value in (
-            ("module_pattern", "("),
+            ("module_prefixes", []),
             ("note_header", " "),
             ("evaluation_sections", []),
             ("max_pages", 0),

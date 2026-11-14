@@ -16,7 +16,7 @@ const config = {
   footer_marker: "Édité par ScoDoc",
   missing_grade: "~",
   ignored_texts: ["Provisoire"],
-  module_pattern: "^(?:R|SAE)\\d+(?:\\.[A-Za-z0-9]+)+",
+  module_prefixes: ["SAE", "R"],
   row_tolerance: 3,
   column_tolerance: 5,
   wrap_gap: 12,
