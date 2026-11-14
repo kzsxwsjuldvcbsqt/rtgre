@@ -1,4 +1,5 @@
 .nav-toggle,
+.nav-class-chip,
 .nav-close,
 .app-backdrop,
 .sheet-head,
@@ -80,7 +81,7 @@
   html.js-enabled .nav-close {
     margin-inline-end: calc(-1 * var(--space-xs));
   }
-  html.js-enabled .nav-class-chip {
+  .nav-class-chip {
     display: inline-flex;
     flex: none;
     align-items: center;
@@ -88,7 +89,6 @@
     padding: var(--space-2xs) var(--space-sm);
     border: var(--rule-width) solid var(--color-navbar-divider);
     border-radius: var(--radius-control);
-    background: var(--color-navbar-hover);
     color: var(--color-navbar-text);
     font-size: var(--text-sm);
     font-weight: var(--weight-semibold);

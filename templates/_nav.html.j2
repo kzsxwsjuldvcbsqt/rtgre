@@ -56,7 +56,7 @@
 </ol>
 </nav>
 {% if class_label %}
-<button type="button" class="nav-toggle nav-class-chip" aria-controls="app-sidebar" aria-expanded="false" aria-label="{{ labels.sections.class_switcher }}">{{ class_label }}</button>
+<span class="nav-class-chip">{{ class_label }}</span>
 {% endif %}
 {% if caller is defined %}
 <div class="app-topbar-actions">{{ caller() }}</div>
