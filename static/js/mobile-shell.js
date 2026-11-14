@@ -92,7 +92,7 @@
       head.className = "sheet-head";
       const title = document.createElement("span");
       title.className = "sheet-title";
-      title.textContent = labels.labelFilters;
+      title.textContent = panel.dataset.sheetTitle || labels.labelFilters;
       const close = document.createElement("button");
       close.type = "button";
       close.className = "sheet-close";
@@ -102,12 +102,22 @@
       head.appendChild(close);
       panel.prepend(head);
 
+      close.addEventListener("click", function () {
+        setSheet(panel, false, true);
+      });
+      panel.addEventListener("click", function (event) {
+        if (event.target.closest("[data-sheet-dismiss]")) {
+          setSheet(panel, false, false);
+        }
+      });
+      if (panel.dataset.sheetApply === "false") return;
+
       const apply = document.createElement("button");
       apply.type = "button";
       apply.className = "sheet-apply";
       panel.appendChild(apply);
 
-      const count = panel.querySelector(".results-count");
+      const count = document.getElementById(panel.dataset.sheetCount || "");
       function syncApply() {
         const text = count ? count.textContent.trim() : "";
         apply.textContent = text
@@ -122,11 +132,8 @@
         });
       }
       syncApply();
-
-      [close, apply].forEach(function (button) {
-        button.addEventListener("click", function () {
-          setSheet(panel, false, true);
-        });
+      apply.addEventListener("click", function () {
+        setSheet(panel, false, true);
       });
     }
 

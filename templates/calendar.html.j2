@@ -30,7 +30,7 @@
 <p class="noscript-notice">{{ labels.calendar.noscript_notice }}</p>
 </noscript>
 
-<div id="calendar-controls" class="filter-form filter-panel" hidden>
+<div id="calendar-controls" class="filter-form filter-panel" data-sheet-count="cal-results-count" hidden>
 <div class="filter-group filter-mobile-slot" id="cal-date-slot"><span class="filter-field-title" aria-hidden="true">{{ labels.fields.date }}</span></div>
 <div class="filter-group filter-group-scroll" id="cal-filters-scroll">
 <div class="filter-group-item" id="cal-view-select-group">
@@ -82,7 +82,7 @@
 <span class="filter-field-title" aria-hidden="true">{{ labels.fields.date }}</span>
 <input type="date" id="cal-date-input" min="{{ site.school_year.first_date }}" max="{{ site.school_year.last_date }}">
 </div>
-<button type="button" id="cal-today-btn">{{ labels.calendar.today_btn }}</button>
+<button type="button" id="cal-today-btn"><span class="label-short">{{ labels.calendar.today_btn }}</span><span class="label-long">{{ labels.calendar.today_row }}</span></button>
 </div>
 <div class="cal-nav-center">
 <button type="button" id="cal-prev-btn" aria-label="{{ labels.calendar.prev_btn }}"><span class="btn-text">{{ labels.calendar.prev_btn }}</span><span class="btn-symbol">{{ icon('chevron-left', url_for, site.icons) }}</span></button>
