@@ -33,6 +33,7 @@ from schedule.matcher import build_matching_matrix
 from schedule.parser import parse_calendar
 from schedule.renderer import render_site
 from schedule.sitecheck import validate_site
+from schedule.viewmodels import prepare_evaluation_comparison
 
 
 class ScheduleTests(unittest.TestCase):
@@ -49,6 +50,23 @@ class ScheduleTests(unittest.TestCase):
             for event in values:
                 for match in matrix[event.occurrence_id]:
                     self.assertEqual(match.evaluation.start_dt, event.start_dt)
+
+    def compare_with(self, **changes):
+        from schedule.models import ClassMatchState
+
+        base = replace(
+            sample_events(self.config, self.classes[0])[0],
+            rooms=("T22", "T25"),
+            teachers=("Jerome M.", "Cleo B."),
+        )
+        other = replace(base, class_id=self.classes[1].id, **changes)
+        state = ClassMatchState(self.classes[1], "same", other, None, None)
+        comparison = prepare_evaluation_comparison(self.config, self.classes[0], base, [state])
+        return comparison["diff_cols"]
+
+    def test_comparison_ignores_room_order(self):
+        self.assertFalse(self.compare_with(rooms=("T25", "T22"))["rooms"])
+        self.assertTrue(self.compare_with(rooms=("T25", "T24"))["rooms"])
 
     def test_nearest_alternate_match(self):
         from dataclasses import replace
