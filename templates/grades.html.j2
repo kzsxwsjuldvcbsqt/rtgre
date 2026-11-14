@@ -15,7 +15,7 @@
 <button type="button" class="btn" id="grades-export-btn" data-sheet-dismiss>{{ icon('download', url_for, site.icons) }}<span class="btn-label"><span class="label-short">{{ labels.grades.export_btn }}</span><span class="label-long">{{ labels.grades.export_row }}</span></span></button>
 <button type="button" class="btn btn-danger" id="grades-reset-btn" data-sheet-dismiss>{{ icon('trash', url_for, site.icons) }}<span class="btn-label"><span class="label-short">{{ labels.grades.reset_btn }}</span><span class="label-long">{{ labels.grades.reset_row }}</span></span></button>
 </div>
-<button type="button" class="filters-toggle filters-toggle-labeled" aria-expanded="false" aria-controls="grades-options">{{ icon('filter', url_for, site.icons) }}{{ labels.grades.options_btn }}</button>
+<button type="button" class="filters-toggle" aria-expanded="false" aria-controls="grades-options" aria-label="{{ labels.grades.options_btn }}">{{ icon('filter', url_for, site.icons) }}</button>
 </div>
 {% endcall %}{% endblock %}
 {% block content %}
