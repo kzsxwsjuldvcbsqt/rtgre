@@ -106,7 +106,10 @@
         setSheet(panel, false, true);
       });
       panel.addEventListener("click", function (event) {
-        if (event.target.closest("[data-sheet-dismiss]")) {
+        if (
+          openSheet === panel &&
+          event.target.closest("[data-sheet-dismiss]")
+        ) {
           setSheet(panel, false, false);
         }
       });
