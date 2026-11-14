@@ -38,7 +38,6 @@ AppUtils.onDOMReady(function () {
 
   const periodItem = document.createElement("div");
   periodItem.className = "filter-group-item";
-  periodItem.dataset.mobileSlot = "eval-period-slot";
 
   const periodSelect = document.createElement("select");
   periodSelect.id = "filter-period";
@@ -135,6 +134,7 @@ AppUtils.onDOMReady(function () {
   const countDiv = document.createElement("div");
   countDiv.className = "results-count";
   countDiv.id = "results-count";
+  countDiv.dataset.mobileSlot = "eval-count-slot";
   form.appendChild(countDiv);
 
   container.appendChild(form);
