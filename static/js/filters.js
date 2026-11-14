@@ -311,7 +311,10 @@ AppUtils.onDOMReady(function () {
 
     const monthCards = document.querySelectorAll(".month-card");
     monthCards.forEach(function (card) {
-      if (card.querySelector(".eval-row:not([hidden])")) {
+      const shown = card.querySelectorAll(".eval-row:not([hidden])").length;
+      const meta = card.querySelector(".data-box-meta");
+      if (meta) meta.textContent = shown;
+      if (shown > 0) {
         card.removeAttribute("hidden");
       } else {
         card.setAttribute("hidden", "");
