@@ -45,7 +45,8 @@
 {% endmacro %}
 
 {% macro app_topbar(trail, title, labels, url_for, site, class_label='') %}
-<header class="app-topbar">
+<div class="app-topbar">
+<header class="app-topbar-main">
 <button type="button" class="nav-toggle nav-burger" aria-controls="app-sidebar" aria-expanded="false" aria-label="{{ labels.sections.menu_open }}">{{ icon('three-bars', url_for, site.icons) }}</button>
 <nav class="app-breadcrumb" aria-label="{{ labels.sections.breadcrumb }}">
 <ol>
@@ -58,8 +59,9 @@
 {% if class_label %}
 <span class="nav-class-chip">{{ class_label }}</span>
 {% endif %}
+</header>
 {% if caller is defined %}
 <div class="app-topbar-actions">{{ caller() }}</div>
 {% endif %}
-</header>
+</div>
 {% endmacro %}

@@ -22,26 +22,23 @@
     display: block;
   }
   .app-topbar {
+    display: contents;
+  }
+  .app-topbar-main {
     position: sticky;
     inset-block-start: 0;
     z-index: var(--z-header);
-    flex-wrap: wrap;
-    gap: 0 var(--space-xs);
-    border-block-end: 0;
+    flex: none;
+    min-height: var(--topbar-height);
+    padding-inline: var(--page-gutter);
     background: var(--color-navbar);
     color: var(--color-navbar-text);
   }
-  .app-topbar {
-    min-height: 0;
-  }
   .app-breadcrumb {
-    display: flex;
     flex: 1;
-    align-items: center;
-    min-height: var(--topbar-height);
   }
   .app-breadcrumb h1,
-  .app-topbar > h1 {
+  .app-topbar-main > h1 {
     color: var(--color-navbar-text);
   }
   .app-breadcrumb a {
@@ -59,13 +56,9 @@
     content: none;
   }
   .app-topbar-actions {
-    order: 1;
-    flex-basis: calc(100% + 2 * var(--page-gutter));
-    margin-inline: calc(-1 * var(--page-gutter));
     padding: var(--space-xs) var(--page-gutter);
     border-block-end: var(--rule-width) solid var(--color-border-muted);
     background: var(--color-surface);
-    color: var(--color-text);
   }
   html.js-enabled .nav-burger,
   html.js-enabled .nav-close {

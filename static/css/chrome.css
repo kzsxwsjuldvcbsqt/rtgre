@@ -69,6 +69,14 @@
   border-block-end: var(--rule-width) solid var(--color-border-muted);
   background: var(--color-surface);
 }
+.app-topbar-main {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  align-self: stretch;
+  gap: var(--space-xs);
+  min-width: 0;
+}
 .app-breadcrumb {
   min-width: 0;
 }
@@ -98,7 +106,7 @@
   white-space: nowrap;
 }
 .app-breadcrumb h1,
-.app-topbar > h1 {
+.app-topbar-main > h1 {
   margin: 0;
   overflow: hidden;
   color: var(--color-text);
