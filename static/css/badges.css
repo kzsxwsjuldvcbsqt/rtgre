@@ -5,9 +5,6 @@
   font-size: var(--text-xs);
   font-weight: var(--weight-medium);
 }
-.match-badge {
-  color: var(--color-text-muted);
-}
 .category-badge,
 .filter-panel.is-open .filter-tone {
   display: inline-flex;

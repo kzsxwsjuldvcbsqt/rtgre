@@ -74,9 +74,6 @@ td .room-tag {
   #evaluations-list .col-module {
     width: var(--width-col-module);
   }
-  .comparison-table .col-class {
-    width: var(--width-col-class);
-  }
   #evaluations-list .col-action {
     width: var(--width-col-chevron);
     text-align: end;
