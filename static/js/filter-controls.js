@@ -105,6 +105,7 @@
     const item = document.createElement("button");
     item.type = "button";
     item.className = "choice-menu-item";
+    item.dataset.sheetDismiss = "";
     item.dataset.value = option.value;
     item.dataset.search = option.textContent.toLowerCase();
     item.appendChild(AppUtils.buildIcon(sprite + "#check", "icon-sm"));
