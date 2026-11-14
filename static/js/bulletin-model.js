@@ -56,9 +56,19 @@
     return parseFloat(text.replace(",", "."));
   }
 
+  function moduleCode(text, prefixes) {
+    const token = text.split(" ")[0];
+    const known = prefixes.some(function (prefix) {
+      return (
+        token.indexOf(prefix) === 0 && /^\d$/.test(token.charAt(prefix.length))
+      );
+    });
+    if (!known || token.indexOf(".") === -1) return null;
+    return /^[A-Za-z0-9.]+$/.test(token) ? token : null;
+  }
+
   function read(pages, info, config) {
     const ignored = new Set(config.ignored_texts);
-    const modulePattern = new RegExp(config.module_pattern);
     const rows = [];
     pages.forEach(function (items) {
       groupRows(items, config.row_tolerance).forEach(function (row) {
@@ -142,17 +152,16 @@
       const grade = last
         ? gradeValue(last.text, config.missing_grade)
         : undefined;
-      const match = first.match(modulePattern);
+      const code = moduleCode(first, config.module_prefixes);
 
       if (section === "ue") {
-        if (!match || grade === undefined) return;
-        const code = match[0];
+        if (!code || grade === undefined) return;
         if (!(code in modules) || modules[code] === null) modules[code] = grade;
         return;
       }
       if (section !== "evaluations") return;
-      if (match && first.slice(match[0].length).indexOf(" - ") === 0) {
-        currentModule = match[0];
+      if (code && first.slice(code.length).indexOf(" - ") === 0) {
+        currentModule = code;
         return;
       }
       if (!currentModule) return;
@@ -208,8 +217,9 @@
           if (trackIds.has(part)) tracks.add(part);
         });
     });
+    const words = parsed.header.toLowerCase().split(/[^a-z0-9]+/);
     const statuses = gradesConfig.status_ids.filter(function (status) {
-      return new RegExp("\\b" + status + "\\b", "i").test(parsed.header);
+      return words.indexOf(status.toLowerCase()) !== -1;
     });
 
     const grades = {};

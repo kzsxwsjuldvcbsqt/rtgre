@@ -90,7 +90,6 @@ def validate_bulletin_config(bulletin):
         "note_header",
         "footer_marker",
         "missing_grade",
-        "module_pattern",
     )
     if (
         not isinstance(bulletin, dict)
@@ -100,9 +99,10 @@ def validate_bulletin_config(bulletin):
         or any(
             not isinstance(bulletin.get(key), list)
             or not all(isinstance(item, str) and item.strip() for item in bulletin[key])
-            for key in ("evaluation_sections", "ignored_texts")
+            for key in ("evaluation_sections", "ignored_texts", "module_prefixes")
         )
         or not bulletin["evaluation_sections"]
+        or not bulletin["module_prefixes"]
         or any(
             type(bulletin.get(key)) is not int or bulletin[key] <= 0
             for key in ("max_bytes", "max_pages")
@@ -115,10 +115,6 @@ def validate_bulletin_config(bulletin):
         )
     ):
         raise ValueError("Invalid bulletin configuration")
-    try:
-        re.compile(bulletin["module_pattern"])
-    except re.error as error:
-        raise ValueError("Invalid bulletin module pattern") from error
 
 
 def validate_evaluation_details(curriculum_data: dict):
