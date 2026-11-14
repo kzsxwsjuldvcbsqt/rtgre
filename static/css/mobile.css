@@ -512,14 +512,6 @@
   .grades-band {
     display: none;
   }
-  html.js-enabled .filters-toggle-labeled {
-    gap: var(--space-xs);
-    width: auto;
-    margin-inline-start: auto;
-    padding-inline: var(--space-sm);
-    font-size: var(--control-font-size);
-    font-weight: var(--weight-medium);
-  }
   #evaluations-list .eval-row {
     position: relative;
     display: flex;
@@ -599,5 +591,8 @@
   }
   .grades-actions {
     flex: 1;
+  }
+  .grades-actions .filters-toggle {
+    margin-inline-start: auto;
   }
 }
