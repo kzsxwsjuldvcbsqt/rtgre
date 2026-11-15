@@ -104,6 +104,15 @@ def render_site(
         module_kinds.setdefault(code, module["kind"])
         module_codes.setdefault(code, module["code"])
     env.filters["canonical_code"] = lambda code: module_codes.get(code, code)
+
+    def short_date(moment):
+        return app_config.labels["calendar"]["day_title_short"].format(
+            day_name=app_config.labels["days_short"][moment.weekday()],
+            day_num=moment.day,
+            month_name=app_config.labels["months_short"][moment.month - 1],
+        )
+
+    env.globals["short_date"] = short_date
     kinds = app_config.curriculum.get("kinds", [])
     kind_labels = {kind["id"]: kind["label"] for kind in kinds}
     kind_rank = {kind["id"]: index for index, kind in enumerate(kinds)}

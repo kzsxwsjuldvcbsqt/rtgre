@@ -146,12 +146,9 @@
   --calendar-minute-height: calc(var(--calendar-hour-height) / 60);
   --event-title-lines: 2;
   --size-progress-dot: 0.5rem;
-  --width-col-date: 7rem;
-  --width-col-time: 8rem;
-  --width-col-category: 9rem;
-  --width-col-module: 8.5rem;
-  --width-col-chevron: 3rem;
-  --width-order-time: 7.5rem;
+  --width-time-range: 7.5rem;
+  --width-eval-date: 9rem;
+  --width-eval-category: 9.5rem;
   --size-order-rank: 1.5rem;
   --menu-min-width: 13rem;
   --width-choice-menu: 26rem;

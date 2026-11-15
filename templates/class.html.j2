@@ -1,6 +1,5 @@
 {% extends "base.html.j2" %}
 {% from "_nav.html.j2" import app_sidebar, app_topbar %}
-{% from "_evaluation_table.html.j2" import evaluation_table_header, evaluation_row %}
 {% from "_icons.html.j2" import icon %}
 {% block title %}{% for s in sections %}{% if s.id == 'evaluations' %}{{ s.label }}{% endif %}{% endfor %} - {{ class_config.label }} - {{ site.title }}{% endblock %}
 {% block sidebar %}{{ app_sidebar(sections, 'evaluations', class_config, section_files.evaluations, url_for, labels, site) }}{% endblock %}
@@ -44,16 +43,19 @@
 {% for month_key, month_label, month_evals in months_grouped %}
 <section class="month-card data-box" data-month="{{ month_key }}">
 <header class="data-box-head"><h3>{{ month_label }}</h3><span class="data-box-meta">{{ month_evals | length }}</span></header>
-<div class="table-card">
-<table class="evaluations-table">
-{{ evaluation_table_header(site, labels, show_action=true) }}
-<tbody>
+<ul class="box-list">
 {% for ev in month_evals %}
-{{ evaluation_row(ev, site, labels, url_for, show_action=true, format_groups=format_groups, module_labels=module_labels) }}
+<li class="eval-row" data-category="{{ ev.category_id }}" data-module="{{ ev.module_code | canonical_code }}" data-date="{{ ev.date_iso }}" data-end-timestamp="{{ ev.end_dt.timestamp() | int }}" data-past="{{ 'true' if ev.is_past else 'false' }}">
+<a class="box-row eval-link" href="{{ url_for('classes/' ~ ev.class_id ~ '/evaluations/' ~ ev.occurrence_id ~ '.html') }}">
+<span class="eval-date"><span class="eval-day">{{ short_date(ev.start_dt) }}</span><span class="eval-delay"></span></span>
+<span class="eval-time">{{ ev.time_range }}</span>
+<span class="eval-module"><strong>{{ ev.module_code | canonical_code }}</strong>{% if module_labels.get(ev.module_code) %} - {{ module_labels[ev.module_code] }}{% endif %}</span>
+<span class="category-badge{% if category_tones.get(ev.category_id) %} label-{{ category_tones[ev.category_id] }}{% endif %}">{{ ev.category_label }}</span>
+{{ icon('chevron-right', url_for, site.icons, 'box-row-icon') }}
+</a>
+</li>
 {% endfor %}
-</tbody>
-</table>
-</div>
+</ul>
 </section>
 {% endfor %}
 </div>

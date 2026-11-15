@@ -102,13 +102,6 @@
     letter-spacing: var(--tracking-label);
     text-transform: uppercase;
   }
-  td.col-action {
-    margin-block-start: var(--space-sm);
-  }
-  .detail-link {
-    justify-content: center;
-    width: 100%;
-  }
 }
 @media (max-width: 39.99em) {
   .filter-group,
@@ -189,29 +182,6 @@
     align-items: center;
     min-height: var(--control-height);
     color: var(--color-text-faint);
-  }
-}
-
-@media (min-width: 60em) {
-  .eval-row {
-    position: relative;
-  }
-  .eval-row .detail-link,
-  .eval-row .detail-link:hover {
-    min-height: 0;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: var(--color-text-faint);
-    vertical-align: middle;
-  }
-  .eval-row .detail-link::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-  }
-  .eval-row:hover .detail-link {
-    color: var(--color-text);
   }
 }
 
