@@ -6,6 +6,7 @@ from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
 from .config import AppConfig
 from .curriculum import (
+    canonical_module_codes,
     get_class_grades_data,
     get_class_resources,
     module_code_variants,
@@ -104,11 +105,10 @@ def render_site(
     cat_map = {c.id: c.label for c in app_config.categories}
     module_labels: dict[str, str] = {}
     module_kinds: dict[str, str] = {}
-    module_codes: dict[str, str] = {}
+    module_codes = canonical_module_codes(app_config.curriculum)
     for code, module in module_code_variants(app_config.curriculum):
         module_labels.setdefault(code, module["label"])
         module_kinds.setdefault(code, module["kind"])
-        module_codes.setdefault(code, module["code"])
     env.filters["canonical_code"] = lambda code: module_codes.get(code, code)
 
     env.globals.update(
