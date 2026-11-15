@@ -175,10 +175,6 @@
   .grades-band {
     flex-wrap: wrap;
   }
-  .grades-table .grade-input,
-  .grade-computed {
-    width: var(--width-grade-input-compact);
-  }
   .show-coefs .grades-table .col-coef {
     display: none;
   }
