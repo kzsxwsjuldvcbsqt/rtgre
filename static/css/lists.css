@@ -3,7 +3,7 @@
   padding: 0;
   list-style: none;
 }
-.box-list > li + li {
+.box-list > li:not([hidden]) ~ li {
   border-block-start: var(--rule-width) solid var(--color-border-muted);
 }
 .box-row {
