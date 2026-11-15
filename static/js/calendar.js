@@ -1,48 +1,50 @@
 (function () {
   AppUtils.onDOMReady(function () {
-    var scriptEl = document.querySelector("script[data-class-id]");
+    const scriptEl = document.querySelector("script[data-class-id]");
     if (!scriptEl) return;
 
-    var currentClassId = scriptEl.getAttribute("data-class-id");
-    var firstDateStr = scriptEl.getAttribute("data-first-date");
-    var lastDateStr = scriptEl.getAttribute("data-last-date");
-    var schoolYearLabel = scriptEl.getAttribute("data-school-year-label");
-    var calendarConfig = JSON.parse(
+    const currentClassId = scriptEl.getAttribute("data-class-id");
+    const firstDateStr = scriptEl.getAttribute("data-first-date");
+    const lastDateStr = scriptEl.getAttribute("data-last-date");
+    const schoolYearLabel = scriptEl.getAttribute("data-school-year-label");
+    const calendarConfig = JSON.parse(
       scriptEl.getAttribute("data-calendar-config"),
     );
-    var allowedDays = calendarConfig.days_of_week;
-    var timezone = scriptEl.getAttribute("data-timezone");
-    var displayMode = scriptEl.getAttribute("data-display-mode");
+    const allowedDays = calendarConfig.days_of_week;
+    const timezone = scriptEl.getAttribute("data-timezone");
+    const displayMode = scriptEl.getAttribute("data-display-mode");
 
-    var categoriesJson = JSON.parse(
+    const categoriesJson = JSON.parse(
       scriptEl.getAttribute("data-categories-json") || "[]",
     );
-    var categoryMap = {};
+    const categoryMap = {};
     categoriesJson.forEach(function (c) {
       categoryMap[c.id] = c;
     });
 
-    var sessionMarks = {};
+    const sessionMarks = {};
     JSON.parse(
       scriptEl.getAttribute("data-session-marks-json") || "[]",
     ).forEach(function (mark) {
       sessionMarks[mark.id] = mark.label;
     });
 
-    var labels = JSON.parse(scriptEl.getAttribute("data-labels-json") || "{}");
-    var classLabel = scriptEl.getAttribute("data-class-label");
-    var moduleStyles = JSON.parse(
+    const labels = JSON.parse(
+      scriptEl.getAttribute("data-labels-json") || "{}",
+    );
+    const classLabel = scriptEl.getAttribute("data-class-label");
+    const moduleStyles = JSON.parse(
       scriptEl.getAttribute("data-module-styles-json") || "{}",
     );
 
-    var navBarEl = document.getElementById("calendar-nav-bar");
+    const navBarEl = document.getElementById("calendar-nav-bar");
     if (navBarEl) navBarEl.hidden = false;
 
-    var initialEventsScript = document.getElementById("class-events-data");
-    var currentClassEvents = [];
+    const initialEventsScript = document.getElementById("class-events-data");
+    let currentClassEvents = [];
     if (initialEventsScript) {
       try {
-        var rawEventsData = JSON.parse(initialEventsScript.textContent);
+        const rawEventsData = JSON.parse(initialEventsScript.textContent);
         currentClassEvents = CalendarModel.normalizeEnvelope(
           rawEventsData,
           currentClassId,
@@ -52,17 +54,17 @@
       }
     }
 
-    var breaks = Array.isArray(calendarConfig.breaks)
+    const breaks = Array.isArray(calendarConfig.breaks)
       ? calendarConfig.breaks
       : [];
 
     function assignSeriesCounts(events) {
-      var groups = Object.create(null);
+      const groups = Object.create(null);
       events.forEach(function (ev) {
         (groups[ev.title] || (groups[ev.title] = [])).push(ev);
       });
       Object.keys(groups).forEach(function (title) {
-        var series = groups[title];
+        const series = groups[title];
         series.sort(function (a, b) {
           return Date.parse(a.start) - Date.parse(b.start);
         });
@@ -85,8 +87,8 @@
 
     function computeGridRange(events) {
       if (events.length === 0) return null;
-      var first = Infinity;
-      var last = -Infinity;
+      let first = Infinity;
+      let last = -Infinity;
       events.forEach(function (ev) {
         first = Math.min(first, toClockMinutes(ev.start));
         last = Math.max(last, toClockMinutes(ev.end));
@@ -99,45 +101,45 @@
 
     CalendarModel.applyBreaks(currentClassEvents, breaks);
     assignSeriesCounts(currentClassEvents);
-    var gridRange = computeGridRange(currentClassEvents);
+    const gridRange = computeGridRange(currentClassEvents);
 
-    var viewSelect = document.getElementById("cal-view-select");
-    var layoutSelect = document.getElementById("cal-layout-select");
-    var layoutGroup = document.getElementById("cal-layout-select-group");
-    var mobileQuery = window.matchMedia(calendarConfig.mobile_media_query);
-    var dateInput = document.getElementById("cal-date-input");
-    var dateGroup = document.getElementById("cal-date-input-group");
+    const viewSelect = document.getElementById("cal-view-select");
+    const layoutSelect = document.getElementById("cal-layout-select");
+    const layoutGroup = document.getElementById("cal-layout-select-group");
+    const mobileQuery = window.matchMedia(calendarConfig.mobile_media_query);
+    const dateInput = document.getElementById("cal-date-input");
+    const dateGroup = document.getElementById("cal-date-input-group");
 
-    var evalsOnlyCb = document.getElementById("cal-evals-only");
-    var teacherCb = document.getElementById("cal-teacher-only");
-    var searchInput = document.getElementById("cal-search-input");
-    var resetBtn = document.getElementById("cal-reset-btn");
+    const evalsOnlyCb = document.getElementById("cal-evals-only");
+    const teacherCb = document.getElementById("cal-teacher-only");
+    const searchInput = document.getElementById("cal-search-input");
+    const resetBtn = document.getElementById("cal-reset-btn");
 
-    var prevBtn = document.getElementById("cal-prev-btn");
-    var todayBtn = document.getElementById("cal-today-btn");
-    var nextBtn = document.getElementById("cal-next-btn");
-    var periodHeading = document.getElementById("cal-period-heading");
-    var viewContainer = document.getElementById("calendar-view-container");
+    const prevBtn = document.getElementById("cal-prev-btn");
+    const todayBtn = document.getElementById("cal-today-btn");
+    const nextBtn = document.getElementById("cal-next-btn");
+    const periodHeading = document.getElementById("cal-period-heading");
+    const viewContainer = document.getElementById("calendar-view-container");
 
-    var searchTimeout = null;
-    var timeMarkerTimer = null;
-    var spotlightPending = false;
-    var lastWrittenHash = "";
+    let searchTimeout = null;
+    let timeMarkerTimer = null;
+    let spotlightPending = false;
+    let lastWrittenHash = "";
 
     function parseISODate(str) {
       return CalendarModel.parseCivilDate(str) || new Date(NaN);
     }
 
     function formatISODate(d) {
-      var y = d.getFullYear();
-      var m = String(d.getMonth() + 1).padStart(2, "0");
-      var day = String(d.getDate()).padStart(2, "0");
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
       return y + "-" + m + "-" + day;
     }
 
     function toWeekday(d, direction) {
-      var date = new Date(d.getTime());
-      var dir = direction >= 0 ? 1 : -1;
+      const date = new Date(d.getTime());
+      const dir = direction >= 0 ? 1 : -1;
       while (
         allowedDays.indexOf(date.getDay() || 7) === -1 &&
         !isNaN(date.getTime())
@@ -148,22 +150,22 @@
     }
 
     function getNextWeekday(d) {
-      var next = new Date(d.getTime());
+      const next = new Date(d.getTime());
       next.setDate(next.getDate() + 1);
       return toWeekday(next, 1);
     }
 
     function getPrevWeekday(d) {
-      var prev = new Date(d.getTime());
+      const prev = new Date(d.getTime());
       prev.setDate(prev.getDate() - 1);
       return toWeekday(prev, -1);
     }
 
-    var minDate = toWeekday(parseISODate(firstDateStr), 1);
-    var maxDate = toWeekday(parseISODate(lastDateStr), -1);
+    const minDate = toWeekday(parseISODate(firstDateStr), 1);
+    const maxDate = toWeekday(parseISODate(lastDateStr), -1);
     function normalizeDate(date) {
       if (isNaN(date.getTime())) return new Date(minDate.getTime());
-      var normalized = toWeekday(date, 1);
+      const normalized = toWeekday(date, 1);
       return new Date(
         Math.min(
           Math.max(normalized.getTime(), minDate.getTime()),
@@ -172,7 +174,7 @@
       );
     }
 
-    var defaultDateStr = formatISODate(normalizeDate(getNowDate().date));
+    const defaultDateStr = formatISODate(normalizeDate(getNowDate().date));
 
     function resolveDefaultView() {
       if (
@@ -183,7 +185,7 @@
       return calendarConfig.default_view;
     }
 
-    var state = {
+    const state = {
       view: resolveDefaultView(),
       layout: calendarConfig.default_layout,
       date: defaultDateStr,
@@ -192,21 +194,23 @@
       search: "",
     };
 
-    var dayNames = labels.days;
-    var monthNames = labels.months;
+    const dayNames = labels.days;
+    const monthNames = labels.months;
 
     function getWeekStart(d) {
-      var date = new Date(d.getTime());
-      var day = date.getDay();
-      var diff = date.getDate() - day + (day === 0 ? -6 : 1);
+      const date = new Date(d.getTime());
+      const day = date.getDay();
+      const diff = date.getDate() - day + (day === 0 ? -6 : 1);
       return new Date(date.setDate(diff));
     }
 
     function getISOWeekNumber(d) {
-      var date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-      var dayNum = date.getUTCDay() || 7;
+      const date = new Date(
+        Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()),
+      );
+      const dayNum = date.getUTCDay() || 7;
       date.setUTCDate(date.getUTCDate() + 4 - dayNum);
-      var yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+      const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
       return Math.ceil(((date - yearStart) / 86400000 + 1) / 7);
     }
 
@@ -222,13 +226,13 @@
     }
 
     function getNowDate() {
-      var hashObj = AppUtils.parseHash(window.location.hash);
+      const hashObj = AppUtils.parseHash(window.location.hash);
       if (
         hashObj.now &&
         (CalendarModel.validInstant(hashObj.now) ||
           CalendarModel.validSiteDateTime(hashObj.now))
       ) {
-        var d = new Date(hashObj.now);
+        const d = new Date(hashObj.now);
         if (!isNaN(d.getTime())) {
           return {
             date: /(?:Z|[+-]\d{2}:?\d{2})$/i.test(hashObj.now)
@@ -253,29 +257,29 @@
     }
 
     function buildTimeMarker(tagName, text) {
-      var markerEl = document.createElement(tagName);
+      const markerEl = document.createElement(tagName);
       markerEl.id = "current-time-marker";
       markerEl.className = "current-time-marker";
 
-      var timeSpan = document.createElement("span");
+      const timeSpan = document.createElement("span");
       timeSpan.className = "current-time-text";
       timeSpan.textContent = text;
       markerEl.appendChild(timeSpan);
 
-      var lineEl = document.createElement("hr");
+      const lineEl = document.createElement("hr");
       lineEl.className = "current-time-line";
       markerEl.appendChild(lineEl);
       return markerEl;
     }
 
     function placeOffViewMarker(now, todayIso, nowTimeStr) {
-      var rangeStart = viewContainer.getAttribute("data-range-start");
-      var rangeEnd = viewContainer.getAttribute("data-range-end");
+      const rangeStart = viewContainer.getAttribute("data-range-start");
+      const rangeEnd = viewContainer.getAttribute("data-range-end");
       if (!rangeStart || !rangeEnd) return false;
 
-      var lowerBound = getPrevWeekday(parseISODate(rangeStart));
+      const lowerBound = getPrevWeekday(parseISODate(rangeStart));
       lowerBound.setDate(lowerBound.getDate() + 1);
-      var upperBound = getNextWeekday(parseISODate(rangeEnd));
+      const upperBound = getNextWeekday(parseISODate(rangeEnd));
       upperBound.setDate(upperBound.getDate() - 1);
       if (
         todayIso < formatISODate(lowerBound) ||
@@ -283,7 +287,7 @@
       )
         return false;
 
-      var markerEl = buildTimeMarker(
+      const markerEl = buildTimeMarker(
         "div",
         AppUtils.formatText(labels.now_marker, {
           day_name: dayNames[(now.getDay() + 6) % 7],
@@ -294,8 +298,8 @@
       );
       markerEl.classList.add("is-off-view");
 
-      var nextBlock = Array.from(viewContainer.children).find(function (el) {
-        var date = el.getAttribute("data-date");
+      const nextBlock = Array.from(viewContainer.children).find(function (el) {
+        const date = el.getAttribute("data-date");
         return date && date > todayIso;
       });
       viewContainer.insertBefore(markerEl, nextBlock || null);
@@ -303,7 +307,7 @@
     }
 
     function updateTimeMarker() {
-      var existingMarker = document.getElementById("current-time-marker");
+      const existingMarker = document.getElementById("current-time-marker");
       if (existingMarker) existingMarker.remove();
 
       viewContainer
@@ -321,13 +325,13 @@
           el.style.removeProperty("--course-progress");
         });
 
-      var nowInfo = getNowDate();
-      var now = nowInfo.date;
-      var todayIso = formatISODate(now);
+      const nowInfo = getNowDate();
+      const now = nowInfo.date;
+      const todayIso = formatISODate(now);
 
-      var nowHours = String(now.getHours()).padStart(2, "0");
-      var nowMins = String(now.getMinutes()).padStart(2, "0");
-      var nowTimeStr = nowHours + ":" + nowMins;
+      const nowHours = String(now.getHours()).padStart(2, "0");
+      const nowMins = String(now.getMinutes()).padStart(2, "0");
+      const nowTimeStr = nowHours + ":" + nowMins;
 
       viewContainer
         .querySelectorAll(".day-section")
@@ -340,7 +344,7 @@
             });
         });
 
-      var todaySection = document.getElementById("day-section-" + todayIso);
+      const todaySection = document.getElementById("day-section-" + todayIso);
       if (todaySection && (state.view === "week" || state.view === "year")) {
         todaySection.classList.add("is-today");
       }
@@ -353,17 +357,17 @@
         return;
       }
 
-      var eventsList = todaySection.querySelector(".calendar-events-list");
-      var eventItems = eventsList
+      const eventsList = todaySection.querySelector(".calendar-events-list");
+      const eventItems = eventsList
         ? Array.from(eventsList.querySelectorAll(".calendar-event-item"))
         : [];
-      var nowMinutes =
+      const nowMinutes =
         now.getHours() * 60 + now.getMinutes() + now.getSeconds() / 60;
-      var ongoingItem = null;
-      var nextItem = null;
+      let ongoingItem = null;
+      let nextItem = null;
       eventItems.forEach(function (item) {
-        var start = timeToMinutes(item.dataset.start);
-        var end = timeToMinutes(item.dataset.end);
+        const start = timeToMinutes(item.dataset.start);
+        const end = timeToMinutes(item.dataset.end);
         if (end <= nowMinutes) {
           item.classList.add("is-past");
         } else if (start <= nowMinutes) {
@@ -379,11 +383,11 @@
       });
 
       if (ongoingItem) {
-        var courseMarker = buildTimeMarker("div", nowTimeStr);
+        const courseMarker = buildTimeMarker("div", nowTimeStr);
         courseMarker.classList.add("is-line");
         ongoingItem.appendChild(courseMarker);
       } else if (viewContainer.classList.contains("is-grid")) {
-        var gridMarker = buildTimeMarker("li", nowTimeStr);
+        const gridMarker = buildTimeMarker("li", nowTimeStr);
         gridMarker.classList.add("is-line");
         gridMarker.style.setProperty(
           "--calendar-offset",
@@ -396,7 +400,7 @@
       } else if (eventsList) {
         eventsList.insertBefore(buildTimeMarker("li", nowTimeStr), nextItem);
       } else {
-        var dayHeading = todaySection.querySelector(":scope > h3");
+        const dayHeading = todaySection.querySelector(":scope > h3");
         todaySection.insertBefore(
           buildTimeMarker("div", nowTimeStr),
           dayHeading ? dayHeading.nextSibling : todaySection.firstChild,
@@ -407,14 +411,14 @@
     }
 
     function stickyBarHeight() {
-      var bar = document.querySelector(".app-topbar-main");
+      const bar = document.querySelector(".app-topbar-main");
       return bar ? bar.getBoundingClientRect().height : 0;
     }
 
     function spotlightNow() {
       if (!spotlightPending) return;
       spotlightPending = false;
-      var target = document.getElementById("current-time-marker");
+      const target = document.getElementById("current-time-marker");
       if (!target) return;
       target.classList.add("is-spotlit");
       target.addEventListener(
@@ -433,16 +437,16 @@
     });
 
     function loadState() {
-      var hashObj = AppUtils.parseHash(window.location.hash);
-      var storedStr = AppUtils.safeStorageGet("calendar_settings", true);
-      var storedObj = {};
+      const hashObj = AppUtils.parseHash(window.location.hash);
+      const storedStr = AppUtils.safeStorageGet("calendar_settings", true);
+      let storedObj = {};
       if (storedStr) {
         try {
           storedObj = JSON.parse(storedStr);
         } catch (e) {}
       }
 
-      var merged = Object.assign({}, storedObj, hashObj);
+      const merged = Object.assign({}, storedObj, hashObj);
 
       if (
         merged.view &&
@@ -463,7 +467,7 @@
         (CalendarModel.validInstant(hashObj.now) ||
           CalendarModel.validSiteDateTime(hashObj.now))
       ) {
-        var nowSim = new Date(hashObj.now);
+        const nowSim = new Date(hashObj.now);
         if (!isNaN(nowSim.getTime())) {
           state.date = formatISODate(normalizeDate(getNowDate().date));
         }
@@ -482,8 +486,8 @@
     }
 
     function saveState() {
-      var hashObj = AppUtils.parseHash(window.location.hash);
-      var saveObj = {
+      const hashObj = AppUtils.parseHash(window.location.hash);
+      const saveObj = {
         view: state.view,
         layout: state.layout,
         date: state.date,
@@ -505,7 +509,7 @@
         true,
       );
 
-      var newHash = AppUtils.buildHash(saveObj);
+      const newHash = AppUtils.buildHash(saveObj);
       lastWrittenHash = newHash;
       if (window.location.hash !== newHash) {
         if (history.replaceState) {
@@ -526,13 +530,13 @@
       if (teacherCb) teacherCb.checked = state.withTeacher;
       if (searchInput) searchInput.value = state.search;
 
-      var isYear = state.view === "year";
+      const isYear = state.view === "year";
       if (prevBtn) prevBtn.hidden = isYear;
       if (nextBtn) nextBtn.hidden = isYear;
       if (todayBtn) todayBtn.hidden = false;
       if (dateGroup) dateGroup.hidden = isYear;
       else if (dateInput) dateInput.hidden = isYear;
-      var navBar = document.getElementById("calendar-nav-bar");
+      const navBar = document.getElementById("calendar-nav-bar");
       if (navBar) navBar.hidden = false;
     }
 
@@ -543,12 +547,12 @@
         }
 
         if (state.withTeacher) {
-          var tList = ev.teachers || [];
+          const tList = ev.teachers || [];
           if (tList.length === 0) return false;
         }
 
         if (searchNorm) {
-          var targetStr = AppUtils.stripAccents(
+          const targetStr = AppUtils.stripAccents(
             [
               ev.title,
               ev.code,
@@ -652,9 +656,9 @@
     if (dateInput) {
       dateInput.addEventListener("change", function () {
         if (dateInput.value) {
-          var picked = parseISODate(dateInput.value);
+          const picked = parseISODate(dateInput.value);
           if (isNaN(picked.getTime())) return;
-          var normalized = normalizeDate(picked);
+          const normalized = normalizeDate(picked);
           state.date = formatISODate(normalized);
           dateInput.value = state.date;
           render();
@@ -707,8 +711,8 @@
     if (prevBtn) {
       prevBtn.addEventListener("click", function () {
         if (state.view === "year") return;
-        var d = parseISODate(state.date);
-        var targetDate;
+        const d = parseISODate(state.date);
+        let targetDate;
         if (state.view === "week") {
           targetDate = new Date(d.getTime());
           targetDate.setDate(targetDate.getDate() - 7);
@@ -726,8 +730,8 @@
     if (nextBtn) {
       nextBtn.addEventListener("click", function () {
         if (state.view === "year") return;
-        var d = parseISODate(state.date);
-        var targetDate;
+        const d = parseISODate(state.date);
+        let targetDate;
         if (state.view === "week") {
           targetDate = new Date(d.getTime());
           targetDate.setDate(targetDate.getDate() + 7);
@@ -744,9 +748,9 @@
 
     if (todayBtn) {
       todayBtn.addEventListener("click", function () {
-        var nowObj = getNowDate();
-        var today = toWeekday(nowObj.date, 1);
-        var todayIso = formatISODate(today);
+        const nowObj = getNowDate();
+        const today = toWeekday(nowObj.date, 1);
+        const todayIso = formatISODate(today);
         spotlightPending = true;
 
         if (state.view === "year") {
@@ -754,14 +758,14 @@
             "--site-header-height",
             stickyBarHeight() + "px",
           );
-          var todayEl =
+          const todayEl =
             document.getElementById(
               "day-section-" + formatISODate(nowObj.date),
             ) || document.getElementById("current-time-marker");
           if (todayEl) {
             todayEl.scrollIntoView({ behavior: "smooth", block: "start" });
           } else {
-            var firstDayEl = viewContainer.querySelector(".day-section");
+            const firstDayEl = viewContainer.querySelector(".day-section");
             if (firstDayEl)
               firstDayEl.scrollIntoView({ behavior: "smooth", block: "start" });
           }
@@ -777,7 +781,7 @@
         updateControlsFromState();
         render();
         if (window.matchMedia(calendarConfig.mobile_media_query).matches) {
-          var marker = document.getElementById("current-time-marker");
+          const marker = document.getElementById("current-time-marker");
           if (marker)
             marker.scrollIntoView({ behavior: "smooth", block: "center" });
         }
@@ -786,7 +790,7 @@
 
     document.addEventListener("keydown", function (e) {
       if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
-      var tag =
+      const tag =
         e.target && e.target.tagName ? e.target.tagName.toLowerCase() : "";
       if (
         tag === "input" ||
@@ -817,7 +821,7 @@
     loadState();
     render();
     requestAnimationFrame(function () {
-      var layout = document.querySelector(".has-filter-sidebar");
+      const layout = document.querySelector(".has-filter-sidebar");
       if (layout) layout.classList.add("is-layout-ready");
     });
   });
