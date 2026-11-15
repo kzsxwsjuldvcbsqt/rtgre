@@ -12,7 +12,6 @@
   border-block-start: var(--rule-width) solid var(--color-border-muted);
   padding: var(--space-md);
   color: var(--color-text-muted);
-  font-size: var(--text-sm);
 }
 .grades-panel abbr {
   text-decoration: none;
@@ -28,7 +27,6 @@
 .grades-summary-table th,
 .grades-summary-table td {
   padding: var(--space-xs) var(--space-md) var(--space-xs) 0;
-  font-size: var(--text-sm);
 }
 .grades-summary-table th:first-child {
   padding-inline-start: var(--space-md);
@@ -73,7 +71,6 @@
 .grades-table td {
   border-block-end: 0;
   border-block-start: var(--rule-width) solid var(--color-border-muted);
-  font-size: var(--text-base);
 }
 .grades-table tbody tr:has(.grade-input:not([hidden])) {
   cursor: pointer;
