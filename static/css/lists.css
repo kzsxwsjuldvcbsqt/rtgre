@@ -82,6 +82,13 @@
   color: var(--color-text-muted);
   font-size: var(--text-sm);
 }
+.eval-row.is-soon .eval-link {
+  background: var(--color-soon);
+}
+.is-soon .eval-delay {
+  color: var(--color-accent-emphasis);
+  font-weight: var(--weight-medium);
+}
 .eval-delay:empty {
   display: none;
 }

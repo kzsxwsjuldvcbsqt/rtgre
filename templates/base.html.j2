@@ -15,7 +15,13 @@
 {% if class_config is defined and class_config %}
 <script src="{{ url_for('static/js/remember-class.js') }}" data-remember-class="{{ class_config.id }}"></script>
 {% endif %}
-<script defer src="{{ url_for('static/js/utils.js') }}"></script>
+<script defer src="{{ url_for('static/js/utils.js') }}"
+  data-language="{{ site.language }}"
+  data-timezone="{{ site.timezone }}"
+  data-soon-days="{{ site.evaluations.soon_days }}"
+  data-relative-days-max="{{ site.evaluations.relative_days_max }}"
+  data-relative-weeks-max="{{ site.evaluations.relative_weeks_max }}"
+></script>
 <script defer src="{{ url_for('static/js/menu.js') }}"></script>
 {% block head_scripts %}{% endblock %}
 <script defer src="{{ url_for('static/js/mobile-shell.js') }}"

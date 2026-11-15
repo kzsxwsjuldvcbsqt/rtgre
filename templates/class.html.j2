@@ -45,9 +45,9 @@
 <header class="data-box-head"><h3>{{ month_label }}</h3><span class="data-box-meta">{{ month_evals | length }}</span></header>
 <ul class="box-list">
 {% for ev in month_evals %}
-<li class="eval-row" data-category="{{ ev.category_id }}" data-module="{{ ev.module_code | canonical_code }}" data-date="{{ ev.date_iso }}" data-end-timestamp="{{ ev.end_dt.timestamp() | int }}" data-past="{{ 'true' if ev.is_past else 'false' }}">
+<li class="eval-row" data-category="{{ ev.category_id }}" data-module="{{ ev.module_code | canonical_code }}" data-end-timestamp="{{ ev.end_dt.timestamp() | int }}" data-past="{{ 'true' if ev.is_past else 'false' }}">
 <a class="box-row eval-link" href="{{ url_for('classes/' ~ ev.class_id ~ '/evaluations/' ~ ev.occurrence_id ~ '.html') }}">
-<span class="eval-date"><span class="eval-day">{{ short_date(ev.start_dt) }}</span><span class="eval-delay"></span></span>
+<span class="eval-date"><span class="eval-day">{{ short_date(ev.start_dt) }}</span><span class="eval-delay" data-relative-date="{{ ev.date_iso }}"></span></span>
 <span class="eval-time">{{ ev.time_range }}</span>
 <span class="eval-module"><strong>{{ ev.module_code | canonical_code }}</strong>{% if module_labels.get(ev.module_code) %} - {{ module_labels[ev.module_code] }}{% endif %}</span>
 <span class="category-badge{% if category_tones.get(ev.category_id) %} label-{{ category_tones[ev.category_id] }}{% endif %}">{{ ev.category_label }}</span>

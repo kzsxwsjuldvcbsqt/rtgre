@@ -315,6 +315,11 @@ def load_config(config_dir: str = "config") -> AppConfig:
     ):
         raise ValueError("Invalid grade limits")
     validate_bulletin_config(grades["bulletin"])
+    if any(
+        type(site["evaluations"][key]) is not int or site["evaluations"][key] < 0
+        for key in ("soon_days", "relative_days_max", "relative_weeks_max")
+    ):
+        raise ValueError("Invalid evaluation delay settings")
     if (
         site["ade"]["retry_attempts"] < 1
         or site["ade"]["request_timeout_seconds"] <= 0

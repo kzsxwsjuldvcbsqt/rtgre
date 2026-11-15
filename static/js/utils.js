@@ -1,4 +1,51 @@
 (function (global) {
+  var settings =
+    (document.currentScript && document.currentScript.dataset) || {};
+
+  var MS_PER_DAY = 86400000;
+  var DAYS_PER_WEEK = 7;
+  var MONTHS_PER_YEAR = 12;
+
+  function dayNumber(iso) {
+    var parts = iso.split("-").map(Number);
+    return Date.UTC(parts[0], parts[1] - 1, parts[2]) / MS_PER_DAY;
+  }
+
+  function relativeDay(dateIso, todayIso, limits) {
+    var days = dayNumber(dateIso) - dayNumber(todayIso);
+    if (Math.abs(days) <= limits.daysMax) return { value: days, unit: "day" };
+    var weeks = Math.round(days / DAYS_PER_WEEK);
+    if (Math.abs(weeks) <= limits.weeksMax) {
+      return { value: weeks, unit: "week" };
+    }
+    var date = dateIso.split("-").map(Number);
+    var today = todayIso.split("-").map(Number);
+    return {
+      value: (date[0] - today[0]) * MONTHS_PER_YEAR + date[1] - today[1],
+      unit: "month",
+    };
+  }
+
+  function formatRelativeDay(relative, language) {
+    return new Intl.RelativeTimeFormat(language, {
+      numeric: relative.unit === "day" ? "auto" : "always",
+    }).format(relative.value, relative.unit);
+  }
+
+  function todayIn(timeZone) {
+    var parts = new Intl.DateTimeFormat("en-CA", {
+      timeZone: timeZone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).formatToParts(new Date());
+    var byType = {};
+    parts.forEach(function (part) {
+      byType[part.type] = part.value;
+    });
+    return [byType.year, byType.month, byType.day].join("-");
+  }
+
   function stripAccents(str) {
     if (!str) return "";
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -122,6 +169,8 @@
     safeStorageRemove: safeStorageRemove,
     bindBlurKeys: bindBlurKeys,
     onDOMReady: onDOMReady,
+    relativeDay: relativeDay,
+    formatRelativeDay: formatRelativeDay,
   };
 
   onDOMReady(function () {
@@ -143,12 +192,32 @@
       clearTimeout(pastTimer);
       var now = Date.now();
       var nextEnd = Infinity;
-      document.querySelectorAll(".eval-row").forEach(function (row) {
+      var todayIso = todayIn(settings.timezone);
+      var limits = {
+        daysMax: Number(settings.relativeDaysMax),
+        weeksMax: Number(settings.relativeWeeksMax),
+      };
+      document.querySelectorAll("[data-end-timestamp]").forEach(function (row) {
         var end = Number(row.dataset.endTimestamp) * 1000;
         if (!Number.isFinite(end)) return;
         var past = end <= now;
         row.dataset.past = String(past);
         if (!past) nextEnd = Math.min(nextEnd, end);
+        var delay = row.querySelector("[data-relative-date]");
+        if (!delay) return;
+        var relative = relativeDay(
+          delay.dataset.relativeDate,
+          todayIso,
+          limits,
+        );
+        delay.textContent = formatRelativeDay(relative, settings.language);
+        row.classList.toggle(
+          "is-soon",
+          !past &&
+            relative.unit === "day" &&
+            relative.value >= 0 &&
+            relative.value <= Number(settings.soonDays),
+        );
       });
       document.dispatchEvent(new Event("evaluations-time-change"));
       if (Number.isFinite(nextEnd))
