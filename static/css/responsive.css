@@ -38,10 +38,10 @@
   }
 }
 @media (min-width: 60em) {
-  .has-filter-sidebar > .filter-sidebar > #calendar-controls[hidden] {
+  .has-filter-bar > .filter-bar > #calendar-controls[hidden] {
     display: flex !important;
   }
-  .has-filter-sidebar > .filter-sidebar > #filters-container[hidden] {
+  .has-filter-bar > .filter-bar > #filters-container[hidden] {
     display: block !important;
   }
   .filters-toggle {
@@ -63,14 +63,14 @@
     min-width: var(--width-period-heading);
     text-align: center;
   }
-  .has-filter-sidebar .filter-form select[data-control] {
+  .has-filter-bar .filter-form select[data-control] {
     display: none;
   }
   .filter-form .choice-trigger,
   .segmented {
     display: inline-flex;
   }
-  .has-filter-sidebar > .filter-sidebar,
+  .has-filter-bar > .filter-bar,
   .page-band {
     margin: calc(-1 * var(--space-lg)) calc(-1 * var(--page-gutter))
       var(--space-lg);
@@ -78,29 +78,29 @@
     border-block-end: var(--rule-width) solid var(--color-border-muted);
     background: var(--color-surface);
   }
-  .has-filter-sidebar .filter-form {
+  .has-filter-bar .filter-form {
     display: flex;
     flex-wrap: nowrap;
     align-items: flex-start;
     gap: var(--space-xs);
   }
-  .has-filter-sidebar .filter-group-scroll {
+  .has-filter-bar .filter-group-scroll {
     flex: 1;
   }
-  .has-filter-sidebar .filter-form > :not(.filter-group-scroll) {
+  .has-filter-bar .filter-form > :not(.filter-group-scroll) {
     flex: none;
     min-width: 0;
   }
-  .has-filter-sidebar .filter-form input[type="text"] {
+  .has-filter-bar .filter-form input[type="text"] {
     width: var(--width-toolbar-search);
   }
-  .has-filter-sidebar .filter-group-last {
+  .has-filter-bar .filter-group-last {
     order: -1;
     margin-inline-end: var(--space-2xs);
     padding-inline-end: var(--space-sm);
     border-inline-end: var(--rule-width) solid var(--color-border-muted);
   }
-  .has-filter-sidebar .results-count {
+  .has-filter-bar .results-count {
     display: flex;
     align-self: flex-start;
     align-items: center;
@@ -129,12 +129,12 @@
   }
 }
 
-.app:has(:where(.page-band, .filter-sidebar > .filter-panel:not([hidden])))
+.app:has(:where(.page-band, .filter-bar > .filter-panel:not([hidden])))
   .app-topbar {
   border-block-end-color: transparent;
 }
 @media (min-width: 60em) {
-  .app:has(:where(.filter-sidebar)) .app-topbar {
+  .app:has(:where(.filter-bar)) .app-topbar {
     border-block-end-color: transparent;
   }
 }

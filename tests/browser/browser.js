@@ -361,7 +361,7 @@
       cw = calendar.contentWindow;
     assert(
       cd
-        .querySelector(".has-filter-sidebar")
+        .querySelector(".has-filter-bar")
         .classList.contains("is-layout-ready") &&
         cw.getComputedStyle(cd.querySelector(".section-main")).visibility ===
           "visible",
@@ -438,7 +438,7 @@
       fw = filters.contentWindow;
     assert(
       fd
-        .querySelector(".has-filter-sidebar")
+        .querySelector(".has-filter-bar")
         .classList.contains("is-layout-ready") &&
         fw.getComputedStyle(fd.querySelector(".section-main")).visibility ===
           "visible",
