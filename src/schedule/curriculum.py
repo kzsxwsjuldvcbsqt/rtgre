@@ -44,7 +44,7 @@ def split_event_title(summary: str, module_code: str, canonical_codes: dict) -> 
     return canonical_codes[module_code], session
 
 
-def resolve_module_styles(curriculum_data: dict, module_codes) -> dict[str, dict]:
+def resolve_module_info(curriculum_data: dict, module_codes) -> dict[str, dict]:
     tones: dict[str, int] = {}
     siblings: dict[tuple, int] = {}
     for module in curriculum_data.get("modules", []):

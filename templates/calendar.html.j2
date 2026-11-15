@@ -19,7 +19,7 @@
   data-session-marks-json='{{ session_marks_json | tojson }}'
   data-labels-json='{{ calendar_labels | tojson }}'
   data-class-label="{{ class_config.label }}"
-  data-module-styles-json='{{ module_styles | tojson }}'
+  data-module-info-json='{{ module_info | tojson }}'
 ></script>
 <script defer src="{{ url_for('static/js/filter-controls.js') }}" data-sprite="{{ url_for('static/' ~ site.icons.sprite) }}"></script>
 {% endblock %}

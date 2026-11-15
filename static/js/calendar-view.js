@@ -7,7 +7,7 @@
     allowedDays,
     displayMode,
     categoryMap,
-    moduleStyles,
+    moduleInfo,
     sessionMarks,
     labels,
     classLabel,
@@ -313,10 +313,7 @@
     function buildCardContent(ev) {
       const card = document.createElement("div");
       card.className = "event-card";
-      const known = Object.prototype.hasOwnProperty.call(
-        moduleStyles,
-        ev.module,
-      );
+      const known = Object.prototype.hasOwnProperty.call(moduleInfo, ev.module);
 
       const title = document.createElement("div");
       title.className = "event-card-title";
@@ -325,7 +322,7 @@
       title.appendChild(strong);
       if (ev.code && known) {
         title.appendChild(
-          document.createTextNode(" " + moduleStyles[ev.module].label),
+          document.createTextNode(" " + moduleInfo[ev.module].label),
         );
       }
       card.appendChild(title);
@@ -677,12 +674,9 @@
       eventByItem.set(li, ev);
       const isEvaluation = Boolean(ev.category && categoryMap[ev.category]);
       if (isEvaluation) li.classList.add("is-evaluation");
-      if (Object.prototype.hasOwnProperty.call(moduleStyles, ev.module)) {
-        const moduleStyle = moduleStyles[ev.module];
-        li.classList.add(
-          "kind-" + moduleStyle.kind,
-          "tone-" + moduleStyle.tone,
-        );
+      if (Object.prototype.hasOwnProperty.call(moduleInfo, ev.module)) {
+        const info = moduleInfo[ev.module];
+        li.classList.add("kind-" + info.kind, "tone-" + info.tone);
       } else {
         li.classList.add("is-special");
       }
