@@ -156,11 +156,6 @@
   font-weight: var(--weight-semibold);
   font-variant-numeric: tabular-nums;
 }
-.order-slot.is-current .order-rank {
-  border-color: var(--color-highlight);
-  background: var(--color-highlight);
-  color: var(--color-on-highlight);
-}
 .order-time {
   flex: none;
   min-width: var(--width-time-range);
@@ -185,7 +180,6 @@
   font-weight: var(--weight-medium);
 }
 .order-class.is-current {
-  border-color: var(--color-highlight);
   font-weight: var(--weight-semibold);
 }
 .order-note {
