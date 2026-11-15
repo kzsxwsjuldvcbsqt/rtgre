@@ -126,8 +126,10 @@
   gap: var(--space-xs);
   color: var(--color-text);
   font-size: var(--text-sm);
-  font-weight: var(--weight-semibold);
   overflow-wrap: anywhere;
+}
+.event-name strong {
+  font-weight: var(--weight-semibold);
 }
 .event-series {
   color: var(--color-text-faint);

@@ -94,6 +94,8 @@
       start: event.start,
       end: event.end,
       title,
+      code: text(event.code) || "",
+      session: text(event.session) || "",
       slug,
       module,
       category,

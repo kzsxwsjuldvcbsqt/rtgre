@@ -30,6 +30,20 @@ def module_code_variants(curriculum_data: dict):
                     yield module["code"].replace(track_id, alias), module
 
 
+def canonical_module_codes(curriculum_data: dict) -> dict[str, str]:
+    codes: dict[str, str] = {}
+    for code, module in module_code_variants(curriculum_data):
+        codes.setdefault(code, module["code"])
+    return codes
+
+
+def split_event_title(summary: str, module_code: str, canonical_codes: dict) -> tuple[str, str]:
+    if module_code not in canonical_codes:
+        return "", summary
+    session = summary[len(module_code) :].lstrip("- ").replace("-", " ")
+    return canonical_codes[module_code], session
+
+
 def resolve_module_styles(curriculum_data: dict, module_codes) -> dict[str, dict]:
     tones: dict[str, int] = {}
     siblings: dict[tuple, int] = {}

@@ -625,7 +625,15 @@
 
       var titleDiv = document.createElement("div");
       titleDiv.className = "event-title";
-      titleDiv.appendChild(document.createTextNode(ev.title + " "));
+      var nameSpan = document.createElement("span");
+      nameSpan.className = "event-name";
+      var nameStrong = document.createElement("strong");
+      nameStrong.textContent = ev.code || ev.title;
+      nameSpan.appendChild(nameStrong);
+      if (ev.code)
+        nameSpan.appendChild(document.createTextNode(" " + ev.session));
+      titleDiv.appendChild(nameSpan);
+      titleDiv.appendChild(document.createTextNode(" "));
 
       if (ev.seriesTotal) {
         var seriesSpan = document.createElement("span");

@@ -23,8 +23,10 @@ from schedule.config import (
     validate_site_config,
 )
 from schedule.curriculum import (
+    canonical_module_codes,
     get_class_grades_data,
     resolve_module_styles,
+    split_event_title,
     validate_curriculum_config,
 )
 from schedule.exporter import serialize_events
@@ -186,6 +188,18 @@ class ScheduleTests(unittest.TestCase):
         validate_curriculum_config(config)
         grades = get_class_grades_data(self.classes[0], config, self.config.labels)
         self.assertIn("custom-semester", grades["annual_units"][0]["units"])
+
+    def test_event_titles_split_into_code_and_session(self):
+        codes = canonical_module_codes(self.config.curriculum)
+        for summary, expected in (
+            ("R5devcloud11-TP-ProgInfra", ("R5dc11", "TP ProgInfra")),
+            ("SAE5dc03-Projet", ("SAE5dc03", "Projet")),
+            ("R505-Discussion Test", ("R505", "Discussion Test")),
+            ("Réunion de rentrée BUT3-FI", ("", "Réunion de rentrée BUT3-FI")),
+        ):
+            with self.subTest(summary=summary):
+                module_code = summary.split("-")[0].strip()
+                self.assertEqual(split_event_title(summary, module_code, codes), expected)
 
     def test_module_kinds_follow_curriculum(self):
         styles = resolve_module_styles(

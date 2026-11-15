@@ -1,4 +1,5 @@
 from .config import AppConfig
+from .curriculum import canonical_module_codes, split_event_title
 from .models import Evaluation, slugify
 
 
@@ -6,6 +7,11 @@ def serialize_events(app_config: AppConfig, class_id: str, events: list[Evaluati
     display_mode = app_config.site["teachers"]["display_mode"]
     unknown_marker = app_config.site["teachers"]["unknown_marker"].casefold()
     empty_value = app_config.labels["empty_value"]
+    canonical_codes = canonical_module_codes(app_config.curriculum)
+    titles = {
+        ev.occurrence_id: split_event_title(ev.summary, ev.module_code, canonical_codes)
+        for ev in events
+    }
     return {
         "class": class_id,
         "events": [
@@ -14,6 +20,8 @@ def serialize_events(app_config: AppConfig, class_id: str, events: list[Evaluati
                 "start": ev.start_dt.isoformat(),
                 "end": ev.end_dt.isoformat(),
                 "title": ev.summary,
+                "code": titles[ev.occurrence_id][0],
+                "session": titles[ev.occurrence_id][1],
                 "slug": slugify(ev.summary),
                 "module": ev.module_code,
                 "category": ev.category_id or None,

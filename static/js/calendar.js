@@ -551,6 +551,7 @@
           var targetStr = AppUtils.stripAccents(
             [
               ev.title,
+              ev.code,
               ev.module,
               (ev.rooms || []).join(" "),
               (ev.teachers || []).join(" "),

@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 
+from .curriculum import canonical_module_codes, split_event_title
+
 
 def prepare_initial_week(app_config, events):
     first_date = datetime.fromisoformat(app_config.site["school_year"]["first_date"]).date()
@@ -8,6 +10,7 @@ def prepare_initial_week(app_config, events):
     initial_date = min(max(today, first_date), last_date)
     week_start = initial_date - timedelta(days=initial_date.weekday())
     formats = app_config.site["formats"]
+    canonical_codes = canonical_module_codes(app_config.curriculum)
     result = []
     for weekday in app_config.calendar_config["days_of_week"]:
         day = week_start + timedelta(days=weekday - 1)
@@ -28,7 +31,9 @@ def prepare_initial_week(app_config, events):
                     {
                         "start_time": event.start_dt.strftime(formats["time"]),
                         "end_time": event.end_dt.strftime(formats["time"]),
-                        "summary": event.summary,
+                        "title": split_event_title(
+                            event.summary, event.module_code, canonical_codes
+                        ),
                         "category_id": event.category_id,
                         "category_label": event.category_label,
                         "rooms": event.rooms,
