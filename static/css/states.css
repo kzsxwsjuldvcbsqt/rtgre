@@ -45,7 +45,7 @@ select:disabled {
     text-decoration: underline;
     text-underline-offset: var(--space-3xs);
   }
-  .resource-list li:hover {
+  a.box-row:hover {
     background: var(--color-canvas);
     text-decoration: none;
   }

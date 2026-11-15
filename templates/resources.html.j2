@@ -13,13 +13,14 @@
 {% if kind_info.label %}
 <header class="data-box-head is-sub"><h3>{{ kind_info.label }}</h3><span class="data-box-meta">{{ modules | length }}</span></header>
 {% endif %}
-<ul class="resource-list">
+<ul class="box-list">
 {% for mod in modules %}
+{% set show_code = mod.code != mod.label and mod.get("show_code", true) %}
 <li>
 {% if mod.chamilo_url %}
-<a href="{{ mod.chamilo_url }}" target="_blank" rel="noopener noreferrer">{% if mod.code == mod.label or not mod.get("show_code", true) %}<strong>{{ mod.label }}</strong>{% else %}<strong>{{ mod.code }}</strong> - {{ mod.label }}{% endif %}</a>{{ icon('link-external', url_for, site.icons, 'list-chevron') }}
+<a class="box-row" href="{{ mod.chamilo_url }}" target="_blank" rel="noopener noreferrer"><span class="box-row-main">{% if show_code %}<strong>{{ mod.code }}</strong> - {{ mod.label }}{% else %}<strong>{{ mod.label }}</strong>{% endif %}</span>{{ icon('link-external', url_for, site.icons, 'box-row-icon') }}</a>
 {% else %}
-<span>{% if mod.code == mod.label or not mod.get("show_code", true) %}<strong>{{ mod.label }}</strong>{% else %}<strong>{{ mod.code }}</strong> - {{ mod.label }}{% endif %}</span>
+<span class="box-row"><span class="box-row-main">{% if show_code %}<strong>{{ mod.code }}</strong> - {{ mod.label }}{% else %}<strong>{{ mod.label }}</strong>{% endif %}</span></span>
 {% endif %}
 </li>
 {% endfor %}

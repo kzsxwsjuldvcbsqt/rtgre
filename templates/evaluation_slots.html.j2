@@ -8,9 +8,9 @@
 <div class="page-container">
 <p>{{ labels.evaluation_page.choose_slot }}</p>
 <section class="data-box">
-<ul class="resource-list">
+<ul class="box-list">
 {% for ev in slots %}
-<li><a href="{{ url_for('classes/' ~ class_config.id ~ '/evaluations/' ~ ev.occurrence_id ~ '.html') }}">{{ ev.date_formatted }} — {{ ev.time_range }}</a>{{ icon('chevron-right', url_for, site.icons, 'list-chevron') }}</li>
+<li><a class="box-row" href="{{ url_for('classes/' ~ class_config.id ~ '/evaluations/' ~ ev.occurrence_id ~ '.html') }}"><span class="box-row-main">{{ ev.date_formatted }} — {{ ev.time_range }}</span>{{ icon('chevron-right', url_for, site.icons, 'box-row-icon') }}</a></li>
 {% endfor %}
 </ul>
 </section>

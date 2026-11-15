@@ -22,9 +22,9 @@
 
 {% if order_slots %}
 <section class="data-box">
-<ol class="order-list">
+<ol class="box-list">
 {% for slot in order_slots %}
-<li class="order-slot{% if slot.is_current %} is-current{% endif %}">
+<li class="box-row order-slot{% if slot.is_current %} is-current{% endif %}">
 <span class="order-rank" aria-hidden="true">{{ loop.index }}</span>
 <span class="order-time">{% if slot.date_label %}<a href="{{ url_for(slot.date_target) }}">{{ slot.date_label }}</a> {% endif %}{{ slot.time_range }}</span>
 <span class="order-classes">
