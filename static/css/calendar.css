@@ -104,8 +104,8 @@
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
-.event-time-start.is-day-start,
-.event-time-end.is-day-end {
+.calendar-view-container:not(.is-grid) .is-day-start,
+.calendar-view-container:not(.is-grid) .is-day-end {
   color: var(--color-bound);
   font-weight: var(--weight-semibold);
 }
