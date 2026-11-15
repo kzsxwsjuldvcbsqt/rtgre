@@ -370,24 +370,26 @@
   z-index: var(--z-menu);
 }
 .event-summary {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3xs);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-content: start;
+  gap: var(--space-3xs) var(--space-xs);
   height: 100%;
   overflow: hidden;
 }
-.event-summary .event-series,
-.event-summary .category-badge ~ .event-rooms,
+.event-summary .event-info {
+  display: contents;
+}
 .event-summary .event-teachers,
 .event-summary .event-groups {
   display: none;
 }
-.event-summary > *,
-.event-summary .event-info > * {
-  flex: none;
+.event-summary .event-title,
+.event-summary .category-badge {
+  grid-column: 1 / -1;
 }
 .event-summary .category-badge {
-  align-self: flex-start;
+  justify-self: start;
 }
 .event-summary .event-title {
   display: -webkit-box;
@@ -395,9 +397,12 @@
   -webkit-line-clamp: var(--event-title-lines);
   overflow: hidden;
 }
-.event-summary .event-time,
 .event-summary .event-rooms {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
   overflow: hidden;
+  text-align: end;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
