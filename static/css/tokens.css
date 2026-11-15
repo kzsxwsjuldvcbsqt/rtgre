@@ -91,6 +91,7 @@
   --weight-semibold: 600;
   --weight-bold: 700;
   --weight-extrabold: 800;
+  --tracking-label: 0.04em;
   --tracking-eyebrow: 0.08em;
   --tracking-heading: -0.015em;
   --tracking-brand: -0.03em;
@@ -165,6 +166,7 @@
 
   --opacity-disabled: 0.5;
   --opacity-dimmed: 0.45;
+  --opacity-indicator: 0.6;
   --transition-fast: 180ms ease;
   --transition-undim: opacity 0s 150ms;
   --motion-spotlight: 1400ms linear 250ms;

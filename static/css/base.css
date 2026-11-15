@@ -24,7 +24,7 @@ h4 {
 h1 {
   font-size: var(--text-xl);
   font-weight: var(--weight-bold);
-  letter-spacing: -0.02em;
+  letter-spacing: var(--tracking-heading);
 }
 h2 {
   font-size: var(--text-lg);
