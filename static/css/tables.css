@@ -32,8 +32,6 @@ thead th {
 tbody tr:last-child > * {
   border-block-end: 0;
 }
-.col-date,
-.col-time,
 .grade-input {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
@@ -48,10 +46,4 @@ tbody tr:last-child > * {
 }
 .table-card {
   overflow-x: auto;
-}
-td .room-tag {
-  display: inline;
-  color: inherit;
-  font-size: inherit;
-  font-weight: inherit;
 }
