@@ -252,7 +252,8 @@
   color: var(--color-text-muted);
   font-size: var(--text-sm);
 }
-.filter-group-reset button {
+.filter-group-reset button,
+.btn-ghost {
   border-color: transparent;
   background: transparent;
   color: var(--color-text-muted);
@@ -366,10 +367,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 .menu-list .icon {
   color: var(--color-text-faint);
-}
-.btn-danger,
-.btn-danger .icon {
-  color: var(--color-danger);
 }
 .menu-list .menu-item-danger {
   color: var(--color-danger);
