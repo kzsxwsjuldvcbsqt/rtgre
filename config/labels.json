@@ -142,7 +142,8 @@
     "order_note_separator": " · ",
     "order_class_note": "{classes} : {note}",
     "no_other_class": "Aucune autre classe n'a cette évaluation.",
-    "choose_slot": "Choisir un créneau"
+    "choose_slot": "Choisir un créneau",
+    "slot_separator": " · "
   },
   "notice": {
     "title": "À savoir",
