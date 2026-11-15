@@ -17,18 +17,16 @@
 .data-box-head > h2,
 .data-box-head > h3 {
   margin: 0;
-  color: var(--color-text);
   font-size: var(--text-md);
   font-weight: var(--weight-semibold);
+  letter-spacing: 0;
 }
-.data-box-head > a {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2xs);
-  margin-inline-start: auto;
+.data-box-head.is-sub > h3 {
   color: var(--color-text-muted);
   font-size: var(--text-sm);
-  white-space: nowrap;
+}
+.data-box.is-sub {
+  margin-block-end: var(--space-md);
 }
 .data-box-meta {
   padding: 0 var(--space-xs);

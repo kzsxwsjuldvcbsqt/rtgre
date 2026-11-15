@@ -49,9 +49,6 @@ tbody tr:last-child > * {
 .table-card {
   overflow-x: auto;
 }
-.semester-section .collapsible-heading {
-  margin: 0;
-}
 td .room-tag {
   display: inline;
   color: inherit;
