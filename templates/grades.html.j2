@@ -153,6 +153,7 @@
 </div>
 </div>
 
+<script defer src="{{ url_for('static/js/grades-display.js') }}" data-class-id="{{ class_config.id }}" data-mobile-query="{{ mobile_media_query }}"></script>
 <script defer src="{{ url_for('static/js/write-access.js') }}"></script>
 <script defer src="{{ url_for('static/js/grades-model.js') }}"></script>
 <script defer src="{{ url_for('static/js/bulletin-model.js') }}"></script>
@@ -162,7 +163,6 @@
   data-max="{{ site.grades.maximum }}"
   data-decimals="{{ site.grades.decimals }}"
   data-message-duration="{{ site.grades.message_duration_ms }}"
-  data-mobile-query="{{ mobile_media_query }}"
   data-pass-mark="{{ site.grades.pass_mark }}"
   data-storage-prefix="{{ site.grades.storage_key_prefix }}"
   data-detail-storage-prefix="{{ site.grades.detail_storage_key_prefix }}"
