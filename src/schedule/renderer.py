@@ -98,9 +98,12 @@ def render_site(
     cat_map = {c.id: c.label for c in app_config.categories}
     module_labels: dict[str, str] = {}
     module_kinds: dict[str, str] = {}
+    module_codes: dict[str, str] = {}
     for code, module in module_code_variants(app_config.curriculum):
         module_labels.setdefault(code, module["label"])
         module_kinds.setdefault(code, module["kind"])
+        module_codes.setdefault(code, module["code"])
+    env.filters["canonical_code"] = lambda code: module_codes.get(code, code)
     kinds = app_config.curriculum.get("kinds", [])
     kind_labels = {kind["id"]: kind["label"] for kind in kinds}
     kind_rank = {kind["id"]: index for index, kind in enumerate(kinds)}
@@ -237,7 +240,11 @@ def render_site(
                         "label": module_labels.get(code, ""),
                         "group": kind_labels.get(module_kinds.get(code), ""),
                     }
-                    for code in {ev.module_code for ev in evals if ev.module_code}
+                    for code in {
+                        module_codes.get(ev.module_code, ev.module_code)
+                        for ev in evals
+                        if ev.module_code
+                    }
                 ),
                 key=lambda option: (
                     kind_rank.get(module_kinds.get(option["code"]), len(kind_rank)),

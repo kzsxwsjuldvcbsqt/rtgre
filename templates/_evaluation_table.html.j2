@@ -37,7 +37,7 @@
 {% macro evaluation_row(ev, site, labels, url_for, show_action=true, format_groups=None, module_labels={}, full=false) %}
 <tr class="eval-row"
     data-category="{{ ev.category_id }}"
-    data-module="{{ ev.module_code }}"
+    data-module="{{ ev.module_code | canonical_code }}"
     data-end-timestamp="{{ ev.end_dt.timestamp() | int }}"
     data-past="{{ 'true' if ev.is_past else 'false' }}"
 >
@@ -50,7 +50,7 @@
 <td class="col-category" data-label="{{ labels.fields.category }}">
 <span class="category-badge cat-{{ ev.category_id }}{% if category_tones.get(ev.category_id) %} label-{{ category_tones[ev.category_id] }}{% endif %}">{{ ev.category_label }}</span>
 </td>
-<td class="col-module" data-label="{{ labels.fields.module }}">{{ ev.module_code }}</td>
+<td class="col-module" data-label="{{ labels.fields.module }}">{{ ev.module_code | canonical_code }}</td>
 <td class="col-module-name" data-label="{{ labels.fields.module_name }}">{{ module_labels.get(ev.module_code, "") }}</td>
 {% if full %}
 <td class="col-rooms" data-label="{{ labels.fields.rooms }}">
