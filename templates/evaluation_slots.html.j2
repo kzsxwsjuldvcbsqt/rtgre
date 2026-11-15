@@ -10,7 +10,7 @@
 <section class="data-box">
 <ul class="box-list">
 {% for ev in slots %}
-<li><a class="box-row" href="{{ url_for('classes/' ~ class_config.id ~ '/evaluations/' ~ ev.occurrence_id ~ '.html') }}"><span class="box-row-main">{{ ev.date_formatted }} — {{ ev.time_range }}</span>{{ icon('chevron-right', url_for, site.icons, 'box-row-icon') }}</a></li>
+<li><a class="box-row" href="{{ url_for('classes/' ~ class_config.id ~ '/evaluations/' ~ ev.occurrence_id ~ '.html') }}"><span class="box-row-main">{{ long_date(ev.start_dt) }}{{ labels.evaluation_page.slot_separator }}{{ ev.time_range }}</span>{{ icon('chevron-right', url_for, site.icons, 'box-row-icon') }}</a></li>
 {% endfor %}
 </ul>
 </section>

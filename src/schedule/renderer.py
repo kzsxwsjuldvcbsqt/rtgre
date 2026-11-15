@@ -1,4 +1,5 @@
 from datetime import datetime
+from functools import partial
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
@@ -13,7 +14,12 @@ from .curriculum import (
 from .exporter import serialize_events
 from .matcher import build_matching_matrix
 from .models import slugify
-from .viewmodels import prepare_evaluation_order, prepare_initial_week
+from .viewmodels import (
+    long_date,
+    prepare_evaluation_order,
+    prepare_initial_week,
+    short_date,
+)
 
 
 def get_rel_path(current_page: str, target: str) -> str:
@@ -105,22 +111,10 @@ def render_site(
         module_codes.setdefault(code, module["code"])
     env.filters["canonical_code"] = lambda code: module_codes.get(code, code)
 
-    def short_date(moment):
-        return app_config.labels["calendar"]["day_title_short"].format(
-            day_name=app_config.labels["days_short"][moment.weekday()],
-            day_num=moment.day,
-            month_name=app_config.labels["months_short"][moment.month - 1],
-        )
-
-    def long_date(moment):
-        return app_config.labels["calendar"]["day_title"].format(
-            day_name=app_config.labels["days"][moment.weekday()],
-            day_num=moment.day,
-            month_name=app_config.labels["months"][moment.month - 1],
-            year=moment.year,
-        )
-
-    env.globals.update(short_date=short_date, long_date=long_date)
+    env.globals.update(
+        short_date=partial(short_date, app_config.labels),
+        long_date=partial(long_date, app_config.labels),
+    )
     kinds = app_config.curriculum.get("kinds", [])
     kind_labels = {kind["id"]: kind["label"] for kind in kinds}
     kind_rank = {kind["id"]: index for index, kind in enumerate(kinds)}

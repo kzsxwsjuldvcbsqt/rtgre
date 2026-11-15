@@ -43,6 +43,23 @@ def prepare_initial_week(app_config, events):
     return result
 
 
+def short_date(labels, moment):
+    return labels["calendar"]["day_title_short"].format(
+        day_name=labels["days_short"][moment.weekday()],
+        day_num=moment.day,
+        month_name=labels["months_short"][moment.month - 1],
+    )
+
+
+def long_date(labels, moment):
+    return labels["calendar"]["day_title"].format(
+        day_name=labels["days"][moment.weekday()],
+        day_num=moment.day,
+        month_name=labels["months"][moment.month - 1],
+        year=moment.year,
+    )
+
+
 def prepare_evaluation_order(app_config, class_config, evaluation, match_states):
     labels = app_config.labels["evaluation_page"]
     separator = app_config.labels["list_separator"]
@@ -92,7 +109,9 @@ def prepare_evaluation_order(app_config, class_config, evaluation, match_states)
             (event.start_dt, event.end_dt),
             {
                 "time_range": event.time_range,
-                "date_label": event.date_formatted if event.date_iso != evaluation.date_iso else "",
+                "date_label": short_date(app_config.labels, event.start_dt)
+                if event.date_iso != evaluation.date_iso
+                else "",
                 "date_target": f"classes/{cls.id}/evaluations/{event.occurrence_id}.html",
                 "is_current": False,
                 "classes": [],
