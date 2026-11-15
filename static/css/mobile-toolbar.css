@@ -1,0 +1,92 @@
+.heading-short,
+.filter-quick,
+.filters-toggle {
+  display: none;
+}
+
+@media (max-width: 59.99em) {
+  html.js-enabled .filters-toggle {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: var(--control-height);
+    min-height: var(--control-height);
+    padding: 0;
+    border: var(--rule-width) solid var(--color-field-border);
+    border-radius: var(--radius-control);
+    background: var(--color-inset);
+    color: var(--color-text);
+  }
+  .filter-quick,
+  .calendar-nav-bar:not([hidden]) {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-xs);
+    margin: calc(-1 * var(--space-lg)) calc(-1 * var(--page-gutter))
+      var(--space-lg);
+    padding: var(--space-xs) var(--page-gutter);
+    border-block-end: var(--rule-width) solid var(--color-border-muted);
+    background: var(--color-surface);
+  }
+  .filter-quick-slot {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+  }
+  .filter-quick-slot .results-count {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    text-align: start;
+  }
+  .has-filter-bar select[data-control] {
+    display: none;
+  }
+  html.js-enabled .segmented {
+    display: flex;
+    flex: none;
+  }
+  .cal-nav-center {
+    display: grid;
+    flex: 1;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--space-xs);
+    min-width: 0;
+  }
+  .cal-nav-center button {
+    width: var(--control-height);
+    padding: 0;
+  }
+  .cal-nav-center #cal-next-btn {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  .cal-period-heading {
+    font-size: var(--text-base);
+    text-align: center;
+  }
+  .cal-period-heading .heading-full {
+    display: none;
+  }
+  .cal-period-heading .heading-short {
+    display: block;
+    line-height: var(--leading-tight);
+  }
+  .heading-eyebrow {
+    display: block;
+    color: var(--color-text-muted);
+    font-family: var(--font-family);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-normal);
+  }
+  .cal-nav-center #cal-prev-btn {
+    grid-column: 1;
+  }
+  .cal-nav-center .cal-period-heading {
+    grid-column: 2;
+    grid-row: 1;
+  }
+}
