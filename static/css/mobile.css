@@ -242,12 +242,7 @@
     text-align: center;
   }
   .cal-period-heading .heading-full {
-    position: absolute;
-    width: var(--visually-hidden-size);
-    height: var(--visually-hidden-size);
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
+    display: none;
   }
   .cal-period-heading .heading-short {
     display: block;
@@ -591,14 +586,6 @@
     border: 0;
     background: transparent;
     color: var(--color-text-faint);
-  }
-  #evaluations-list .detail-link-text {
-    position: absolute;
-    width: var(--visually-hidden-size);
-    height: var(--visually-hidden-size);
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
   }
   .grades-actions {
     flex: 1;

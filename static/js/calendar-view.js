@@ -89,7 +89,6 @@
         fullEl.textContent = full;
         var shortEl = document.createElement("span");
         shortEl.className = "heading-short";
-        shortEl.setAttribute("aria-hidden", "true");
         if (eyebrow) {
           var eyebrowEl = document.createElement("span");
           eyebrowEl.className = "heading-eyebrow";
