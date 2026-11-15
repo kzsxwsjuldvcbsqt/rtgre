@@ -13,7 +13,7 @@
   padding: var(--space-md);
   color: var(--color-text-muted);
 }
-.grades-panel abbr {
+.grades-page abbr {
   text-decoration: none;
   cursor: help;
 }
