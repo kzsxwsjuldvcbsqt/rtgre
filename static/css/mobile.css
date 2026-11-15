@@ -507,6 +507,13 @@
   .grades-band {
     display: none;
   }
+  .calendar-view-year .day-section {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .calendar-view-year .calendar-event-item {
+    grid-template-columns: var(--width-time-range) minmax(0, 1fr);
+    gap: var(--space-sm);
+  }
   .order-slot {
     flex-wrap: wrap;
     gap: var(--space-2xs) var(--space-sm);
