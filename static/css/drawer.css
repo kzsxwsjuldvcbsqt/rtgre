@@ -1,0 +1,139 @@
+.nav-toggle,
+.nav-class-chip,
+.nav-close,
+.app-backdrop {
+  display: none;
+}
+
+@media (max-width: 74.99em) {
+  .app {
+    display: block;
+  }
+  .app-topbar {
+    display: contents;
+  }
+  .app-topbar-main {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: var(--z-header);
+    flex: none;
+    min-height: var(--topbar-height);
+    padding-inline: var(--page-gutter);
+    background: var(--color-navbar);
+    color: var(--color-navbar-text);
+  }
+  .app-breadcrumb {
+    flex: 1;
+  }
+  .app-breadcrumb h1,
+  .app-topbar-main > h1 {
+    color: var(--color-navbar-text);
+  }
+  .app-breadcrumb a {
+    color: var(--color-navbar-muted);
+  }
+  .app-breadcrumb li + li::before {
+    color: var(--color-navbar-faint);
+  }
+  .app-topbar:has(.nav-class-chip)
+    .app-breadcrumb
+    li:first-child:not(:last-child) {
+    display: none;
+  }
+  .app-topbar:has(.nav-class-chip) .app-breadcrumb li:nth-child(2)::before {
+    content: none;
+  }
+  .app-topbar-actions {
+    padding: var(--space-xs) var(--page-gutter);
+    border-block-end: var(--rule-width) solid var(--color-border-muted);
+    background: var(--color-surface);
+  }
+  html.js-enabled .nav-burger,
+  html.js-enabled .nav-close {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: var(--touch-target);
+    height: var(--touch-target);
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-control);
+    background: transparent;
+    color: var(--color-navbar-text);
+  }
+  html.js-enabled .nav-burger {
+    margin-inline-start: calc(-1 * var(--space-sm));
+  }
+  html.js-enabled .nav-close {
+    margin-inline-end: calc(-1 * var(--space-xs));
+  }
+  .nav-class-chip {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    min-height: var(--height-box-title);
+    padding: var(--space-2xs) var(--space-sm);
+    border: var(--rule-width) solid var(--color-navbar-divider);
+    border-radius: var(--radius-control);
+    color: var(--color-navbar-text);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+  }
+  .app-topbar .nav-toggle:hover,
+  .app-sidebar .nav-close:hover {
+    border-color: var(--color-navbar-divider);
+    background: var(--color-navbar-active);
+  }
+  html.js-enabled .app-sidebar {
+    display: none;
+  }
+  html.js-enabled .is-nav-open .app-sidebar {
+    position: fixed;
+    inset-block: 0;
+    inset-inline-start: 0;
+    z-index: var(--z-overlay);
+    display: flex;
+    width: var(--width-drawer);
+  }
+  html:not(.js-enabled) .app-sidebar {
+    position: static;
+    height: auto;
+  }
+  .app-sidebar-head {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-block-end: var(--space-xs);
+  }
+  .app-nav .app-nav-classes {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-2xs);
+    padding-inline: var(--space-sm);
+  }
+  .app-nav-classes + .app-nav-classes {
+    margin-block-start: var(--space-2xs);
+  }
+  .app-nav-classes + .app-nav-classes::before {
+    content: none;
+  }
+  .app-nav-classes a {
+    justify-content: center;
+    padding-inline: 0;
+    border: var(--rule-width) solid var(--color-navbar-divider);
+  }
+  .app-nav-classes a[aria-current="page"] {
+    border-color: var(--color-highlight);
+  }
+  .app-backdrop:not([hidden]) {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-backdrop);
+    display: block;
+    background: var(--color-backdrop);
+  }
+  html.is-overlay-open {
+    overflow: hidden;
+  }
+}
