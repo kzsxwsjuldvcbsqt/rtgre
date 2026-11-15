@@ -108,6 +108,11 @@
     color: var(--color-text-faint);
   }
 }
+@media (min-width: 60em) and (max-width: 74.99em) {
+  :root {
+    --width-toolbar-search: var(--width-toolbar-search-compact);
+  }
+}
 
 @media (min-width: 75em) {
   html {
