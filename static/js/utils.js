@@ -51,6 +51,10 @@
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   }
 
+  function normalizeSearch(str) {
+    return stripAccents(str).toLowerCase().split(/\s+/).join(" ").trim();
+  }
+
   function slugify(str) {
     if (!str) return "";
     const cleaned = stripAccents(str).toLowerCase();
@@ -169,6 +173,7 @@
     safeStorageRemove: safeStorageRemove,
     bindBlurKeys: bindBlurKeys,
     onDOMReady: onDOMReady,
+    normalizeSearch: normalizeSearch,
     relativeDay: relativeDay,
     formatRelativeDay: formatRelativeDay,
   };

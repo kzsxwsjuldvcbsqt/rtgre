@@ -552,17 +552,16 @@
         }
 
         if (searchNorm) {
-          const targetStr = AppUtils.stripAccents(
-            [
-              ev.title,
-              ev.code,
-              ev.module,
-              (ev.rooms || []).join(" "),
-              (ev.teachers || []).join(" "),
-              (ev.staff_markers || []).join(" "),
-              (ev.groups || []).join(" "),
-            ].join(" "),
-          ).toLowerCase();
+          const known = Object.prototype.hasOwnProperty.call(
+            moduleInfo,
+            ev.module,
+          );
+          const targetStr = AppUtils.normalizeSearch(
+            CalendarModel.searchText(
+              ev,
+              known ? moduleInfo[ev.module].label : "",
+            ),
+          );
 
           if (targetStr.indexOf(searchNorm) === -1) {
             return false;
