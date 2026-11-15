@@ -171,11 +171,23 @@
     );
   }
 
+  function searchText(event, moduleLabel) {
+    return [
+      event.code + " " + event.session,
+      event.title,
+      event.module,
+      moduleLabel || "",
+    ]
+      .concat(event.rooms, event.teachers, event.staff_markers, event.groups)
+      .join(" ");
+  }
+
   const api = {
     applyBreaks,
     inSiteTimezone,
     normalizeEnvelope,
     parseCivilDate,
+    searchText,
     validInstant,
     validSiteDateTime,
   };

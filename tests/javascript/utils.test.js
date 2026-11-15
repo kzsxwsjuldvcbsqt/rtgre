@@ -90,3 +90,8 @@ test("delays are worded in the site language", () => {
     "avant-hier",
   );
 });
+
+test("search text ignores case, accents and extra spaces", () => {
+  assert.equal(utils.normalizeSearch("  SAÉ501   Projet "), "sae501 projet");
+  assert.equal(utils.normalizeSearch(""), "");
+});

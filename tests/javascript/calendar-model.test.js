@@ -80,3 +80,34 @@ test("an instant is converted to the wall clock of the site timezone", () => {
   assert.equal(local.getHours(), 8);
   assert.equal(local.getMinutes(), 30);
 });
+
+test("search text holds the title as displayed and as published", () => {
+  const events = model.normalizeEnvelope(
+    {
+      class: "b3cya",
+      events: [
+        event({
+          title: "SAE501-Projet",
+          code: "SAE501",
+          session: "Projet",
+          rooms: ["012"],
+          teachers: ["Alain M."],
+          groups: ["B3cy1"],
+        }),
+      ],
+    },
+    "b3cya",
+  );
+  const text = model.searchText(events[0], "Concevoir une solution");
+
+  for (const wanted of [
+    "SAE501 Projet",
+    "SAE501-Projet",
+    "Concevoir une solution",
+    "012",
+    "Alain M.",
+    "B3cy1",
+  ]) {
+    assert.ok(text.includes(wanted), wanted);
+  }
+});

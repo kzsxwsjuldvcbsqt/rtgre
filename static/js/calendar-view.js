@@ -186,7 +186,7 @@
         }
       }
 
-      const searchNorm = AppUtils.stripAccents(state.search).toLowerCase();
+      const searchNorm = AppUtils.normalizeSearch(state.search);
       if (state.view === "year") {
         setRange(firstDateStr, lastDateStr);
         const yearCount = renderYearView(
