@@ -150,6 +150,8 @@
   --width-time-range: 7.5rem;
   --width-eval-date: 9rem;
   --width-fact: 9rem;
+  --width-year-title: 16rem;
+  --size-module-dot: 0.625rem;
   --width-eval-category: 9.5rem;
   --size-order-rank: 1.5rem;
   --menu-min-width: 13rem;
@@ -163,6 +165,7 @@
   --opacity-disabled: 0.5;
   --opacity-dimmed: 0.45;
   --opacity-indicator: 0.6;
+  --opacity-past: 0.6;
   --transition-fast: 180ms ease;
   --transition-undim: opacity 0s 150ms;
   --motion-spotlight: 1400ms linear 250ms;

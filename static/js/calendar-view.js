@@ -481,11 +481,10 @@
           heading.appendChild(document.createTextNode(" "));
           heading.appendChild(headingDate);
         } else {
-          heading.textContent = AppUtils.formatText(labels.day_title, {
-            day_name: dayNames[dayIdx],
+          heading.textContent = AppUtils.formatText(labels.day_title_short, {
+            day_name: labels.days_short[dayIdx],
             day_num: dDate.getDate(),
-            month_name: monthNames[dDate.getMonth()],
-            year: dDate.getFullYear(),
+            month_name: labels.months_short[dDate.getMonth()],
           });
         }
         daySection.appendChild(heading);
@@ -579,42 +578,25 @@
 
           totalYearItems += weekItemCount;
 
-          if (hasFilter) {
-            weekDataList.forEach(function (dayData) {
-              if (dayData.dayCount === 0) return;
-              var daySection = buildDaySection(
-                dayData,
-                dayNames,
-                monthNames,
-                true,
-              );
-              monthFrag.appendChild(daySection);
-            });
-          } else {
-            if (weekItemCount === 0) {
-              var wNum = getISOWeekNumber(weekDays[0]);
-              var emptyWeekP = document.createElement("p");
-              emptyWeekP.className = "empty-state-message";
-              emptyWeekP.textContent =
-                labels.week_prefix +
-                " " +
-                wNum +
-                " : " +
-                labels.no_courses_week;
-              emptyWeekP.setAttribute("data-date", formatISODate(weekDays[0]));
-              monthFrag.appendChild(emptyWeekP);
-            } else {
-              weekDataList.forEach(function (dayData) {
-                var daySection = buildDaySection(
-                  dayData,
-                  dayNames,
-                  monthNames,
-                  true,
-                );
-                monthFrag.appendChild(daySection);
-              });
-            }
+          if (!hasFilter && weekItemCount === 0) {
+            var emptyWeekP = document.createElement("p");
+            emptyWeekP.className = "empty-state-message";
+            emptyWeekP.textContent =
+              labels.week_prefix +
+              " " +
+              getISOWeekNumber(weekDays[0]) +
+              " : " +
+              labels.no_courses_week;
+            emptyWeekP.setAttribute("data-date", formatISODate(weekDays[0]));
+            monthFrag.appendChild(emptyWeekP);
+            return;
           }
+          weekDataList.forEach(function (dayData) {
+            if (dayData.dayCount === 0) return;
+            monthFrag.appendChild(
+              buildDaySection(dayData, dayNames, monthNames, true),
+            );
+          });
         });
 
         if (monthFrag.hasChildNodes()) {
