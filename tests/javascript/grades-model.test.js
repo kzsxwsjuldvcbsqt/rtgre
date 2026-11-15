@@ -158,3 +158,34 @@ test("detail data keeps known evaluations and counts the rest as ignored", () =>
     ),
   );
 });
+
+test("reads a backup file and names what is wrong with it", () => {
+  const backup = { format: "notes", version: 2, class: "b3dc3", grades: {} };
+  const read = (value) => model.parseBackup(JSON.stringify(value), "notes", 2);
+
+  assert.deepEqual(read(backup), { data: backup });
+  assert.deepEqual(read({ ...backup, detail: { enabled: true } }).data.detail, {
+    enabled: true,
+  });
+  assert.deepEqual(model.parseBackup("{", "notes", 2), {
+    error: "invalid_json",
+  });
+  assert.deepEqual(read({ ...backup, version: 3 }), {
+    error: "newer_version",
+  });
+  for (const broken of [
+    null,
+    [],
+    { ...backup, format: "other" },
+    { ...backup, class: "" },
+    { ...backup, class: 3 },
+    { ...backup, grades: [] },
+    { ...backup, grades: null },
+    { ...backup, version: 0 },
+    { ...backup, version: 1.5 },
+    { ...backup, detail: null },
+    { ...backup, detail: [] },
+  ]) {
+    assert.deepEqual(read(broken), { error: "bad_format" });
+  }
+});

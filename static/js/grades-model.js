@@ -180,8 +180,32 @@
     return result;
   }
 
+  function parseBackup(text, format, version) {
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (error) {
+      return { error: "invalid_json" };
+    }
+    if (
+      !isObject(data) ||
+      data.format !== format ||
+      typeof data.class !== "string" ||
+      !data.class ||
+      !isObject(data.grades) ||
+      !Number.isInteger(data.version) ||
+      data.version < 1 ||
+      (data.detail !== undefined && !isObject(data.detail))
+    ) {
+      return { error: "bad_format" };
+    }
+    if (data.version > version) return { error: "newer_version" };
+    return { data: data };
+  }
+
   const api = {
     calculate,
+    parseBackup,
     normalizeGrades,
     normalizeDetail,
     moduleGradesFromDetail,

@@ -44,6 +44,11 @@
     const errInvalidJson = scriptEl.getAttribute("data-err-invalid-json");
     const errBadFormat = scriptEl.getAttribute("data-err-bad-format");
     const errNewerVersion = scriptEl.getAttribute("data-err-newer-version");
+    const backupErrors = {
+      invalid_json: errInvalidJson,
+      bad_format: errBadFormat,
+      newer_version: errNewerVersion,
+    };
     const importSuccessMsg = scriptEl.getAttribute("data-import-success");
     const entriesIgnoredMsg = scriptEl.getAttribute("data-entries-ignored");
 
@@ -721,35 +726,17 @@
 
         const reader = new FileReader();
         reader.onload = function (e) {
+          const backup = GradesModel.parseBackup(
+            e.target.result,
+            exportFormat,
+            formatVersion,
+          );
+          if (backup.error) {
+            showMessage(backupErrors[backup.error], true);
+            return;
+          }
+          const data = backup.data;
           try {
-            const data = JSON.parse(e.target.result);
-
-            if (
-              !data ||
-              typeof data !== "object" ||
-              Array.isArray(data) ||
-              data.format !== exportFormat ||
-              typeof data.class !== "string" ||
-              !data.class ||
-              !data.grades ||
-              typeof data.grades !== "object" ||
-              Array.isArray(data.grades) ||
-              !Number.isInteger(data.version) ||
-              data.version < 1 ||
-              (data.detail !== undefined &&
-                (!data.detail ||
-                  typeof data.detail !== "object" ||
-                  Array.isArray(data.detail)))
-            ) {
-              showMessage(errBadFormat, true);
-              return;
-            }
-
-            if (data.version > formatVersion) {
-              showMessage(errNewerVersion, true);
-              return;
-            }
-
             if (data.class !== classId) {
               if (!window.confirm(confirmOtherClassMsg)) {
                 return;
@@ -822,10 +809,7 @@
             }
             showMessage(statusMsg, false);
           } catch (error) {
-            showMessage(
-              error instanceof SyntaxError ? errInvalidJson : errBadFormat,
-              true,
-            );
+            showMessage(errBadFormat, true);
           }
         };
         reader.onerror = function () {
