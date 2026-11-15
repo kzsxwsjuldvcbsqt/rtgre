@@ -10,7 +10,7 @@ td {
   padding: var(--space-sm) var(--space-md);
   border-block-end: var(--rule-width) solid var(--color-border-muted);
   color: var(--color-text);
-  font-size: var(--text-sm);
+  font-size: var(--text-base);
   text-align: start;
   vertical-align: middle;
 }
