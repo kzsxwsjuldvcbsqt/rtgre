@@ -1,6 +1,5 @@
 import datetime
 import re
-import unicodedata
 
 from icalendar import Calendar
 
@@ -69,11 +68,6 @@ def make_evaluation(
     else:
         module_code = summary.split()[0].strip() if summary else ""
 
-    search_raw = " ".join([summary, module_code, *rooms, *teachers, *staff_markers, *groups])
-    normalized_search = "".join(
-        c for c in unicodedata.normalize("NFD", search_raw) if unicodedata.category(c) != "Mn"
-    ).lower()
-
     return Evaluation(
         occurrence_id=make_occurrence_id(summary, start_dt, end_dt, source_uid, class_id),
         class_id=class_id,
@@ -90,7 +84,6 @@ def make_evaluation(
         flags=tuple(flags),
         complementary_info=tuple(complementary),
         date_iso=start_dt.strftime("%Y-%m-%d"),
-        date_formatted=start_dt.strftime(formats["date_absolute"]),
         time_range=formats["time_range"].format(
             start=start_dt.strftime(formats["time"]), end=end_dt.strftime(formats["time"])
         ),
@@ -98,7 +91,6 @@ def make_evaluation(
         month_label=formats["month_title"].format(
             month_name=month_name.capitalize(), year=start_dt.year
         ),
-        search_index=normalized_search,
         is_past=end_dt < now,
     )
 

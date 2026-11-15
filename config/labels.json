@@ -127,8 +127,7 @@
     "reset_filters": "Réinitialiser",
     "results_count_singular": "évaluation",
     "results_count_plural": "évaluations",
-    "empty_state": "Aucune évaluation ne correspond aux filtres.",
-    "detail_link": "Voir plus"
+    "empty_state": "Aucune évaluation ne correspond aux filtres."
   },
   "evaluation_page": {
     "back_link": "Retour aux évaluations de la classe",
@@ -169,12 +168,10 @@
     "date": "Date",
     "time": "Horaire",
     "module": "Module",
-    "module_name": "Nom complet",
     "category": "Catégorie",
     "rooms": "Salle",
     "teachers": "Enseignants",
-    "groups": "Groupes",
-    "compare": "Détails"
+    "groups": "Groupes"
   },
   "groups_all": "Toutes les classes",
   "list_separator": ", ",
