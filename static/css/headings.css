@@ -1,37 +1,20 @@
 .page-container > :first-child {
   margin-block-start: 0;
 }
-.section-head {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: var(--space-md);
-}
-.page-container > h1 {
-  margin-block-end: var(--space-xs);
-}
-.page-container > h1 + h2,
-.page-container > h1 + .collapsible-heading {
-  margin-block: 0 var(--space-lg);
-  color: var(--color-text-muted);
-  font-size: var(--text-base);
-  font-weight: var(--weight-medium);
-  letter-spacing: 0;
-}
 .page-container > h2 {
   margin-block: var(--space-xl) var(--space-sm);
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0;
 }
 .page-container > h2:first-child {
   margin-block-start: 0;
-}
-.page-container > h3 {
-  margin-block: var(--space-lg) var(--space-sm);
 }
 .collapsible-heading {
   display: flex;
   align-items: center;
   gap: var(--space-xs);
-  margin-block: var(--space-xl) var(--space-sm);
+  margin: 0;
 }
 .heading-toggle-btn {
   display: inline-flex;
