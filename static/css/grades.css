@@ -194,6 +194,7 @@
 }
 .grade-computed {
   display: inline-flex;
+  vertical-align: middle;
   font-size: var(--control-font-size);
   align-items: center;
   justify-content: flex-end;
