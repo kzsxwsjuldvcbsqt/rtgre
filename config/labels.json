@@ -112,7 +112,14 @@
     "week_title_eyebrow": "{prefix} {week}",
     "week_title_short": "{start_day} - {end_day} {end_month}",
     "week_title_short_split": "{start_day} {start_month} - {end_day} {end_month}",
-    "day_title_short": "{day_name} {day_num} {month_name}"
+    "day_title_short": "{day_name} {day_num} {month_name}",
+    "card_when": "{date} · {start} - {end}",
+    "card_session": "Séance",
+    "card_session_count": "{index} sur {total}",
+    "card_rooms": "Salle",
+    "card_teachers": "Avec",
+    "card_groups": "Groupes",
+    "card_separator": " · "
   },
   "class_page": {
     "back_link": "Retour au choix de la classe",
