@@ -16,7 +16,7 @@ AppUtils.onDOMReady(function () {
   const labelPast = dataset.labelPast;
   const labelAll = dataset.labelAll;
 
-  const STORAGE_KEY = "schedule_filters_state";
+  const STORAGE_KEY = "evaluation_filters";
 
   const form = document.createElement("form");
   form.className = "filter-form";
@@ -110,7 +110,6 @@ AppUtils.onDOMReady(function () {
       cb.type = "checkbox";
       cb.name = "category";
       cb.value = cat.id;
-      cb.checked = true;
       lbl.appendChild(cb);
       lbl.appendChild(AppUtils.buildIcon(dataset.iconCheck, "icon-sm"));
       const name = document.createElement("span");
@@ -197,14 +196,14 @@ AppUtils.onDOMReady(function () {
     }
 
     if (state.cat !== undefined) {
-      const deselectedCats = Array.isArray(state.cat)
+      const selectedCats = Array.isArray(state.cat)
         ? state.cat
         : typeof state.cat === "string" && state.cat
           ? state.cat.split(",")
           : [];
       const checkboxes = form.querySelectorAll('input[name="category"]');
       checkboxes.forEach(function (cb) {
-        cb.checked = !deselectedCats.includes(cb.value);
+        cb.checked = selectedCats.includes(cb.value);
       });
     }
   }
@@ -235,15 +234,15 @@ AppUtils.onDOMReady(function () {
     const mod = moduleSelect ? moduleSelect.value : "";
 
     const catCheckboxes = form.querySelectorAll('input[name="category"]');
-    const deselectedCats = [];
+    const selectedCats = [];
     catCheckboxes.forEach(function (cb) {
-      if (!cb.checked) deselectedCats.push(cb.value);
+      if (cb.checked) selectedCats.push(cb.value);
     });
 
     const stateObj = {
       period: period,
       mod: mod,
-      cat: deselectedCats,
+      cat: selectedCats,
     };
 
     setStoredState(stateObj);
@@ -252,8 +251,8 @@ AppUtils.onDOMReady(function () {
     if (period && period !== "upcoming") params.set("period", period);
     if (mod) params.set("mod", mod);
 
-    if (deselectedCats.length > 0) {
-      params.set("cat", deselectedCats.join(","));
+    if (selectedCats.length > 0) {
+      params.set("cat", selectedCats.join(","));
     }
 
     const hashStr = params.toString();
@@ -282,7 +281,7 @@ AppUtils.onDOMReady(function () {
       resetButton.hidden =
         selectedPeriod === "upcoming" &&
         !selectedModule &&
-        selectedCats.length === catCheckboxes.length;
+        selectedCats.length === 0;
     }
 
     let visibleCount = 0;
@@ -294,7 +293,7 @@ AppUtils.onDOMReady(function () {
 
       let matches = true;
 
-      if (catCheckboxes.length > 0 && !selectedCats.includes(cat))
+      if (selectedCats.length > 0 && !selectedCats.includes(cat))
         matches = false;
       if (selectedModule && mod !== selectedModule) matches = false;
 
@@ -354,7 +353,7 @@ AppUtils.onDOMReady(function () {
 
       const checkboxes = form.querySelectorAll('input[name="category"]');
       checkboxes.forEach(function (cb) {
-        cb.checked = true;
+        cb.checked = false;
       });
 
       removeStoredState();
