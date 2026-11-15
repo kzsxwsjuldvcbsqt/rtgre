@@ -213,7 +213,9 @@ def render_site(
     resources_tpl = env.get_template("resources.html.j2")
     eval_detail_tpl = env.get_template("evaluation.html.j2")
 
-    categories_json = [{"id": c.id, "label": c.label} for c in app_config.categories]
+    categories_json = [
+        {"id": c.id, "label": c.label, "tone": c.tone} for c in app_config.categories
+    ]
     session_marks_json = [{"id": m.id, "label": m.label} for m in app_config.session_marks]
 
     for prog in app_config.programs:
