@@ -55,24 +55,3 @@ td .room-tag {
   font-size: inherit;
   font-weight: inherit;
 }
-@media (min-width: 60em) {
-  #evaluations-list .evaluations-table {
-    table-layout: fixed;
-  }
-  #evaluations-list .col-date {
-    width: var(--width-col-date);
-  }
-  #evaluations-list .col-time {
-    width: var(--width-col-time);
-  }
-  #evaluations-list .col-category {
-    width: var(--width-col-category);
-  }
-  #evaluations-list .col-module {
-    width: var(--width-col-module);
-  }
-  #evaluations-list .col-action {
-    width: var(--width-col-chevron);
-    text-align: end;
-  }
-}

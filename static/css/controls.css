@@ -1,5 +1,4 @@
 .btn,
-.detail-link,
 .choice-trigger,
 .filter-form select,
 .filter-form input[type="text"],
@@ -19,7 +18,6 @@
   transition: color var(--transition-fast);
 }
 .btn,
-.detail-link,
 .choice-trigger,
 .filter-form button,
 .calendar-nav-bar button,

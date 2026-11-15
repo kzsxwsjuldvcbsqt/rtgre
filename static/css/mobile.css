@@ -518,74 +518,37 @@
     flex-basis: 100%;
     padding-inline-start: calc(var(--size-order-rank) + var(--space-sm));
   }
-  #evaluations-list .eval-row {
-    position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: var(--space-3xs) var(--space-xs);
-    padding: var(--space-sm) var(--space-xl) var(--space-sm) var(--space-md);
+  .eval-link {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "day time icon"
+      "delay delay icon"
+      "module module icon"
+      "badge badge icon";
+    gap: var(--space-3xs) var(--space-sm);
+    padding-block: var(--space-sm);
   }
-  #evaluations-list .eval-row::before,
-  #evaluations-list .eval-row::after {
-    content: "";
-    flex-basis: 100%;
+  .eval-date {
+    display: contents;
   }
-  #evaluations-list .eval-row::before {
-    order: 3;
+  .eval-day {
+    grid-area: day;
   }
-  #evaluations-list .eval-row::after {
-    order: 6;
+  .eval-delay {
+    grid-area: delay;
   }
-  #evaluations-list .eval-row td {
-    padding: 0;
+  .eval-time {
+    grid-area: time;
   }
-  #evaluations-list .eval-row td::before {
-    content: none;
+  .eval-module {
+    grid-area: module;
   }
-  #evaluations-list .col-module {
-    order: 1;
-    font-size: var(--text-base);
-    font-weight: var(--weight-semibold);
-  }
-  #evaluations-list .col-module-name {
-    order: 2;
-    flex: 1 1 0;
-    min-width: 0;
-    font-size: var(--text-base);
-  }
-  #evaluations-list .col-date,
-  #evaluations-list .col-time {
-    color: var(--color-text-muted);
-  }
-  #evaluations-list .col-date {
-    order: 4;
-  }
-  #evaluations-list .col-time {
-    order: 5;
-  }
-  #evaluations-list .col-category {
-    order: 7;
+  .eval-link .category-badge {
+    grid-area: badge;
     margin-block-start: var(--space-2xs);
   }
-  #evaluations-list .col-action {
-    position: static;
-    order: 8;
-    margin: 0;
-  }
-  #evaluations-list table {
-    margin: 0;
-  }
-  #evaluations-list .detail-link {
-    position: absolute;
-    inset: 0;
-    justify-content: flex-end;
-    width: auto;
-    min-height: 0;
-    padding-inline: 0 var(--space-sm);
-    border: 0;
-    background: transparent;
-    color: var(--color-text-faint);
+  .eval-link .box-row-icon {
+    grid-area: icon;
   }
   .grades-actions {
     flex: 1;

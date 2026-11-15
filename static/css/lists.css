@@ -65,6 +65,40 @@
 .text-block > :first-child {
   margin-block-start: 0;
 }
+.eval-link {
+  display: grid;
+  grid-template-columns:
+    var(--width-eval-date) var(--width-time-range) minmax(0, 1fr)
+    var(--width-eval-category) auto;
+}
+.eval-date {
+  display: flex;
+  flex-direction: column;
+}
+.eval-day {
+  font-weight: var(--weight-medium);
+}
+.eval-delay {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+.eval-delay:empty {
+  display: none;
+}
+.eval-delay::first-letter {
+  text-transform: uppercase;
+}
+.eval-time {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.eval-module strong {
+  font-weight: var(--weight-semibold);
+}
+.eval-link .category-badge {
+  justify-self: start;
+}
 .order-slot.is-current {
   background: var(--color-accent-soft);
 }
@@ -89,7 +123,7 @@
 }
 .order-time {
   flex: none;
-  min-width: var(--width-order-time);
+  min-width: var(--width-time-range);
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
   font-weight: var(--weight-medium);
