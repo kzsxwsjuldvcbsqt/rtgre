@@ -189,6 +189,24 @@ class ScheduleTests(unittest.TestCase):
         grades = get_class_grades_data(self.classes[0], config, self.config.labels)
         self.assertIn("custom-semester", grades["annual_units"][0]["units"])
 
+    def test_semester_units_carry_annual_labels(self):
+        annual = {item["id"]: item for item in self.config.curriculum["annual_units"]}
+        for cls in self.classes:
+            grades = get_class_grades_data(cls, self.config.curriculum, self.config.labels)
+            for semester in grades["semesters"]:
+                with self.subTest(class_id=cls.id, semester=semester["id"]):
+                    self.assertEqual(
+                        [(unit["short_label"], unit["title"]) for unit in semester["units"]],
+                        [
+                            (annual[unit["annual"]]["short_label"], annual[unit["annual"]]["label"])
+                            for unit in semester["units"]
+                        ],
+                    )
+                    self.assertEqual(
+                        len({unit["short_label"] for unit in semester["units"]}),
+                        len(semester["units"]),
+                    )
+
     def test_event_titles_split_into_code_and_session(self):
         codes = canonical_module_codes(self.config.curriculum)
         for summary, expected in (
