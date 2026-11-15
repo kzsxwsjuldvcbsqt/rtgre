@@ -30,12 +30,12 @@
     isTimeGrid,
     gridRange,
   }) {
-    var eventByItem = new WeakMap();
+    const eventByItem = new WeakMap();
 
     function indexByDate(events) {
-      var result = Object.create(null);
+      const result = Object.create(null);
       events.forEach(function (event) {
-        var date = event.start.substring(0, 10);
+        const date = event.start.substring(0, 10);
         if (!result[date]) result[date] = [];
         result[date].push(event);
       });
@@ -43,9 +43,9 @@
     }
 
     function prepareDay(date, eventsByDate, search) {
-      var iso = formatISODate(date);
-      var dayEvents = eventsByDate[iso] || [];
-      var events = filterEvents(dayEvents, search).sort(function (a, b) {
+      const iso = formatISODate(date);
+      const dayEvents = eventsByDate[iso] || [];
+      const events = filterEvents(dayEvents, search).sort(function (a, b) {
         return a.start.localeCompare(b.start);
       });
       return {
@@ -58,11 +58,11 @@
     }
 
     function renderCalendarView(events) {
-      var currDate = parseISODate(state.date);
+      const currDate = parseISODate(state.date);
 
       if (state.view !== "year") {
         if (prevBtn) {
-          var prevTest;
+          let prevTest;
           if (state.view === "week") {
             prevTest = new Date(currDate.getTime());
             prevTest.setDate(prevTest.getDate() - 7);
@@ -73,7 +73,7 @@
         }
 
         if (nextBtn) {
-          var nextTest;
+          let nextTest;
           if (state.view === "week") {
             nextTest = new Date(currDate.getTime());
             nextTest.setDate(nextTest.getDate() + 7);
@@ -86,13 +86,13 @@
 
       function setHeading(full, short, eyebrow) {
         if (!periodHeading) return;
-        var fullEl = document.createElement("span");
+        const fullEl = document.createElement("span");
         fullEl.className = "heading-full";
         fullEl.textContent = full;
-        var shortEl = document.createElement("span");
+        const shortEl = document.createElement("span");
         shortEl.className = "heading-short";
         if (eyebrow) {
-          var eyebrowEl = document.createElement("span");
+          const eyebrowEl = document.createElement("span");
           eyebrowEl.className = "heading-eyebrow";
           eyebrowEl.textContent = eyebrow;
           shortEl.appendChild(eyebrowEl);
@@ -104,11 +104,11 @@
       if (state.view === "year") {
         setHeading(schoolYearLabel, schoolYearLabel);
       } else if (state.view === "week") {
-        var wStart = getWeekStart(currDate);
-        var wEnd = new Date(wStart.getTime());
+        const wStart = getWeekStart(currDate);
+        const wEnd = new Date(wStart.getTime());
         wEnd.setDate(wEnd.getDate() + allowedDays[allowedDays.length - 1] - 1);
         wStart.setDate(wStart.getDate() + allowedDays[0] - 1);
-        var wNum = getISOWeekNumber(wStart);
+        const wNum = getISOWeekNumber(wStart);
 
         setHeading(
           AppUtils.formatText(labels.week_title, {
@@ -137,7 +137,7 @@
           }),
         );
       } else {
-        var dayIdx = (currDate.getDay() + 6) % 7;
+        const dayIdx = (currDate.getDay() + 6) % 7;
         setHeading(
           AppUtils.formatText(labels.day_title, {
             day_name: dayNames[dayIdx],
@@ -157,7 +157,7 @@
         viewContainer.removeChild(viewContainer.firstChild);
       }
 
-      var isFiltered = Boolean(
+      const isFiltered = Boolean(
         state.evals ||
         state.withTeacher ||
         (state.search && state.search.trim().length > 0),
@@ -177,19 +177,19 @@
         (isFiltered ? " is-filtered" : "");
 
       function updateResultsCount(count) {
-        var resultsCountEl = document.getElementById("cal-results-count");
+        const resultsCountEl = document.getElementById("cal-results-count");
         if (resultsCountEl) {
-          var countSingular = labels.results_count_singular;
-          var countPlural = labels.results_count_plural;
-          var countLabel = count < 2 ? countSingular : countPlural;
+          const countSingular = labels.results_count_singular;
+          const countPlural = labels.results_count_plural;
+          const countLabel = count < 2 ? countSingular : countPlural;
           resultsCountEl.textContent = count + " " + countLabel;
         }
       }
 
-      var searchNorm = AppUtils.stripAccents(state.search).toLowerCase();
+      const searchNorm = AppUtils.stripAccents(state.search).toLowerCase();
       if (state.view === "year") {
         setRange(firstDateStr, lastDateStr);
-        var yearCount = renderYearView(
+        const yearCount = renderYearView(
           events,
           searchNorm,
           dayNames,
@@ -199,11 +199,11 @@
         return;
       }
 
-      var daysToRender = [];
+      const daysToRender = [];
       if (state.view === "week") {
-        var start = getWeekStart(currDate);
-        for (var i = 0; i < allowedDays.length; i++) {
-          var d = new Date(start.getTime());
+        const start = getWeekStart(currDate);
+        for (let i = 0; i < allowedDays.length; i++) {
+          const d = new Date(start.getTime());
           d.setDate(d.getDate() + allowedDays[i] - 1);
           if (d >= minDate && d <= maxDate) daysToRender.push(d);
         }
@@ -218,22 +218,22 @@
         );
       }
 
-      var dayRenderData = [];
-      var totalWeekItems = 0;
+      const dayRenderData = [];
+      let totalWeekItems = 0;
 
       viewContainer.style.setProperty(
         "--calendar-day-count",
         daysToRender.length,
       );
-      var eventsByDate = indexByDate(events);
+      const eventsByDate = indexByDate(events);
       daysToRender.forEach(function (date) {
-        var data = prepareDay(date, eventsByDate, searchNorm);
+        const data = prepareDay(date, eventsByDate, searchNorm);
         totalWeekItems += data.dayCount;
         dayRenderData.push(data);
       });
 
       if (state.view === "week" && totalWeekItems === 0) {
-        var emptyWeekP = document.createElement("p");
+        const emptyWeekP = document.createElement("p");
         emptyWeekP.className = "empty-state-message";
         emptyWeekP.textContent = labels.no_courses_week;
         emptyWeekP.setAttribute("data-date", formatISODate(daysToRender[0]));
@@ -243,7 +243,7 @@
       }
 
       dayRenderData.forEach(function (dayData) {
-        var daySection = buildDaySection(
+        const daySection = buildDaySection(
           dayData,
           dayNames,
           monthNames,
@@ -258,7 +258,7 @@
     }
 
     function toMinutes(time) {
-      var parts = time.split(":");
+      const parts = time.split(":");
       return parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
     }
 
@@ -271,10 +271,10 @@
     }
 
     function assignLanes(items) {
-      var placements = [];
-      var cluster = [];
-      var laneEnds = [];
-      var clusterEnd = "";
+      const placements = [];
+      let cluster = [];
+      let laneEnds = [];
+      let clusterEnd = "";
       function closeCluster() {
         cluster.forEach(function (placement) {
           placement.lanes = laneEnds.length;
@@ -283,16 +283,16 @@
         laneEnds = [];
       }
       items.forEach(function (item) {
-        var start = item.dataset.start;
-        var end = item.dataset.end;
+        const start = item.dataset.start;
+        const end = item.dataset.end;
         if (cluster.length > 0 && start >= clusterEnd) closeCluster();
-        var lane = laneEnds.findIndex(function (laneEnd) {
+        let lane = laneEnds.findIndex(function (laneEnd) {
           return laneEnd <= start;
         });
         if (lane === -1) lane = laneEnds.length;
         laneEnds[lane] = end;
         clusterEnd = cluster.length > 0 && clusterEnd > end ? clusterEnd : end;
-        var placement = { item: item, lane: lane, lanes: 1 };
+        const placement = { item: item, lane: lane, lanes: 1 };
         cluster.push(placement);
         placements.push(placement);
       });
@@ -302,22 +302,25 @@
 
     function addFact(list, term, value) {
       if (!value) return;
-      var dt = document.createElement("dt");
+      const dt = document.createElement("dt");
       dt.textContent = term;
-      var dd = document.createElement("dd");
+      const dd = document.createElement("dd");
       dd.textContent = value;
       list.appendChild(dt);
       list.appendChild(dd);
     }
 
     function buildCardContent(ev) {
-      var card = document.createElement("div");
+      const card = document.createElement("div");
       card.className = "event-card";
-      var known = Object.prototype.hasOwnProperty.call(moduleStyles, ev.module);
+      const known = Object.prototype.hasOwnProperty.call(
+        moduleStyles,
+        ev.module,
+      );
 
-      var title = document.createElement("div");
+      const title = document.createElement("div");
       title.className = "event-card-title";
-      var strong = document.createElement("strong");
+      const strong = document.createElement("strong");
       strong.textContent = ev.code || ev.title;
       title.appendChild(strong);
       if (ev.code && known) {
@@ -327,8 +330,8 @@
       }
       card.appendChild(title);
 
-      var day = parseISODate(ev.start.substring(0, 10));
-      var when = document.createElement("div");
+      const day = parseISODate(ev.start.substring(0, 10));
+      const when = document.createElement("div");
       when.className = "event-card-when";
       when.textContent = AppUtils.formatText(labels.card_when, {
         date: AppUtils.formatText(labels.day_title_short, {
@@ -341,7 +344,7 @@
       });
       card.appendChild(when);
 
-      var session = [];
+      const session = [];
       if (ev.code && ev.session) session.push(ev.session);
       if (ev.seriesTotal) {
         session.push(
@@ -360,7 +363,7 @@
         }
       });
 
-      var facts = document.createElement("dl");
+      const facts = document.createElement("dl");
       facts.className = "event-card-facts";
       addFact(facts, labels.card_session, session.join(labels.card_separator));
       addFact(facts, labels.card_rooms, ev.rooms.join(labels.list_separator));
@@ -379,15 +382,15 @@
     }
 
     function buildEventCard(item) {
-      var summary = document.createElement("div");
+      const summary = document.createElement("div");
       summary.className = "event-summary";
       summary.setAttribute("aria-hidden", "true");
       Array.from(item.childNodes).forEach(function (node) {
         summary.appendChild(node);
       });
-      var summaryCategory = summary.querySelector(".category-badge");
+      const summaryCategory = summary.querySelector(".category-badge");
       if (summaryCategory) {
-        var summaryTitle = summary.querySelector(".event-title");
+        const summaryTitle = summary.querySelector(".event-title");
         summaryTitle.parentNode.insertBefore(
           summaryCategory,
           summaryTitle.nextSibling,
@@ -405,15 +408,15 @@
         gridRange.end - gridRange.start,
       );
 
-      var hours = document.createElement("div");
+      const hours = document.createElement("div");
       hours.className = "calendar-hours";
       hours.setAttribute("aria-hidden", "true");
       for (
-        var minute = gridRange.start;
+        let minute = gridRange.start;
         minute <= gridRange.end;
         minute += 60
       ) {
-        var hour = document.createElement("span");
+        const hour = document.createElement("span");
         hour.className = "calendar-hour";
         hour.textContent = formatMinutes(minute);
         hour.style.setProperty("--calendar-offset", minute - gridRange.start);
@@ -425,9 +428,9 @@
       viewContainer
         .querySelectorAll(".day-section")
         .forEach(function (section) {
-          var list = section.querySelector(".calendar-events-list");
+          let list = section.querySelector(".calendar-events-list");
           if (!list) {
-            var empty = section.querySelector(".empty-state-message");
+            const empty = section.querySelector(".empty-state-message");
             if (empty) empty.remove();
             list = document.createElement("ul");
             list.className = "calendar-events-list";
@@ -436,8 +439,8 @@
           assignLanes(
             Array.from(list.querySelectorAll(".calendar-event-item")),
           ).forEach(function (placement) {
-            var item = placement.item;
-            var start = toMinutes(item.dataset.start);
+            const item = placement.item;
+            const start = toMinutes(item.dataset.start);
             item.style.setProperty(
               "--calendar-offset",
               start - gridRange.start,
@@ -454,24 +457,24 @@
     }
 
     function buildDaySection(dayData, dayNames, monthNames, includeHeading) {
-      var dDate = dayData.dDate;
-      var dIso = dayData.dIso;
+      const dDate = dayData.dDate;
+      const dIso = dayData.dIso;
 
-      var daySection = document.createElement("section");
+      const daySection = document.createElement("section");
       daySection.className = "day-section";
       daySection.setAttribute("id", "day-section-" + dIso);
       daySection.setAttribute("data-date", dIso);
-      var isoDay = dDate.getDay() === 0 ? 7 : dDate.getDay();
+      const isoDay = dDate.getDay() === 0 ? 7 : dDate.getDay();
       daySection.setAttribute("data-day", String(isoDay));
 
       if (includeHeading) {
-        var dayIdx = (dDate.getDay() + 6) % 7;
-        var heading = document.createElement("h3");
+        const dayIdx = (dDate.getDay() + 6) % 7;
+        const heading = document.createElement("h3");
         if (state.view === "week") {
-          var headingName = document.createElement("span");
+          const headingName = document.createElement("span");
           headingName.className = "day-heading-name";
           headingName.textContent = dayNames[dayIdx];
-          var headingDate = document.createElement("span");
+          const headingDate = document.createElement("span");
           headingDate.className = "day-heading-date";
           headingDate.textContent = AppUtils.formatText(labels.week_day_date, {
             day_num: dDate.getDate(),
@@ -491,12 +494,12 @@
       }
 
       if (dayData.events.length === 0) {
-        var noCoursesP = document.createElement("p");
+        const noCoursesP = document.createElement("p");
         noCoursesP.className = "empty-state-message";
         noCoursesP.textContent = labels.no_courses;
         daySection.appendChild(noCoursesP);
       } else {
-        var ul = document.createElement("ul");
+        const ul = document.createElement("ul");
         ul.className = "calendar-events-list";
         dayData.events.forEach(function (event) {
           ul.appendChild(renderEventItem(event, dayData.bounds));
@@ -508,24 +511,24 @@
     }
 
     function renderYearView(events, searchNorm, dayNames, monthNames) {
-      var frag = document.createDocumentFragment();
-      var totalYearItems = 0;
-      var hasFilter = Boolean(
+      const frag = document.createDocumentFragment();
+      let totalYearItems = 0;
+      const hasFilter = Boolean(
         state.evals ||
         state.withTeacher ||
         (searchNorm && searchNorm.length > 0),
       );
 
-      var eventsByDate = indexByDate(events);
+      const eventsByDate = indexByDate(events);
 
-      var startY = parseISODate(firstDateStr).getFullYear();
-      var startM = parseISODate(firstDateStr).getMonth();
-      var endY = parseISODate(lastDateStr).getFullYear();
-      var endM = parseISODate(lastDateStr).getMonth();
+      const startY = parseISODate(firstDateStr).getFullYear();
+      const startM = parseISODate(firstDateStr).getMonth();
+      const endY = parseISODate(lastDateStr).getFullYear();
+      const endM = parseISODate(lastDateStr).getMonth();
 
-      var monthsList = [];
-      var curY = startY;
-      var curM = startM;
+      const monthsList = [];
+      let curY = startY;
+      let curM = startM;
       while (curY < endY || (curY === endY && curM <= endM)) {
         monthsList.push({ year: curY, month: curM });
         curM++;
@@ -536,28 +539,28 @@
       }
 
       monthsList.forEach(function (mObj) {
-        var mYear = mObj.year;
-        var mMonth = mObj.month;
-        var daysInMonth = new Date(mYear, mMonth + 1, 0).getDate();
+        const mYear = mObj.year;
+        const mMonth = mObj.month;
+        const daysInMonth = new Date(mYear, mMonth + 1, 0).getDate();
 
-        var monthNameCap = monthNames[mMonth];
+        let monthNameCap = monthNames[mMonth];
         monthNameCap =
           monthNameCap.charAt(0).toUpperCase() + monthNameCap.slice(1);
-        var monthHeadingText = monthNameCap + " " + mYear;
+        const monthHeadingText = monthNameCap + " " + mYear;
 
-        var monthFrag = document.createDocumentFragment();
+        const monthFrag = document.createDocumentFragment();
 
-        var weeksInMonth = {};
-        var weekOrder = [];
-        for (var day = 1; day <= daysInMonth; day++) {
-          var d = new Date(mYear, mMonth, day);
-          var dayOfWeek = d.getDay();
+        const weeksInMonth = {};
+        const weekOrder = [];
+        for (let day = 1; day <= daysInMonth; day++) {
+          const d = new Date(mYear, mMonth, day);
+          const dayOfWeek = d.getDay();
           if (allowedDays.indexOf(dayOfWeek || 7) === -1) continue;
-          var iso = formatISODate(d);
+          const iso = formatISODate(d);
           if (iso < firstDateStr || iso > lastDateStr) continue;
 
-          var wStart = getWeekStart(d);
-          var wKey = formatISODate(wStart);
+          const wStart = getWeekStart(d);
+          const wKey = formatISODate(wStart);
           if (!weeksInMonth[wKey]) {
             weeksInMonth[wKey] = [];
             weekOrder.push(wKey);
@@ -566,12 +569,12 @@
         }
 
         weekOrder.forEach(function (wKey) {
-          var weekDays = weeksInMonth[wKey];
-          var weekDataList = [];
-          var weekItemCount = 0;
+          const weekDays = weeksInMonth[wKey];
+          const weekDataList = [];
+          let weekItemCount = 0;
 
           weekDays.forEach(function (date) {
-            var data = prepareDay(date, eventsByDate, searchNorm);
+            const data = prepareDay(date, eventsByDate, searchNorm);
             weekItemCount += data.dayCount;
             weekDataList.push(data);
           });
@@ -579,7 +582,7 @@
           totalYearItems += weekItemCount;
 
           if (!hasFilter && weekItemCount === 0) {
-            var emptyWeekP = document.createElement("p");
+            const emptyWeekP = document.createElement("p");
             emptyWeekP.className = "empty-state-message";
             emptyWeekP.textContent =
               labels.week_prefix +
@@ -600,7 +603,7 @@
         });
 
         if (monthFrag.hasChildNodes()) {
-          var mTitle = document.createElement("h2");
+          const mTitle = document.createElement("h2");
           mTitle.className = "year-month-title";
           mTitle.textContent = monthHeadingText;
           mTitle.setAttribute(
@@ -613,7 +616,7 @@
       });
 
       if (hasFilter && totalYearItems === 0) {
-        var emptyP = document.createElement("p");
+        const emptyP = document.createElement("p");
         emptyP.className = "empty-state-message";
         emptyP.textContent = labels.no_courses;
         frag.appendChild(emptyP);
@@ -625,11 +628,11 @@
 
     function getDayBounds(events) {
       if (events.length === 0) return { minStart: null, maxEnd: null };
-      var minStart = events[0].start.substring(11, 16);
-      var maxEnd = events[0].end.substring(11, 16);
-      for (var i = 1; i < events.length; i++) {
-        var s = events[i].start.substring(11, 16);
-        var e = events[i].end.substring(11, 16);
+      let minStart = events[0].start.substring(11, 16);
+      let maxEnd = events[0].end.substring(11, 16);
+      for (let i = 1; i < events.length; i++) {
+        const s = events[i].start.substring(11, 16);
+        const e = events[i].end.substring(11, 16);
         if (s < minStart) minStart = s;
         if (e > maxEnd) maxEnd = e;
       }
@@ -643,7 +646,10 @@
     }
 
     function otherGroups(ev) {
-      var ownGroups = [classLabel.toLowerCase(), currentClassId.toLowerCase()];
+      const ownGroups = [
+        classLabel.toLowerCase(),
+        currentClassId.toLowerCase(),
+      ];
       return ev.groups.filter(function (group) {
         return ownGroups.indexOf(group.toLowerCase()) === -1;
       });
@@ -651,10 +657,10 @@
 
     function appendTags(parent, className, values) {
       if (values.length === 0) return;
-      var block = document.createElement("div");
+      const block = document.createElement("div");
       block.className = className;
       values.forEach(function (value, index) {
-        var tag = document.createElement("span");
+        const tag = document.createElement("span");
         tag.className = "room-tag";
         tag.textContent = value;
         block.appendChild(tag);
@@ -666,13 +672,13 @@
     }
 
     function renderEventItem(ev, bounds) {
-      var li = document.createElement("li");
+      const li = document.createElement("li");
       li.className = "calendar-event-item";
       eventByItem.set(li, ev);
-      var isEvaluation = Boolean(ev.category && categoryMap[ev.category]);
+      const isEvaluation = Boolean(ev.category && categoryMap[ev.category]);
       if (isEvaluation) li.classList.add("is-evaluation");
       if (Object.prototype.hasOwnProperty.call(moduleStyles, ev.module)) {
-        var moduleStyle = moduleStyles[ev.module];
+        const moduleStyle = moduleStyles[ev.module];
         li.classList.add(
           "kind-" + moduleStyle.kind,
           "tone-" + moduleStyle.tone,
@@ -681,26 +687,26 @@
         li.classList.add("is-special");
       }
 
-      var startTime = ev.start.substring(11, 16);
-      var endTime = ev.end.substring(11, 16);
+      const startTime = ev.start.substring(11, 16);
+      const endTime = ev.end.substring(11, 16);
 
       li.setAttribute("data-start", startTime);
       li.setAttribute("data-end", endTime);
 
-      var isDayStart = Boolean(
+      const isDayStart = Boolean(
         bounds && bounds.minStart && startTime === bounds.minStart,
       );
-      var isDayEnd = Boolean(
+      const isDayEnd = Boolean(
         bounds && bounds.maxEnd && endTime === bounds.maxEnd,
       );
 
-      var timeDiv = document.createElement("div");
+      const timeDiv = document.createElement("div");
       timeDiv.className = "event-time";
-      var startSpan = document.createElement("span");
+      const startSpan = document.createElement("span");
       startSpan.className =
         "event-time-start" + (isDayStart ? " is-day-start" : "");
       startSpan.textContent = startTime;
-      var endSpan = document.createElement("span");
+      const endSpan = document.createElement("span");
       endSpan.className = "event-time-end" + (isDayEnd ? " is-day-end" : "");
       endSpan.textContent = endTime;
       timeDiv.appendChild(startSpan);
@@ -708,14 +714,14 @@
       timeDiv.appendChild(endSpan);
       li.appendChild(timeDiv);
 
-      var infoDiv = document.createElement("div");
+      const infoDiv = document.createElement("div");
       infoDiv.className = "event-info";
 
-      var titleDiv = document.createElement("div");
+      const titleDiv = document.createElement("div");
       titleDiv.className = "event-title";
-      var nameSpan = document.createElement("span");
+      const nameSpan = document.createElement("span");
       nameSpan.className = "event-name";
-      var nameStrong = document.createElement("strong");
+      const nameStrong = document.createElement("strong");
       nameStrong.textContent = ev.code || ev.title;
       nameSpan.appendChild(nameStrong);
       if (ev.code)
@@ -724,7 +730,7 @@
       titleDiv.appendChild(document.createTextNode(" "));
 
       if (ev.seriesTotal) {
-        var seriesSpan = document.createElement("span");
+        const seriesSpan = document.createElement("span");
         seriesSpan.className = "event-series";
         seriesSpan.textContent = ev.seriesIndex + "/" + ev.seriesTotal;
         titleDiv.appendChild(seriesSpan);
@@ -732,8 +738,8 @@
       }
 
       if (isEvaluation) {
-        var cat = categoryMap[ev.category];
-        var catSpan = document.createElement("span");
+        const cat = categoryMap[ev.category];
+        const catSpan = document.createElement("span");
         catSpan.className = cat.tone
           ? "category-badge label-" + cat.tone
           : "category-badge";
@@ -743,7 +749,7 @@
       } else {
         (ev.flags || []).forEach(function (flag) {
           if (!Object.prototype.hasOwnProperty.call(sessionMarks, flag)) return;
-          var markSpan = document.createElement("span");
+          const markSpan = document.createElement("span");
           markSpan.className = "category-badge session-mark";
           markSpan.textContent = sessionMarks[flag];
           titleDiv.appendChild(markSpan);
@@ -763,7 +769,7 @@
     }
 
     function fitTimeGrid() {
-      var hours = viewContainer.querySelector(".calendar-hours");
+      const hours = viewContainer.querySelector(".calendar-hours");
       if (!hours) return;
       viewContainer.style.setProperty(
         "--calendar-grid-top",
