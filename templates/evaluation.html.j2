@@ -1,21 +1,25 @@
 {% extends "base.html.j2" %}
 {% from "_nav.html.j2" import app_sidebar, app_topbar %}
-{% from "_evaluation_table.html.j2" import evaluation_table_header, evaluation_row %}
 {% from "_icons.html.j2" import icon %}
 {% block title %}{{ evaluation.summary }} - {{ class_config.label }} - {{ site.title }}{% endblock %}
 {% block sidebar %}{{ app_sidebar(sections, 'evaluations', class_config, section_files.evaluations, url_for, labels, site) }}{% endblock %}
 {% block topbar %}{{ app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.calendar)), ((sections | selectattr('id', 'equalto', 'evaluations') | first).label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.evaluations))], evaluation.summary, labels, url_for, site, class_config.label) }}{% endblock %}
 {% block content %}
 <div class="page-container">
+<header class="eval-summary" data-end-timestamp="{{ evaluation.end_dt.timestamp() | int }}">
+<h2><strong>{{ evaluation.module_code | canonical_code }}</strong>{% if module_labels.get(evaluation.module_code) %} - {{ module_labels[evaluation.module_code] }}{% endif %}</h2>
+<p class="eval-summary-meta"><span class="category-badge{% if category_tones.get(evaluation.category_id) %} label-{{ category_tones[evaluation.category_id] }}{% endif %}">{{ evaluation.category_label }}</span><span class="eval-delay" data-relative-date="{{ evaluation.date_iso }}"></span></p>
+</header>
 <section class="data-box">
-<div class="table-card">
-<table class="evaluations-table">
-{{ evaluation_table_header(site, labels, show_action=false, full=true) }}
-<tbody>
-{{ evaluation_row(evaluation, site, labels, url_for, show_action=false, format_groups=format_groups, module_labels=module_labels, full=true) }}
-</tbody>
-</table>
-</div>
+<dl class="fact-grid">
+<div><dt>{{ labels.fields.date }}</dt><dd>{{ long_date(evaluation.start_dt) }}</dd></div>
+<div><dt>{{ labels.fields.time }}</dt><dd class="fact-time">{{ evaluation.time_range }}</dd></div>
+<div><dt>{{ labels.fields.rooms }}</dt><dd>{{ evaluation.rooms | join(labels.list_separator) }}</dd></div>
+{% if site.teachers.display_mode != "hidden" %}
+<div><dt>{{ labels.fields.teachers }}</dt><dd>{{ (evaluation.teachers or evaluation.staff_markers) | join(labels.list_separator) or labels.empty_value }}</dd></div>
+{% endif %}
+<div><dt>{{ labels.fields.groups }}</dt><dd>{{ format_groups(evaluation.groups) | join(labels.list_separator) }}</dd></div>
+</dl>
 </section>
 
 <h2>{{ labels.evaluation_page.order_heading }}</h2>
