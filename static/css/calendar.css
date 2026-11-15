@@ -326,6 +326,41 @@
 .calendar-view-year .event-groups {
   font-size: var(--text-sm);
 }
+@media (min-width: 60em) {
+  .calendar-view-year .event-info {
+    display: grid;
+    grid-template-columns: var(--grid-year-row);
+  }
+  .calendar-view-year .event-info > * {
+    grid-row: 1;
+  }
+  .calendar-view-year .event-teachers {
+    grid-column: 2;
+  }
+  .calendar-view-year .event-rooms {
+    grid-column: 3;
+  }
+  .calendar-view-year .event-groups {
+    grid-column: 4;
+  }
+  .calendar-view-year .event-title {
+    flex-wrap: nowrap;
+  }
+  .calendar-view-year .event-title > :not(.event-name) {
+    flex: none;
+  }
+  .calendar-view-year .event-name,
+  .calendar-view-year .event-teachers,
+  .calendar-view-year .event-rooms,
+  .calendar-view-year .event-groups {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .calendar-view-year .room-tag {
+    display: inline;
+  }
+}
 .calendar-view-year .empty-state-message {
   margin: 0;
   padding-block: var(--space-sm);
