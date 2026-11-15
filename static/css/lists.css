@@ -106,6 +106,39 @@
 .eval-link .category-badge {
   justify-self: start;
 }
+.eval-summary h2 {
+  margin-block: 0 var(--space-xs);
+  font-size: var(--text-md);
+  font-weight: var(--weight-normal);
+  letter-spacing: 0;
+}
+.eval-summary strong {
+  font-weight: var(--weight-semibold);
+}
+.eval-summary-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-block-end: var(--space-md);
+}
+.fact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--width-fact), 1fr));
+  gap: var(--space-md) var(--space-lg);
+  margin: 0;
+  padding: var(--space-md);
+}
+.fact-grid dt {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+.fact-grid dd {
+  margin: 0;
+}
+.fact-time {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
 .order-slot.is-current {
   background: var(--color-accent-soft);
 }

@@ -112,7 +112,15 @@ def render_site(
             month_name=app_config.labels["months_short"][moment.month - 1],
         )
 
-    env.globals["short_date"] = short_date
+    def long_date(moment):
+        return app_config.labels["calendar"]["day_title"].format(
+            day_name=app_config.labels["days"][moment.weekday()],
+            day_num=moment.day,
+            month_name=app_config.labels["months"][moment.month - 1],
+            year=moment.year,
+        )
+
+    env.globals.update(short_date=short_date, long_date=long_date)
     kinds = app_config.curriculum.get("kinds", [])
     kind_labels = {kind["id"]: kind["label"] for kind in kinds}
     kind_rank = {kind["id"]: index for index, kind in enumerate(kinds)}
