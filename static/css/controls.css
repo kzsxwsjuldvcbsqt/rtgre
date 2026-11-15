@@ -302,7 +302,7 @@
 }
 input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
-  opacity: 0.6;
+  opacity: var(--opacity-indicator);
 }
 .cal-nav-start {
   display: contents;
