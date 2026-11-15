@@ -87,14 +87,10 @@
 .calendar-event-item.is-evaluation {
   border: var(--rule-accent-width) solid var(--color-text);
 }
-.calendar-event-item.is-evaluation .category-badge {
-  background: var(--color-primary);
-  color: var(--color-on-primary);
-}
 .calendar-event-item .session-mark {
-  border: var(--rule-width) solid var(--color-text);
+  border: var(--rule-width) solid var(--color-field-border);
   background: transparent;
-  color: var(--color-text);
+  color: var(--color-text-muted);
 }
 .calendar-view-week .calendar-event-item {
   display: flex;

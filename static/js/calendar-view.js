@@ -646,7 +646,9 @@
       if (isEvaluation) {
         var cat = categoryMap[ev.category];
         var catSpan = document.createElement("span");
-        catSpan.className = "category-badge cat-" + cat.id;
+        catSpan.className = cat.tone
+          ? "category-badge label-" + cat.tone
+          : "category-badge";
         catSpan.textContent = cat.label;
         titleDiv.appendChild(catSpan);
         titleDiv.appendChild(document.createTextNode(" "));

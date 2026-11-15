@@ -111,7 +111,7 @@
 <li class="calendar-event-item" data-start="{{ ev.start_time }}" data-end="{{ ev.end_time }}">
 <div class="event-time"><span class="event-time-start{% if loop.first %} is-day-start{% endif %}">{{ ev.start_time }}</span> - <span class="event-time-end{% if loop.last %} is-day-end{% endif %}">{{ ev.end_time }}</span></div>
 <div class="event-info">
-<div class="event-title"><span class="event-name">{% if ev.title[0] %}<strong>{{ ev.title[0] }}</strong> {{ ev.title[1] }}{% else %}<strong>{{ ev.title[1] }}</strong>{% endif %}</span>{% if ev.category_id %} <span class="category-badge cat-{{ ev.category_id }}">{{ ev.category_label }}</span>{% endif %}</div>
+<div class="event-title"><span class="event-name">{% if ev.title[0] %}<strong>{{ ev.title[0] }}</strong> {{ ev.title[1] }}{% else %}<strong>{{ ev.title[1] }}</strong>{% endif %}</span>{% if ev.category_id %} <span class="category-badge{% if category_tones.get(ev.category_id) %} label-{{ category_tones[ev.category_id] }}{% endif %}">{{ ev.category_label }}</span>{% endif %}</div>
 {% set t_items = [] %}
 {% if site.teachers.display_mode != "hidden" %}
 {% for t in ev.teachers %}{% set _ = t_items.append(t) %}{% endfor %}
