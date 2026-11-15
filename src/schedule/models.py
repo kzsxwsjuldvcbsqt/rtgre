@@ -146,11 +146,9 @@ class Evaluation:
     flags: tuple[str, ...]
     complementary_info: tuple[str, ...]
     date_iso: str
-    date_formatted: str
     time_range: str
     month_key: str
     month_label: str
-    search_index: str
     is_past: bool
 
 
@@ -159,5 +157,3 @@ class ClassMatchState:
     class_config: ClassConfig
     status: str
     evaluation: Evaluation | None
-    alternate_date_iso: str | None
-    alternate_date_formatted: str | None

@@ -60,7 +60,7 @@ class ScheduleTests(unittest.TestCase):
             teachers=("Jerome M.", "Cleo B."),
         )
         other = replace(base, class_id=self.classes[1].id, **changes)
-        state = ClassMatchState(self.classes[1], "same", other, None, None)
+        state = ClassMatchState(self.classes[1], "same", other)
         return prepare_evaluation_order(self.config, self.classes[0], base, [state])
 
     def test_order_ignores_room_order(self):
@@ -313,11 +313,8 @@ class ScheduleTests(unittest.TestCase):
                 self.assertIn(event.occurrence_id, legacy)
 
     def test_configured_date_formats(self):
-        self.config.site["formats"].update(
-            date_absolute="%Y.%m.%d", time="%Hh%M", time_range="{start} / {end}"
-        )
+        self.config.site["formats"].update(time="%Hh%M", time_range="{start} / {end}")
         event = sample_events(self.config, self.classes[0])[0]
-        self.assertEqual(event.date_formatted, "2026.09.08")
         self.assertEqual(event.time_range, "08h00 / 10h00")
 
     def test_fetch_preserves_network_error(self):

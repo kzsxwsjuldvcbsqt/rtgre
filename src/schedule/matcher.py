@@ -84,8 +84,6 @@ def build_matching_matrix(
                         class_config=cls,
                         status="same",
                         evaluation=same_match,
-                        alternate_date_iso=None,
-                        alternate_date_formatted=None,
                     )
                 )
             else:
@@ -110,8 +108,6 @@ def build_matching_matrix(
                             class_config=cls,
                             status="alternate",
                             evaluation=alt_match,
-                            alternate_date_iso=alt_match.date_iso,
-                            alternate_date_formatted=alt_match.date_formatted,
                         )
                     )
                 else:
@@ -120,8 +116,6 @@ def build_matching_matrix(
                             class_config=cls,
                             status="absent",
                             evaluation=None,
-                            alternate_date_iso=None,
-                            alternate_date_formatted=None,
                         )
                     )
 
