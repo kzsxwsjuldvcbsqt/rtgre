@@ -25,7 +25,7 @@ from schedule.config import (
 from schedule.curriculum import (
     canonical_module_codes,
     get_class_grades_data,
-    resolve_module_styles,
+    resolve_module_info,
     split_event_title,
     validate_curriculum_config,
 )
@@ -220,15 +220,15 @@ class ScheduleTests(unittest.TestCase):
                 self.assertEqual(split_event_title(summary, module_code, codes), expected)
 
     def test_module_kinds_follow_curriculum(self):
-        styles = resolve_module_styles(
+        info = resolve_module_info(
             self.config.curriculum, ["R5cyber09", "SAE501", "SAE502", "SAE5Porfolio", "Forum"]
         )
-        self.assertEqual(styles.keys(), {"R5cyber09", "SAE501", "SAE502", "SAE5Porfolio"})
-        self.assertEqual(styles["R5cyber09"]["kind"], "resource")
+        self.assertEqual(info.keys(), {"R5cyber09", "SAE501", "SAE502", "SAE5Porfolio"})
+        self.assertEqual(info["R5cyber09"]["kind"], "resource")
         self.assertEqual(
-            styles["SAE5Porfolio"], resolve_module_styles(self.config.curriculum, ["SAE5"])["SAE5"]
+            info["SAE5Porfolio"], resolve_module_info(self.config.curriculum, ["SAE5"])["SAE5"]
         )
-        self.assertNotEqual(styles["SAE501"]["tone"], styles["SAE502"]["tone"])
+        self.assertNotEqual(info["SAE501"]["tone"], info["SAE502"]["tone"])
         config = copy.deepcopy(self.config.curriculum)
         config["modules"][0]["ade_codes"] = [""]
         with self.assertRaises(ValueError):

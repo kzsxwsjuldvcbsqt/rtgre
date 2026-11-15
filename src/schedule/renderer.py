@@ -10,7 +10,7 @@ from .curriculum import (
     get_class_grades_data,
     get_class_resources,
     module_code_variants,
-    resolve_module_styles,
+    resolve_module_info,
 )
 from .exporter import serialize_events
 from .matcher import build_matching_matrix
@@ -118,7 +118,7 @@ def render_site(
     kinds = app_config.curriculum.get("kinds", [])
     kind_labels = {kind["id"]: kind["label"] for kind in kinds}
     kind_rank = {kind["id"]: index for index, kind in enumerate(kinds)}
-    module_styles = resolve_module_styles(
+    module_info = resolve_module_info(
         app_config.curriculum,
         sorted(
             {
@@ -309,7 +309,7 @@ def render_site(
                     "groups_all": app_config.labels["groups_all"],
                 },
                 calendar_config=app_config.calendar_config,
-                module_styles=module_styles,
+                module_info=module_info,
                 initial_payload=initial_payload,
                 initial_week_days=initial_week_days,
                 favicons=active_favicons,

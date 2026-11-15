@@ -33,8 +33,8 @@
       scriptEl.getAttribute("data-labels-json") || "{}",
     );
     const classLabel = scriptEl.getAttribute("data-class-label");
-    const moduleStyles = JSON.parse(
-      scriptEl.getAttribute("data-module-styles-json") || "{}",
+    const moduleInfo = JSON.parse(
+      scriptEl.getAttribute("data-module-info-json") || "{}",
     );
 
     const navBarEl = document.getElementById("calendar-nav-bar");
@@ -597,7 +597,7 @@
       allowedDays,
       displayMode,
       categoryMap,
-      moduleStyles,
+      moduleInfo,
       sessionMarks,
       labels,
       classLabel,
