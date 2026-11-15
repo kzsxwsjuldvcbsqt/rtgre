@@ -80,6 +80,10 @@ select:disabled {
   .menu-list .menu-item-danger:hover {
     background: var(--color-danger-soft);
   }
+  .btn.btn-primary:hover:not(:disabled) {
+    border-color: var(--color-primary-hover);
+    background: var(--color-primary-hover);
+  }
   .btn.btn-danger:hover:not(:disabled) {
     border-color: var(--color-danger);
     background: var(--color-danger-soft);
