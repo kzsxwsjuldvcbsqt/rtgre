@@ -34,28 +34,11 @@
 .btn {
   padding-inline: var(--space-md);
 }
-.filter-form input[type="text"] {
-  width: min(100%, 20rem);
-}
 .filter-form input::placeholder {
   color: var(--color-text-faint);
   opacity: 1;
 }
 
-#filters-container,
-#calendar-controls {
-  margin-block-end: var(--space-lg);
-}
-.filter-form {
-  display: grid;
-  grid-template-columns: minmax(0, 20rem) auto minmax(0, 1fr);
-  gap: var(--space-sm) var(--space-md);
-  width: 100%;
-  padding: var(--space-md);
-  border: var(--rule-width) solid var(--color-border-muted);
-  border-radius: var(--radius-medium);
-  background: var(--color-surface);
-}
 .filter-group {
   display: flex;
   flex-wrap: wrap;
@@ -63,18 +46,12 @@
   gap: var(--space-xs);
   min-width: 0;
 }
-.filter-group-scroll {
-  grid-column: 1 / -1;
-}
 .filter-group-item {
   display: flex;
   min-width: 0;
 }
 .filter-field-title {
   display: none;
-}
-.filter-group-last {
-  min-width: 12rem;
 }
 .filter-form label:has(input),
 .toggle-pill:has(input) {
@@ -278,9 +255,6 @@
   color: var(--color-text-muted);
 }
 .results-count {
-  grid-column: 3;
-  align-self: center;
-  justify-self: end;
   color: var(--color-text-muted);
   font-size: var(--text-sm);
   white-space: nowrap;
