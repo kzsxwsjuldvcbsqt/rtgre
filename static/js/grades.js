@@ -1,101 +1,101 @@
 (function () {
   document.addEventListener("DOMContentLoaded", async function () {
-    var scriptEl = document.querySelector("script[data-class-id]");
+    const scriptEl = document.querySelector("script[data-class-id]");
     if (!scriptEl) return;
 
-    var actionsEl = document.getElementById("grades-actions");
+    const actionsEl = document.getElementById("grades-actions");
     if (actionsEl) {
       actionsEl.hidden = false;
     }
 
-    var classId = scriptEl.getAttribute("data-class-id");
-    var minVal = parseFloat(scriptEl.getAttribute("data-min"));
-    var maxVal = parseFloat(scriptEl.getAttribute("data-max"));
-    var decimals = parseInt(scriptEl.getAttribute("data-decimals"), 10);
-    var passMark = parseFloat(scriptEl.getAttribute("data-pass-mark"));
-    var messageDuration = parseInt(
+    const classId = scriptEl.getAttribute("data-class-id");
+    const minVal = parseFloat(scriptEl.getAttribute("data-min"));
+    const maxVal = parseFloat(scriptEl.getAttribute("data-max"));
+    const decimals = parseInt(scriptEl.getAttribute("data-decimals"), 10);
+    const passMark = parseFloat(scriptEl.getAttribute("data-pass-mark"));
+    const messageDuration = parseInt(
       scriptEl.getAttribute("data-message-duration"),
       10,
     );
-    var messageTimer = null;
-    var storagePrefix = scriptEl.getAttribute("data-storage-prefix");
-    var formatVersion = parseInt(
+    let messageTimer = null;
+    const storagePrefix = scriptEl.getAttribute("data-storage-prefix");
+    const formatVersion = parseInt(
       scriptEl.getAttribute("data-format-version"),
       10,
     );
-    var exportFormat = scriptEl.getAttribute("data-export-format");
-    var exportFilename = scriptEl.getAttribute("data-export-filename");
-    var maxImportBytes = parseInt(
+    const exportFormat = scriptEl.getAttribute("data-export-format");
+    const exportFilename = scriptEl.getAttribute("data-export-filename");
+    const maxImportBytes = parseInt(
       scriptEl.getAttribute("data-max-import-bytes"),
       10,
     );
-    var maxEntries = parseInt(scriptEl.getAttribute("data-max-entries"), 10);
-    var importReplaceConfirm = scriptEl.getAttribute(
+    const maxEntries = parseInt(scriptEl.getAttribute("data-max-entries"), 10);
+    const importReplaceConfirm = scriptEl.getAttribute(
       "data-import-replace-confirm",
     );
-    var errEmptyImport = scriptEl.getAttribute("data-err-empty-import");
-    var errStorage = scriptEl.getAttribute("data-err-storage");
-    var errRestore = scriptEl.getAttribute("data-err-restore");
-    var errFileSize = scriptEl.getAttribute("data-err-file-size");
-    var messageEl = document.getElementById("grades-message");
-    var resetConfirmMsg = scriptEl.getAttribute("data-reset-confirm");
-    var confirmOtherClassMsg = scriptEl.getAttribute(
+    const errEmptyImport = scriptEl.getAttribute("data-err-empty-import");
+    const errStorage = scriptEl.getAttribute("data-err-storage");
+    const errRestore = scriptEl.getAttribute("data-err-restore");
+    const errFileSize = scriptEl.getAttribute("data-err-file-size");
+    const messageEl = document.getElementById("grades-message");
+    const resetConfirmMsg = scriptEl.getAttribute("data-reset-confirm");
+    const confirmOtherClassMsg = scriptEl.getAttribute(
       "data-confirm-other-class",
     );
-    var errInvalidJson = scriptEl.getAttribute("data-err-invalid-json");
-    var errBadFormat = scriptEl.getAttribute("data-err-bad-format");
-    var errNewerVersion = scriptEl.getAttribute("data-err-newer-version");
-    var importSuccessMsg = scriptEl.getAttribute("data-import-success");
-    var entriesIgnoredMsg = scriptEl.getAttribute("data-entries-ignored");
+    const errInvalidJson = scriptEl.getAttribute("data-err-invalid-json");
+    const errBadFormat = scriptEl.getAttribute("data-err-bad-format");
+    const errNewerVersion = scriptEl.getAttribute("data-err-newer-version");
+    const importSuccessMsg = scriptEl.getAttribute("data-import-success");
+    const entriesIgnoredMsg = scriptEl.getAttribute("data-entries-ignored");
 
-    var rawConfigData = scriptEl.getAttribute("data-grades-config");
-    var gradesConfig = JSON.parse(rawConfigData);
+    const rawConfigData = scriptEl.getAttribute("data-grades-config");
+    const gradesConfig = JSON.parse(rawConfigData);
 
-    var storageKey = storagePrefix + "_" + classId;
-    var errConflict = scriptEl.getAttribute("data-err-conflict");
-    var gradesBaseline;
-    var restoreFailed = false;
-    var writeAccess = await WriteAccess.acquire(storageKey);
-    var lastValidByCode = {};
+    const storageKey = storagePrefix + "_" + classId;
+    const errConflict = scriptEl.getAttribute("data-err-conflict");
+    let gradesBaseline;
+    let restoreFailed = false;
+    const writeAccess = await WriteAccess.acquire(storageKey);
+    let lastValidByCode = {};
 
-    var inputs = Array.prototype.slice.call(
+    const inputs = Array.prototype.slice.call(
       document.querySelectorAll(".grade-input[data-module]"),
     );
-    var inputsByCode = {};
+    const inputsByCode = {};
     inputs.forEach(function (input) {
-      var code = input.getAttribute("data-module");
+      const code = input.getAttribute("data-module");
       inputsByCode[code] = input;
     });
 
-    var hasDetails = gradesConfig.has_details === true;
-    var detailKey =
+    const hasDetails = gradesConfig.has_details === true;
+    const detailKey =
       scriptEl.getAttribute("data-detail-storage-prefix") + "_" + classId;
-    var detailToggle = document.getElementById("grades-detail-toggle");
-    var detailOption = document.getElementById("grades-detail-option");
-    var evaluationInputs = Array.prototype.slice.call(
+    const detailToggle = document.getElementById("grades-detail-toggle");
+    const detailOption = document.getElementById("grades-detail-option");
+    const evaluationInputs = Array.prototype.slice.call(
       document.querySelectorAll(".grade-input[data-evaluation]"),
     );
-    var evaluationRows = Array.prototype.slice.call(
+    const evaluationRows = Array.prototype.slice.call(
       document.querySelectorAll(".evaluation-row"),
     );
-    var computedOutputs = Array.prototype.slice.call(
+    const computedOutputs = Array.prototype.slice.call(
       document.querySelectorAll(".grade-computed"),
     );
-    var detailLimits = {
+    const detailLimits = {
       minimum: minVal,
       maximum: maxVal,
       maxEntries: maxEntries,
     };
-    var detailEnabled = false;
-    var detailBaseline;
-    var lastValidDetail = {};
+    let detailEnabled = false;
+    let detailBaseline;
+    let lastValidDetail = {};
 
     function currentEvaluations() {
-      var evaluations = {};
+      const evaluations = {};
       evaluationInputs.forEach(function (input) {
-        var grade = getValidGrade(input);
+        const grade = getValidGrade(input);
         if (grade === null) return;
-        var code = input.getAttribute("data-evaluation-module");
+        const code = input.getAttribute("data-evaluation-module");
         evaluations[code] = evaluations[code] || {};
         evaluations[code][input.getAttribute("data-evaluation")] = grade;
       });
@@ -119,18 +119,18 @@
       });
       computedOutputs.forEach(function (output) {
         output.hidden = !detailEnabled;
-        var input = inputsByCode[output.getAttribute("data-computed-module")];
+        const input = inputsByCode[output.getAttribute("data-computed-module")];
         if (input) input.hidden = detailEnabled;
       });
     }
 
     function getValidGrade(input) {
-      var valStr = input.value.trim();
+      const valStr = input.value.trim();
       if (valStr === "") {
         input.removeAttribute("aria-invalid");
         return null;
       }
-      var num = AppUtils.parseGrade(valStr, minVal, maxVal);
+      const num = AppUtils.parseGrade(valStr, minVal, maxVal);
       if (num === null) {
         input.setAttribute("aria-invalid", "true");
         return null;
@@ -140,10 +140,10 @@
     }
 
     function currentGrades() {
-      var gradesByCode = {};
+      const gradesByCode = {};
       inputs.forEach(function (input) {
-        var code = input.getAttribute("data-module");
-        var g = getValidGrade(input);
+        const code = input.getAttribute("data-module");
+        const g = getValidGrade(input);
         if (g !== null) {
           gradesByCode[code] = g;
         }
@@ -152,7 +152,7 @@
     }
 
     function markResult(element, value) {
-      var known = value !== null && value !== undefined;
+      const known = value !== null && value !== undefined;
       element.classList.toggle("is-pass", known && value >= passMark);
       element.classList.toggle("is-fail", known && value < passMark);
     }
@@ -165,22 +165,22 @@
     }
 
     function showComputed(detail) {
-      var computed = GradesModel.moduleGradesFromDetail(
+      const computed = GradesModel.moduleGradesFromDetail(
         detail.evaluations,
         gradesConfig,
       );
       computedOutputs.forEach(function (output) {
-        var code = output.getAttribute("data-computed-module");
-        var value = computed[code];
+        const code = output.getAttribute("data-computed-module");
+        const value = computed[code];
         markResult(output, value);
         output.textContent = value === undefined ? "" : value.toFixed(decimals);
       });
     }
 
     function calculate() {
-      var detail = currentDetail();
+      const detail = currentDetail();
       showComputed(detail);
-      var averages = GradesModel.calculate(
+      const averages = GradesModel.calculate(
         GradesModel.effectiveGrades(currentGrades(), detail, gradesConfig),
         gradesConfig,
       );
@@ -193,15 +193,15 @@
           averages.semesters[sem.id],
         );
       });
-      var panelTable = document.getElementById("grades-panel-body");
-      var panelEmpty = document.getElementById("grades-panel-empty");
+      const panelTable = document.getElementById("grades-panel-body");
+      const panelEmpty = document.getElementById("grades-panel-empty");
       if (panelTable && panelEmpty) {
-        var hasAverage = Object.keys(averages.units).some(function (id) {
+        const hasAverage = Object.keys(averages.units).some(function (id) {
           return averages.units[id] !== null;
         });
         panelTable.hidden = !hasAverage;
         panelEmpty.hidden = hasAverage;
-        var panelToggle = document.getElementById("grades-panel-toggle");
+        const panelToggle = document.getElementById("grades-panel-toggle");
         if (panelToggle) panelToggle.hidden = !hasAverage;
       }
       gradesConfig.annual_units.forEach(function (au) {
@@ -211,8 +211,8 @@
             averages.units[au.units[sem.id]],
           );
         });
-        var complete = gradesConfig.semesters.every(function (sem) {
-          var unitId = au.units[sem.id];
+        const complete = gradesConfig.semesters.every(function (sem) {
+          const unitId = au.units[sem.id];
           return !unitId || averages.units[unitId] !== null;
         });
         showAverage(
@@ -224,18 +224,18 @@
 
     function writeGrades(grades) {
       writeAccess.assertWritable();
-      var current = localStorage.getItem(storageKey);
+      const current = localStorage.getItem(storageKey);
       if (gradesBaseline !== undefined && current !== gradesBaseline) {
         throw new Error("conflict");
       }
-      var serialized = JSON.stringify(grades);
+      const serialized = JSON.stringify(grades);
       localStorage.setItem(storageKey, serialized);
       gradesBaseline = serialized;
     }
 
     function assertDetailUnchanged() {
       if (!hasDetails) return;
-      var current = localStorage.getItem(detailKey);
+      const current = localStorage.getItem(detailKey);
       if (detailBaseline !== undefined && current !== detailBaseline) {
         throw new Error("conflict");
       }
@@ -250,17 +250,17 @@
         detailBaseline = null;
         return;
       }
-      var serialized = JSON.stringify(detail);
+      const serialized = JSON.stringify(detail);
       localStorage.setItem(detailKey, serialized);
       detailBaseline = serialized;
     }
 
     function applyDetail(detail) {
       evaluationInputs.forEach(function (input) {
-        var values =
+        const values =
           detail.evaluations[input.getAttribute("data-evaluation-module")] ||
           {};
-        var id = input.getAttribute("data-evaluation");
+        const id = input.getAttribute("data-evaluation");
         input.value = Object.prototype.hasOwnProperty.call(values, id)
           ? String(values[id])
           : "";
@@ -273,7 +273,7 @@
 
     function applyGrades(grades) {
       inputs.forEach(function (input) {
-        var code = input.getAttribute("data-module");
+        const code = input.getAttribute("data-module");
         input.value = Object.prototype.hasOwnProperty.call(grades, code)
           ? String(grades[code])
           : "";
@@ -288,8 +288,8 @@
         return false;
       }
       inputs.forEach(function (input) {
-        var code = input.getAttribute("data-module");
-        var g = getValidGrade(input);
+        const code = input.getAttribute("data-module");
+        const g = getValidGrade(input);
         if (g !== null) {
           lastValidByCode[code] = g;
         } else if (input.getAttribute("aria-invalid") !== "true") {
@@ -297,9 +297,9 @@
         }
       });
       evaluationInputs.forEach(function (input) {
-        var code = input.getAttribute("data-evaluation-module");
-        var id = input.getAttribute("data-evaluation");
-        var g = getValidGrade(input);
+        const code = input.getAttribute("data-evaluation-module");
+        const id = input.getAttribute("data-evaluation");
+        const g = getValidGrade(input);
         if (g !== null) {
           lastValidDetail[code] = lastValidDetail[code] || {};
           lastValidDetail[code][id] = g;
@@ -326,10 +326,10 @@
 
     function restoreFromStorage() {
       try {
-        var raw = localStorage.getItem(storageKey);
+        const raw = localStorage.getItem(storageKey);
         gradesBaseline = raw;
         if (!raw) return;
-        var restored = GradesModel.normalizeGrades(
+        const restored = GradesModel.normalizeGrades(
           JSON.parse(raw),
           Object.keys(inputsByCode),
           {
@@ -358,10 +358,10 @@
     function restoreDetail() {
       if (!hasDetails) return;
       try {
-        var raw = localStorage.getItem(detailKey);
+        const raw = localStorage.getItem(detailKey);
         detailBaseline = raw;
         if (!raw) return;
-        var restored = GradesModel.normalizeDetail(
+        const restored = GradesModel.normalizeDetail(
           JSON.parse(raw),
           gradesConfig,
           detailLimits,
@@ -412,21 +412,21 @@
     if (!writeAccess.writable) showMessage(errConflict, true);
     document.documentElement.dataset.storageReady = "true";
 
-    var exportBtn = document.getElementById("grades-export-btn");
+    const exportBtn = document.getElementById("grades-export-btn");
     if (exportBtn) {
       exportBtn.addEventListener("click", function () {
-        var exportedGrades = {};
+        const exportedGrades = {};
         inputs.forEach(function (input) {
-          var val = input.value.trim();
+          const val = input.value.trim();
           if (val !== "") {
-            var num = AppUtils.parseGrade(val, minVal, maxVal);
+            const num = AppUtils.parseGrade(val, minVal, maxVal);
             if (num !== null) {
               exportedGrades[input.getAttribute("data-module")] = num;
             }
           }
         });
 
-        var exportObject = {
+        const exportObject = {
           format: exportFormat,
           version: formatVersion,
           class: classId,
@@ -435,12 +435,12 @@
         };
         if (hasDetails) exportObject.detail = currentDetail();
 
-        var blob = new Blob([JSON.stringify(exportObject, null, 2)], {
+        const blob = new Blob([JSON.stringify(exportObject, null, 2)], {
           type: "application/json",
         });
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement("a");
-        var dateStr = new Date().toISOString().slice(0, 10);
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        const dateStr = new Date().toISOString().slice(0, 10);
         a.href = url;
         a.download = AppUtils.formatText(exportFilename, {
           class: classId,
@@ -453,7 +453,7 @@
       });
     }
 
-    var resetBtn = document.getElementById("grades-reset-btn");
+    const resetBtn = document.getElementById("grades-reset-btn");
     if (resetBtn) {
       resetBtn.addEventListener("click", function () {
         if (window.confirm(resetConfirmMsg)) {
@@ -484,7 +484,7 @@
     }
 
     function updateActionState() {
-      var isEmpty =
+      const isEmpty =
         Object.keys(lastValidByCode).length === 0 &&
         Object.keys(lastValidDetail).length === 0;
       if (exportBtn) exportBtn.disabled = isEmpty;
@@ -492,8 +492,8 @@
     }
     updateActionState();
 
-    var importBtn = document.getElementById("grades-import-btn");
-    var importFile = document.getElementById("grades-import-file");
+    const importBtn = document.getElementById("grades-import-btn");
+    const importFile = document.getElementById("grades-import-file");
 
     function showMessage(msg, isError, isPending) {
       if (!messageEl) return;
@@ -514,9 +514,9 @@
       }
     }
 
-    var bulletinBtn = document.getElementById("grades-bulletin-btn");
-    var bulletinFile = document.getElementById("grades-bulletin-file");
-    var bulletinConfig = JSON.parse(
+    const bulletinBtn = document.getElementById("grades-bulletin-btn");
+    const bulletinFile = document.getElementById("grades-bulletin-file");
+    const bulletinConfig = JSON.parse(
       scriptEl.getAttribute("data-bulletin-config"),
     );
 
@@ -531,30 +531,30 @@
     }
 
     async function readBulletinPages(file) {
-      var pdfjs = await import(
+      const pdfjs = await import(
         new URL(scriptEl.getAttribute("data-pdfjs"), document.baseURI).href
       );
       pdfjs.GlobalWorkerOptions.workerSrc = new URL(
         scriptEl.getAttribute("data-pdfjs-worker"),
         document.baseURI,
       ).href;
-      var task = pdfjs.getDocument({
+      const task = pdfjs.getDocument({
         data: new Uint8Array(await file.arrayBuffer()),
         isEvalSupported: false,
         disableFontFace: true,
         enableXfa: false,
         verbosity: 0,
       });
-      var doc = await task.promise;
+      const doc = await task.promise;
       try {
         if (doc.numPages > bulletinConfig.max_pages) {
           throw new Error("not_recognized");
         }
-        var info = (await doc.getMetadata()).info || {};
-        var pages = [];
-        for (var number = 1; number <= doc.numPages; number++) {
-          var page = await doc.getPage(number);
-          var content = await page.getTextContent();
+        const info = (await doc.getMetadata()).info || {};
+        const pages = [];
+        for (let number = 1; number <= doc.numPages; number++) {
+          const page = await doc.getPage(number);
+          const content = await page.getTextContent();
           pages.push(
             content.items.map(function (item) {
               return {
@@ -572,18 +572,18 @@
     }
 
     function mergeBulletin(result) {
-      var counts = { added: 0, replaced: 0, unchanged: 0 };
+      const counts = { added: 0, replaced: 0, unchanged: 0 };
       function count(previous, next) {
         if (previous === undefined) counts.added++;
         else if (previous === next) counts.unchanged++;
         else counts.replaced++;
       }
-      var grades = Object.assign({}, lastValidByCode);
+      const grades = Object.assign({}, lastValidByCode);
       Object.keys(result.grades).forEach(function (code) {
         count(lastValidByCode[code], result.grades[code]);
         grades[code] = result.grades[code];
       });
-      var evaluations = JSON.parse(JSON.stringify(lastValidDetail));
+      const evaluations = JSON.parse(JSON.stringify(lastValidDetail));
       Object.keys(result.evaluations).forEach(function (code) {
         evaluations[code] = evaluations[code] || {};
         Object.keys(result.evaluations[code]).forEach(function (id) {
@@ -607,10 +607,10 @@
         return;
       }
       showMessage(bulletinText("bulletin-reading"), false, true);
-      var result;
+      let result;
       try {
-        var source = await readBulletinPages(file);
-        var parsed = BulletinModel.read(
+        const source = await readBulletinPages(file);
+        const parsed = BulletinModel.read(
           source.pages,
           source.info,
           bulletinConfig,
@@ -653,7 +653,7 @@
         showMessage(bulletinText("err-bulletin-empty"), true);
         return;
       }
-      var merged = mergeBulletin(result);
+      const merged = mergeBulletin(result);
       if (
         merged.counts.replaced > 0 &&
         !window.confirm(
@@ -665,7 +665,10 @@
         showMessage("", false);
         return;
       }
-      var detail = { enabled: detailEnabled, evaluations: merged.evaluations };
+      const detail = {
+        enabled: detailEnabled,
+        evaluations: merged.evaluations,
+      };
       try {
         assertDetailUnchanged();
         writeGrades(merged.grades);
@@ -682,7 +685,7 @@
       applyGrades(merged.grades);
       applyDetail(detail);
       updateActionState();
-      var message = fillTemplate(
+      let message = fillTemplate(
         bulletinText("bulletin-success"),
         merged.counts,
       );
@@ -698,7 +701,7 @@
         bulletinFile.click();
       });
       bulletinFile.addEventListener("change", function (evt) {
-        var file = evt.target.files[0];
+        const file = evt.target.files[0];
         if (file) importBulletin(file);
       });
     }
@@ -710,17 +713,17 @@
       });
 
       importFile.addEventListener("change", function (evt) {
-        var file = evt.target.files[0];
+        const file = evt.target.files[0];
         if (!file) return;
         if (file.size > maxImportBytes) {
           showMessage(errFileSize, true);
           return;
         }
 
-        var reader = new FileReader();
+        const reader = new FileReader();
         reader.onload = function (e) {
           try {
-            var data = JSON.parse(e.target.result);
+            const data = JSON.parse(e.target.result);
 
             if (
               !data ||
@@ -754,7 +757,7 @@
               }
             }
 
-            var normalized = GradesModel.normalizeGrades(
+            const normalized = GradesModel.normalizeGrades(
               data.grades,
               Object.keys(inputsByCode),
               {
@@ -763,13 +766,13 @@
                 maxEntries: maxEntries,
               },
             );
-            var importedGrades = data.grades;
-            var ignoredCount = normalized.ignored;
-            var newValues = normalized.grades;
-            var newDetail = { enabled: false, evaluations: {} };
-            var detailEntries = 0;
+            const importedGrades = data.grades;
+            let ignoredCount = normalized.ignored;
+            const newValues = normalized.grades;
+            let newDetail = { enabled: false, evaluations: {} };
+            let detailEntries = 0;
             if (data.detail !== undefined) {
-              var normalizedDetail = GradesModel.normalizeDetail(
+              const normalizedDetail = GradesModel.normalizeDetail(
                 data.detail,
                 gradesConfig,
                 detailLimits,
@@ -814,7 +817,7 @@
             applyDetail(newDetail);
             updateActionState();
 
-            var statusMsg = importSuccessMsg;
+            let statusMsg = importSuccessMsg;
             if (ignoredCount > 0) {
               statusMsg += " (" + ignoredCount + " " + entriesIgnoredMsg + ")";
             }
@@ -834,17 +837,17 @@
     }
 
     function initCollapsibleSemesters() {
-      var semSections = document.querySelectorAll(".semester-section");
+      const semSections = document.querySelectorAll(".semester-section");
       semSections.forEach(function (sec) {
-        var table = sec.querySelector(".grades-table");
+        const table = sec.querySelector(".grades-table");
         if (!table) return;
-        var semId = table.getAttribute("data-semester");
-        var btn = sec.querySelector(".heading-toggle-btn");
+        const semId = table.getAttribute("data-semester");
+        const btn = sec.querySelector(".heading-toggle-btn");
         if (!btn) return;
-        var arrow = btn.querySelector(".toggle-arrow");
-        var card = sec.querySelector(".table-card");
+        const arrow = btn.querySelector(".toggle-arrow");
+        const card = sec.querySelector(".table-card");
 
-        var semStorageKey = "sem_collapsed_" + classId + "_" + semId;
+        const semStorageKey = "sem_collapsed_" + classId + "_" + semId;
 
         function setCollapsed(isCollapsed) {
           card.hidden = isCollapsed;
@@ -858,13 +861,13 @@
           }
         }
 
-        var savedState = AppUtils.safeStorageGet(semStorageKey, true);
+        const savedState = AppUtils.safeStorageGet(semStorageKey, true);
         if (savedState === "1") {
           setCollapsed(true);
         }
 
         btn.addEventListener("click", function () {
-          var nextState = !card.hidden;
+          const nextState = !card.hidden;
           setCollapsed(nextState);
           AppUtils.safeStorageSet(semStorageKey, nextState ? "1" : "0", true);
         });
@@ -872,18 +875,18 @@
     }
 
     function initCoefficientToggle() {
-      var page = document.getElementById("grades-page");
-      var option = document.getElementById("grades-coef-option");
-      var toggle = document.getElementById("grades-coef-toggle");
+      const page = document.getElementById("grades-page");
+      const option = document.getElementById("grades-coef-option");
+      const toggle = document.getElementById("grades-coef-toggle");
       if (!page || !option || !toggle) return;
-      var coefStorageKey = "coefs_visible_" + classId;
+      const coefStorageKey = "coefs_visible_" + classId;
 
       function setVisible(visible) {
         toggle.checked = visible;
         page.classList.toggle("show-coefs", visible);
       }
 
-      var saved = AppUtils.safeStorageGet(coefStorageKey, true);
+      const saved = AppUtils.safeStorageGet(coefStorageKey, true);
       setVisible(
         saved === null
           ? !window.matchMedia(scriptEl.getAttribute("data-mobile-query"))
@@ -904,16 +907,16 @@
     document.querySelectorAll(".grades-table tbody").forEach(function (body) {
       body.addEventListener("click", function (event) {
         if (event.target.closest("input, button, a")) return;
-        var row = event.target.closest("tr");
-        var input = row && row.querySelector(".grade-input:not([hidden])");
+        const row = event.target.closest("tr");
+        const input = row && row.querySelector(".grade-input:not([hidden])");
         if (input) input.focus();
       });
     });
 
-    var summaryToggle = document.getElementById("grades-panel-toggle");
+    const summaryToggle = document.getElementById("grades-panel-toggle");
     if (summaryToggle) {
       summaryToggle.addEventListener("click", function () {
-        var expanded = summaryToggle.getAttribute("aria-expanded") !== "true";
+        const expanded = summaryToggle.getAttribute("aria-expanded") !== "true";
         summaryToggle.setAttribute(
           "aria-expanded",
           expanded ? "true" : "false",
