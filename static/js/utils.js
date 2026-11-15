@@ -1,25 +1,25 @@
 (function (global) {
-  var settings =
+  const settings =
     (document.currentScript && document.currentScript.dataset) || {};
 
-  var MS_PER_DAY = 86400000;
-  var DAYS_PER_WEEK = 7;
-  var MONTHS_PER_YEAR = 12;
+  const MS_PER_DAY = 86400000;
+  const DAYS_PER_WEEK = 7;
+  const MONTHS_PER_YEAR = 12;
 
   function dayNumber(iso) {
-    var parts = iso.split("-").map(Number);
+    const parts = iso.split("-").map(Number);
     return Date.UTC(parts[0], parts[1] - 1, parts[2]) / MS_PER_DAY;
   }
 
   function relativeDay(dateIso, todayIso, limits) {
-    var days = dayNumber(dateIso) - dayNumber(todayIso);
+    const days = dayNumber(dateIso) - dayNumber(todayIso);
     if (Math.abs(days) <= limits.daysMax) return { value: days, unit: "day" };
-    var weeks = Math.round(days / DAYS_PER_WEEK);
+    const weeks = Math.round(days / DAYS_PER_WEEK);
     if (Math.abs(weeks) <= limits.weeksMax) {
       return { value: weeks, unit: "week" };
     }
-    var date = dateIso.split("-").map(Number);
-    var today = todayIso.split("-").map(Number);
+    const date = dateIso.split("-").map(Number);
+    const today = todayIso.split("-").map(Number);
     return {
       value: (date[0] - today[0]) * MONTHS_PER_YEAR + date[1] - today[1],
       unit: "month",
@@ -33,13 +33,13 @@
   }
 
   function todayIn(timeZone) {
-    var parts = new Intl.DateTimeFormat("en-CA", {
+    const parts = new Intl.DateTimeFormat("en-CA", {
       timeZone: timeZone,
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
     }).formatToParts(new Date());
-    var byType = {};
+    const byType = {};
     parts.forEach(function (part) {
       byType[part.type] = part.value;
     });
@@ -53,13 +53,13 @@
 
   function slugify(str) {
     if (!str) return "";
-    var cleaned = stripAccents(str).toLowerCase();
+    const cleaned = stripAccents(str).toLowerCase();
     return cleaned.replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
   }
 
   function parseHash(hashStr) {
-    var result = Object.create(null);
-    var params = new URLSearchParams((hashStr || "").replace(/^#/, ""));
+    const result = Object.create(null);
+    const params = new URLSearchParams((hashStr || "").replace(/^#/, ""));
     params.forEach(function (value, key) {
       result[key] = value;
     });
@@ -76,16 +76,16 @@
 
   function parseGrade(value, minimum, maximum) {
     if (typeof value !== "string" && typeof value !== "number") return null;
-    var normalized = String(value).trim().replace(",", ".");
+    const normalized = String(value).trim().replace(",", ".");
     if (!/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(normalized)) return null;
-    var number = Number(normalized);
+    const number = Number(normalized);
     return Number.isFinite(number) && number >= minimum && number <= maximum
       ? number
       : null;
   }
 
   function buildHash(obj) {
-    var parts = [];
+    const parts = [];
     Object.keys(obj).forEach(function (key) {
       if (obj[key] !== null && obj[key] !== undefined && obj[key] !== "") {
         parts.push(
@@ -98,7 +98,7 @@
 
   function safeStorageGet(key, isSession) {
     try {
-      var storage = isSession ? window.sessionStorage : window.localStorage;
+      const storage = isSession ? window.sessionStorage : window.localStorage;
       return storage.getItem(key);
     } catch (e) {
       return null;
@@ -107,14 +107,14 @@
 
   function safeStorageSet(key, val, isSession) {
     try {
-      var storage = isSession ? window.sessionStorage : window.localStorage;
+      const storage = isSession ? window.sessionStorage : window.localStorage;
       storage.setItem(key, val);
     } catch (e) {}
   }
 
   function safeStorageRemove(key, isSession) {
     try {
-      var storage = isSession ? window.sessionStorage : window.localStorage;
+      const storage = isSession ? window.sessionStorage : window.localStorage;
       storage.removeItem(key);
     } catch (e) {}
   }
@@ -128,12 +128,12 @@
   }
 
   function bindBlurKeys(elements, options) {
-    var settings = options || {};
+    const settings = options || {};
     Array.prototype.forEach.call(elements, function (element) {
       element.addEventListener("keydown", function (event) {
         if (event.isComposing) return;
-        var isEscape = event.key === "Escape";
-        var isEnter = event.key === "Enter";
+        const isEscape = event.key === "Escape";
+        const isEnter = event.key === "Enter";
         if (!isEscape && !isEnter) return;
         if (isEnter && settings.multiline && event.shiftKey) return;
         event.preventDefault();
@@ -145,12 +145,12 @@
   }
 
   function buildIcon(href, className) {
-    var svgNs = "http://www.w3.org/2000/svg";
-    var svg = document.createElementNS(svgNs, "svg");
+    const svgNs = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(svgNs, "svg");
     svg.setAttribute("class", className ? "icon " + className : "icon");
     svg.setAttribute("aria-hidden", "true");
     svg.setAttribute("focusable", "false");
-    var use = document.createElementNS(svgNs, "use");
+    const use = document.createElementNS(svgNs, "use");
     use.setAttribute("href", href);
     svg.appendChild(use);
     return svg;
@@ -176,36 +176,36 @@
   onDOMReady(function () {
     document.body.classList.add("js-ready");
 
-    var activeSection = document.querySelector(
+    const activeSection = document.querySelector(
       ".app-nav a[aria-current='page']",
     );
     if (activeSection) {
-      var sectionMenu = activeSection.closest(".app-nav");
-      var linkBox = activeSection.getBoundingClientRect();
-      var menuBox = sectionMenu.getBoundingClientRect();
+      const sectionMenu = activeSection.closest(".app-nav");
+      const linkBox = activeSection.getBoundingClientRect();
+      const menuBox = sectionMenu.getBoundingClientRect();
       sectionMenu.scrollLeft +=
         linkBox.left - menuBox.left - (menuBox.width - linkBox.width) / 2;
     }
 
-    var pastTimer;
+    let pastTimer;
     function updatePastEvaluations() {
       clearTimeout(pastTimer);
-      var now = Date.now();
-      var nextEnd = Infinity;
-      var todayIso = todayIn(settings.timezone);
-      var limits = {
+      const now = Date.now();
+      let nextEnd = Infinity;
+      const todayIso = todayIn(settings.timezone);
+      const limits = {
         daysMax: Number(settings.relativeDaysMax),
         weeksMax: Number(settings.relativeWeeksMax),
       };
       document.querySelectorAll("[data-end-timestamp]").forEach(function (row) {
-        var end = Number(row.dataset.endTimestamp) * 1000;
+        const end = Number(row.dataset.endTimestamp) * 1000;
         if (!Number.isFinite(end)) return;
-        var past = end <= now;
+        const past = end <= now;
         row.dataset.past = String(past);
         if (!past) nextEnd = Math.min(nextEnd, end);
-        var delay = row.querySelector("[data-relative-date]");
+        const delay = row.querySelector("[data-relative-date]");
         if (!delay) return;
-        var relative = relativeDay(
+        const relative = relativeDay(
           delay.dataset.relativeDate,
           todayIso,
           limits,
@@ -231,41 +231,41 @@
     });
     updatePastEvaluations();
 
-    var headingToggles = Array.prototype.slice.call(
+    const headingToggles = Array.prototype.slice.call(
       document.querySelectorAll(
         ".heading-toggle-btn:not(.semester-toggle-btn)",
       ),
     );
     headingToggles.forEach(function (btn) {
-      var targetId = btn.getAttribute("aria-controls");
-      var targetEl = document.getElementById(targetId);
+      const targetId = btn.getAttribute("aria-controls");
+      const targetEl = document.getElementById(targetId);
       if (!targetEl) return;
 
-      var storageKey = "heading_toggle_" + targetId;
-      var savedState = safeStorageGet(storageKey);
+      const storageKey = "heading_toggle_" + targetId;
+      const savedState = safeStorageGet(storageKey);
 
       if (savedState === "collapsed") {
         btn.setAttribute("aria-expanded", "false");
         targetEl.hidden = true;
-        var arrowInit = btn.querySelector(".toggle-arrow");
+        const arrowInit = btn.querySelector(".toggle-arrow");
         if (arrowInit) {
           arrowInit.classList.add("is-collapsed");
         }
       } else if (savedState === "expanded") {
         btn.setAttribute("aria-expanded", "true");
         targetEl.hidden = false;
-        var arrowInitExp = btn.querySelector(".toggle-arrow");
+        const arrowInitExp = btn.querySelector(".toggle-arrow");
         if (arrowInitExp) {
           arrowInitExp.classList.remove("is-collapsed");
         }
       }
 
       btn.addEventListener("click", function () {
-        var isExpanded = btn.getAttribute("aria-expanded") === "true";
-        var nextExpanded = !isExpanded;
+        const isExpanded = btn.getAttribute("aria-expanded") === "true";
+        const nextExpanded = !isExpanded;
         btn.setAttribute("aria-expanded", nextExpanded ? "true" : "false");
         targetEl.hidden = !nextExpanded;
-        var arrow = btn.querySelector(".toggle-arrow");
+        const arrow = btn.querySelector(".toggle-arrow");
         if (arrow) {
           arrow.classList.toggle("is-collapsed", !nextExpanded);
         }
