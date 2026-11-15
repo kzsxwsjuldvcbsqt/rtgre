@@ -96,7 +96,7 @@
 <tr>
 <th class="col-module">{{ labels.grades.subject_code }}</th>
 {% for u in sem.units %}
-<th class="col-coef" scope="col">{{ u.label }}</th>
+<th class="col-coef" scope="col"><abbr title="{{ u.title }}">{{ u.short_label }}</abbr></th>
 {% endfor %}
 <th class="col-grade-input">{{ grade_label }}</th>
 </tr>
@@ -107,7 +107,7 @@
 <td class="col-module">
 <span class="module-title"><strong>{{ subj.code }}</strong> - {{ subj.label }}</span>
 {% set coef = namespace(units=[]) %}{% for u in sem.units %}{% if subj.coeffs.get(u.id) %}{% set coef.units = coef.units + [u] %}{% endif %}{% endfor %}
-<span class="coef-list" aria-hidden="true">{% for u in coef.units %}{% if not loop.first %}<span class="coef-sep">{{ labels.grades.coefficient_separator }}</span>{% endif %}<span class="coef"><span class="coef-unit">{{ u.label }}</span> <strong>{{ subj.coeffs[u.id] }}</strong></span>{% endfor %}</span>
+<span class="coef-list" aria-hidden="true">{% for u in coef.units %}{% if not loop.first %}<span class="coef-sep">{{ labels.grades.coefficient_separator }}</span>{% endif %}<span class="coef"><span class="coef-unit">{{ u.short_label }}</span> <strong>{{ subj.coeffs[u.id] }}</strong></span>{% endfor %}</span>
 </td>
 {% for u in sem.units %}
 <td class="col-coef">{{ subj.coeffs.get(u.id) or "" }}</td>

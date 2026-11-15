@@ -222,6 +222,7 @@ def get_class_grades_data(class_config: ClassConfig, curriculum_data: dict, labe
     details_map = curriculum_data.get("evaluation_details", {}).get(track, {}).get(status, {})
     all_units = curriculum_data.get("units", [])
     annual_units = curriculum_data.get("annual_units", [])
+    annual_by_id = {au["id"]: au for au in annual_units}
     semesters = curriculum_data.get("semesters", [])
     raw_modules = curriculum_data.get("modules", [])
     module_dict = {m["code"]: m for m in raw_modules if "code" in m}
@@ -232,7 +233,13 @@ def get_class_grades_data(class_config: ClassConfig, curriculum_data: dict, labe
     for sem in semesters:
         sem_id = sem["id"]
         sem_units = [
-            u for u in all_units if u["semester"] == sem_id and track in u.get("tracks", [])
+            {
+                **u,
+                "short_label": annual_by_id[u["annual"]]["short_label"],
+                "title": annual_by_id[u["annual"]]["label"],
+            }
+            for u in all_units
+            if u["semester"] == sem_id and track in u.get("tracks", [])
         ]
 
         sem_mods = [
