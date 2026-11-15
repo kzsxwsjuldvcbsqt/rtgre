@@ -4,6 +4,7 @@ const fs = require("node:fs");
 const vm = require("node:vm");
 const context = {
   URLSearchParams,
+  Intl,
   document: { readyState: "loading", addEventListener() {} },
 };
 vm.createContext(context);
@@ -46,5 +47,46 @@ test("fragments and configurable labels round trip", () => {
   assert.equal(
     utils.formatText("Note / {maximum}", { maximum: 100 }),
     "Note / 100",
+  );
+});
+
+const limits = { daysMax: 13, weeksMax: 8 };
+
+function relative(date, today) {
+  const result = utils.relativeDay(date, today, limits);
+  return [result.value, result.unit];
+}
+
+test("delays switch from days to weeks to months", () => {
+  assert.deepEqual(relative("2026-11-15", "2026-11-15"), [0, "day"]);
+  assert.deepEqual(relative("2026-11-16", "2026-11-15"), [1, "day"]);
+  assert.deepEqual(relative("2026-11-28", "2026-11-15"), [13, "day"]);
+  assert.deepEqual(relative("2026-11-29", "2026-11-15"), [2, "week"]);
+  assert.deepEqual(relative("2027-01-10", "2026-11-15"), [8, "week"]);
+  assert.deepEqual(relative("2027-02-01", "2026-11-15"), [3, "month"]);
+  assert.deepEqual(relative("2026-11-10", "2026-11-15"), [-5, "day"]);
+});
+
+test("delays cross month and year boundaries by calendar day", () => {
+  assert.deepEqual(relative("2026-12-01", "2026-11-30"), [1, "day"]);
+  assert.deepEqual(relative("2027-01-01", "2026-12-31"), [1, "day"]);
+});
+
+test("delays are worded in the site language", () => {
+  assert.equal(
+    utils.formatRelativeDay({ value: 1, unit: "day" }, "fr"),
+    "demain",
+  );
+  assert.equal(
+    utils.formatRelativeDay({ value: 10, unit: "day" }, "fr"),
+    "dans 10 jours",
+  );
+  assert.equal(
+    utils.formatRelativeDay({ value: 3, unit: "week" }, "fr"),
+    "dans 3 semaines",
+  );
+  assert.equal(
+    utils.formatRelativeDay({ value: -2, unit: "day" }, "fr"),
+    "avant-hier",
   );
 });

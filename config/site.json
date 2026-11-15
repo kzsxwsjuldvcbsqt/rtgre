@@ -11,31 +11,14 @@
   "github_profile": "kzsxwsjuldvcbsqt",
   "robots_txt": "User-agent: *\nDisallow:\n",
   "content_security_policy": {
-    "default-src": [
-      "'none'"
-    ],
-    "script-src": [
-      "'self'"
-    ],
-    "style-src": [
-      "'self'"
-    ],
-    "font-src": [
-      "'self'",
-      "https://fonts.gstatic.com"
-    ],
-    "img-src": [
-      "'self'"
-    ],
-    "form-action": [
-      "'self'"
-    ],
-    "base-uri": [
-      "'none'"
-    ],
-    "object-src": [
-      "'none'"
-    ]
+    "default-src": ["'none'"],
+    "script-src": ["'self'"],
+    "style-src": ["'self'"],
+    "font-src": ["'self'", "https://fonts.gstatic.com"],
+    "img-src": ["'self'"],
+    "form-action": ["'self'"],
+    "base-uri": ["'none'"],
+    "object-src": ["'none'"]
   },
   "favicons": [
     {
@@ -94,7 +77,10 @@
       "formation_marker": "Formation:",
       "program_marker": "Réseaux et Télécommunications",
       "ue_section": "Unités d'enseignement",
-      "evaluation_sections": ["Ressources", "Situations d'apprentissage et d'évaluation"],
+      "evaluation_sections": [
+        "Ressources",
+        "Situations d'apprentissage et d'évaluation"
+      ],
       "note_header": "Note/20",
       "footer_marker": "Édité par ScoDoc",
       "missing_grade": "~",
@@ -106,13 +92,8 @@
     }
   },
   "rooms": {
-    "strip_prefixes": [
-      "IUT1_",
-      "Campus_"
-    ],
-    "strip_suffixes": [
-      "_RT"
-    ],
+    "strip_prefixes": ["IUT1_", "Campus_"],
+    "strip_suffixes": ["_RT"],
     "drop_lowercase_suffix": true
   },
   "teachers": {
@@ -123,6 +104,11 @@
   "matching": {
     "alternate_date_window_days": 7
   },
+  "evaluations": {
+    "soon_days": 7,
+    "relative_days_max": 13,
+    "relative_weeks_max": 8
+  },
   "formats": {
     "date_absolute": "%d/%m/%Y",
     "time": "%H:%M",
@@ -132,10 +118,7 @@
     "month_title": "{month_name} {year}"
   },
   "parser": {
-    "ignored_description_prefixes": [
-      "Exporté le:",
-      "(Exporté le:"
-    ],
+    "ignored_description_prefixes": ["Exporté le:", "(Exporté le:"],
     "group_pattern": "^B\\d+[A-Za-z0-9]+$",
     "module_line_pattern": "^(?:R\\d|A\\d|SAE).*",
     "teacher_pattern": "^[A-Za-zÀ-ÖØ-öø-ÿ\\s\\-]{2,60}$"
