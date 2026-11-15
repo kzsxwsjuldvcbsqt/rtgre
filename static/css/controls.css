@@ -115,6 +115,7 @@
   pointer-events: none;
 }
 .filter-form .search-field input {
+  text-overflow: ellipsis;
   padding-inline-start: calc(2 * var(--space-sm) + var(--icon-size-sm));
   border-color: var(--color-border-muted);
   background: var(--color-canvas);

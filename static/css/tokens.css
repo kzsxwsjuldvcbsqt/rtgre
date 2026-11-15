@@ -117,6 +117,7 @@
   --height-picker-option: 3.5rem;
   --picker-slide: 2.5rem;
   --width-toolbar-search: clamp(12rem, 14vw, 13rem);
+  --width-toolbar-search-compact: clamp(9rem, 100vw - 54rem, 12rem);
   --control-height: 2.25rem;
   --control-font-size: var(--text-sm);
   --touch-target: 2.75rem;
