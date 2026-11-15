@@ -1,8 +1,7 @@
 (function () {
-  document.addEventListener("DOMContentLoaded", async function () {
-    const scriptEl = document.querySelector("script[data-class-id]");
-    if (!scriptEl) return;
+  const scriptEl = document.currentScript;
 
+  document.addEventListener("DOMContentLoaded", async function () {
     const actionsEl = document.getElementById("grades-actions");
     if (actionsEl) {
       actionsEl.hidden = false;
@@ -835,99 +834,5 @@
         reader.readAsText(file);
       });
     }
-
-    function initCollapsibleSemesters() {
-      const semSections = document.querySelectorAll(".semester-section");
-      semSections.forEach(function (sec) {
-        const table = sec.querySelector(".grades-table");
-        if (!table) return;
-        const semId = table.getAttribute("data-semester");
-        const btn = sec.querySelector(".heading-toggle-btn");
-        if (!btn) return;
-        const arrow = btn.querySelector(".toggle-arrow");
-        const card = sec.querySelector(".table-card");
-
-        const semStorageKey = "sem_collapsed_" + classId + "_" + semId;
-
-        function setCollapsed(isCollapsed) {
-          card.hidden = isCollapsed;
-          btn.setAttribute("aria-expanded", isCollapsed ? "false" : "true");
-          if (arrow) {
-            if (isCollapsed) {
-              arrow.classList.add("is-collapsed");
-            } else {
-              arrow.classList.remove("is-collapsed");
-            }
-          }
-        }
-
-        const savedState = AppUtils.safeStorageGet(semStorageKey, true);
-        if (savedState === "1") {
-          setCollapsed(true);
-        }
-
-        btn.addEventListener("click", function () {
-          const nextState = !card.hidden;
-          setCollapsed(nextState);
-          AppUtils.safeStorageSet(semStorageKey, nextState ? "1" : "0", true);
-        });
-      });
-    }
-
-    function initCoefficientToggle() {
-      const page = document.getElementById("grades-page");
-      const option = document.getElementById("grades-coef-option");
-      const toggle = document.getElementById("grades-coef-toggle");
-      if (!page || !option || !toggle) return;
-      const coefStorageKey = "coefs_visible_" + classId;
-
-      function setVisible(visible) {
-        toggle.checked = visible;
-        page.classList.toggle("show-coefs", visible);
-      }
-
-      const saved = AppUtils.safeStorageGet(coefStorageKey, true);
-      setVisible(
-        saved === null
-          ? !window.matchMedia(scriptEl.getAttribute("data-mobile-query"))
-              .matches
-          : saved === "1",
-      );
-      option.hidden = false;
-      toggle.addEventListener("change", function () {
-        setVisible(toggle.checked);
-        AppUtils.safeStorageSet(
-          coefStorageKey,
-          toggle.checked ? "1" : "0",
-          true,
-        );
-      });
-    }
-
-    document.querySelectorAll(".grades-table tbody").forEach(function (body) {
-      body.addEventListener("click", function (event) {
-        if (event.target.closest("input, button, a")) return;
-        const row = event.target.closest("tr");
-        const input = row && row.querySelector(".grade-input:not([hidden])");
-        if (input) input.focus();
-      });
-    });
-
-    const summaryToggle = document.getElementById("grades-panel-toggle");
-    if (summaryToggle) {
-      summaryToggle.addEventListener("click", function () {
-        const expanded = summaryToggle.getAttribute("aria-expanded") !== "true";
-        summaryToggle.setAttribute(
-          "aria-expanded",
-          expanded ? "true" : "false",
-        );
-        summaryToggle
-          .closest(".grades-panel")
-          .classList.toggle("is-expanded", expanded);
-      });
-    }
-
-    initCollapsibleSemesters();
-    initCoefficientToggle();
   });
 })();
