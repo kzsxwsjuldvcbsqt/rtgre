@@ -157,3 +157,25 @@ test("documents that are not a ScoDoc bulletin are rejected", () => {
     /not_recognized/,
   );
 });
+
+test("bulletin grades are merged over existing ones and counted", () => {
+  const current = {
+    grades: { R501: 12, R502: 9 },
+    evaluations: { R503: { ds: 8, tp: 14 } },
+  };
+  const merged = model.merge(current, {
+    grades: { R501: 12, R502: 11, R504: 15 },
+    evaluations: { R503: { ds: 10 }, R505: { oral: 13 } },
+  });
+
+  assert.deepEqual(merged.grades, { R501: 12, R502: 11, R504: 15 });
+  assert.deepEqual(merged.evaluations, {
+    R503: { ds: 10, tp: 14 },
+    R505: { oral: 13 },
+  });
+  assert.deepEqual(merged.counts, { added: 2, replaced: 2, unchanged: 1 });
+  assert.deepEqual(current, {
+    grades: { R501: 12, R502: 9 },
+    evaluations: { R503: { ds: 8, tp: 14 } },
+  });
+});

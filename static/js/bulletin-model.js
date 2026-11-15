@@ -263,7 +263,31 @@
     };
   }
 
-  const api = { groupRows, read, match, normalizeLabel };
+  function merge(current, result) {
+    const counts = { added: 0, replaced: 0, unchanged: 0 };
+    function count(previous, next) {
+      if (previous === undefined) counts.added++;
+      else if (previous === next) counts.unchanged++;
+      else counts.replaced++;
+    }
+    const grades = Object.assign({}, current.grades);
+    Object.keys(result.grades).forEach(function (code) {
+      count(current.grades[code], result.grades[code]);
+      grades[code] = result.grades[code];
+    });
+    const evaluations = JSON.parse(JSON.stringify(current.evaluations));
+    Object.keys(result.evaluations).forEach(function (code) {
+      const known = current.evaluations[code] || {};
+      evaluations[code] = evaluations[code] || {};
+      Object.keys(result.evaluations[code]).forEach(function (id) {
+        count(known[id], result.evaluations[code][id]);
+        evaluations[code][id] = result.evaluations[code][id];
+      });
+    });
+    return { grades: grades, evaluations: evaluations, counts: counts };
+  }
+
+  const api = { groupRows, read, match, merge, normalizeLabel };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else global.BulletinModel = api;
 })(globalThis);
