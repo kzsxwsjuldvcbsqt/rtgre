@@ -53,7 +53,10 @@ def resolve_module_styles(curriculum_data: dict, module_codes) -> dict[str, dict
         tones[module["code"]] = siblings[group]
     known: dict[str, dict] = {}
     for code, module in module_code_variants(curriculum_data):
-        known.setdefault(code, {"kind": module["kind"], "tone": tones[module["code"]]})
+        known.setdefault(
+            code,
+            {"kind": module["kind"], "tone": tones[module["code"]], "label": module["label"]},
+        )
     return {code: known[code] for code in module_codes if code in known}
 
 

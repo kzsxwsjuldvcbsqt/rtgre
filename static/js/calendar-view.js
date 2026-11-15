@@ -30,6 +30,8 @@
     isTimeGrid,
     gridRange,
   }) {
+    var eventByItem = new WeakMap();
+
     function indexByDate(events) {
       var result = Object.create(null);
       events.forEach(function (event) {
@@ -298,14 +300,89 @@
       return placements;
     }
 
+    function addFact(list, term, value) {
+      if (!value) return;
+      var dt = document.createElement("dt");
+      dt.textContent = term;
+      var dd = document.createElement("dd");
+      dd.textContent = value;
+      list.appendChild(dt);
+      list.appendChild(dd);
+    }
+
+    function buildCardContent(ev) {
+      var card = document.createElement("div");
+      card.className = "event-card";
+      var known = Object.prototype.hasOwnProperty.call(moduleStyles, ev.module);
+
+      var title = document.createElement("div");
+      title.className = "event-card-title";
+      var strong = document.createElement("strong");
+      strong.textContent = ev.code || ev.title;
+      title.appendChild(strong);
+      if (ev.code && known) {
+        title.appendChild(
+          document.createTextNode(" " + moduleStyles[ev.module].label),
+        );
+      }
+      card.appendChild(title);
+
+      var day = parseISODate(ev.start.substring(0, 10));
+      var when = document.createElement("div");
+      when.className = "event-card-when";
+      when.textContent = AppUtils.formatText(labels.card_when, {
+        date: AppUtils.formatText(labels.day_title_short, {
+          day_name: labels.days_short[(day.getDay() + 6) % 7],
+          day_num: day.getDate(),
+          month_name: labels.months_short[day.getMonth()],
+        }),
+        start: ev.start.substring(11, 16),
+        end: ev.end.substring(11, 16),
+      });
+      card.appendChild(when);
+
+      var session = [];
+      if (ev.code && ev.session) session.push(ev.session);
+      if (ev.seriesTotal) {
+        session.push(
+          AppUtils.formatText(labels.card_session_count, {
+            index: ev.seriesIndex,
+            total: ev.seriesTotal,
+          }),
+        );
+      }
+      if (ev.category && categoryMap[ev.category]) {
+        session.push(categoryMap[ev.category].label);
+      }
+      (ev.flags || []).forEach(function (flag) {
+        if (Object.prototype.hasOwnProperty.call(sessionMarks, flag)) {
+          session.push(sessionMarks[flag]);
+        }
+      });
+
+      var facts = document.createElement("dl");
+      facts.className = "event-card-facts";
+      addFact(facts, labels.card_session, session.join(labels.card_separator));
+      addFact(facts, labels.card_rooms, ev.rooms.join(labels.list_separator));
+      addFact(
+        facts,
+        labels.card_teachers,
+        eventStaff(ev).join(labels.list_separator),
+      );
+      addFact(
+        facts,
+        labels.card_groups,
+        otherGroups(ev).join(labels.list_separator),
+      );
+      card.appendChild(facts);
+      return card;
+    }
+
     function buildEventCard(item) {
       var summary = document.createElement("div");
       summary.className = "event-summary";
       summary.setAttribute("aria-hidden", "true");
-      var card = document.createElement("div");
-      card.className = "event-card";
       Array.from(item.childNodes).forEach(function (node) {
-        card.appendChild(node.cloneNode(true));
         summary.appendChild(node);
       });
       var summaryCategory = summary.querySelector(".category-badge");
@@ -317,7 +394,7 @@
         );
       }
       item.appendChild(summary);
-      item.appendChild(card);
+      item.appendChild(buildCardContent(eventByItem.get(item)));
       item.tabIndex = 0;
     }
 
@@ -577,9 +654,39 @@
       return { minStart: minStart, maxEnd: maxEnd };
     }
 
+    function eventStaff(ev) {
+      if (displayMode !== "hidden" && ev.teachers.length > 0)
+        return ev.teachers;
+      return ev.staff_markers;
+    }
+
+    function otherGroups(ev) {
+      var ownGroups = [classLabel.toLowerCase(), currentClassId.toLowerCase()];
+      return ev.groups.filter(function (group) {
+        return ownGroups.indexOf(group.toLowerCase()) === -1;
+      });
+    }
+
+    function appendTags(parent, className, values) {
+      if (values.length === 0) return;
+      var block = document.createElement("div");
+      block.className = className;
+      values.forEach(function (value, index) {
+        var tag = document.createElement("span");
+        tag.className = "room-tag";
+        tag.textContent = value;
+        block.appendChild(tag);
+        if (index < values.length - 1) {
+          block.appendChild(document.createTextNode(labels.list_separator));
+        }
+      });
+      parent.appendChild(block);
+    }
+
     function renderEventItem(ev, bounds) {
       var li = document.createElement("li");
       li.className = "calendar-event-item";
+      eventByItem.set(li, ev);
       var isEvaluation = Boolean(ev.category && categoryMap[ev.category]);
       if (isEvaluation) li.classList.add("is-evaluation");
       if (Object.prototype.hasOwnProperty.call(moduleStyles, ev.module)) {
@@ -594,7 +701,6 @@
 
       var startTime = ev.start.substring(11, 16);
       var endTime = ev.end.substring(11, 16);
-      var sep = labels.list_separator;
 
       li.setAttribute("data-start", startTime);
       li.setAttribute("data-end", endTime);
@@ -665,62 +771,9 @@
 
       infoDiv.appendChild(titleDiv);
 
-      var teachersToDisplay = [];
-      if (displayMode !== "hidden" && ev.teachers && ev.teachers.length > 0) {
-        teachersToDisplay = ev.teachers;
-      } else if (ev.staff_markers && ev.staff_markers.length > 0) {
-        teachersToDisplay = ev.staff_markers;
-      }
-
-      if (teachersToDisplay.length > 0) {
-        var teachersDiv = document.createElement("div");
-        teachersDiv.className = "event-teachers";
-        teachersToDisplay.forEach(function (t, idx) {
-          var tagSpan = document.createElement("span");
-          tagSpan.className = "room-tag";
-          tagSpan.textContent = t;
-          teachersDiv.appendChild(tagSpan);
-          if (idx < teachersToDisplay.length - 1) {
-            teachersDiv.appendChild(document.createTextNode(sep));
-          }
-        });
-        infoDiv.appendChild(teachersDiv);
-      }
-
-      if (ev.rooms && ev.rooms.length > 0) {
-        var roomsDiv = document.createElement("div");
-        roomsDiv.className = "event-rooms";
-        ev.rooms.forEach(function (r, idx) {
-          var tagSpan = document.createElement("span");
-          tagSpan.className = "room-tag";
-          tagSpan.textContent = r;
-          roomsDiv.appendChild(tagSpan);
-          if (idx < ev.rooms.length - 1) {
-            roomsDiv.appendChild(document.createTextNode(sep));
-          }
-        });
-        infoDiv.appendChild(roomsDiv);
-      }
-
-      var ownGroups = [classLabel.toLowerCase(), currentClassId.toLowerCase()];
-      var otherGroups = (ev.groups || []).filter(function (g) {
-        return ownGroups.indexOf(g.toLowerCase()) === -1;
-      });
-
-      if (otherGroups.length > 0) {
-        var groupsDiv = document.createElement("div");
-        groupsDiv.className = "event-groups";
-        otherGroups.forEach(function (g, idx) {
-          var tagSpan = document.createElement("span");
-          tagSpan.className = "room-tag";
-          tagSpan.textContent = g;
-          groupsDiv.appendChild(tagSpan);
-          if (idx < otherGroups.length - 1) {
-            groupsDiv.appendChild(document.createTextNode(sep));
-          }
-        });
-        infoDiv.appendChild(groupsDiv);
-      }
+      appendTags(infoDiv, "event-teachers", eventStaff(ev));
+      appendTags(infoDiv, "event-rooms", ev.rooms);
+      appendTags(infoDiv, "event-groups", otherGroups(ev));
 
       li.appendChild(infoDiv);
 
