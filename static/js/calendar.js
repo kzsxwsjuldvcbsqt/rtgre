@@ -821,7 +821,7 @@
     loadState();
     render();
     requestAnimationFrame(function () {
-      const layout = document.querySelector(".has-filter-sidebar");
+      const layout = document.querySelector(".has-filter-bar");
       if (layout) layout.classList.add("is-layout-ready");
     });
   });

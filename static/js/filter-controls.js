@@ -301,7 +301,7 @@
 
   AppUtils.onDOMReady(function () {
     document
-      .querySelectorAll(".has-filter-sidebar select[data-control]")
+      .querySelectorAll(".has-filter-bar select[data-control]")
       .forEach(function (select) {
         if (select.dataset.control === "segmented") buildSegmented(select);
         if (select.dataset.control === "menu") buildMenu(select);

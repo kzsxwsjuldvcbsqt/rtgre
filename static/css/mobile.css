@@ -214,7 +214,7 @@
     font-size: var(--text-sm);
     text-align: start;
   }
-  .has-filter-sidebar select[data-control] {
+  .has-filter-bar select[data-control] {
     display: none;
   }
   html.js-enabled .segmented {

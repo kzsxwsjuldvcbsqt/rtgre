@@ -175,7 +175,7 @@
   color: var(--color-on-highlight);
   font-weight: var(--weight-semibold);
 }
-.has-filter-sidebar .filter-group-item {
+.has-filter-bar .filter-group-item {
   position: relative;
 }
 .filter-form select[data-control="menu"] {

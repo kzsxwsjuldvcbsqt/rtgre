@@ -9,8 +9,8 @@
 <script defer src="{{ url_for('static/js/filter-controls.js') }}" data-sprite="{{ url_for('static/' ~ site.icons.sprite) }}"></script>
 {% endblock %}
 {% block content %}
-<div class="page-container has-filter-sidebar">
-<div class="filter-sidebar">
+<div class="page-container has-filter-bar">
+<div class="filter-bar">
 <div class="filter-quick">
 <div class="filter-quick-slot" id="eval-count-slot"></div>
 <button type="button" class="filters-toggle" aria-expanded="false" aria-controls="filters-container" aria-label="{{ labels.calendar.toggle_controls }}">{{ icon('filter', url_for, site.icons) }}</button>

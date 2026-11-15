@@ -361,6 +361,6 @@ AppUtils.onDOMReady(function () {
     });
   }
 
-  const layout = container.closest(".has-filter-sidebar");
+  const layout = container.closest(".has-filter-bar");
   if (layout) layout.classList.add("is-layout-ready");
 });

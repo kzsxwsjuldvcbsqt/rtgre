@@ -5,7 +5,7 @@ function markScrolled() {
 markScrolled();
 window.addEventListener("scroll", markScrolled, { passive: true });
 window.addEventListener("load", function () {
-  document.querySelectorAll(".has-filter-sidebar").forEach(function (layout) {
+  document.querySelectorAll(".has-filter-bar").forEach(function (layout) {
     layout.classList.add("is-layout-ready");
   });
 });
