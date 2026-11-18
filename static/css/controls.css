@@ -163,7 +163,7 @@
   color: var(--color-text-muted);
 }
 .segmented .segmented-option[aria-pressed="true"] {
-  background: var(--color-surface);
+  background: var(--color-chip);
   box-shadow: 0 0 0 var(--rule-width) var(--color-border);
   color: var(--color-text);
 }

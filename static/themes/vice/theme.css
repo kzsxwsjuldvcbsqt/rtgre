@@ -32,6 +32,12 @@
       --color-navbar-muted: rgba(255, 255, 255, 0.86);
       --color-navbar-faint: rgba(255, 255, 255, 0.72);
     }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-accent: #ff8fc0;
+        --color-accent-emphasis: #ffb3d4;
+      }
+    }
     .app-sidebar {
       background:
         linear-gradient(
