@@ -94,6 +94,40 @@
     return { units, semesters, annualUnits };
   }
 
+  function requirements(grades, config, passMark) {
+    const needs = [];
+    config.semesters.forEach(function (semester) {
+      semester.units.forEach(function (unit) {
+        let gradedWeight = 0;
+        let gradedSum = 0;
+        let remainingWeight = 0;
+        let remaining = 0;
+        semester.subjects.forEach(function (subject) {
+          const weight = subject.coeffs[unit.id];
+          if (!weight) return;
+          const grade = grades[subject.code];
+          if (typeof grade === "number") {
+            gradedWeight += weight;
+            gradedSum += grade * weight;
+          } else {
+            remainingWeight += weight;
+            remaining += 1;
+          }
+        });
+        if (gradedWeight === 0 || remainingWeight === 0) return;
+        needs.push({
+          semester: semester.id,
+          unit: unit.id,
+          remaining: remaining,
+          needed:
+            (passMark * (gradedWeight + remainingWeight) - gradedSum) /
+            remainingWeight,
+        });
+      });
+    });
+    return needs;
+  }
+
   function detailedSubjects(config) {
     const subjects = [];
     config.semesters.forEach(function (semester) {
@@ -205,6 +239,7 @@
 
   const api = {
     calculate,
+    requirements,
     parseBackup,
     normalizeGrades,
     normalizeDetail,

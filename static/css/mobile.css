@@ -30,6 +30,10 @@
   .grades-panel:not(.is-expanded) .grades-summary-total > * {
     border-block-start: 0;
   }
+  html.js-enabled .grades-panel:not(.is-expanded) .grades-needs-head,
+  html.js-enabled .grades-panel:not(.is-expanded) .grades-needs {
+    display: none;
+  }
 }
 
 @media (max-width: 59.99em) {

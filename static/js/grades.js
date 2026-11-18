@@ -163,6 +163,48 @@
       markResult(element, value);
     }
 
+    function showNeeds(needs) {
+      const list = document.getElementById("grades-needs");
+      const head = document.getElementById("grades-needs-head");
+      if (!list || !head) return;
+      const rows = needs.map(function (need) {
+        const semester = gradesConfig.semesters.find(function (item) {
+          return item.id === need.semester;
+        });
+        const unit = semester.units.find(function (item) {
+          return item.id === need.unit;
+        });
+        let text = scriptEl.getAttribute(
+          need.remaining === 1 ? "data-needs-one" : "data-needs-many",
+        );
+        if (need.needed <= minVal) {
+          text = scriptEl.getAttribute("data-needs-secured");
+        } else if (need.needed > maxVal) {
+          text = scriptEl.getAttribute("data-needs-unreachable");
+        }
+        const row = document.createElement("li");
+        row.className = "box-row";
+        const scope = document.createElement("span");
+        scope.className = "needs-scope";
+        scope.textContent = AppUtils.formatText(
+          scriptEl.getAttribute("data-needs-scope"),
+          { unit: unit.short_label, semester: semester.short_label },
+        );
+        const value = document.createElement("span");
+        value.className = "box-row-main needs-value";
+        value.textContent = AppUtils.formatText(text, {
+          grade: need.needed.toFixed(decimals),
+          count: need.remaining,
+        });
+        row.appendChild(scope);
+        row.appendChild(value);
+        return row;
+      });
+      list.replaceChildren.apply(list, rows);
+      list.hidden = rows.length === 0;
+      head.hidden = rows.length === 0;
+    }
+
     function showComputed(detail) {
       const computed = GradesModel.moduleGradesFromDetail(
         detail.evaluations,
@@ -179,10 +221,13 @@
     function calculate() {
       const detail = currentDetail();
       showComputed(detail);
-      const averages = GradesModel.calculate(
-        GradesModel.effectiveGrades(currentGrades(), detail, gradesConfig),
+      const effective = GradesModel.effectiveGrades(
+        currentGrades(),
+        detail,
         gradesConfig,
       );
+      const averages = GradesModel.calculate(effective, gradesConfig);
+      showNeeds(GradesModel.requirements(effective, gradesConfig, passMark));
       inputs.concat(evaluationInputs).forEach(function (input) {
         markResult(input, getValidGrade(input));
       });

@@ -55,6 +55,22 @@
   color: var(--color-text-faint);
   font-weight: var(--weight-normal);
 }
+.grades-needs-head {
+  margin-block-start: var(--space-md);
+}
+.grades-needs .box-row {
+  align-items: baseline;
+  min-height: 0;
+  font-size: var(--text-sm);
+}
+.needs-scope {
+  flex: none;
+  font-weight: var(--weight-semibold);
+}
+.needs-value {
+  color: var(--color-text-muted);
+  text-align: end;
+}
 .is-pass {
   color: var(--color-pass);
 }

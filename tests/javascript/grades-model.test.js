@@ -189,3 +189,33 @@ test("reads a backup file and names what is wrong with it", () => {
     assert.deepEqual(read(broken), { error: "bad_format" });
   }
 });
+
+test("the grade still needed is worked out per unit", () => {
+  const needs = model.requirements({ R1: 8 }, config, 10);
+  const byUnit = Object.fromEntries(needs.map((need) => [need.unit, need]));
+  for (const need of needs) {
+    assert.equal(need.semester, "s5");
+    assert.ok(need.remaining >= 1);
+  }
+  const unit = config.semesters[0].units[0].id;
+  const subjects = config.semesters[0].subjects.filter(
+    (subject) => subject.coeffs[unit],
+  );
+  const total = subjects.reduce(
+    (sum, subject) => sum + subject.coeffs[unit],
+    0,
+  );
+  const graded = subjects.find((subject) => subject.code === "R1").coeffs[unit];
+  assert.equal(byUnit[unit].remaining, subjects.length - 1);
+  assert.equal(
+    byUnit[unit].needed,
+    (10 * total - 8 * graded) / (total - graded),
+  );
+  assert.deepEqual(model.requirements({}, config, 10), []);
+  const full = Object.fromEntries(
+    config.semesters.flatMap((semester) =>
+      semester.subjects.map((subject) => [subject.code, 12]),
+    ),
+  );
+  assert.deepEqual(model.requirements(full, config, 10), []);
+});

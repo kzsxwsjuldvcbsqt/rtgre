@@ -79,6 +79,8 @@
 <p class="grades-panel-empty" id="grades-panel-empty">{{ labels.grades.panel_empty }}</p>
 <button type="button" class="grades-panel-toggle" id="grades-panel-toggle" aria-expanded="false" aria-controls="grades-panel-body" hidden>{{ labels.grades.summary_detail }}{{ icon('chevron-down', site.icons, 'icon-sm') }}</button>
 </div>
+<header class="data-box-head is-sub grades-needs-head" id="grades-needs-head" hidden><h3>{{ labels.grades.needs_title.format(pass_mark=site.grades.pass_mark) }}</h3></header>
+<ul class="box-list grades-needs" id="grades-needs" hidden></ul>
 </aside>
 {% endif %}
 
@@ -187,6 +189,11 @@
   data-err-bad-format="{{ labels.grades.err_bad_format }}"
   data-err-newer-version="{{ labels.grades.err_newer_version }}"
   data-err-conflict="{{ labels.grades.err_conflict }}"
+  data-needs-one="{{ labels.grades.needs_one }}"
+  data-needs-many="{{ labels.grades.needs_many }}"
+  data-needs-secured="{{ labels.grades.needs_secured }}"
+  data-needs-unreachable="{{ labels.grades.needs_unreachable }}"
+  data-needs-scope="{{ labels.grades.needs_scope }}"
   data-import-success="{{ labels.grades.import_success }}"
   data-entries-ignored="{{ labels.grades.entries_ignored }}"
   data-grades-config='{{ grades_data | tojson }}'
