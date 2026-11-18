@@ -32,6 +32,10 @@
 .btn {
   padding-inline: var(--space-md);
 }
+.feed-actions {
+  display: flex;
+  gap: var(--space-xs);
+}
 .btn-primary {
   border-color: var(--color-primary);
   background: var(--color-primary);

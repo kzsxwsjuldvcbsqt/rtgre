@@ -43,6 +43,9 @@
   .app-topbar:has(.nav-class-chip) .app-breadcrumb li:nth-child(2)::before {
     content: none;
   }
+  .app-topbar-actions:not(:has(*)) {
+    display: none;
+  }
   .app-topbar-actions {
     padding: var(--space-xs) var(--page-gutter);
     border-block-end: var(--rule-width) solid var(--color-border-muted);

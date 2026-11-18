@@ -45,6 +45,10 @@ Les évaluations sont affichées par mois et peuvent être filtrées par catégo
 
 Cette détection dépend des règles de configuration et des informations présentes dans ADE. Elle n'est pas infaillible : un titre inhabituel ou une donnée manquante peut fausser le résultat.
 
+### Abonnement calendrier
+
+Chaque classe publie deux calendriers au format iCalendar : tous ses cours (`calendrier.ics`) et ses évaluations seules (`evaluations.ics`). Les pages Emploi du temps et Évaluations proposent de s'y abonner dans son agenda ou d'en copier le lien, par exemple pour l'ajouter par adresse dans Google Agenda. Les titres y sont ceux du site, avec la catégorie devant le nom d'une évaluation, et les enseignants y sont désignés comme sur le site. Les noms de fichiers et la fréquence de rafraîchissement annoncée se règlent dans la section `feeds` de `config/site.json`.
+
 ### Modules et ressources
 
 La page des modules regroupe les enseignements par semestre, type de module, parcours et statut de la classe. Elle construit les liens vers les espaces Chamilo correspondants lorsqu'ils sont disponibles. La navigation propose aussi des liens vers la messagerie étudiante, les GitLab IM2AG et GRICAD, et le compte OpenStack de l'IUT.
@@ -111,6 +115,7 @@ Le pipeline se trouve dans `src/schedule/` :
 - `renderer.py` génère les pages avec Jinja2 et y intègre le jeu d'icônes.
 - `stylesheets.py` regroupe les feuilles de style du dossier `static/css/` en un seul fichier publié.
 - `exporter.py` produit les fichiers JSON utilisés par le calendrier côté navigateur.
+- `feeds.py` écrit les calendriers iCalendar auxquels on peut s'abonner.
 - `sitecheck.py` vérifie les liens, les ressources, les fragments et les identifiants HTML du site généré.
 
 La publication est protégée par plusieurs garde-fous : un verrou contre deux générations simultanées, une génération dans un dossier temporaire, une validation avant publication, un remplacement atomique de l'ancienne version, une restauration de la version précédente en cas d'échec et le refus d'écraser certains dossiers non gérés. Ces mesures limitent les mauvaises surprises lors des publications, sans constituer une garantie absolue.

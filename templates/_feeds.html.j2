@@ -1,0 +1,7 @@
+{% from "_icons.html.j2" import icon %}
+{% macro feed_actions(file, slot, labels, site) %}
+<div class="feed-actions js-only" data-mobile-slot="{{ slot }}">
+<a class="btn" href="{{ file }}" data-feed-subscribe data-sheet-dismiss>{{ icon('calendar', site.icons) }}<span class="btn-label"><span class="label-short">{{ labels.feeds.subscribe_btn }}</span><span class="label-long">{{ labels.feeds.subscribe_row }}</span></span></a>
+<button type="button" class="btn btn-ghost" data-feed-copy="{{ file }}" data-copied="{{ labels.feeds.copied }}" data-message-duration="{{ site.grades.message_duration_ms }}"><span class="btn-label"><span class="label-short">{{ labels.feeds.copy_btn }}</span><span class="label-long">{{ labels.feeds.copy_row }}</span></span></button>
+</div>
+{% endmacro %}

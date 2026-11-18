@@ -1,10 +1,14 @@
 {% extends "base.html.j2" %}
 {% from "_nav.html.j2" import app_sidebar, app_topbar %}
+{% from "_feeds.html.j2" import feed_actions %}
 {% from "_icons.html.j2" import icon %}
 {% block title %}{% for s in sections %}{% if s.id == 'calendar' %}{{ s.label }}{% endif %}{% endfor %} - {{ class_config.label }} - {{ site.title }}{% endblock %}
 {% block sidebar %}{{ app_sidebar(sections, 'calendar', class_config, section_files.calendar, url_for, labels, site) }}{% endblock %}
-{% block topbar %}{{ app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.calendar))], (sections | selectattr('id', 'equalto', 'calendar') | first).label, labels, url_for, site, class_config.label) }}{% endblock %}
+{% block topbar %}{% call app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.calendar))], (sections | selectattr('id', 'equalto', 'calendar') | first).label, labels, url_for, site, class_config.label) %}
+{{ feed_actions(site.feeds.calendar_file, 'cal-feed-slot', labels, site) }}
+{% endcall %}{% endblock %}
 {% block head_scripts %}
+<script defer src="{{ url_for('static/js/feeds.js') }}"></script>
 <script defer src="{{ url_for('static/js/calendar-model.js') }}"></script>
 <script defer src="{{ url_for('static/js/calendar-view.js') }}"></script>
 <script defer src="{{ url_for('static/js/calendar.js') }}"
@@ -71,6 +75,7 @@
 </div>
 
 <div class="results-count" id="cal-results-count"></div>
+<div class="filter-mobile-slot" id="cal-feed-slot"></div>
 </div>
 </div>
 

@@ -92,6 +92,12 @@
   .filter-panel .choice-trigger-key {
     display: none;
   }
+  .filter-panel .feed-actions {
+    display: contents;
+  }
+  .filter-panel .feed-actions > * {
+    order: 1;
+  }
   .filter-panel .label-long {
     display: inline;
   }
