@@ -1,5 +1,6 @@
 import copy
 import json
+import os
 import re
 import shutil
 import tempfile
@@ -12,7 +13,7 @@ from unittest.mock import patch
 import requests
 from support.fixtures import calendar_bytes, sample_events
 
-from schedule.build import build_lock, output_path, publish_site
+from schedule.build import build_lock, output_path, publish_site, run
 from schedule.classifier import match_session_marks
 from schedule.config import (
     load_config,
@@ -30,7 +31,7 @@ from schedule.curriculum import (
     validate_curriculum_config,
 )
 from schedule.exporter import serialize_events
-from schedule.fetcher import fetch_calendar
+from schedule.fetcher import CalendarUnavailable, fetch_calendar
 from schedule.matcher import build_matching_matrix
 from schedule.parser import normalize_room_name, parse_calendar
 from schedule.renderer import render_site
@@ -357,10 +358,24 @@ class ScheduleTests(unittest.TestCase):
         ):
             client = session.return_value.__enter__.return_value
             client.get.side_effect = error
-            with self.assertRaises(RuntimeError) as raised:
+            with self.assertRaises(CalendarUnavailable) as raised:
                 fetch_calendar("https://example.invalid", self.config.site, "test")
             self.assertIs(raised.exception.__cause__, error)
             self.assertEqual(client.get.call_count, self.config.site["ade"]["retry_attempts"])
+
+    def test_unreachable_calendar_ends_the_build_as_a_temporary_failure(self):
+        with (
+            patch("schedule.build.fetch_calendar", side_effect=CalendarUnavailable("down")),
+            patch("schedule.build.publish_site") as publish,
+            patch("sys.stderr"),
+        ):
+            self.assertEqual(run(), os.EX_TEMPFAIL)
+            publish.assert_not_called()
+        with patch("schedule.build.main"):
+            self.assertEqual(run(), os.EX_OK)
+        with patch("schedule.build.main", side_effect=ValueError("broken")):
+            with self.assertRaises(ValueError):
+                run()
 
     def test_all_page_families_render_with_safe_links(self):
         events = sample_events(self.config, self.classes[0])

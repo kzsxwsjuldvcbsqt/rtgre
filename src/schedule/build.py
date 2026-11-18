@@ -2,13 +2,14 @@ import fcntl
 import os
 import re
 import shutil
+import sys
 import tempfile
 from contextlib import contextmanager
 from pathlib import Path
 
 from .config import build_ade_url, load_config
 from .corrections import apply_corrections
-from .fetcher import fetch_calendar
+from .fetcher import CalendarUnavailable, fetch_calendar
 from .matcher import build_matching_matrix, reconcile_shared_groups
 from .parser import parse_calendar
 from .renderer import render_site
@@ -125,5 +126,14 @@ def main():
     publish_site(app_config, events_by_class, matching_matrix)
 
 
+def run() -> int:
+    try:
+        main()
+    except CalendarUnavailable as error:
+        print(error, file=sys.stderr)
+        return os.EX_TEMPFAIL
+    return os.EX_OK
+
+
 if __name__ == "__main__":
-    main()
+    sys.exit(run())
