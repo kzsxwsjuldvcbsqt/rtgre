@@ -2,8 +2,7 @@ from datetime import date, datetime
 from functools import partial
 from pathlib import Path
 
-from jinja2 import Environment, FileSystemLoader, StrictUndefined
-from markupsafe import Markup
+from jinja2 import ChoiceLoader, Environment, FileSystemLoader, PrefixLoader, StrictUndefined
 
 from .config import AppConfig, active_theme, theme_files
 from .curriculum import (
@@ -45,10 +44,7 @@ def get_404_url(target: str, base_path: str) -> str:
     return f"/{target.lstrip('/')}"
 
 
-def inline_icon_sprite(path: Path, id_prefix: str) -> Markup:
-    source = path.read_text(encoding="utf-8")
-    symbols = source[source.index(">") + 1 : source.rindex("</svg>")]
-    return Markup(symbols.replace('<symbol id="', f'<symbol id="{id_prefix}'))
+STATIC_TEMPLATE_PREFIX = "static"
 
 
 def render_site(
@@ -83,7 +79,17 @@ def render_site(
         )
 
     env = Environment(
-        loader=FileSystemLoader(templates_dir), autoescape=True, undefined=StrictUndefined
+        loader=ChoiceLoader(
+            [
+                FileSystemLoader(templates_dir),
+                PrefixLoader({STATIC_TEMPLATE_PREFIX: FileSystemLoader(static_dir)}),
+            ]
+        ),
+        autoescape=True,
+        undefined=StrictUndefined,
+    )
+    env.globals.update(
+        icon_sprite_template=f"{STATIC_TEMPLATE_PREFIX}/{app_config.site['icons']['sprite']}"
     )
 
     files_by_theme = {
@@ -98,10 +104,6 @@ def render_site(
 
     section_files = {section.id: section.file for section in app_config.sections if section.file}
     env.globals.update(
-        icon_sprite=inline_icon_sprite(
-            Path(static_dir) / app_config.site["icons"]["sprite"],
-            app_config.site["icons"]["id_prefix"],
-        ),
         theme_id=theme["id"] if theme else "",
         theme_stylesheet=active_files.get("stylesheet", ""),
         theme_preload_images=active_files.get("preload_images", []),
