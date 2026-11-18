@@ -9,6 +9,7 @@
   white-space: nowrap;
   border: 0;
 }
-[hidden] {
+[hidden],
+html:not(.js-enabled) .js-only {
   display: none !important;
 }

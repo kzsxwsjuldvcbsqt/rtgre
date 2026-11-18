@@ -23,9 +23,9 @@
 <div class="page-band grades-band">
 <div class="grades-toggles" data-mobile-slot="grades-display-slot">
 {% if grades_data.has_details %}
-<label class="toggle-pill" for="grades-detail-toggle" id="grades-detail-option" hidden><input type="checkbox" id="grades-detail-toggle">{{ icon('check', site.icons, 'icon-sm') }}{{ labels.grades.detail_toggle }}</label>
+<label class="toggle-pill js-only" for="grades-detail-toggle"><input type="checkbox" id="grades-detail-toggle">{{ icon('check', site.icons, 'icon-sm') }}{{ labels.grades.detail_toggle }}</label>
 {% endif %}
-<label class="toggle-pill" for="grades-coef-toggle" id="grades-coef-option" hidden><input type="checkbox" id="grades-coef-toggle">{{ icon('check', site.icons, 'icon-sm') }}{{ labels.grades.coef_toggle }}</label>
+<label class="toggle-pill js-only" for="grades-coef-toggle"><input type="checkbox" id="grades-coef-toggle">{{ icon('check', site.icons, 'icon-sm') }}{{ labels.grades.coef_toggle }}</label>
 </div>
 </div>
 <div id="grades-options" class="filter-panel sheet-only" data-sheet-title="{{ labels.grades.options_btn }}" data-sheet-apply="false">

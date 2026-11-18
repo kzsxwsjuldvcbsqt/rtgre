@@ -32,9 +32,8 @@
 
   function initCoefficientToggle() {
     const page = document.getElementById("grades-page");
-    const option = document.getElementById("grades-coef-option");
     const toggle = document.getElementById("grades-coef-toggle");
-    if (!page || !option || !toggle) return;
+    if (!page || !toggle) return;
     const key = "coefs_visible_" + settings.classId;
 
     function setVisible(visible) {
@@ -48,7 +47,6 @@
         ? !window.matchMedia(settings.mobileQuery).matches
         : saved === "1",
     );
-    option.hidden = false;
     toggle.addEventListener("change", function () {
       setVisible(toggle.checked);
       remember(key, toggle.checked);

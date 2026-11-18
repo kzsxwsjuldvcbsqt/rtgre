@@ -3,10 +3,6 @@
 
   document.addEventListener("DOMContentLoaded", async function () {
     const actionsEl = document.getElementById("grades-actions");
-    if (actionsEl) {
-      actionsEl.hidden = false;
-    }
-
     const classId = scriptEl.getAttribute("data-class-id");
     const minVal = parseFloat(scriptEl.getAttribute("data-min"));
     const maxVal = parseFloat(scriptEl.getAttribute("data-max"));
@@ -75,7 +71,6 @@
     const detailKey =
       scriptEl.getAttribute("data-detail-storage-prefix") + "_" + classId;
     const detailToggle = document.getElementById("grades-detail-toggle");
-    const detailOption = document.getElementById("grades-detail-option");
     const evaluationInputs = Array.prototype.slice.call(
       document.querySelectorAll(".grade-input[data-evaluation]"),
     );
@@ -404,8 +399,7 @@
     applyMode();
     calculate();
 
-    if (detailToggle && detailOption) {
-      detailOption.hidden = false;
+    if (detailToggle) {
       detailToggle.addEventListener("change", function () {
         detailEnabled = detailToggle.checked;
         applyMode();
@@ -495,6 +489,7 @@
       if (resetBtn) resetBtn.disabled = isEmpty && !restoreFailed;
     }
     updateActionState();
+    if (actionsEl) actionsEl.hidden = false;
 
     const importBtn = document.getElementById("grades-import-btn");
     const importFile = document.getElementById("grades-import-file");
