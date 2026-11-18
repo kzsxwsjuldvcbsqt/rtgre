@@ -37,7 +37,8 @@
     "version": "2.1.1",
     "license": "MIT",
     "sprite": "icons/phosphor.svg",
-    "id_prefix": "icon-"
+    "id_prefix": "icon-",
+    "current_suffix": "-fill"
   },
   "school_year": {
     "label": "2026-2027",

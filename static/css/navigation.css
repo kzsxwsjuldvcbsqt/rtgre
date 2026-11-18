@@ -24,6 +24,10 @@
   font-weight: var(--weight-medium);
   white-space: nowrap;
 }
+.app-nav a .icon:not(.icon-sm) {
+  inline-size: var(--icon-size-nav);
+  block-size: var(--icon-size-nav);
+}
 .app-nav a .icon {
   flex: none;
   color: var(--color-navbar-faint);

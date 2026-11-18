@@ -59,7 +59,11 @@ def validate_site_config(site: dict):
                 f"base_path to be '/', but got '{base_path}'"
             )
     icons = site["icons"]
-    if not valid_relative_file(icons["sprite"]) or not valid_public_id(icons["id_prefix"]):
+    if (
+        not valid_relative_file(icons["sprite"])
+        or not valid_public_id(icons["id_prefix"])
+        or not re.fullmatch(r"-[a-z]+", icons["current_suffix"])
+    ):
         raise ValueError("Invalid icons configuration")
     if not valid_relative_file(site["stylesheet"]):
         raise ValueError("Invalid stylesheet path")

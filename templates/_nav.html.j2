@@ -10,7 +10,7 @@
 <ul class="nav-menu">
 {% for sec in sections %}
 {% if sec.kind == 'internal' %}
-<li><a href="{{ url_for('classes/' ~ class_config.id ~ '/' ~ sec.file) }}"{% if sec.id == current_id %} aria-current="page"{% endif %}>{{ icon(sec.icon, site.icons) }}<span>{{ sec.label }}</span></a></li>
+<li><a href="{{ url_for('classes/' ~ class_config.id ~ '/' ~ sec.file) }}"{% if sec.id == current_id %} aria-current="page"{% endif %}>{{ icon(sec.icon ~ (site.icons.current_suffix if sec.id == current_id else ''), site.icons) }}<span>{{ sec.label }}</span></a></li>
 {% endif %}
 {% endfor %}
 </ul>
@@ -36,7 +36,7 @@
 <ul class="app-nav-foot">
 {% for sec in sections %}
 {% if sec.kind == 'global' %}
-<li><a href="{{ url_for(('classes/' ~ class_config.id ~ '/' if class_config else '') ~ sec.file) }}"{% if sec.id == current_id %} aria-current="page"{% endif %}>{{ icon(sec.icon, site.icons) }}<span>{{ sec.label }}</span></a></li>
+<li><a href="{{ url_for(('classes/' ~ class_config.id ~ '/' if class_config else '') ~ sec.file) }}"{% if sec.id == current_id %} aria-current="page"{% endif %}>{{ icon(sec.icon ~ (site.icons.current_suffix if sec.id == current_id else ''), site.icons) }}<span>{{ sec.label }}</span></a></li>
 {% endif %}
 {% endfor %}
 </ul>
