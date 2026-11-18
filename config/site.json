@@ -109,6 +109,13 @@
   "matching": {
     "alternate_date_window_days": 7
   },
+  "feeds": {
+    "calendar_file": "calendrier.ics",
+    "evaluations_file": "evaluations.ics",
+    "refresh_minutes": 60,
+    "product_id": "-//BUT3 RT//Emploi du temps//FR",
+    "uid_domain": "rtgre.fr"
+  },
   "evaluations": {
     "soon_days": 7,
     "relative_days_max": 13,

@@ -366,6 +366,17 @@ def load_config(config_dir: str = "config") -> AppConfig:
     ):
         raise ValueError("Invalid grade limits")
     validate_bulletin_config(grades["bulletin"])
+    feeds = site["feeds"]
+    if (
+        not all(valid_relative_file(feeds[key]) for key in ("calendar_file", "evaluations_file"))
+        or feeds["calendar_file"] == feeds["evaluations_file"]
+        or type(feeds["refresh_minutes"]) is not int
+        or feeds["refresh_minutes"] <= 0
+        or not all(
+            isinstance(feeds[key], str) and feeds[key] for key in ("product_id", "uid_domain")
+        )
+    ):
+        raise ValueError("Invalid feeds configuration")
     if any(
         type(site["evaluations"][key]) is not int or site["evaluations"][key] < 0
         for key in ("soon_days", "relative_days_max", "relative_weeks_max")

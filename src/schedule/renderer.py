@@ -13,6 +13,7 @@ from .curriculum import (
     resolve_module_info,
 )
 from .exporter import serialize_events
+from .feeds import write_class_feeds
 from .matcher import build_matching_matrix
 from .models import slugify
 from .viewmodels import (
@@ -316,6 +317,7 @@ def render_site(
                 f.write(cls_evals_html)
 
             initial_payload = serialize_events(app_config, cls.id, all_cls_events)
+            write_class_feeds(app_config, cls, initial_payload["events"], class_dir, now)
             initial_week_days = prepare_initial_week(app_config, all_cls_events)
 
             cal_page_path = f"classes/{cls.id}/{section_files['calendar']}"

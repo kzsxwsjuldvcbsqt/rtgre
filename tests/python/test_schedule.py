@@ -11,6 +11,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 import requests
+from icalendar import Calendar
 from markupsafe import escape
 from support.fixtures import calendar_bytes, sample_events
 
@@ -488,6 +489,33 @@ class ScheduleTests(unittest.TestCase):
                         self.assertEqual(marker in html, cls.id in offered)
                     notice = str(escape(self.config.labels["grades"]["bulletin_notice"]))
                     self.assertEqual(notice in html, cls.id in offered)
+
+    def test_each_class_publishes_calendar_feeds(self):
+        cls = self.classes[0]
+        events = sample_events(self.config, cls)
+        feeds = self.config.site["feeds"]
+        with tempfile.TemporaryDirectory() as directory:
+            render_site(self.config, {cls.id: events}, output_dir=directory)
+            root = Path(directory) / "classes" / cls.id
+            full = Calendar.from_ical((root / feeds["calendar_file"]).read_bytes())
+            graded = Calendar.from_ical((root / feeds["evaluations_file"]).read_bytes())
+        entries = full.walk("VEVENT")
+        self.assertEqual(len(entries), len(events))
+        self.assertEqual(len({str(entry["UID"]) for entry in entries}), len(events))
+        self.assertIn(cls.label, str(full["X-WR-CALNAME"]))
+        self.assertEqual(
+            sorted(entry["DTSTART"].dt for entry in entries),
+            sorted(event.start_dt for event in events),
+        )
+        evaluations = [event for event in events if event.category_id]
+        self.assertTrue(evaluations)
+        self.assertEqual(len(graded.walk("VEVENT")), len(evaluations))
+        for entry in graded.walk("VEVENT"):
+            self.assertIn(
+                str(entry["SUMMARY"]).split(" · ")[0],
+                {event.category_label for event in evaluations},
+            )
+            self.assertTrue(str(entry["UID"]).endswith("@" + feeds["uid_domain"]))
 
     def test_stylesheet_imports_are_bundled_into_their_layers(self):
         with tempfile.TemporaryDirectory() as directory:

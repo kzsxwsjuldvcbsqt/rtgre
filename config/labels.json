@@ -184,6 +184,18 @@
   "list_separator": ", ",
   "unofficial_notice": "Site non officiel",
   "empty_value": "Non renseigné",
+  "feeds": {
+    "calendar_name": "{site} {class}",
+    "evaluations_name": "{site} {class} · Évaluations",
+    "evaluation_summary": "{category} · {name}",
+    "teachers": "Avec {names}",
+    "groups": "Groupes : {names}",
+    "subscribe_btn": "S'abonner",
+    "subscribe_row": "S'abonner dans mon agenda",
+    "copy_btn": "Copier le lien",
+    "copy_row": "Copier le lien du calendrier",
+    "copied": "Lien copié"
+  },
   "footer": {
     "generated_at": "Données mises à jour le",
     "time_connector": "à"
