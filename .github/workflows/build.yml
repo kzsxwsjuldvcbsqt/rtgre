@@ -110,6 +110,22 @@ jobs:
         with:
           path: dist/
 
+  keepalive:
+    name: Keep scheduled workflows enabled
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Re-enable the workflows of this repository
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/actions/workflows" --jq '.workflows[] | select(.path | startswith(".github/workflows/")) | .id' |
+            while read -r workflow; do
+              gh api --method PUT "repos/$GITHUB_REPOSITORY/actions/workflows/$workflow/enable"
+            done
+
   deploy:
     name: Deploy to GitHub Pages
     permissions:
