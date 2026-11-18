@@ -1,5 +1,5 @@
 (function () {
-  const sprite = document.currentScript.dataset.sprite;
+  const iconPrefix = document.currentScript.dataset.iconPrefix;
   const valueProperty = Object.getOwnPropertyDescriptor(
     HTMLSelectElement.prototype,
     "value",
@@ -108,7 +108,7 @@
     item.dataset.sheetDismiss = "";
     item.dataset.value = option.value;
     item.dataset.search = option.textContent.toLowerCase();
-    item.appendChild(AppUtils.buildIcon(sprite + "#check", "icon-sm"));
+    item.appendChild(AppUtils.buildIcon(iconPrefix + "check", "icon-sm"));
     const code = document.createElement("span");
     code.className = "choice-menu-code";
     code.textContent = option.dataset.code || option.textContent;
@@ -143,7 +143,7 @@
     trigger.appendChild(triggerText);
     trigger.appendChild(triggerDefault);
     trigger.appendChild(
-      AppUtils.buildIcon(sprite + "#chevron-down", "icon-sm"),
+      AppUtils.buildIcon(iconPrefix + "chevron-down", "icon-sm"),
     );
 
     const panel = document.createElement("div");
@@ -158,7 +158,7 @@
     const back = document.createElement("button");
     back.type = "button";
     back.className = "choice-menu-back";
-    back.appendChild(AppUtils.buildIcon(sprite + "#chevron-left", ""));
+    back.appendChild(AppUtils.buildIcon(iconPrefix + "chevron-left", ""));
     back.appendChild(document.createTextNode(label));
     head.appendChild(back);
     panel.appendChild(head);
@@ -171,7 +171,9 @@
     search.autocomplete = "off";
     const searchField = document.createElement("span");
     searchField.className = "search-field choice-menu-search-field";
-    searchField.appendChild(AppUtils.buildIcon(sprite + "#search", "icon-sm"));
+    searchField.appendChild(
+      AppUtils.buildIcon(iconPrefix + "search", "icon-sm"),
+    );
     searchField.appendChild(search);
     panel.appendChild(searchField);
 

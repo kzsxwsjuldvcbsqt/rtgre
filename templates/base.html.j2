@@ -28,7 +28,7 @@
 <script defer src="{{ url_for('static/js/menu.js') }}"></script>
 {% block head_scripts %}{% endblock %}
 <script defer src="{{ url_for('static/js/mobile-shell.js') }}"
-  data-icon-close="{{ url_for('static/' ~ site.icons.sprite) }}#x"
+  data-icon-close="#{{ site.icons.id_prefix }}x"
   data-label-filters="{{ labels.sections.filters_title }}"
   data-label-close="{{ labels.sections.filters_close }}"
   data-label-apply="{{ labels.sections.filters_apply }}"
@@ -36,6 +36,7 @@
 ></script>
 </head>
 <body class="app">
+<svg class="icon-sprite" aria-hidden="true" focusable="false">{{ icon_sprite }}</svg>
 {% block sidebar %}{% endblock %}
 <div class="app-main">
 {% block topbar %}{% endblock %}

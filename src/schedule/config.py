@@ -58,6 +58,9 @@ def validate_site_config(site: dict):
                 f"Invalid configuration: custom_domain '{custom_domain}' requires "
                 f"base_path to be '/', but got '{base_path}'"
             )
+    icons = site["icons"]
+    if not valid_relative_file(icons["sprite"]) or not valid_public_id(icons["id_prefix"]):
+        raise ValueError("Invalid icons configuration")
     for key in ("output_directory", "static_directory"):
         path = PurePosixPath(site[key])
         if path.is_absolute() or len(path.parts) != 1 or path.name in ("", ".", ".."):

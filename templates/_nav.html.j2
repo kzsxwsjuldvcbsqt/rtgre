@@ -3,14 +3,14 @@
 <aside class="app-sidebar" id="app-sidebar">
 <div class="app-sidebar-head">
 <p class="app-brand">{{ site.title }}</p>
-<button type="button" class="nav-close" aria-label="{{ labels.sections.menu_close }}">{{ icon('x', url_for, site.icons) }}</button>
+<button type="button" class="nav-close" aria-label="{{ labels.sections.menu_close }}">{{ icon('x', site.icons) }}</button>
 </div>
 <nav class="app-nav" aria-label="{{ labels.sections.navigation }}">
 {% if class_config %}
 <ul class="nav-menu">
 {% for sec in sections %}
 {% if sec.kind == 'internal' %}
-<li><a href="{{ url_for('classes/' ~ class_config.id ~ '/' ~ sec.file) }}"{% if sec.id == current_id %} aria-current="page"{% endif %}>{{ icon(sec.icon, url_for, site.icons) }}<span>{{ sec.label }}</span></a></li>
+<li><a href="{{ url_for('classes/' ~ class_config.id ~ '/' ~ sec.file) }}"{% if sec.id == current_id %} aria-current="page"{% endif %}>{{ icon(sec.icon, site.icons) }}<span>{{ sec.label }}</span></a></li>
 {% endif %}
 {% endfor %}
 </ul>
@@ -29,14 +29,14 @@
 <ul class="app-nav-links">
 {% for sec in sections %}
 {% if sec.kind == 'external' %}
-<li><a href="{{ sec.url }}" target="_blank" rel="noopener noreferrer" class="nav-external"><span>{{ sec.label }}</span>{{ icon('link-external', url_for, site.icons, 'icon-sm') }}</a></li>
+<li><a href="{{ sec.url }}" target="_blank" rel="noopener noreferrer" class="nav-external"><span>{{ sec.label }}</span>{{ icon('link-external', site.icons, 'icon-sm') }}</a></li>
 {% endif %}
 {% endfor %}
 </ul>
 <ul class="app-nav-foot">
 {% for sec in sections %}
 {% if sec.kind == 'global' %}
-<li><a href="{{ url_for(('classes/' ~ class_config.id ~ '/' if class_config else '') ~ sec.file) }}"{% if sec.id == current_id %} aria-current="page"{% endif %}>{{ icon(sec.icon, url_for, site.icons) }}<span>{{ sec.label }}</span></a></li>
+<li><a href="{{ url_for(('classes/' ~ class_config.id ~ '/' if class_config else '') ~ sec.file) }}"{% if sec.id == current_id %} aria-current="page"{% endif %}>{{ icon(sec.icon, site.icons) }}<span>{{ sec.label }}</span></a></li>
 {% endif %}
 {% endfor %}
 </ul>
@@ -47,7 +47,7 @@
 {% macro app_topbar(trail, title, labels, url_for, site, class_label='') %}
 <div class="app-topbar">
 <header class="app-topbar-main">
-<button type="button" class="nav-toggle nav-burger" aria-controls="app-sidebar" aria-expanded="false" aria-label="{{ labels.sections.menu_open }}">{{ icon('three-bars', url_for, site.icons) }}</button>
+<button type="button" class="nav-toggle nav-burger" aria-controls="app-sidebar" aria-expanded="false" aria-label="{{ labels.sections.menu_open }}">{{ icon('three-bars', site.icons) }}</button>
 <nav class="app-breadcrumb" aria-label="{{ labels.sections.breadcrumb }}">
 <ol>
 {% for label, href in trail %}

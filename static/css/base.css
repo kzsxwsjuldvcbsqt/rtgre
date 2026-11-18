@@ -66,6 +66,9 @@ textarea {
 button {
   cursor: pointer;
 }
+.icon-sprite {
+  display: none;
+}
 .icon {
   display: inline-block;
   inline-size: var(--icon-size);

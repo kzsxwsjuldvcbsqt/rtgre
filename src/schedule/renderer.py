@@ -3,6 +3,7 @@ from functools import partial
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
+from markupsafe import Markup
 
 from .config import AppConfig, active_theme, theme_stylesheet
 from .curriculum import (
@@ -42,6 +43,12 @@ def get_404_url(target: str, base_path: str) -> str:
     if base:
         return f"{base}/{target.lstrip('/')}"
     return f"/{target.lstrip('/')}"
+
+
+def inline_icon_sprite(path: Path, id_prefix: str) -> Markup:
+    source = path.read_text(encoding="utf-8")
+    symbols = source[source.index(">") + 1 : source.rindex("</svg>")]
+    return Markup(symbols.replace('<symbol id="', f'<symbol id="{id_prefix}'))
 
 
 def render_site(
@@ -90,6 +97,10 @@ def render_site(
 
     section_files = {section.id: section.file for section in app_config.sections if section.file}
     env.globals.update(
+        icon_sprite=inline_icon_sprite(
+            Path(static_dir) / app_config.site["icons"]["sprite"],
+            app_config.site["icons"]["id_prefix"],
+        ),
         theme_id=theme["id"] if theme else "",
         theme_stylesheet=stylesheets[theme["id"]] if theme else "",
         section_files=section_files,

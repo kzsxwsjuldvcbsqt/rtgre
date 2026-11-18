@@ -436,6 +436,7 @@ class ScheduleTests(unittest.TestCase):
             tempfile.TemporaryDirectory() as static,
             tempfile.TemporaryDirectory() as directory,
         ):
+            shutil.copytree("static/icons", Path(static) / "icons")
             stylesheet = Path(static) / "themes" / "sample" / "theme.css"
             stylesheet.parent.mkdir(parents=True)
             stylesheet.touch()

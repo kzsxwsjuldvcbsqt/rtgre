@@ -6,14 +6,14 @@
 {% block topbar %}{{ app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.calendar))], (sections | selectattr('id', 'equalto', 'evaluations') | first).label, labels, url_for, site, class_config.label) }}{% endblock %}
 {% block head_scripts %}
 <script defer src="{{ url_for('static/js/filters.js') }}"></script>
-<script defer src="{{ url_for('static/js/filter-controls.js') }}" data-sprite="{{ url_for('static/' ~ site.icons.sprite) }}"></script>
+<script defer src="{{ url_for('static/js/filter-controls.js') }}" data-icon-prefix="#{{ site.icons.id_prefix }}"></script>
 {% endblock %}
 {% block content %}
 <div class="page-container has-filter-bar">
 <div class="filter-bar">
 <div class="filter-quick">
 <div class="filter-quick-slot" id="eval-count-slot"></div>
-<button type="button" class="filters-toggle" aria-expanded="false" aria-controls="filters-container" aria-label="{{ labels.calendar.toggle_controls }}">{{ icon('filter', url_for, site.icons) }}</button>
+<button type="button" class="filters-toggle" aria-expanded="false" aria-controls="filters-container" aria-label="{{ labels.calendar.toggle_controls }}">{{ icon('filter', site.icons) }}</button>
 </div>
 <div id="filters-container" class="filter-panel" data-sheet-count="results-count"
   data-label-filters-heading="{{ labels.class_page.filters_heading }}"
@@ -33,8 +33,8 @@
   data-label-all="{{ labels.periods.all }}"
   data-categories='{{ active_categories | tojson }}'
   data-modules='{{ active_modules | tojson }}'
-  data-icon-check="{{ url_for('static/' ~ site.icons.sprite) }}#check"
-  data-icon-reset="{{ url_for('static/' ~ site.icons.sprite) }}#x"
+  data-icon-check="#{{ site.icons.id_prefix }}check"
+  data-icon-reset="#{{ site.icons.id_prefix }}x"
 ></div>
 </div>
 
@@ -51,7 +51,7 @@
 <span class="eval-time">{{ ev.time_range }}</span>
 <span class="eval-module"><strong>{{ ev.module_code | canonical_code }}</strong>{% if module_labels.get(ev.module_code) %} - {{ module_labels[ev.module_code] }}{% endif %}</span>
 <span class="category-badge{% if category_tones.get(ev.category_id) %} label-{{ category_tones[ev.category_id] }}{% endif %}">{{ ev.category_label }}</span>
-{{ icon('chevron-right', url_for, site.icons, 'box-row-icon') }}
+{{ icon('chevron-right', site.icons, 'box-row-icon') }}
 </a>
 </li>
 {% endfor %}

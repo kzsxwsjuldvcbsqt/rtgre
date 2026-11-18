@@ -3,7 +3,7 @@
 {% from "_icons.html.j2" import icon %}
 {% block title %}{% for s in sections %}{% if s.id == 'resources' %}{{ s.label }}{% endif %}{% endfor %} - {{ class_config.label }} - {{ site.title }}{% endblock %}
 {% block sidebar %}{{ app_sidebar(sections, 'resources', class_config, section_files.resources, url_for, labels, site) }}{% endblock %}
-{% block topbar %}{% call app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.calendar))], (sections | selectattr('id', 'equalto', 'resources') | first).label, labels, url_for, site, class_config.label) %}<a class="btn" href="{{ site.chamilo.space_url }}" target="_blank" rel="noopener noreferrer">{{ labels.resources.chamilo_space }}{{ icon('link-external', url_for, site.icons, 'icon-sm') }}</a>{% endcall %}{% endblock %}
+{% block topbar %}{% call app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.calendar))], (sections | selectattr('id', 'equalto', 'resources') | first).label, labels, url_for, site, class_config.label) %}<a class="btn" href="{{ site.chamilo.space_url }}" target="_blank" rel="noopener noreferrer">{{ labels.resources.chamilo_space }}{{ icon('link-external', site.icons, 'icon-sm') }}</a>{% endcall %}{% endblock %}
 {% block content %}
 <div class="page-container">
 {% for sem_info, kinds_grouped in resource_groups %}
@@ -18,7 +18,7 @@
 {% set show_code = mod.code != mod.label and mod.get("show_code", true) %}
 <li>
 {% if mod.chamilo_url %}
-<a class="box-row" href="{{ mod.chamilo_url }}" target="_blank" rel="noopener noreferrer"><span class="box-row-main">{% if show_code %}<strong>{{ mod.code }}</strong> - {{ mod.label }}{% else %}<strong>{{ mod.label }}</strong>{% endif %}</span>{{ icon('link-external', url_for, site.icons, 'box-row-icon') }}</a>
+<a class="box-row" href="{{ mod.chamilo_url }}" target="_blank" rel="noopener noreferrer"><span class="box-row-main">{% if show_code %}<strong>{{ mod.code }}</strong> - {{ mod.label }}{% else %}<strong>{{ mod.label }}</strong>{% endif %}</span>{{ icon('link-external', site.icons, 'box-row-icon') }}</a>
 {% else %}
 <span class="box-row"><span class="box-row-main">{% if show_code %}<strong>{{ mod.code }}</strong> - {{ mod.label }}{% else %}<strong>{{ mod.label }}</strong>{% endif %}</span></span>
 {% endif %}
