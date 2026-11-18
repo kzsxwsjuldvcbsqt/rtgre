@@ -81,25 +81,27 @@ html:not(.js-enabled) [data-step-panel="program"],
 html:not(.js-enabled) .picker-back {
   display: none;
 }
-.class-picker.is-ready {
+html.js-enabled .class-picker {
   display: grid;
 }
-.class-picker.is-ready > .picker-step {
+html.js-enabled .class-picker > .picker-step {
   grid-area: 1 / 1;
   align-self: center;
   margin: 0;
   opacity: 0;
   visibility: hidden;
   transform: translateX(var(--picker-slide));
+}
+.class-picker.is-ready > .picker-step {
   transition:
     opacity var(--motion-slide),
     transform var(--motion-slide),
     visibility var(--motion-slide);
 }
-.class-picker.is-ready > [data-step-panel="program"] {
+html.js-enabled .class-picker > [data-step-panel="program"] {
   transform: translateX(calc(-1 * var(--picker-slide)));
 }
-.class-picker.is-ready > .picker-step.is-active {
+html.js-enabled .class-picker > .picker-step.is-active {
   opacity: 1;
   visibility: visible;
   transform: none;
