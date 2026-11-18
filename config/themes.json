@@ -6,6 +6,7 @@
       "id": "vice",
       "label": "Vice",
       "enabled": true,
+      "preload_images": ["cover.webp"],
       "first_date": "2026-11-18",
       "last_date": "2026-11-30"
     }

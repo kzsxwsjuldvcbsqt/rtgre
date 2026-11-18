@@ -375,6 +375,7 @@ class ScheduleTests(unittest.TestCase):
                     "id": "first",
                     "label": "First",
                     "enabled": False,
+                    "preload_images": [],
                     "first_date": "2026-11-01",
                     "last_date": "2026-11-30",
                 },
@@ -382,6 +383,7 @@ class ScheduleTests(unittest.TestCase):
                     "id": "second",
                     "label": "Second",
                     "enabled": True,
+                    "preload_images": ["cover.webp"],
                     "first_date": "2026-11-10",
                     "last_date": "2026-11-20",
                 },
@@ -402,6 +404,7 @@ class ScheduleTests(unittest.TestCase):
             {"id": "first"},
             {"enabled": "yes"},
             {"label": " "},
+            {"preload_images": ["../cover.webp"]},
             {"first_date": "2026-11-21"},
             {"last_date": "soon"},
         ):
@@ -426,6 +429,7 @@ class ScheduleTests(unittest.TestCase):
                     "id": "sample",
                     "label": "Sample",
                     "enabled": True,
+                    "preload_images": ["cover.webp"],
                     "first_date": "2026-11-10",
                     "last_date": "2026-11-20",
                 }
@@ -441,6 +445,8 @@ class ScheduleTests(unittest.TestCase):
             stylesheet = Path(static) / "themes" / "sample" / "theme.css"
             stylesheet.parent.mkdir(parents=True)
             stylesheet.touch()
+            cover = stylesheet.with_name("cover.webp")
+            cover.touch()
             page = Path(directory) / "classes" / self.classes[0].id / "index.html"
 
             def render(day):
@@ -456,9 +462,15 @@ class ScheduleTests(unittest.TestCase):
             themed = render("2026-11-20")
             self.assertIn('data-theme="sample"', themed)
             self.assertIn(link, themed)
+            self.assertIn('as="image" href="../../static/themes/sample/cover.webp"', themed)
             plain = render("2026-11-21")
             self.assertNotIn("data-theme", plain)
             self.assertNotIn(link, plain)
+            self.assertNotIn("preload", plain)
+            cover.unlink()
+            with self.assertRaises(ValueError):
+                render("2026-11-21")
+            cover.touch()
             stylesheet.unlink()
             with self.assertRaises(ValueError):
                 render("2026-11-21")

@@ -6,6 +6,7 @@
       --vice-violet: #b78cff;
       --vice-amber: #ffb347;
       --vice-cover: url("cover.webp");
+      --vice-cover-tint: #c79abf;
       --vice-cover-ratio: 16 / 9;
       --vice-cover-focus: 58% 30%;
       --vice-cover-fade: 46%;
@@ -60,7 +61,8 @@
           var(--color-navbar),
           transparent var(--vice-cover-fade)
         ),
-        var(--vice-cover) var(--vice-cover-focus) / cover no-repeat;
+        var(--vice-cover) var(--vice-cover-focus) / cover no-repeat
+          var(--vice-cover-tint);
     }
     .app-nav a {
       text-shadow: var(--vice-ink-shadow);

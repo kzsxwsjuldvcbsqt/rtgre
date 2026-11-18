@@ -5,7 +5,7 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 from markupsafe import Markup
 
-from .config import AppConfig, active_theme, theme_stylesheet
+from .config import AppConfig, active_theme, theme_files
 from .curriculum import (
     canonical_module_codes,
     get_class_grades_data,
@@ -86,14 +86,15 @@ def render_site(
         loader=FileSystemLoader(templates_dir), autoescape=True, undefined=StrictUndefined
     )
 
-    stylesheets = {
-        theme["id"]: theme_stylesheet(app_config.themes, theme)
-        for theme in app_config.themes["themes"]
+    files_by_theme = {
+        theme["id"]: theme_files(app_config.themes, theme) for theme in app_config.themes["themes"]
     }
-    for stylesheet in stylesheets.values():
-        if not (Path(static_dir) / stylesheet).is_file():
-            raise ValueError(f"Missing theme stylesheet: {stylesheet}")
+    for files in files_by_theme.values():
+        for file in (files["stylesheet"], *files["preload_images"]):
+            if not (Path(static_dir) / file).is_file():
+                raise ValueError(f"Missing theme file: {file}")
     theme = active_theme(app_config.themes, today or now.date())
+    active_files = files_by_theme[theme["id"]] if theme else {}
 
     section_files = {section.id: section.file for section in app_config.sections if section.file}
     env.globals.update(
@@ -102,7 +103,8 @@ def render_site(
             app_config.site["icons"]["id_prefix"],
         ),
         theme_id=theme["id"] if theme else "",
-        theme_stylesheet=stylesheets[theme["id"]] if theme else "",
+        theme_stylesheet=active_files.get("stylesheet", ""),
+        theme_preload_images=active_files.get("preload_images", []),
         section_files=section_files,
         programs=app_config.programs,
         category_tones={

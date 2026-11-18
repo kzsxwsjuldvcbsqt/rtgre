@@ -101,6 +101,7 @@ def validate_themes_config(config: dict) -> None:
             type(theme["enabled"]) is not bool
             or not isinstance(theme["label"], str)
             or not theme["label"].strip()
+            or not all(valid_relative_file(image) for image in theme["preload_images"])
             or date.fromisoformat(theme["first_date"]) > date.fromisoformat(theme["last_date"])
         ):
             raise ValueError(f"Invalid theme {theme['id']}")
@@ -115,8 +116,12 @@ def active_theme(config: dict, today: date) -> dict | None:
     return None
 
 
-def theme_stylesheet(config: dict, theme: dict) -> str:
-    return f"{config['directory']}/{theme['id']}/{config['stylesheet']}"
+def theme_files(config: dict, theme: dict) -> dict:
+    folder = f"{config['directory']}/{theme['id']}"
+    return {
+        "stylesheet": f"{folder}/{config['stylesheet']}",
+        "preload_images": [f"{folder}/{image}" for image in theme["preload_images"]],
+    }
 
 
 def validate_bulletin_config(bulletin):
