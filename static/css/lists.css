@@ -19,6 +19,24 @@
   flex: 1;
   min-width: 0;
 }
+.setting-row {
+  flex-wrap: wrap;
+  padding-block: var(--space-sm);
+}
+.setting-row .box-row-main {
+  flex-basis: var(--width-setting-label);
+}
+.setting-name,
+.setting-help {
+  display: block;
+}
+.setting-name {
+  font-weight: var(--weight-medium);
+}
+.setting-help {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
 .box-row-icon {
   flex: none;
   color: var(--color-text-faint);

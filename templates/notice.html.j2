@@ -4,8 +4,25 @@
 {% block title %}{{ labels.notice.title }} - {{ site.title }}{% endblock %}
 {% block sidebar %}{{ app_sidebar(sections, 'notice', class_config, section_files.notice, url_for, labels, site) }}{% endblock %}
 {% block topbar %}{% if class_config %}{{ app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.calendar))], labels.notice.title, labels, url_for, site, class_config.label) }}{% else %}{{ app_topbar([(labels.index.heading, url_for('index.html'))], labels.notice.title, labels, url_for, site) }}{% endif %}{% endblock %}
+{% block head_scripts %}
+<script defer src="{{ url_for('static/js/appearance.js') }}"></script>
+{% endblock %}
 {% block content %}
 <div class="page-container">
+<section class="data-box js-only">
+<header class="data-box-head"><h2>{{ labels.notice.settings_title }}</h2></header>
+<ul class="box-list">
+<li class="box-row setting-row">
+<span class="box-row-main"><span class="setting-name" id="appearance-label">{{ labels.notice.appearance }}</span><span class="setting-help">{{ labels.notice.appearance_help }}</span></span>
+<div class="segmented" role="group" aria-labelledby="appearance-label" data-color-scheme-choice>
+<button type="button" class="segmented-option" data-value="auto" aria-pressed="false">{{ labels.notice.scheme_auto }}</button>
+<button type="button" class="segmented-option" data-value="light" aria-pressed="false">{{ labels.notice.scheme_light }}</button>
+<button type="button" class="segmented-option" data-value="dark" aria-pressed="false">{{ labels.notice.scheme_dark }}</button>
+</div>
+</li>
+</ul>
+</section>
+<h2>{{ labels.notice.about_title }}</h2>
 <div class="text-block">
 <p>{{ labels.notice.p1 }}</p>
 <p>{{ labels.notice.p2 }}</p>
