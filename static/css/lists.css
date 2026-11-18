@@ -31,7 +31,8 @@
   color: var(--color-text-muted);
   font-size: var(--text-sm);
 }
-.grades-message {
+.grades-message,
+.site-main .stale-notice {
   max-width: none;
   margin-block: var(--space-md);
   padding: var(--space-sm) var(--space-md);
@@ -46,7 +47,11 @@
   background: var(--color-surface);
   color: var(--color-text-muted);
 }
-.grades-message[role="alert"] {
+.site-main .stale-notice {
+  margin: var(--space-md) var(--page-gutter) 0;
+}
+.grades-message[role="alert"],
+.site-main .stale-notice {
   border-color: var(--color-danger);
   background: var(--color-danger-soft);
   color: var(--color-text);

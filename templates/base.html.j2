@@ -47,6 +47,7 @@
 <div class="app-main">
 {% block topbar %}{% endblock %}
 <main class="site-main">
+<p class="stale-notice" role="alert" hidden data-generated-at="{{ generated_iso }}" data-stale-hours="{{ site.stale_after_hours }}" data-message="{{ labels.footer.stale_notice }}"></p>
 {% block content %}{% endblock %}
 </main>
 <footer class="app-footnote">

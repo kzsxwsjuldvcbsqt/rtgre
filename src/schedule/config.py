@@ -366,6 +366,8 @@ def load_config(config_dir: str = "config") -> AppConfig:
     ):
         raise ValueError("Invalid grade limits")
     validate_bulletin_config(grades["bulletin"])
+    if type(site["stale_after_hours"]) is not int or site["stale_after_hours"] <= 0:
+        raise ValueError("Invalid stale data delay")
     feeds = site["feeds"]
     if (
         not all(valid_relative_file(feeds[key]) for key in ("calendar_file", "evaluations_file"))

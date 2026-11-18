@@ -198,6 +198,7 @@
   },
   "footer": {
     "generated_at": "Données mises à jour le",
+    "stale_notice": "Les données n'ont pas été mises à jour depuis {hours} heures : vérifie sur l'ADE avant de te déplacer.",
     "time_connector": "à"
   },
   "days": [

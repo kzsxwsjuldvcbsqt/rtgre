@@ -105,6 +105,7 @@ def render_site(
 
     section_files = {section.id: section.file for section in app_config.sections if section.file}
     env.globals.update(
+        generated_iso=now.isoformat(timespec="seconds"),
         theme_id=theme["id"] if theme else "",
         theme_stylesheet=active_files.get("stylesheet", ""),
         theme_preload_images=active_files.get("preload_images", []),

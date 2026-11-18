@@ -95,3 +95,19 @@ test("search text ignores case, accents and extra spaces", () => {
   assert.equal(utils.normalizeSearch("  SAÉ501   Projet "), "sae501 projet");
   assert.equal(utils.normalizeSearch(""), "");
 });
+
+test("data age is counted in whole hours", () => {
+  const built = "2026-11-18T08:00:00+01:00";
+  assert.equal(
+    utils.hoursSince(built, Date.parse("2026-11-18T08:59:59+01:00")),
+    0,
+  );
+  assert.equal(
+    utils.hoursSince(built, Date.parse("2026-11-18T20:00:00+01:00")),
+    12,
+  );
+  assert.equal(
+    utils.hoursSince(built, Date.parse("2026-11-19T09:30:00+01:00")),
+    25,
+  );
+});

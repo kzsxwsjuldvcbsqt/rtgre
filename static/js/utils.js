@@ -32,6 +32,21 @@
     }).format(relative.value, relative.unit);
   }
 
+  const MS_PER_HOUR = 60 * 60 * 1000;
+
+  function hoursSince(instantIso, now) {
+    return Math.floor((now - Date.parse(instantIso)) / MS_PER_HOUR);
+  }
+
+  function showStaleNotice() {
+    const notice = document.querySelector(".stale-notice");
+    if (!notice) return;
+    const hours = hoursSince(notice.dataset.generatedAt, Date.now());
+    if (hours < Number(notice.dataset.staleHours)) return;
+    notice.textContent = formatText(notice.dataset.message, { hours: hours });
+    notice.hidden = false;
+  }
+
   function todayIn(timeZone) {
     const parts = new Intl.DateTimeFormat("en-CA", {
       timeZone: timeZone,
@@ -174,6 +189,7 @@
     bindBlurKeys: bindBlurKeys,
     onDOMReady: onDOMReady,
     normalizeSearch: normalizeSearch,
+    hoursSince: hoursSince,
     relativeDay: relativeDay,
     formatRelativeDay: formatRelativeDay,
   };
@@ -191,6 +207,8 @@
       sectionMenu.scrollLeft +=
         linkBox.left - menuBox.left - (menuBox.width - linkBox.width) / 2;
     }
+
+    showStaleNotice();
 
     let pastTimer;
     function updatePastEvaluations() {
