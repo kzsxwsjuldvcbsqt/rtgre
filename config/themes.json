@@ -1,5 +1,13 @@
 {
   "directory": "themes",
   "stylesheet": "theme.css",
-  "themes": []
+  "themes": [
+    {
+      "id": "vice",
+      "label": "Vice",
+      "enabled": true,
+      "first_date": "2026-11-18",
+      "last_date": "2026-11-30"
+    }
+  ]
 }

@@ -1,0 +1,93 @@
+@layer theme {
+  @media screen {
+    :root {
+      --vice-magenta: #c741a5;
+      --vice-pink: #ef5597;
+      --vice-violet: #b78cff;
+      --vice-amber: #ffb347;
+      --vice-cover: url("cover.webp");
+      --vice-cover-ratio: 16 / 9;
+      --vice-cover-focus: 58% 30%;
+      --vice-cover-fade: 46%;
+      --vice-cover-overlap: var(--space-2xl);
+      --vice-glow-height: 48%;
+      --vice-ink-shadow: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.4);
+      --vice-line: 0.1875rem;
+      --vice-drift: 14s;
+      --vice-sunset: linear-gradient(
+        90deg,
+        var(--vice-violet),
+        var(--vice-pink),
+        var(--vice-amber),
+        var(--vice-pink),
+        var(--vice-violet)
+      );
+
+      --color-highlight: var(--vice-pink);
+      --color-accent: #a3216e;
+      --color-accent-emphasis: #7a1552;
+      --color-accent-soft: rgba(239, 85, 151, 0.18);
+      --color-soon: rgba(239, 85, 151, 0.09);
+      --color-navbar-muted: rgba(255, 255, 255, 0.86);
+      --color-navbar-faint: rgba(255, 255, 255, 0.72);
+    }
+    .app-sidebar {
+      background:
+        linear-gradient(
+            to top,
+            var(--vice-pink) 0%,
+            var(--vice-magenta) 16%,
+            rgba(199, 65, 165, 0.82) 28%,
+            rgba(199, 65, 165, 0.62) 40%,
+            rgba(199, 65, 165, 0.42) 52%,
+            rgba(199, 65, 165, 0.25) 64%,
+            rgba(199, 65, 165, 0.12) 76%,
+            rgba(199, 65, 165, 0.04) 88%,
+            rgba(199, 65, 165, 0) 100%
+          )
+          bottom / 100% var(--vice-glow-height) no-repeat,
+        var(--color-navbar);
+    }
+    .app-sidebar::before {
+      content: "";
+      flex: none;
+      aspect-ratio: var(--vice-cover-ratio);
+      margin: calc(-1 * var(--space-md)) calc(-1 * var(--space-sm))
+        calc(-1 * var(--vice-cover-overlap));
+      background:
+        linear-gradient(
+          to top,
+          var(--color-navbar),
+          transparent var(--vice-cover-fade)
+        ),
+        var(--vice-cover) var(--vice-cover-focus) / cover no-repeat;
+    }
+    .app-nav a {
+      text-shadow: var(--vice-ink-shadow);
+    }
+    .app-nav-classes a[aria-current="page"] {
+      color: var(--color-navbar-text);
+    }
+    .app-sidebar-head {
+      position: relative;
+    }
+    .app-brand {
+      background: var(--vice-sunset) 0 0 / 200% 100%;
+      background-clip: text;
+      color: transparent;
+      animation: vice-drift var(--vice-drift) linear infinite;
+    }
+    @keyframes vice-drift {
+      to {
+        background-position: -200% 0;
+      }
+    }
+  }
+  @media screen and (max-width: 74.99em) {
+    .app-topbar-main {
+      background:
+        var(--vice-sunset) bottom / 100% var(--vice-line) no-repeat,
+        var(--color-navbar);
+    }
+  }
+}
