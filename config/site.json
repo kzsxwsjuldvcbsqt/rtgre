@@ -48,8 +48,8 @@
     "calendar_type": "ical",
     "request_timeout_seconds": 30,
     "user_agent": "but3-evaluations/1.0",
-    "retry_attempts": 3,
-    "retry_delay_seconds": 5
+    "retry_attempts": 4,
+    "retry_delay_seconds": 60
   },
   "chamilo": {
     "space_url": "https://chamilo.univ-grenoble-alpes.fr/courses/IUT1RT3",
