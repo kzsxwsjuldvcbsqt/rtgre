@@ -63,6 +63,24 @@ Ces résultats ne sont pas des notes officielles. Ce sont des estimations basée
 
 L'interface reprend la structure d'une application web : une barre latérale fixe avec le choix de la classe, les pages et les liens utiles, une barre supérieure avec le fil d'Ariane et les actions de la page, et un contenu sur toute la largeur. Sur mobile et tablette, la barre latérale devient un menu qui s'ouvre depuis le bouton de la barre supérieure, et les filtres s'ouvrent dans une feuille en bas de l'écran. La page d'accueil guide le choix en deux étapes, formation puis classe ; la dernière classe consultée est mémorisée dans le navigateur, et l'adresse du site y ramène directement ensuite. L'impression utilise un rendu clair adapté. La navigation reste utilisable au clavier, et les pages principalement informatives fonctionnent partiellement sans JavaScript. Les libellés et contrôles sont pensés pour l'accessibilité, sans que le projet revendique une conformité complète à une norme faute d'audit dédié.
 
+### Thèmes
+
+Le site peut changer d'habillage pour une période donnée, puis reprendre seul son apparence habituelle. Chaque thème tient dans son propre dossier, `static/themes/<identifiant>/`, avec une feuille `theme.css` et ses images. Un thème ne touche ni aux modèles HTML ni au JavaScript : il redéfinit des couleurs du site et ajoute quelques règles dans une couche CSS dédiée, placée au-dessus des styles habituels et sous ceux de l'impression.
+
+Les thèmes sont déclarés dans `config/themes.json`. Chacun a un interrupteur `enabled` et une période, de `first_date` à `last_date` incluses. À chaque construction, le générateur retient le premier thème activé dont la période contient la date du jour ; sa feuille de style n'est chargée que dans ce cas, et les pages n'en portent aucune trace le reste du temps. La mise à jour automatique du site fait donc apparaître et disparaître un thème sans intervention.
+
+| Thème | Ambiance |
+| --- | --- |
+| `vice` | coucher de soleil rose et violet sur la barre latérale, accent rose à la place du jaune |
+
+D'autres thèmes sont prévus, dont un thème d'hiver. Pour en ajouter un :
+
+1. créer `static/themes/<identifiant>/theme.css`, en s'appuyant sur les variables de `static/css/tokens.css` ;
+2. ajouter son entrée dans `config/themes.json` avec sa période ;
+3. lancer les tests, qui vérifient la configuration et la présence de la feuille de style.
+
+Pour retirer un thème, il suffit de passer `enabled` à `false`, ou de supprimer son dossier et son entrée.
+
 ## Architecture
 
 Le projet est un générateur de site statique. Il n'y a pas de serveur applicatif : la génération produit des fichiers HTML, CSS, JavaScript et JSON, puis tout le reste se passe dans le navigateur.
@@ -118,6 +136,7 @@ Il n'y a pas de serveur applicatif, pas d'API privée, pas de base de données, 
 │   ├── css/             # styles
 │   ├── js/              # logique exécutée dans le navigateur
 │   ├── icons/           # icônes Phosphor
+│   ├── themes/          # thèmes temporaires, un dossier par thème
 │   └── vendor/pdfjs/    # lecture des relevés PDF (pdf.js)
 ├── tests/
 │   ├── python/
@@ -199,6 +218,7 @@ Le comportement et le contenu du site sont décrits dans `config/`.
 | `config/calendar.json` | vues, jours affichés, affichage (grille horaire ou liste) et temporisations |
 | `config/corrections.json` | retouches manuelles des cours ADE (suppression ou surcharge) |
 | `config/labels.json` | textes affichés dans l'interface |
+| `config/themes.json` | thèmes temporaires, avec leur période et leur interrupteur |
 
 Pour adapter le site à une nouvelle année :
 
