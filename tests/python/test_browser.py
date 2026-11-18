@@ -15,6 +15,7 @@ from support.fixtures import sample_events
 
 from schedule.config import load_config
 from schedule.renderer import render_site
+from schedule.stylesheets import bundle_stylesheet
 
 
 class BrowserTests(unittest.TestCase):
@@ -44,6 +45,7 @@ class BrowserTests(unittest.TestCase):
             )
             render_site(config, events, output_dir=str(root))
             shutil.copytree("static", root / "static")
+            bundle_stylesheet(root / "static" / config.site["stylesheet"])
             for script in Path("tests/browser").glob("*.js"):
                 shutil.copy(script, root / script.name)
             (root / "runner.html").write_text(

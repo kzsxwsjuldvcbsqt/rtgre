@@ -5,6 +5,7 @@
   "timezone": "Europe/Paris",
   "output_directory": "dist",
   "static_directory": "static",
+  "stylesheet": "css/style.css",
   "base_path": "/",
   "custom_domain": "rtgre.fr",
   "github_url": "https://github.com/kzsxwsjuldvcbsqt/rtgre",

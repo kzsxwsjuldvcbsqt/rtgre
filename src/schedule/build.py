@@ -14,6 +14,7 @@ from .matcher import build_matching_matrix, reconcile_shared_groups
 from .parser import parse_calendar
 from .renderer import render_site
 from .sitecheck import validate_site
+from .stylesheets import bundle_stylesheet
 
 GENERATED_MARKER = ".schedule-generated"
 
@@ -86,6 +87,7 @@ def _publish_site(app_config, events_by_class, matching_matrix, project_root: Pa
                 dest = dist_static / relative
                 dest.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(source, dest)
+        bundle_stylesheet(dist_static / app_config.site["stylesheet"])
         validate_site(staging, app_config.site.get("base_path", "/"))
         (staging / GENERATED_MARKER).write_text("schedule\n", encoding="utf-8")
         if backup.exists():

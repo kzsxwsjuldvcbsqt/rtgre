@@ -10,7 +10,7 @@
 <link rel="{{ icon.rel }}"{% if icon.type %} type="{{ icon.type }}"{% endif %} href="{{ url_for('static/' ~ icon.filename) }}">
 {% endfor %}
 <title>{% block title %}{{ site.title }}{% endblock %}</title>
-<link rel="stylesheet" href="{{ url_for('static/css/style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static/' ~ site.stylesheet) }}">
 {% if theme_stylesheet %}
 <link rel="stylesheet" href="{{ url_for('static/' ~ theme_stylesheet) }}">
 {% endif %}

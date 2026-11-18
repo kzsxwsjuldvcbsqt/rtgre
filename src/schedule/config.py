@@ -61,6 +61,8 @@ def validate_site_config(site: dict):
     icons = site["icons"]
     if not valid_relative_file(icons["sprite"]) or not valid_public_id(icons["id_prefix"]):
         raise ValueError("Invalid icons configuration")
+    if not valid_relative_file(site["stylesheet"]):
+        raise ValueError("Invalid stylesheet path")
     for key in ("output_directory", "static_directory"):
         path = PurePosixPath(site[key])
         if path.is_absolute() or len(path.parts) != 1 or path.name in ("", ".", ".."):

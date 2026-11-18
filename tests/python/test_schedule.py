@@ -38,6 +38,7 @@ from schedule.matcher import build_matching_matrix
 from schedule.parser import normalize_room_name, parse_calendar
 from schedule.renderer import render_site
 from schedule.sitecheck import validate_site
+from schedule.stylesheets import bundle_stylesheet
 from schedule.viewmodels import prepare_evaluation_order
 
 
@@ -461,6 +462,45 @@ class ScheduleTests(unittest.TestCase):
             stylesheet.unlink()
             with self.assertRaises(ValueError):
                 render("2026-11-21")
+
+    def test_stylesheet_imports_are_bundled_into_their_layers(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            entry = root / "style.css"
+            entry.write_text(
+                "@layer base, pages;\n\n"
+                '@import url("base.css") layer(base);\n'
+                '@import url("first.css") layer(pages);\n'
+                '@import url("second.css") layer(pages);\n\n'
+                "@font-face {\n  font-family: Sample;\n}\n"
+            )
+            (root / "base.css").write_text("a {\n  color: red;\n}\n")
+            (root / "first.css").write_text("b {\n  color: blue;\n}\n")
+            (root / "second.css").write_text("i {\n  color: green;\n}\n")
+            bundle_stylesheet(entry)
+            self.assertEqual(
+                entry.read_text(),
+                "@layer base, pages;\n\n"
+                "@layer base {\na {\n  color: red;\n}\n}\n"
+                "@layer pages {\nb {\n  color: blue;\n}\n}\n"
+                "@layer pages {\ni {\n  color: green;\n}\n}\n\n"
+                "@font-face {\n  font-family: Sample;\n}\n",
+            )
+            self.assertEqual([path.name for path in root.iterdir()], ["style.css"])
+            for broken in ('@import "other.css";\n', '@import url("../x.css") layer(base);\n'):
+                with self.subTest(broken=broken):
+                    entry.write_text(broken)
+                    with self.assertRaises(ValueError):
+                        bundle_stylesheet(entry)
+            entry.write_text('@import url("outer.css") layer(base);\n')
+            (root / "outer.css").write_text('@import url("inner.css") layer(base);\n')
+            with self.assertRaises(ValueError):
+                bundle_stylesheet(entry)
+        bundled = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, bundled)
+        shutil.copytree("static/css", bundled / "css")
+        bundle_stylesheet(bundled / self.config.site["stylesheet"])
+        self.assertEqual([path.name for path in (bundled / "css").iterdir()], ["style.css"])
 
     def test_unreachable_calendar_ends_the_build_as_a_temporary_failure(self):
         with (
