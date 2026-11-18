@@ -11,6 +11,7 @@
   "custom_domain": "rtgre.fr",
   "github_url": "https://github.com/kzsxwsjuldvcbsqt/rtgre",
   "github_profile": "kzsxwsjuldvcbsqt",
+  "feedback_url": "https://github.com/kzsxwsjuldvcbsqt/rtgre/issues/new",
   "robots_txt": "User-agent: *\nDisallow:\n",
   "content_security_policy": {
     "default-src": ["'none'"],

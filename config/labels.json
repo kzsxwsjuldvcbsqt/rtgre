@@ -166,7 +166,9 @@
     "scheme_auto": "Automatique",
     "scheme_light": "Clair",
     "scheme_dark": "Sombre",
-    "about_title": "À propos"
+    "about_title": "À propos",
+    "feedback": "Une erreur ou une idée ? Signale-la sur",
+    "feedback_link": "GitHub"
   },
   "page_404": {
     "title": "Page non trouvée",
