@@ -493,6 +493,10 @@ def load_config(config_dir: str = "config") -> AppConfig:
     ):
         raise ValueError("Invalid or duplicate section files")
 
+    class_ids = {cls.id for program in programs for cls in program.classes}
+    if not set(grades["bulletin"]["classes"]) <= class_ids:
+        raise ValueError("Unknown class in bulletin configuration")
+
     tz = ZoneInfo(site["timezone"])
 
     return AppConfig(

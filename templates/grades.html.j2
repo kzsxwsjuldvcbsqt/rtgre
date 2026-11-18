@@ -3,6 +3,7 @@
 {% from "_icons.html.j2" import icon %}
 {% block title %}{% for s in sections %}{% if s.id == 'grades' %}{{ s.label }}{% endif %}{% endfor %} - {{ class_config.label }} - {{ site.title }}{% endblock %}
 {% block sidebar %}{{ app_sidebar(sections, 'grades', class_config, section_files.grades, url_for, labels, site) }}{% endblock %}
+{% set bulletin_enabled = class_config.id in site.grades.bulletin.classes %}
 {% block topbar %}{% call app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.calendar))], (sections | selectattr('id', 'equalto', 'grades') | first).label, labels, url_for, site, class_config.label) %}
 <div class="grades-actions" id="grades-actions" role="group" aria-label="{{ labels.grades.actions }}" hidden>
 <div class="grades-backup" data-mobile-slot="grades-reset-slot">
@@ -13,8 +14,10 @@
 <input type="file" id="grades-import-file" accept=".json" hidden>
 <button type="button" class="btn" id="grades-export-btn" data-sheet-dismiss>{{ icon('download', site.icons) }}<span class="btn-label"><span class="label-short">{{ labels.grades.export_btn }}</span><span class="label-long">{{ labels.grades.export_row }}</span></span></button>
 </div>
+{% if bulletin_enabled %}
 <button type="button" class="btn btn-primary" id="grades-bulletin-btn">{{ icon('file-pdf', site.icons) }}<span class="btn-label">{{ labels.grades.bulletin_btn }}</span></button>
 <input type="file" id="grades-bulletin-file" accept="application/pdf,.pdf" hidden>
+{% endif %}
 <button type="button" class="filters-toggle" aria-expanded="false" aria-controls="grades-options" aria-label="{{ labels.grades.options_btn }}">{{ icon('filter', site.icons) }}</button>
 </div>
 {% endcall %}{% endblock %}
@@ -36,7 +39,7 @@
 <noscript>
 <p class="noscript-notice">{{ labels.grades.noscript_notice }}</p>
 </noscript>
-<p class="privacy-notice">{{ labels.grades.privacy_notice }}<br>{{ labels.grades.bulletin_notice }}</p>
+<p class="privacy-notice">{{ labels.grades.privacy_notice }}{% if bulletin_enabled %}<br>{{ labels.grades.bulletin_notice }}{% endif %}</p>
 <div id="grades-message" class="grades-message" role="status" aria-live="polite" hidden></div>
 
 <div class="grades-layout">
@@ -156,7 +159,9 @@
 <script defer src="{{ url_for('static/js/grades-display.js') }}" data-class-id="{{ class_config.id }}" data-mobile-query="{{ mobile_media_query }}"></script>
 <script defer src="{{ url_for('static/js/write-access.js') }}"></script>
 <script defer src="{{ url_for('static/js/grades-model.js') }}"></script>
+{% if bulletin_enabled %}
 <script defer src="{{ url_for('static/js/bulletin-model.js') }}"></script>
+{% endif %}
 <script defer src="{{ url_for('static/js/grades.js') }}"
   data-class-id="{{ class_config.id }}"
   data-min="{{ site.grades.minimum }}"

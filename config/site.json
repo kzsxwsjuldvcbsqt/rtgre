@@ -74,6 +74,7 @@
     "max_entries": 500,
     "message_duration_ms": 5000,
     "bulletin": {
+      "classes": ["b3dc3"],
       "max_bytes": 2000000,
       "max_pages": 10,
       "producer_marker": "ScoDoc",

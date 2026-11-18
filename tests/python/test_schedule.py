@@ -11,6 +11,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 import requests
+from markupsafe import escape
 from support.fixtures import calendar_bytes, sample_events
 
 from schedule.build import build_lock, output_path, publish_site, run
@@ -474,6 +475,19 @@ class ScheduleTests(unittest.TestCase):
             stylesheet.unlink()
             with self.assertRaises(ValueError):
                 render("2026-11-21")
+
+    def test_bulletin_import_is_offered_to_configured_classes_only(self):
+        offered = set(self.config.site["grades"]["bulletin"]["classes"])
+        self.assertTrue(offered)
+        with tempfile.TemporaryDirectory() as directory:
+            render_site(self.config, {}, output_dir=directory)
+            for cls in self.classes:
+                with self.subTest(class_id=cls.id):
+                    html = (Path(directory) / "classes" / cls.id / "notes.html").read_text()
+                    for marker in ('id="grades-bulletin-btn"', "bulletin-model.js"):
+                        self.assertEqual(marker in html, cls.id in offered)
+                    notice = str(escape(self.config.labels["grades"]["bulletin_notice"]))
+                    self.assertEqual(notice in html, cls.id in offered)
 
     def test_stylesheet_imports_are_bundled_into_their_layers(self):
         with tempfile.TemporaryDirectory() as directory:
