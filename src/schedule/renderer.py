@@ -1,10 +1,10 @@
-from datetime import datetime
+from datetime import date, datetime
 from functools import partial
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
-from .config import AppConfig
+from .config import AppConfig, active_theme, theme_stylesheet
 from .curriculum import (
     canonical_module_codes,
     get_class_grades_data,
@@ -54,6 +54,7 @@ def render_site(
     output_dir: str = "dist",
     templates_dir: str = "templates",
     static_dir: str = "static",
+    today: date | None = None,
 ):
     out_path = Path(output_dir)
     out_path.mkdir(parents=True, exist_ok=True)
@@ -65,8 +66,8 @@ def render_site(
             f for f in fav_candidates if (src_static / f.get("filename", "")).is_file()
         ]
 
+    now = datetime.now(app_config.timezone)
     if not now_str:
-        now = datetime.now(app_config.timezone)
         formats = app_config.site["formats"]
         now_str = formats["footer_timestamp"].format(
             date=now.strftime(formats["date_absolute"]),
@@ -78,8 +79,19 @@ def render_site(
         loader=FileSystemLoader(templates_dir), autoescape=True, undefined=StrictUndefined
     )
 
+    stylesheets = {
+        theme["id"]: theme_stylesheet(app_config.themes, theme)
+        for theme in app_config.themes["themes"]
+    }
+    for stylesheet in stylesheets.values():
+        if not (Path(static_dir) / stylesheet).is_file():
+            raise ValueError(f"Missing theme stylesheet: {stylesheet}")
+    theme = active_theme(app_config.themes, today or now.date())
+
     section_files = {section.id: section.file for section in app_config.sections if section.file}
     env.globals.update(
+        theme_id=theme["id"] if theme else "",
+        theme_stylesheet=stylesheets[theme["id"]] if theme else "",
         section_files=section_files,
         programs=app_config.programs,
         category_tones={

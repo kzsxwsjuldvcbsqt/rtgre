@@ -1,5 +1,5 @@
-@layer reset, tokens, base, layout, components, states, responsive, print,
-  utilities;
+@layer reset, tokens, base, layout, components, states, responsive, theme,
+  print, utilities;
 
 @import url("reset.css") layer(reset);
 @import url("tokens.css") layer(tokens);

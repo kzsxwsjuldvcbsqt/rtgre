@@ -31,6 +31,7 @@ class AppConfig:
     calendar_config: dict
     corrections: tuple[dict, ...]
     labels: dict
+    themes: dict
     timezone: ZoneInfo
 
 
@@ -78,6 +79,39 @@ def validate_site_config(site: dict):
 
 def valid_public_id(value: object) -> bool:
     return isinstance(value, str) and re.fullmatch(r"[a-z0-9][a-z0-9_-]*", value) is not None
+
+
+def validate_themes_config(config: dict) -> None:
+    themes = config["themes"]
+    ids = [theme["id"] for theme in themes]
+    if (
+        not valid_relative_file(config["stylesheet"])
+        or not valid_public_id(config["directory"])
+        or len(set(ids)) != len(ids)
+        or not all(valid_public_id(theme_id) for theme_id in ids)
+    ):
+        raise ValueError("Invalid themes configuration")
+    for theme in themes:
+        if (
+            type(theme["enabled"]) is not bool
+            or not isinstance(theme["label"], str)
+            or not theme["label"].strip()
+            or date.fromisoformat(theme["first_date"]) > date.fromisoformat(theme["last_date"])
+        ):
+            raise ValueError(f"Invalid theme {theme['id']}")
+
+
+def active_theme(config: dict, today: date) -> dict | None:
+    for theme in config["themes"]:
+        if theme["enabled"] and date.fromisoformat(
+            theme["first_date"]
+        ) <= today <= date.fromisoformat(theme["last_date"]):
+            return theme
+    return None
+
+
+def theme_stylesheet(config: dict, theme: dict) -> str:
+    return f"{config['directory']}/{theme['id']}/{config['stylesheet']}"
 
 
 def validate_bulletin_config(bulletin):
@@ -280,6 +314,9 @@ def load_config(config_dir: str = "config") -> AppConfig:
 
     with open(path / "corrections.json", encoding="utf-8") as f:
         corrections_data = json.load(f)
+    with open(path / "themes.json", encoding="utf-8") as f:
+        themes_data = json.load(f)
+    validate_themes_config(themes_data)
     validate_curriculum_config(curriculum_data)
     validate_evaluation_details(curriculum_data)
     validate_calendar_config(calendar_data)
@@ -456,5 +493,6 @@ def load_config(config_dir: str = "config") -> AppConfig:
         calendar_config=calendar_data,
         corrections=tuple(corrections_data["events"]),
         labels=labels,
+        themes=themes_data,
         timezone=tz,
     )

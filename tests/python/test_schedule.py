@@ -6,7 +6,7 @@ import shutil
 import tempfile
 import unittest
 from dataclasses import replace
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from unittest.mock import patch
 
@@ -16,12 +16,14 @@ from support.fixtures import calendar_bytes, sample_events
 from schedule.build import build_lock, output_path, publish_site, run
 from schedule.classifier import match_session_marks
 from schedule.config import (
+    active_theme,
     load_config,
     validate_bulletin_config,
     validate_calendar_config,
     validate_evaluation_details,
     validate_session_marks,
     validate_site_config,
+    validate_themes_config,
 )
 from schedule.curriculum import (
     canonical_module_codes,
@@ -362,6 +364,102 @@ class ScheduleTests(unittest.TestCase):
                 fetch_calendar("https://example.invalid", self.config.site, "test")
             self.assertIs(raised.exception.__cause__, error)
             self.assertEqual(client.get.call_count, self.config.site["ade"]["retry_attempts"])
+
+    def test_theme_applies_only_within_its_enabled_period(self):
+        themes = {
+            "directory": "themes",
+            "stylesheet": "theme.css",
+            "themes": [
+                {
+                    "id": "first",
+                    "label": "First",
+                    "enabled": False,
+                    "first_date": "2026-11-01",
+                    "last_date": "2026-11-30",
+                },
+                {
+                    "id": "second",
+                    "label": "Second",
+                    "enabled": True,
+                    "first_date": "2026-11-10",
+                    "last_date": "2026-11-20",
+                },
+            ],
+        }
+        validate_themes_config(themes)
+        for day, expected in (
+            ("2026-11-09", None),
+            ("2026-11-10", "second"),
+            ("2026-11-20", "second"),
+            ("2026-11-21", None),
+        ):
+            with self.subTest(day=day):
+                theme = active_theme(themes, date.fromisoformat(day))
+                self.assertEqual(theme and theme["id"], expected)
+        for change in (
+            {"id": "Bad Id"},
+            {"id": "first"},
+            {"enabled": "yes"},
+            {"label": " "},
+            {"first_date": "2026-11-21"},
+            {"last_date": "soon"},
+        ):
+            with self.subTest(change=change):
+                broken = copy.deepcopy(themes)
+                broken["themes"][1].update(change)
+                with self.assertRaises(ValueError):
+                    validate_themes_config(broken)
+        for key, value in (("directory", "../themes"), ("stylesheet", "/theme.css")):
+            with self.subTest(key=key):
+                broken = copy.deepcopy(themes)
+                broken[key] = value
+                with self.assertRaises(ValueError):
+                    validate_themes_config(broken)
+
+    def test_pages_load_the_stylesheet_of_the_active_theme_only(self):
+        themes = {
+            "directory": "themes",
+            "stylesheet": "theme.css",
+            "themes": [
+                {
+                    "id": "sample",
+                    "label": "Sample",
+                    "enabled": True,
+                    "first_date": "2026-11-10",
+                    "last_date": "2026-11-20",
+                }
+            ],
+        }
+        config = replace(self.config, themes=themes)
+        link = 'static/themes/sample/theme.css"'
+        with (
+            tempfile.TemporaryDirectory() as static,
+            tempfile.TemporaryDirectory() as directory,
+        ):
+            stylesheet = Path(static) / "themes" / "sample" / "theme.css"
+            stylesheet.parent.mkdir(parents=True)
+            stylesheet.touch()
+            page = Path(directory) / "classes" / self.classes[0].id / "index.html"
+
+            def render(day):
+                render_site(
+                    config,
+                    {},
+                    output_dir=directory,
+                    static_dir=static,
+                    today=date.fromisoformat(day),
+                )
+                return page.read_text()
+
+            themed = render("2026-11-20")
+            self.assertIn('data-theme="sample"', themed)
+            self.assertIn(link, themed)
+            plain = render("2026-11-21")
+            self.assertNotIn("data-theme", plain)
+            self.assertNotIn(link, plain)
+            stylesheet.unlink()
+            with self.assertRaises(ValueError):
+                render("2026-11-21")
 
     def test_unreachable_calendar_ends_the_build_as_a_temporary_failure(self):
         with (
