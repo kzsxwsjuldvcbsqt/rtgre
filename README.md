@@ -115,7 +115,7 @@ Le pipeline se trouve dans `src/schedule/` :
 
 La publication est protégée par plusieurs garde-fous : un verrou contre deux générations simultanées, une génération dans un dossier temporaire, une validation avant publication, un remplacement atomique de l'ancienne version, une restauration de la version précédente en cas d'échec et le refus d'écraser certains dossiers non gérés. Ces mesures limitent les mauvaises surprises lors des publications, sans constituer une garantie absolue.
 
-Le chargement des pages est gardé léger sans outil de construction supplémentaire. Les styles restent découpés en fichiers par rôle dans le dépôt, mais le site publié n'en charge qu'un. Les icônes sont intégrées à chaque page au lieu d'être demandées séparément, ce qui les affiche dès le premier rendu. Une page demande ainsi une quinzaine de fichiers au lieu de près de quarante.
+Le chargement des pages est gardé léger sans outil de construction supplémentaire. Les styles restent découpés en fichiers par rôle dans le dépôt, mais le site publié n'en charge qu'un. Les icônes sont intégrées à chaque page au lieu d'être demandées séparément, ce qui les affiche dès le premier rendu. La police est hébergée avec le site et préchargée, si bien qu'aucune ressource ne vient d'un service tiers. Une page demande ainsi une quinzaine de fichiers au lieu de près de quarante.
 
 ### Navigateur, en JavaScript
 
@@ -139,6 +139,7 @@ Il n'y a pas de serveur applicatif, pas d'API privée, pas de base de données, 
 │   ├── css/             # styles
 │   ├── js/              # logique exécutée dans le navigateur
 │   ├── icons/           # icônes Phosphor
+│   ├── fonts/           # police Inter, hébergée avec le site
 │   ├── themes/          # thèmes temporaires, un dossier par thème
 │   └── vendor/pdfjs/    # lecture des relevés PDF (pdf.js)
 ├── tests/
@@ -310,4 +311,5 @@ Le projet est distribué sous licence MIT. Voir [LICENSE](LICENSE).
 Certaines ressources distribuées avec le dépôt conservent leur propre licence :
 
 - Phosphor Icons : [static/icons/PHOSPHOR-LICENSE.md](static/icons/PHOSPHOR-LICENSE.md)
+- Inter : [static/fonts/INTER-LICENSE.md](static/fonts/INTER-LICENSE.md)
 - pdf.js (Mozilla, Apache 2.0) : [static/vendor/pdfjs/LICENSE](static/vendor/pdfjs/LICENSE)
