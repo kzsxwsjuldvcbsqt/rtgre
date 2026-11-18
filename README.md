@@ -283,11 +283,11 @@ Côté navigateur, chaque page déclare une Content-Security-Policy définie dan
 
 ## Déploiement
 
-Le déploiement est géré par `.github/workflows/build.yml`. Le workflow s'exécute sur les push vers `main` ou `master`, sur les pull requests, manuellement, et automatiquement toutes les six heures.
+Le déploiement est géré par `.github/workflows/build.yml`. Le workflow s'exécute sur les push vers `main` ou `master`, sur les pull requests, manuellement, et automatiquement : toutes les heures en journée du lundi au vendredi, toutes les six heures le reste du temps.
 
 Il enchaîne l'installation des dépendances, les contrôles de formatage et de syntaxe, les tests Python, JavaScript et navigateur, la génération du dossier `dist/`, puis l'envoi de l'artefact GitHub Pages. Le déploiement effectif a lieu sauf pour les pull requests.
 
-Le déclenchement toutes les six heures permet de recopier plusieurs fois par jour les nouvelles données disponibles dans ADE.
+Le déclenchement horaire en semaine permet de reprendre dans l'heure un changement de salle ou d'horaire publié dans ADE. Quand ADE ne répond pas, la mise à jour automatique conserve le site en ligne sans échouer, et n'échoue que si le site n'a pas pu être republié depuis vingt-quatre heures.
 
 ## Données personnelles et limites
 
