@@ -67,7 +67,7 @@ L'interface reprend la structure d'une application web : une barre latérale fix
 
 Le site peut changer d'habillage pour une période donnée, puis reprendre seul son apparence habituelle. Chaque thème tient dans son propre dossier, `static/themes/<identifiant>/`, avec une feuille `theme.css` et ses images. Un thème ne touche ni aux modèles HTML ni au JavaScript : il redéfinit des couleurs du site et ajoute quelques règles dans une couche CSS dédiée, placée au-dessus des styles habituels et sous ceux de l'impression.
 
-Les thèmes sont déclarés dans `config/themes.json`. Chacun a un interrupteur `enabled` et une période, de `first_date` à `last_date` incluses. À chaque construction, le générateur retient le premier thème activé dont la période contient la date du jour ; sa feuille de style n'est chargée que dans ce cas, et les pages n'en portent aucune trace le reste du temps. La mise à jour automatique du site fait donc apparaître et disparaître un thème sans intervention.
+Les thèmes sont déclarés dans `config/themes.json`. Chacun a un interrupteur `enabled`, une période, de `first_date` à `last_date` incluses, et la liste `preload_images` des images à charger en priorité. À chaque construction, le générateur retient le premier thème activé dont la période contient la date du jour ; sa feuille de style n'est chargée que dans ce cas, et les pages n'en portent aucune trace le reste du temps. La mise à jour automatique du site fait donc apparaître et disparaître un thème sans intervention.
 
 | Thème | Ambiance |
 | --- | --- |
@@ -108,11 +108,14 @@ Le pipeline se trouve dans `src/schedule/` :
 - `matcher.py` rapproche les évaluations entre les groupes.
 - `curriculum.py` prépare les modules, coefficients, ressources et données de notes.
 - `viewmodels.py` prépare les données destinées aux vues.
-- `renderer.py` génère les pages avec Jinja2.
+- `renderer.py` génère les pages avec Jinja2 et y intègre le jeu d'icônes.
+- `stylesheets.py` regroupe les feuilles de style du dossier `static/css/` en un seul fichier publié.
 - `exporter.py` produit les fichiers JSON utilisés par le calendrier côté navigateur.
 - `sitecheck.py` vérifie les liens, les ressources, les fragments et les identifiants HTML du site généré.
 
 La publication est protégée par plusieurs garde-fous : un verrou contre deux générations simultanées, une génération dans un dossier temporaire, une validation avant publication, un remplacement atomique de l'ancienne version, une restauration de la version précédente en cas d'échec et le refus d'écraser certains dossiers non gérés. Ces mesures limitent les mauvaises surprises lors des publications, sans constituer une garantie absolue.
+
+Le chargement des pages est gardé léger sans outil de construction supplémentaire. Les styles restent découpés en fichiers par rôle dans le dépôt, mais le site publié n'en charge qu'un. Les icônes sont intégrées à chaque page au lieu d'être demandées séparément, ce qui les affiche dès le premier rendu. Une page demande ainsi une quinzaine de fichiers au lieu de près de quarante.
 
 ### Navigateur, en JavaScript
 
