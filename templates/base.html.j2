@@ -10,6 +10,9 @@
 <link rel="{{ icon.rel }}"{% if icon.type %} type="{{ icon.type }}"{% endif %} href="{{ url_for('static/' ~ icon.filename) }}">
 {% endfor %}
 <title>{% block title %}{{ site.title }}{% endblock %}</title>
+{% for font in site.preload_fonts %}
+<link rel="preload" as="font" type="font/woff2" href="{{ url_for('static/' ~ font) }}" crossorigin>
+{% endfor %}
 {% for image in theme_preload_images %}
 <link rel="preload" as="image" href="{{ url_for('static/' ~ image) }}">
 {% endfor %}

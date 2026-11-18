@@ -65,8 +65,8 @@ def validate_site_config(site: dict):
         or not re.fullmatch(r"-[a-z]+", icons["current_suffix"])
     ):
         raise ValueError("Invalid icons configuration")
-    if not valid_relative_file(site["stylesheet"]):
-        raise ValueError("Invalid stylesheet path")
+    if not all(valid_relative_file(path) for path in (site["stylesheet"], *site["preload_fonts"])):
+        raise ValueError("Invalid stylesheet or font path")
     for key in ("output_directory", "static_directory"):
         path = PurePosixPath(site[key])
         if path.is_absolute() or len(path.parts) != 1 or path.name in ("", ".", ".."):

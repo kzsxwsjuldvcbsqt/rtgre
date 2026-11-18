@@ -466,7 +466,7 @@ class ScheduleTests(unittest.TestCase):
             plain = render("2026-11-21")
             self.assertNotIn("data-theme", plain)
             self.assertNotIn(link, plain)
-            self.assertNotIn("preload", plain)
+            self.assertNotIn('as="image"', plain)
             cover.unlink()
             with self.assertRaises(ValueError):
                 render("2026-11-21")
