@@ -97,8 +97,10 @@
   .has-filter-bar .filter-group-last {
     order: -1;
     margin-inline-end: var(--space-2xs);
-    padding-inline-end: var(--space-sm);
-    border-inline-end: var(--rule-width) solid var(--color-border-muted);
+  }
+  .filter-form label:has(input:checked) .icon,
+  .toggle-pill:has(input:checked) .icon {
+    display: none;
   }
   .has-filter-bar .results-count {
     display: flex;

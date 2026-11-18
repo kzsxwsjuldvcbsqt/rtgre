@@ -69,8 +69,10 @@ select:disabled {
   .segmented .segmented-option:not([aria-pressed="true"]):hover {
     color: var(--color-text);
   }
-  .segmented .segmented-option:not([aria-pressed="true"]):hover::before {
-    background: var(--color-canvas);
+  .filter-form label:has(input:checked):hover,
+  .toggle-pill:has(input:checked):hover {
+    border-color: var(--color-primary-hover);
+    background: var(--color-primary-hover);
   }
   .menu-list button:hover,
   .menu-list a:hover {

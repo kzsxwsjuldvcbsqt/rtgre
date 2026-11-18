@@ -12,6 +12,7 @@
   --color-surface-hover: var(--color-canvas);
   --color-inset: #ffffff;
   --color-badge: #eeeeee;
+  --color-track: var(--color-badge);
 
   --color-border: #c4c4c4;
   --color-border-muted: #e3e3e3;
