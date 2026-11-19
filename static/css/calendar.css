@@ -56,9 +56,20 @@
   gap: var(--space-sm);
   min-width: 0;
   padding: var(--space-sm);
-  border: var(--rule-width) solid var(--color-border-muted);
+  --event-surface: var(--event-fill, var(--color-surface));
+  --event-surface-past: color-mix(
+    in srgb,
+    var(--event-surface) var(--mix-past),
+    var(--color-surface)
+  );
+  border: var(--rule-width) solid
+    color-mix(
+      in srgb,
+      var(--event-surface) var(--mix-event-edge),
+      var(--color-text)
+    );
   border-radius: var(--radius-control);
-  background: var(--event-fill, var(--color-surface));
+  background: var(--event-surface);
 }
 .calendar-event-item.kind-resource {
   --event-fill: var(--color-kind-resource);
@@ -208,31 +219,30 @@
   color: inherit;
   border-block-start: var(--rule-width) solid currentColor;
 }
-.calendar-event-item.is-ongoing,
-.calendar-event-item.is-past {
-  position: relative;
-}
-.calendar-event-item.is-ongoing::after,
-.calendar-event-item.is-past::after {
-  content: "";
-  position: absolute;
-  inset-block-start: 0;
-  inset-inline: 0;
-  height: 100%;
-  border-radius: inherit;
-  background: var(--color-veil);
-  pointer-events: none;
-}
-.calendar-event-item.is-ongoing:not(.is-evaluation) {
-  border-color: transparent;
-}
 .calendar-event-item.is-past {
   border-color: var(--color-border-muted);
+  background: var(--event-surface-past);
 }
-.calendar-event-item.is-ongoing::after {
-  height: calc(var(--course-progress) * 100%);
-  border-end-start-radius: 0;
-  border-end-end-radius: 0;
+.calendar-event-item.is-past .event-title {
+  color: var(--color-text-muted);
+}
+.calendar-event-item.is-past
+  :is(
+    .event-time,
+    .event-rooms,
+    .event-teachers,
+    .event-groups,
+    .event-series,
+    .room-tag
+  ) {
+  color: var(--color-text-faint);
+}
+.calendar-event-item.is-ongoing {
+  background: linear-gradient(
+    to bottom,
+    var(--event-surface-past) calc(var(--course-progress) * 100%),
+    var(--event-surface) calc(var(--course-progress) * 100%)
+  );
 }
 .current-time-marker.is-line {
   position: absolute;
@@ -295,12 +305,6 @@
   border: 0;
   border-radius: 0;
   background: transparent;
-}
-.calendar-view-year .calendar-event-item.is-past {
-  opacity: var(--opacity-past);
-}
-.calendar-view-year .calendar-event-item.is-past::after {
-  content: none;
 }
 .calendar-view-year .event-time,
 .calendar-view-year .event-title {

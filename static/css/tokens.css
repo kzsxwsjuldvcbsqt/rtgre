@@ -53,7 +53,6 @@
   --color-label-slate-bg: #e7ecf2;
   --color-label-slate-fg: #3f5266;
   --color-now: var(--color-field-invalid);
-  --color-veil: rgba(255, 255, 255, 0.6);
   --color-backdrop: rgba(0, 0, 0, 0.45);
   --color-now-soft: rgba(229, 72, 77, 0.16);
   --color-now-glow: rgba(229, 72, 77, 0.45);
@@ -170,7 +169,8 @@
   --opacity-disabled: 0.5;
   --opacity-dimmed: 0.45;
   --opacity-indicator: 0.6;
-  --opacity-past: 0.6;
+  --mix-past: 35%;
+  --mix-event-edge: 82%;
   --transition-fast: 180ms ease;
   --transition-undim: opacity 0s 150ms;
   --motion-spotlight: 1400ms linear 250ms;
@@ -235,7 +235,6 @@
     --color-label-green-fg: #7fd69b;
     --color-label-slate-bg: #232b34;
     --color-label-slate-fg: #a9bccf;
-    --color-veil: rgba(18, 18, 18, 0.6);
     --color-backdrop: rgba(0, 0, 0, 0.6);
 
     --color-link: #f2f2f2;
