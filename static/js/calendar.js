@@ -787,28 +787,26 @@
       });
     }
 
-    document.addEventListener("keydown", function (e) {
-      if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
-      const tag =
-        e.target && e.target.tagName ? e.target.tagName.toLowerCase() : "";
-      if (
-        tag === "input" ||
-        tag === "select" ||
-        tag === "textarea" ||
-        (e.target && e.target.isContentEditable)
-      )
-        return;
-
-      if (e.key === "ArrowLeft" || e.keyCode === 37) {
-        if (prevBtn && !prevBtn.disabled && !prevBtn.hidden) {
-          prevBtn.click();
-        }
-      } else if (e.key === "ArrowRight" || e.keyCode === 39) {
-        if (nextBtn && !nextBtn.disabled && !nextBtn.hidden) {
-          nextBtn.click();
-        }
-      }
-    });
+    const shortcuts = {
+      ArrowLeft: function () {
+        return AppUtils.press(prevBtn);
+      },
+      ArrowRight: function () {
+        return AppUtils.press(nextBtn);
+      },
+    };
+    shortcuts[scriptEl.getAttribute("data-key-today")] = function () {
+      return AppUtils.press(todayBtn);
+    };
+    shortcuts[scriptEl.getAttribute("data-key-reset")] = function () {
+      return AppUtils.press(resetBtn);
+    };
+    shortcuts[scriptEl.getAttribute("data-key-search")] = function () {
+      if (!searchInput) return false;
+      searchInput.focus();
+      return true;
+    };
+    AppUtils.bindShortcuts(shortcuts);
 
     window.addEventListener("hashchange", function () {
       if (window.location.hash !== lastWrittenHash) {

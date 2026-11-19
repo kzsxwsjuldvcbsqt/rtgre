@@ -38,6 +38,8 @@
   data-modules='{{ active_modules | tojson }}'
   data-icon-check="#{{ site.icons.id_prefix }}check"
   data-icon-reset="#{{ site.icons.id_prefix }}x"
+  data-key-reset="{{ site.shortcuts.reset }}"
+  data-hint-reset="{{ labels.shortcuts.hint.format(key=site.shortcuts.reset | upper) }}"
 ><div class="filter-mobile-slot" id="eval-feed-slot"></div></div>
 </div>
 

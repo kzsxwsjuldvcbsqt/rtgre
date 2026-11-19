@@ -37,7 +37,9 @@
 }
 
 @media (max-width: 59.99em) {
-  .grades-band {
+  .grades-band,
+  .search-key,
+  .shortcuts-box {
     display: none;
   }
   .calendar-view-year .day-section {

@@ -69,6 +69,23 @@ select:disabled {
   .segmented .segmented-option:not([aria-pressed="true"]):hover {
     color: var(--color-text);
   }
+  [data-shortcut]:hover::after,
+  [data-shortcut]:focus-visible::after {
+    content: attr(data-shortcut);
+    position: absolute;
+    inset-block-start: calc(100% + var(--space-2xs));
+    inset-inline-start: 50%;
+    z-index: var(--z-menu);
+    padding: var(--space-3xs) var(--space-xs);
+    border-radius: var(--radius-key);
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    white-space: nowrap;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
   .filter-form label:has(input:checked):hover,
   .toggle-pill:has(input:checked):hover {
     border-color: var(--color-primary-hover);

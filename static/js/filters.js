@@ -132,7 +132,13 @@ AppUtils.onDOMReady(function () {
   resetBtn.hidden = true;
   resetBtn.appendChild(AppUtils.buildIcon(dataset.iconReset, "icon-sm"));
   resetBtn.appendChild(document.createTextNode(labelReset));
+  resetBtn.dataset.shortcut = dataset.hintReset;
   resetGroup.appendChild(resetBtn);
+  const shortcuts = {};
+  shortcuts[dataset.keyReset] = function () {
+    return AppUtils.press(resetBtn);
+  };
+  AppUtils.bindShortcuts(shortcuts);
   form.appendChild(resetGroup);
 
   const countDiv = document.createElement("div");

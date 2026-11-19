@@ -199,6 +199,17 @@
   "list_separator": ", ",
   "unofficial_notice": "Site non officiel",
   "empty_value": "Non renseigné",
+  "shortcuts": {
+    "title": "Raccourcis clavier",
+    "hint": "Touche {key}",
+    "previous_key": "←",
+    "next_key": "→",
+    "previous": "Semaine ou jour précédent",
+    "next": "Semaine ou jour suivant",
+    "today": "Revenir à aujourd'hui",
+    "reset": "Réinitialiser les filtres",
+    "search": "Aller à la recherche"
+  },
   "feeds": {
     "calendar_name": "{site} {class}",
     "evaluations_name": "{site} {class} · Évaluations",

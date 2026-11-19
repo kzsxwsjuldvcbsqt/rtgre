@@ -32,6 +32,36 @@
     }).format(relative.value, relative.unit);
   }
 
+  function bindShortcuts(handlers) {
+    document.addEventListener("keydown", function (event) {
+      if (
+        event.defaultPrevented ||
+        event.altKey ||
+        event.ctrlKey ||
+        event.metaKey
+      )
+        return;
+      const target = event.target;
+      const tag = target && target.tagName ? target.tagName.toLowerCase() : "";
+      if (
+        tag === "input" ||
+        tag === "select" ||
+        tag === "textarea" ||
+        (target && target.isContentEditable)
+      )
+        return;
+      const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
+      if (!Object.prototype.hasOwnProperty.call(handlers, key)) return;
+      if (handlers[key]()) event.preventDefault();
+    });
+  }
+
+  function press(button) {
+    if (!button || button.disabled || button.hidden) return false;
+    button.click();
+    return true;
+  }
+
   const MS_PER_HOUR = 60 * 60 * 1000;
 
   function hoursSince(instantIso, now) {
@@ -190,6 +220,8 @@
     onDOMReady: onDOMReady,
     normalizeSearch: normalizeSearch,
     hoursSince: hoursSince,
+    bindShortcuts: bindShortcuts,
+    press: press,
     relativeDay: relativeDay,
     formatRelativeDay: formatRelativeDay,
   };

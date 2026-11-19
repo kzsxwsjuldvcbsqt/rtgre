@@ -111,3 +111,13 @@ test("data age is counted in whole hours", () => {
     25,
   );
 });
+
+test("a pressed control must be usable", () => {
+  let clicks = 0;
+  const button = { disabled: false, hidden: false, click: () => clicks++ };
+  assert.equal(utils.press(button), true);
+  assert.equal(utils.press({ ...button, disabled: true }), false);
+  assert.equal(utils.press({ ...button, hidden: true }), false);
+  assert.equal(utils.press(null), false);
+  assert.equal(clicks, 1);
+});

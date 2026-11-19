@@ -111,6 +111,11 @@
     "alternate_date_window_days": 7
   },
   "stale_after_hours": 12,
+  "shortcuts": {
+    "today": "a",
+    "reset": "r",
+    "search": "/"
+  },
   "feeds": {
     "calendar_file": "calendrier.ics",
     "evaluations_file": "evaluations.ics",

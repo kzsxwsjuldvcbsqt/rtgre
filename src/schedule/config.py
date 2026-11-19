@@ -366,6 +366,11 @@ def load_config(config_dir: str = "config") -> AppConfig:
     ):
         raise ValueError("Invalid grade limits")
     validate_bulletin_config(grades["bulletin"])
+    keys = [site["shortcuts"][name] for name in ("today", "reset", "search")]
+    if len(set(keys)) != len(keys) or not all(
+        isinstance(key, str) and len(key) == 1 and key == key.lower() for key in keys
+    ):
+        raise ValueError("Invalid keyboard shortcuts")
     if type(site["stale_after_hours"]) is not int or site["stale_after_hours"] <= 0:
         raise ValueError("Invalid stale data delay")
     feeds = site["feeds"]

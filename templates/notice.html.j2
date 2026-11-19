@@ -34,6 +34,15 @@
 {% endif %}
 </ul>
 </section>
+<section class="data-box shortcuts-box">
+<header class="data-box-head"><h2>{{ labels.shortcuts.title }}</h2></header>
+<ul class="box-list">
+<li class="box-row"><span class="shortcut-keys"><kbd>{{ labels.shortcuts.previous_key }}</kbd><kbd>{{ labels.shortcuts.next_key }}</kbd></span><span class="box-row-main">{{ labels.shortcuts.previous }}, {{ labels.shortcuts.next | lower }}</span></li>
+<li class="box-row"><span class="shortcut-keys"><kbd>{{ site.shortcuts.today | upper }}</kbd></span><span class="box-row-main">{{ labels.shortcuts.today }}</span></li>
+<li class="box-row"><span class="shortcut-keys"><kbd>{{ site.shortcuts.reset | upper }}</kbd></span><span class="box-row-main">{{ labels.shortcuts.reset }}</span></li>
+<li class="box-row"><span class="shortcut-keys"><kbd>{{ site.shortcuts.search | upper }}</kbd></span><span class="box-row-main">{{ labels.shortcuts.search }}</span></li>
+</ul>
+</section>
 <h2>{{ labels.notice.about_title }}</h2>
 <div class="text-block">
 <p>{{ labels.notice.p1 }}</p>
