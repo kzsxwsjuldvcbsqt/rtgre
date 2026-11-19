@@ -226,6 +226,9 @@
 .calendar-event-item.is-past .event-title {
   color: var(--color-text-muted);
 }
+.calendar-event-item.is-past .event-name strong {
+  font-weight: var(--weight-medium);
+}
 .calendar-event-item.is-past
   :is(
     .event-time,
