@@ -125,14 +125,20 @@
     flex: none;
     flex-wrap: nowrap;
   }
-  .calendar-nav-bar + .filter-form .filter-group-reset {
+  .calendar-nav-bar + .filter-form :is(.filter-group-reset, .results-count) {
     order: -2;
+  }
+  .calendar-nav-bar
+    + .filter-form
+    .filter-group-reset:has(button[hidden])
+    + .results-count {
+    display: none;
   }
   .has-filter-bar .reset-label {
     display: none;
   }
   @container filter-bar (max-width: 62rem) {
-    .reset-count {
+    .calendar-nav-bar + .filter-form .results-count {
       display: none;
     }
   }

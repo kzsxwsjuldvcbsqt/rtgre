@@ -101,8 +101,10 @@
 </div>
 
 <div class="filter-group filter-group-reset">
-<button type="button" id="cal-reset-btn" aria-label="{{ labels.shortcuts.reset }}" data-shortcut="{{ labels.shortcuts.hint_named.format(name=labels.calendar.reset_btn, key=site.shortcuts.reset | upper) }}" hidden><span class="reset-count" id="cal-results-count"></span>{{ icon('x', site.icons, 'icon-sm') }}<span class="reset-label">{{ labels.calendar.reset_btn }}</span></button>
+<button type="button" id="cal-reset-btn" aria-label="{{ labels.shortcuts.reset }}" data-shortcut="{{ labels.shortcuts.hint_named.format(name=labels.calendar.reset_btn, key=site.shortcuts.reset | upper) }}" hidden>{{ icon('x', site.icons, 'icon-sm') }}<span class="reset-label">{{ labels.calendar.reset_btn }}</span></button>
 </div>
+
+<div class="results-count" id="cal-results-count"></div>
 
 </div>
 </div>

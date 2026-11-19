@@ -131,7 +131,11 @@ AppUtils.onDOMReady(function () {
   resetBtn.id = "filter-reset";
   resetBtn.hidden = true;
   resetBtn.appendChild(AppUtils.buildIcon(dataset.iconReset, "icon-sm"));
-  resetBtn.appendChild(document.createTextNode(labelReset));
+  const resetLabel = document.createElement("span");
+  resetLabel.className = "reset-label";
+  resetLabel.textContent = labelReset;
+  resetBtn.appendChild(resetLabel);
+  resetBtn.setAttribute("aria-label", labelReset);
   resetBtn.dataset.shortcut = dataset.hintReset;
   resetGroup.appendChild(resetBtn);
   const shortcuts = {};

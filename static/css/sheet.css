@@ -91,7 +91,6 @@
   }
   .filter-panel .filter-field-title,
   .filter-panel .results-count,
-  .filter-panel .reset-count,
   .filter-panel .label-short,
   .filter-panel .choice-trigger-key {
     display: none;

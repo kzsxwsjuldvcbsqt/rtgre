@@ -338,10 +338,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .cal-period-caret {
   color: var(--color-text-faint);
 }
-.reset-count {
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
 .btn-text {
   display: none;
 }
