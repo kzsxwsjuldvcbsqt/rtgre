@@ -34,6 +34,9 @@
 {% endfor %}
 </ul>
 <ul class="app-nav-foot">
+{% if class_config %}
+<li class="nav-agenda"><a href="{{ url_for('classes/' ~ class_config.id ~ '/' ~ section_files.notice) }}#agenda">{{ icon('plus', site.icons) }}<span>{{ labels.feeds.add_btn }}</span></a></li>
+{% endif %}
 {% for sec in sections %}
 {% if sec.kind == 'global' %}
 <li><a href="{{ url_for(('classes/' ~ class_config.id ~ '/' if class_config else '') ~ sec.file) }}"{% if sec.id == current_id %} aria-current="page"{% endif %}>{{ icon(sec.icon ~ (site.icons.current_suffix if sec.id == current_id else ''), site.icons) }}<span>{{ sec.label }}</span></a></li>

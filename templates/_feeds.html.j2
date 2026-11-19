@@ -1,6 +1,6 @@
 {% from "_icons.html.j2" import icon %}
-{% macro feed_entry(slot, target, labels, site) %}
-<a class="btn feed-entry" href="{{ target }}" data-mobile-slot="{{ slot }}">{{ icon('calendar', site.icons) }}<span class="btn-label">{{ labels.feeds.add_btn }}</span></a>
+{% macro feed_entry(target, labels, site) %}
+<a class="btn feed-entry" href="{{ target }}">{{ icon('calendar', site.icons) }}<span class="btn-label">{{ labels.feeds.add_btn }}</span></a>
 {% endmacro %}
 {% macro feed_choices(file, labels, site) %}
 <div class="feed-choices">

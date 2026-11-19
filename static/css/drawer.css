@@ -1,3 +1,4 @@
+.nav-agenda,
 .nav-toggle,
 .nav-class-chip,
 .nav-close,
@@ -43,8 +44,12 @@
   .app-topbar:has(.nav-class-chip) .app-breadcrumb li:nth-child(2)::before {
     content: none;
   }
-  .app-topbar-actions:not(:has(*)) {
+  .feed-entry,
+  .app-topbar-actions:not(:has(> :not(.feed-entry))) {
     display: none;
+  }
+  .nav-agenda {
+    display: block;
   }
   .app-topbar-actions {
     padding: var(--space-xs) var(--page-gutter);
