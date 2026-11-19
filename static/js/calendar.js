@@ -576,12 +576,7 @@
       stopTimeMarkerTimer();
       saveState();
       if (resetBtn) {
-        resetBtn.hidden =
-          state.view === resolveDefaultView() &&
-          state.layout === calendarConfig.default_layout &&
-          !state.evals &&
-          !state.withTeacher &&
-          !state.search;
+        resetBtn.hidden = !state.evals && !state.withTeacher && !state.search;
       }
       renderCalendarView(currentClassEvents);
       updateTimeMarker();
@@ -698,9 +693,6 @@
 
     if (resetBtn) {
       resetBtn.addEventListener("click", function () {
-        state.view = resolveDefaultView();
-        state.layout = calendarConfig.default_layout;
-        state.date = defaultDateStr;
         state.evals = false;
         state.withTeacher = false;
         state.search = "";
