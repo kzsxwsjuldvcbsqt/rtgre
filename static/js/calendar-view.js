@@ -87,25 +87,20 @@
         }
       }
 
-      function setHeading(full, short, eyebrow) {
+      function setHeading(title, eyebrow) {
         if (!periodHeading) return;
-        const fullEl = document.createElement("span");
-        fullEl.className = "heading-full";
-        fullEl.textContent = full;
-        const shortEl = document.createElement("span");
-        shortEl.className = "heading-short";
+        const parts = [document.createTextNode(title)];
         if (eyebrow) {
           const eyebrowEl = document.createElement("span");
           eyebrowEl.className = "heading-eyebrow";
           eyebrowEl.textContent = eyebrow;
-          shortEl.appendChild(eyebrowEl);
+          parts.unshift(eyebrowEl);
         }
-        shortEl.appendChild(document.createTextNode(short));
-        periodHeading.replaceChildren(fullEl, shortEl);
+        periodHeading.replaceChildren.apply(periodHeading, parts);
       }
 
       if (state.view === "year") {
-        setHeading(schoolYearLabel, schoolYearLabel);
+        setHeading(schoolYearLabel);
       } else if (state.view === "week") {
         const wStart = getWeekStart(currDate);
         const wEnd = new Date(wStart.getTime());
@@ -114,15 +109,6 @@
         const wNum = getISOWeekNumber(wStart);
 
         setHeading(
-          AppUtils.formatText(labels.week_title, {
-            prefix: labels.week_prefix,
-            week: wNum,
-            start_day: wStart.getDate(),
-            start_month: monthNames[wStart.getMonth()],
-            end_day: wEnd.getDate(),
-            end_month: monthNames[wEnd.getMonth()],
-            year: wEnd.getFullYear(),
-          }),
           AppUtils.formatText(
             wStart.getMonth() === wEnd.getMonth()
               ? labels.week_title_short
@@ -142,12 +128,6 @@
       } else {
         const dayIdx = (currDate.getDay() + 6) % 7;
         setHeading(
-          AppUtils.formatText(labels.day_title, {
-            day_name: dayNames[dayIdx],
-            day_num: currDate.getDate(),
-            month_name: monthNames[currDate.getMonth()],
-            year: currDate.getFullYear(),
-          }),
           AppUtils.formatText(labels.day_title_short, {
             day_name: labels.days_short[dayIdx],
             day_num: currDate.getDate(),

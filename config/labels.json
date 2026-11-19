@@ -88,7 +88,8 @@
   "calendar": {
     "title": "Emploi du temps",
     "view_label": "Vue",
-    "layout_label": "Affichage",
+    "layout_label": "Présentation",
+    "display_menu": "Affichage",
     "layout_grid": "Grille",
     "layout_list": "Liste",
     "view_week": "Semaine",
@@ -112,7 +113,6 @@
     "results_count_plural": "cours",
     "noscript_notice": "Activez JavaScript pour naviguer dans le calendrier et filtrer l'emploi du temps.",
     "year_title": "Année {year}",
-    "week_title": "{prefix} {week} : {start_day} {start_month} - {end_day} {end_month} {year}",
     "day_title": "{day_name} {day_num} {month_name} {year}",
     "week_day_date": "{day_num} {month_name}",
     "week_title_eyebrow": "{prefix} {week}",
@@ -204,6 +204,7 @@
   "shortcuts": {
     "title": "Raccourcis clavier",
     "hint": "Touche {key}",
+    "hint_named": "{name} · touche {key}",
     "previous_key": "←",
     "next_key": "→",
     "previous": "Semaine ou jour précédent",

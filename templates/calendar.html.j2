@@ -38,6 +38,24 @@
 <p class="noscript-notice">{{ labels.calendar.noscript_notice }}</p>
 </noscript>
 
+<div id="calendar-nav-bar" class="calendar-nav-bar" hidden>
+<div class="cal-nav-center">
+<button type="button" id="cal-prev-btn" data-shortcut="{{ labels.shortcuts.hint.format(key=labels.shortcuts.previous_key) }}" aria-label="{{ labels.calendar.prev_btn }}"><span class="btn-text">{{ labels.calendar.prev_btn }}</span><span class="btn-symbol">{{ icon('chevron-left', site.icons) }}</span></button>
+<button type="button" id="cal-next-btn" data-shortcut="{{ labels.shortcuts.hint.format(key=labels.shortcuts.next_key) }}" aria-label="{{ labels.calendar.next_btn }}"><span class="btn-text">{{ labels.calendar.next_btn }}</span><span class="btn-symbol">{{ icon('chevron-right', site.icons) }}</span></button>
+<button type="button" id="cal-today-btn" data-mobile-slot="cal-date-slot" data-shortcut="{{ labels.shortcuts.hint.format(key=site.shortcuts.today | upper) }}" data-sheet-dismiss><span class="label-short">{{ labels.calendar.today_btn }}</span><span class="label-long">{{ labels.calendar.today_row }}</span></button>
+<div class="cal-period">
+<div id="cal-period-heading" class="cal-period-heading"></div>
+{{ icon('chevron-down', site.icons, 'icon-sm cal-period-caret') }}
+<div class="filter-group-item" id="cal-date-input-group" data-mobile-slot="cal-date-slot">
+<label for="cal-date-input" class="visually-hidden">{{ labels.fields.date }}</label>
+<span class="filter-field-title" aria-hidden="true">{{ labels.fields.date }}</span>
+<input type="date" id="cal-date-input" min="{{ site.school_year.first_date }}" max="{{ site.school_year.last_date }}">
+</div>
+</div>
+</div>
+<button type="button" class="filters-toggle" aria-expanded="false" aria-controls="calendar-controls" aria-label="{{ labels.calendar.toggle_controls }}">{{ icon('filter', site.icons) }}</button>
+</div>
+
 <div id="calendar-controls" class="filter-form filter-panel" data-sheet-count="cal-results-count" hidden>
 <div class="filter-group filter-mobile-slot" id="cal-date-slot"><span class="filter-field-title" aria-hidden="true">{{ labels.fields.date }}</span></div>
 <div class="filter-group filter-group-scroll" id="cal-filters-scroll">
@@ -53,6 +71,10 @@
 </select>
 </div>
 
+<details class="menu display-menu">
+<summary class="btn" aria-label="{{ labels.calendar.display_menu }}">{{ icon('filter', site.icons) }}<span class="btn-label">{{ labels.calendar.display_menu }}</span></summary>
+<div class="menu-panel">
+<div class="display-options" data-mobile-slot="cal-options-slot">
 <div class="filter-group-item" id="cal-layout-select-group" hidden>
 <label for="cal-layout-select" class="visually-hidden">{{ labels.calendar.layout_label }}</label>
 <span class="filter-field-title" aria-hidden="true">{{ labels.calendar.layout_label }}</span>
@@ -67,6 +89,10 @@
 <label for="cal-evals-only"><input type="checkbox" id="cal-evals-only">{{ icon('check', site.icons, 'icon-sm') }}{{ labels.calendar.evals_only }}</label>
 <label for="cal-teacher-only"><input type="checkbox" id="cal-teacher-only">{{ icon('check', site.icons, 'icon-sm') }}{{ labels.calendar.teacher_filter }}</label>
 </div>
+</div>
+</details>
+<div class="filter-mobile-slot" id="cal-options-slot"></div>
+</div>
 
 <div class="filter-group filter-group-last">
 <label for="cal-search-input" class="visually-hidden">{{ labels.calendar.search_label }}</label>
@@ -75,32 +101,14 @@
 </div>
 
 <div class="filter-group filter-group-reset">
-<button type="button" id="cal-reset-btn" data-shortcut="{{ labels.shortcuts.hint.format(key=site.shortcuts.reset | upper) }}" hidden>{{ icon('x', site.icons, 'icon-sm') }}{{ labels.calendar.reset_btn }}</button>
+<button type="button" id="cal-reset-btn" aria-label="{{ labels.shortcuts.reset }}" data-shortcut="{{ labels.shortcuts.hint_named.format(name=labels.calendar.reset_btn, key=site.shortcuts.reset | upper) }}" hidden><span class="reset-count" id="cal-results-count"></span>{{ icon('x', site.icons, 'icon-sm') }}<span class="reset-label">{{ labels.calendar.reset_btn }}</span></button>
 </div>
 
-<div class="results-count" id="cal-results-count"></div>
 <div class="filter-mobile-slot" id="cal-feed-slot"></div>
 </div>
 </div>
 
 <div class="section-main">
-<div id="calendar-nav-bar" class="calendar-nav-bar" hidden>
-<div class="cal-nav-start" data-mobile-slot="cal-date-slot">
-<div class="filter-group-item" id="cal-date-input-group">
-<label for="cal-date-input" class="visually-hidden">{{ labels.fields.date }}</label>
-<span class="filter-field-title" aria-hidden="true">{{ labels.fields.date }}</span>
-<input type="date" id="cal-date-input" min="{{ site.school_year.first_date }}" max="{{ site.school_year.last_date }}">
-</div>
-<button type="button" id="cal-today-btn" data-shortcut="{{ labels.shortcuts.hint.format(key=site.shortcuts.today | upper) }}" data-sheet-dismiss><span class="label-short">{{ labels.calendar.today_btn }}</span><span class="label-long">{{ labels.calendar.today_row }}</span></button>
-</div>
-<div class="cal-nav-center">
-<button type="button" id="cal-prev-btn" data-shortcut="{{ labels.shortcuts.hint.format(key=labels.shortcuts.previous_key) }}" aria-label="{{ labels.calendar.prev_btn }}"><span class="btn-text">{{ labels.calendar.prev_btn }}</span><span class="btn-symbol">{{ icon('chevron-left', site.icons) }}</span></button>
-<button type="button" id="cal-next-btn" data-shortcut="{{ labels.shortcuts.hint.format(key=labels.shortcuts.next_key) }}" aria-label="{{ labels.calendar.next_btn }}"><span class="btn-text">{{ labels.calendar.next_btn }}</span><span class="btn-symbol">{{ icon('chevron-right', site.icons) }}</span></button>
-<div id="cal-period-heading" class="cal-period-heading"></div>
-</div>
-<button type="button" class="filters-toggle" aria-expanded="false" aria-controls="calendar-controls" aria-label="{{ labels.calendar.toggle_controls }}">{{ icon('filter', site.icons) }}</button>
-</div>
-
 <div id="calendar-view-container" class="calendar-view-container">
 {% set total_initial_events = [] %}
 {% for day_data in initial_week_days %}

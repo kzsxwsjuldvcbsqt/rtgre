@@ -71,7 +71,8 @@ kbd {
   gap: var(--space-xs);
   max-width: 100%;
 }
-.btn-primary {
+.btn-primary,
+.display-menu:has(input:checked) > summary {
   border-color: var(--color-primary);
   background: var(--color-primary);
   color: var(--color-on-primary);
@@ -151,6 +152,8 @@ kbd {
   pointer-events: none;
 }
 .filter-form .search-field input {
+  width: 100%;
+  min-width: 0;
   text-overflow: ellipsis;
   padding-inline: calc(2 * var(--space-sm) + var(--icon-size-sm))
     calc(var(--space-xs) + var(--size-key));
@@ -296,14 +299,8 @@ kbd {
 
 .calendar-nav-bar {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: var(--space-md);
-  margin-block-end: var(--space-lg);
-}
-.calendar-nav-bar #cal-date-input-group {
-  display: flex;
-  min-width: 0;
 }
 .calendar-nav-bar input[type="date"] {
   font-variant-numeric: tabular-nums;
@@ -312,13 +309,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
   opacity: var(--opacity-indicator);
 }
-.cal-nav-start {
-  display: contents;
-}
 .cal-nav-center {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  gap: var(--space-xs);
+}
+.cal-period {
+  position: relative;
+  display: flex;
+  align-items: center;
   gap: var(--space-xs);
 }
 .cal-period-heading {
@@ -326,7 +325,22 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-size: var(--text-md);
   font-family: var(--font-mono);
   font-weight: var(--weight-semibold);
-  text-align: start;
+  line-height: var(--leading-tight);
+  white-space: nowrap;
+}
+.heading-eyebrow {
+  display: block;
+  color: var(--color-text-muted);
+  font-family: var(--font-family);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-normal);
+}
+.cal-period-caret {
+  color: var(--color-text-faint);
+}
+.reset-count {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 .btn-text {
   display: none;
@@ -335,7 +349,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: inline-flex;
 }
 
-.menu > summary {
+.menu > summary:not(.btn) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -361,7 +375,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .menu > summary::marker {
   content: "";
 }
-.menu-list {
+.menu-list,
+.menu-panel {
   position: absolute;
   z-index: var(--z-menu);
   inset-block-start: calc(100% + var(--space-2xs));
@@ -374,6 +389,29 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border-radius: var(--radius-control);
   background: var(--color-surface);
   box-shadow: var(--shadow-menu);
+}
+.menu-panel {
+  gap: var(--space-xs);
+  padding: var(--space-sm);
+}
+.display-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+.menu-panel .filter-group-item {
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+.menu-panel .filter-field-title {
+  display: block;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+.menu-panel label:has(input) {
+  justify-content: center;
+  white-space: nowrap;
 }
 .menu[open] > summary {
   background: var(--color-canvas);

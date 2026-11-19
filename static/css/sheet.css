@@ -38,8 +38,11 @@
   .filter-panel .filter-group-scroll,
   .filter-panel .filter-group-reset,
   .filter-panel .filter-mobile-slot,
-  .filter-panel .cal-nav-start {
+  .filter-panel .display-options {
     display: contents;
+  }
+  .filter-panel .display-menu {
+    display: none;
   }
   .sheet-head {
     display: flex;
@@ -88,6 +91,7 @@
   }
   .filter-panel .filter-field-title,
   .filter-panel .results-count,
+  .filter-panel .reset-count,
   .filter-panel .label-short,
   .filter-panel .choice-trigger-key {
     display: none;

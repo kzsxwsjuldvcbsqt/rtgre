@@ -61,7 +61,8 @@ select:disabled {
   input:hover:not(:disabled):not(:focus):not([aria-invalid="true"]),
   textarea:hover:not(:disabled):not(:focus):not([aria-invalid="true"]),
   .filter-form label:has(input):hover,
-  .toggle-pill:has(input):hover {
+  .toggle-pill:has(input):hover,
+  summary.btn:hover {
     border-color: var(--color-text-faint);
     background: var(--color-surface-hover);
     text-decoration: none;
@@ -99,7 +100,11 @@ select:disabled {
   .menu-list .menu-item-danger:hover {
     background: var(--color-danger-soft);
   }
-  .btn.btn-primary:hover:not(:disabled) {
+  .cal-period:has(.filter-group-item:not([hidden])):hover {
+    background: var(--color-surface-hover);
+  }
+  .btn.btn-primary:hover:not(:disabled),
+  .display-menu:has(input:checked) > summary:hover {
     border-color: var(--color-primary-hover);
     background: var(--color-primary-hover);
   }
@@ -125,6 +130,6 @@ html.js-enabled .has-filter-bar:not(.is-layout-ready) > .section-main,
 html.js-enabled
   .has-filter-bar:not(.is-layout-ready)
   > .filter-bar
-  > :is(#calendar-controls, #filters-container) {
+  > :is(#calendar-nav-bar, #calendar-controls, #filters-container) {
   visibility: hidden;
 }
