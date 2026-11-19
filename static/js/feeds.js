@@ -3,9 +3,19 @@ AppUtils.onDOMReady(function () {
     return new URL(file, document.baseURI);
   }
 
-  document.querySelectorAll("[data-feed-subscribe]").forEach(function (link) {
-    const target = address(link.getAttribute("href"));
-    link.href = "webcal://" + target.host + target.pathname;
+  function subscription(file) {
+    const target = address(file);
+    return "webcal://" + target.host + target.pathname;
+  }
+
+  document.querySelectorAll("[data-feed-device]").forEach(function (link) {
+    link.href = subscription(link.getAttribute("href"));
+  });
+
+  document.querySelectorAll("[data-feed-google]").forEach(function (link) {
+    link.href = AppUtils.formatText(link.dataset.feedGoogle, {
+      url: encodeURIComponent(subscription(link.getAttribute("href"))),
+    });
   });
 
   document.querySelectorAll("[data-feed-copy]").forEach(function (button) {

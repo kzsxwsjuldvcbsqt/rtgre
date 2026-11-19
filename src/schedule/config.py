@@ -377,6 +377,7 @@ def load_config(config_dir: str = "config") -> AppConfig:
         or not all(
             isinstance(feeds[key], str) and feeds[key] for key in ("product_id", "uid_domain")
         )
+        or "{url}" not in feeds["google_url"]
     ):
         raise ValueError("Invalid feeds configuration")
     if any(

@@ -205,10 +205,14 @@
     "evaluation_summary": "{category} · {name}",
     "teachers": "Avec {names}",
     "groups": "Groupes : {names}",
-    "subscribe_btn": "S'abonner",
-    "subscribe_row": "S'abonner dans mon agenda",
-    "copy_btn": "Copier le lien",
-    "copy_row": "Copier le lien du calendrier",
+    "add_btn": "Ajouter à mon agenda",
+    "row_all": "Mon agenda : tous les cours",
+    "row_all_help": "Tes cours s'affichent dans ton agenda et s'y mettent à jour tout seuls.",
+    "row_evaluations": "Mon agenda : évaluations seulement",
+    "row_evaluations_help": "Seulement les DS, partiels, soutenances et oraux, pour avoir des rappels.",
+    "device": "Agenda de l'appareil",
+    "google": "Google Agenda",
+    "copy_link": "Copier le lien",
     "copied": "Lien copié"
   },
   "footer": {

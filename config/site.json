@@ -116,7 +116,8 @@
     "evaluations_file": "evaluations.ics",
     "refresh_minutes": 60,
     "product_id": "-//BUT3 RT//Emploi du temps//FR",
-    "uid_domain": "rtgre.fr"
+    "uid_domain": "rtgre.fr",
+    "google_url": "https://calendar.google.com/calendar/r?cid={url}"
   },
   "evaluations": {
     "soon_days": 7,

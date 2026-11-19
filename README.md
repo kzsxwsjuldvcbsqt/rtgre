@@ -47,7 +47,7 @@ Cette détection dépend des règles de configuration et des informations prése
 
 ### Abonnement calendrier
 
-Chaque classe publie deux calendriers au format iCalendar : tous ses cours (`calendrier.ics`) et ses évaluations seules (`evaluations.ics`). Les pages Emploi du temps et Évaluations proposent de s'y abonner dans son agenda ou d'en copier le lien, par exemple pour l'ajouter par adresse dans Google Agenda. Les titres y sont ceux du site, avec la catégorie devant le nom d'une évaluation, et les enseignants y sont désignés comme sur le site. Les noms de fichiers et la fréquence de rafraîchissement annoncée se règlent dans la section `feeds` de `config/site.json`.
+Chaque classe publie deux calendriers au format iCalendar : tous ses cours (`calendrier.ics`) et ses évaluations seules (`evaluations.ics`). Les pages Emploi du temps et Évaluations ont un bouton « Ajouter à mon agenda » qui mène aux réglages, où l'on choisit pour chaque calendrier l'agenda de l'appareil, Google Agenda ou la copie du lien. Les titres y sont ceux du site, avec la catégorie devant le nom d'une évaluation, et les enseignants y sont désignés comme sur le site. Les noms de fichiers et la fréquence de rafraîchissement annoncée se règlent dans la section `feeds` de `config/site.json`.
 
 ### Modules et ressources
 

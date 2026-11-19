@@ -32,9 +32,11 @@
 .btn {
   padding-inline: var(--space-md);
 }
-.feed-actions {
+.feed-choices {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--space-xs);
+  max-width: 100%;
 }
 .btn-primary {
   border-color: var(--color-primary);

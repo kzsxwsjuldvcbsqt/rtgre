@@ -92,10 +92,7 @@
   .filter-panel .choice-trigger-key {
     display: none;
   }
-  .filter-panel .feed-actions {
-    display: contents;
-  }
-  .filter-panel .feed-actions > * {
+  .filter-panel .feed-entry {
     order: 1;
   }
   .filter-panel .label-long {
