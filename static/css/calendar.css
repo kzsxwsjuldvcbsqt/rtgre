@@ -517,6 +517,33 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.calendar-view-container.is-grid .calendar-event-item {
+  container: event / size;
+}
+@container event (max-height: 3rem) {
+  .event-summary {
+    row-gap: 0;
+    line-height: var(--leading-tight);
+  }
+  .event-summary .event-title {
+    -webkit-line-clamp: 1;
+  }
+  .event-summary .category-badge {
+    display: none;
+  }
+}
+@container event (max-height: 2.25rem) {
+  .event-summary .event-title {
+    grid-column: 2;
+    grid-row: 1;
+    display: block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .event-summary .event-rooms {
+    display: none;
+  }
+}
 .event-card {
   position: absolute;
   pointer-events: none;
