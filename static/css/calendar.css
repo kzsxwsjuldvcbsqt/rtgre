@@ -468,16 +468,20 @@
 .calendar-view-container.is-grid .calendar-event-item:focus-visible {
   transition: none;
 }
-.calendar-view-container.is-grid:has(
+.calendar-view-container.is-grid:not(.has-pinned):has(
     .calendar-event-item:hover,
     .calendar-event-item:focus-visible
   )
-  .calendar-event-item:not(:hover, :focus-visible) {
+  .calendar-event-item:not(:hover, :focus-visible),
+.calendar-view-container.is-grid.has-pinned
+  .calendar-event-item:not(.is-pinned) {
   opacity: var(--opacity-dimmed);
   transition: none;
 }
-.calendar-view-container.is-grid .calendar-event-item:hover,
-.calendar-view-container.is-grid .calendar-event-item:focus-visible {
+.calendar-view-container.is-grid:not(.has-pinned) .calendar-event-item:hover,
+.calendar-view-container.is-grid .calendar-event-item:has(:focus-visible),
+.calendar-view-container.is-grid .calendar-event-item:focus-visible,
+.calendar-view-container.is-grid .calendar-event-item.is-pinned {
   z-index: var(--z-menu);
 }
 .event-summary {
@@ -553,8 +557,12 @@
   clip-path: inset(50%);
   white-space: nowrap;
 }
-.calendar-event-item:hover > .event-card,
-.calendar-event-item:focus-visible > .event-card {
+.calendar-view-container:not(.has-pinned)
+  .calendar-event-item:hover
+  > .event-card,
+.calendar-event-item:focus-visible > .event-card,
+.calendar-event-item:has(:focus-visible) > .event-card,
+.calendar-event-item.is-pinned > .event-card {
   z-index: var(--z-menu);
   inset-block-start: 0;
   inset-inline-start: calc(100% + var(--space-xs));
@@ -571,6 +579,39 @@
   background: var(--color-surface);
   box-shadow: var(--shadow-overlay);
   white-space: normal;
+}
+.calendar-event-item:has(:focus-visible) > .event-card,
+.calendar-event-item.is-pinned > .event-card {
+  pointer-events: auto;
+}
+.calendar-view-container.is-grid .calendar-event-item {
+  cursor: pointer;
+}
+.event-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs) var(--space-md);
+}
+.event-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+}
+.event-card .event-links {
+  margin-block-start: var(--space-2xs);
+  padding-block-start: var(--space-xs);
+  border-block-start: var(--rule-width) solid var(--color-border-muted);
+}
+.event-card .event-links a {
+  color: var(--color-text);
+  font-size: var(--text-sm);
+}
+.event-summary .event-links,
+.calendar-view-year .event-links {
+  display: none;
 }
 .event-card-title {
   font-size: var(--text-base);

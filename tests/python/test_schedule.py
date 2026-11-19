@@ -226,14 +226,19 @@ class ScheduleTests(unittest.TestCase):
                 self.assertEqual(split_event_title(summary, module_code, codes), expected)
 
     def test_module_kinds_follow_curriculum(self):
+        chamilo = self.config.site["chamilo"]
         info = resolve_module_info(
-            self.config.curriculum, ["R5cyber09", "SAE501", "SAE502", "SAE5Porfolio", "Forum"]
+            self.config.curriculum,
+            ["R5cyber09", "SAE501", "SAE502", "SAE5Porfolio", "Forum"],
+            chamilo,
         )
         self.assertEqual(info.keys(), {"R5cyber09", "SAE501", "SAE502", "SAE5Porfolio"})
         self.assertEqual(info["R5cyber09"]["kind"], "resource")
         self.assertEqual(
-            info["SAE5Porfolio"], resolve_module_info(self.config.curriculum, ["SAE5"])["SAE5"]
+            info["SAE5Porfolio"],
+            resolve_module_info(self.config.curriculum, ["SAE5"], chamilo)["SAE5"],
         )
+        self.assertTrue(info["R5cyber09"]["url"].startswith(chamilo["course_base_url"]))
         self.assertNotEqual(info["SAE501"]["tone"], info["SAE502"]["tone"])
         config = copy.deepcopy(self.config.curriculum)
         config["modules"][0]["ade_codes"] = [""]

@@ -44,7 +44,9 @@ def split_event_title(summary: str, module_code: str, canonical_codes: dict) -> 
     return canonical_codes[module_code], session
 
 
-def resolve_module_info(curriculum_data: dict, module_codes) -> dict[str, dict]:
+def resolve_module_info(
+    curriculum_data: dict, module_codes, chamilo_config: dict
+) -> dict[str, dict]:
     tones: dict[str, int] = {}
     siblings: dict[tuple, int] = {}
     for module in curriculum_data.get("modules", []):
@@ -55,7 +57,12 @@ def resolve_module_info(curriculum_data: dict, module_codes) -> dict[str, dict]:
     for code, module in module_code_variants(curriculum_data):
         known.setdefault(
             code,
-            {"kind": module["kind"], "tone": tones[module["code"]], "label": module["label"]},
+            {
+                "kind": module["kind"],
+                "tone": tones[module["code"]],
+                "label": module["label"],
+                "url": build_chamilo_url(module, chamilo_config) or "",
+            },
         )
     return {code: known[code] for code in module_codes if code in known}
 

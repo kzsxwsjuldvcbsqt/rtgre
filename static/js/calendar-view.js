@@ -10,6 +10,8 @@
     moduleInfo,
     sessionMarks,
     labels,
+    externalIcon,
+    evaluationHref,
     classLabel,
     prevBtn,
     nextBtn,
@@ -58,6 +60,7 @@
     }
 
     function renderCalendarView(events) {
+      pinCard(null);
       const currDate = parseISODate(state.date);
 
       if (state.view !== "year") {
@@ -310,6 +313,56 @@
       list.appendChild(dd);
     }
 
+    function eventLinks(ev) {
+      const links = document.createElement("div");
+      links.className = "event-links";
+      if (ev.category && categoryMap[ev.category]) {
+        const detail = document.createElement("a");
+        detail.href = AppUtils.formatText(evaluationHref, {
+          id: encodeURIComponent(ev.occurrence_id),
+        });
+        detail.textContent = labels.card_evaluation_link;
+        links.appendChild(detail);
+      }
+      const known = Object.prototype.hasOwnProperty.call(moduleInfo, ev.module);
+      if (known && moduleInfo[ev.module].url) {
+        const course = document.createElement("a");
+        course.href = moduleInfo[ev.module].url;
+        course.target = "_blank";
+        course.rel = "noopener noreferrer";
+        course.appendChild(document.createTextNode(labels.card_course_link));
+        course.appendChild(AppUtils.buildIcon(externalIcon, "icon-sm"));
+        links.appendChild(course);
+      }
+      return links.childElementCount > 0 ? links : null;
+    }
+
+    function pinCard(item) {
+      const current = viewContainer.querySelector(
+        ".calendar-event-item.is-pinned",
+      );
+      const next = item && item !== current ? item : null;
+      if (current) current.classList.remove("is-pinned");
+      if (next) next.classList.add("is-pinned");
+      viewContainer.classList.toggle("has-pinned", next !== null);
+    }
+
+    viewContainer.addEventListener("click", function (event) {
+      if (event.target.closest(".event-card")) return;
+      const item = event.target.closest(".calendar-event-item");
+      pinCard(viewContainer.classList.contains("is-grid") ? item : null);
+    });
+    viewContainer.addEventListener("focusin", function (event) {
+      const item = event.target.closest(".calendar-event-item");
+      if (!item || !item.classList.contains("is-pinned")) pinCard(null);
+    });
+    document.addEventListener("click", function (event) {
+      if (!viewContainer.contains(event.target)) pinCard(null);
+    });
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") pinCard(null);
+    });
+
     function buildCardContent(ev) {
       const card = document.createElement("div");
       card.className = "event-card";
@@ -375,6 +428,8 @@
         otherGroups(ev).join(labels.list_separator),
       );
       card.appendChild(facts);
+      const links = eventLinks(ev);
+      if (links) card.appendChild(links);
       return card;
     }
 
@@ -756,6 +811,8 @@
       appendTags(infoDiv, "event-teachers", eventStaff(ev));
       appendTags(infoDiv, "event-rooms", ev.rooms);
       appendTags(infoDiv, "event-groups", otherGroups(ev));
+      const links = eventLinks(ev);
+      if (links) infoDiv.appendChild(links);
 
       li.appendChild(infoDiv);
 

@@ -157,6 +157,7 @@ def render_site(
                 if ev.module_code
             }
         ),
+        app_config.site["chamilo"],
     )
 
     configured_group_codes = {

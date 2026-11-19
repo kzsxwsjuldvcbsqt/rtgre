@@ -25,6 +25,8 @@
   data-key-today="{{ site.shortcuts.today }}"
   data-key-reset="{{ site.shortcuts.reset }}"
   data-key-search="{{ site.shortcuts.search }}"
+  data-icon-external="#{{ site.icons.id_prefix }}link-external"
+  data-evaluation-href="evaluations/{id}.html"
   data-module-info-json='{{ module_info | tojson }}'
 ></script>
 <script defer src="{{ url_for('static/js/filter-controls.js') }}" data-icon-prefix="#{{ site.icons.id_prefix }}"></script>

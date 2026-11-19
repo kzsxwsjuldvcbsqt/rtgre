@@ -599,6 +599,8 @@
       moduleInfo,
       sessionMarks,
       labels,
+      externalIcon: scriptEl.getAttribute("data-icon-external"),
+      evaluationHref: scriptEl.getAttribute("data-evaluation-href"),
       classLabel,
       prevBtn,
       nextBtn,

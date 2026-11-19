@@ -125,6 +125,8 @@
     "card_rooms": "Salle",
     "card_teachers": "Avec",
     "card_groups": "Groupes",
+    "card_course_link": "Espace Chamilo",
+    "card_evaluation_link": "Détail de l'évaluation",
     "card_separator": " · "
   },
   "class_page": {
