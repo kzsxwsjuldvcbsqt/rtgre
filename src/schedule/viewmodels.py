@@ -48,6 +48,19 @@ def prepare_initial_week(app_config, events):
     return result
 
 
+def prepare_module_progress(events, module_codes, now):
+    progress = {}
+    for event in sorted(events, key=lambda item: item.start_dt):
+        code = module_codes.get(event.module_code)
+        if code is None:
+            continue
+        entry = progress.setdefault(code, {"total": 0, "upcoming": []})
+        entry["total"] += 1
+        if event.end_dt > now:
+            entry["upcoming"].append(event)
+    return progress
+
+
 def short_date(labels, moment):
     return labels["calendar"]["day_title_short"].format(
         day_name=labels["days_short"][moment.weekday()],

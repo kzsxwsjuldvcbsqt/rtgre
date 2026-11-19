@@ -37,6 +37,54 @@
   color: var(--color-text-muted);
   font-size: var(--text-sm);
 }
+.module-row {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 8fr) minmax(0, 5fr) minmax(0, 5fr)
+    var(--width-module-links);
+  align-items: center;
+  gap: var(--space-xs) var(--space-md);
+  min-height: var(--height-box-row);
+  padding: var(--space-sm) var(--space-md);
+}
+.module-name,
+.module-progress,
+.module-fact-label {
+  display: block;
+}
+.module-name strong {
+  font-weight: var(--weight-semibold);
+}
+.module-progress,
+.module-fact-label {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+.module-fact {
+  font-size: var(--text-sm);
+}
+.module-fact-label {
+  font-size: var(--text-xs);
+}
+.module-upcoming > :not(:nth-child(1 of [data-past="false"])) {
+  display: none;
+}
+.module-upcoming:not(:has([data-past="false"]))::after {
+  content: attr(data-empty);
+  color: var(--color-text-faint);
+}
+.module-upcoming a {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2xs) var(--space-xs);
+  color: var(--color-text);
+}
+.module-links {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-xs);
+}
 .box-row-icon {
   flex: none;
   color: var(--color-text-faint);

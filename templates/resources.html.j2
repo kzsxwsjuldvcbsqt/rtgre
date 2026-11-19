@@ -16,12 +16,29 @@
 <ul class="box-list">
 {% for mod in modules %}
 {% set show_code = mod.code != mod.label and mod.get("show_code", true) %}
-<li>
-{% if mod.chamilo_url %}
-<a class="box-row" href="{{ mod.chamilo_url }}" target="_blank" rel="noopener noreferrer"><span class="box-row-main">{% if show_code %}<strong>{{ mod.code }}</strong> - {{ mod.label }}{% else %}<strong>{{ mod.label }}</strong>{% endif %}</span>{{ icon('link-external', site.icons, 'box-row-icon') }}</a>
-{% else %}
-<span class="box-row"><span class="box-row-main">{% if show_code %}<strong>{{ mod.code }}</strong> - {{ mod.label }}{% else %}<strong>{{ mod.label }}</strong>{% endif %}</span></span>
+{% set progress = module_progress.get(mod.code, {"total": 0, "upcoming": []}) %}
+{% set done = progress.total - (progress.upcoming | length) %}
+<li class="module-row">
+<div class="module-main">
+<span class="module-name">{% if show_code %}<strong>{{ mod.code }}</strong> - {{ mod.label }}{% else %}<strong>{{ mod.label }}</strong>{% endif %}</span>
+<span class="module-progress">{% if progress.total == 0 %}{{ labels.resources.no_sessions }}{% elif done == progress.total %}{{ labels.resources.finished }}{% else %}{{ labels.resources.progress.format(done=done, total=progress.total) }}{% endif %}</span>
+</div>
+<div class="module-fact">
+<span class="module-fact-label">{{ labels.resources.next_session }}</span>
+<span class="module-upcoming" data-empty="{{ labels.resources.next_session_none }}">{% for ev in progress.upcoming %}<span data-end-timestamp="{{ ev.end_dt.timestamp() | int }}" data-past="false">{{ short_date(ev.start_dt) }}{{ labels.calendar.card_separator }}{{ ev.time_range }}</span>{% endfor %}</span>
+</div>
+<div class="module-fact">
+<span class="module-fact-label">{{ labels.resources.next_evaluation }}</span>
+<span class="module-upcoming" data-empty="{{ labels.resources.next_evaluation_none }}">{% for ev in progress.upcoming if ev.category_id %}<a href="{{ url_for('classes/' ~ class_config.id ~ '/evaluations/' ~ ev.occurrence_id ~ '.html') }}" data-end-timestamp="{{ ev.end_dt.timestamp() | int }}" data-past="false"><span class="category-badge{% if category_tones.get(ev.category_id) %} label-{{ category_tones[ev.category_id] }}{% endif %}">{{ ev.category_label }}</span>{{ short_date(ev.start_dt) }}</a>{% endfor %}</span>
+</div>
+<div class="module-links">
+{% if progress.total %}
+<a class="btn" href="{{ url_for('classes/' ~ class_config.id ~ '/' ~ section_files.calendar) }}#view=year&amp;search={{ mod.code | urlencode }}">{{ labels.resources.sessions_btn }}</a>
 {% endif %}
+{% if mod.chamilo_url %}
+<a class="btn" href="{{ mod.chamilo_url }}" target="_blank" rel="noopener noreferrer">{{ labels.resources.chamilo_btn }}{{ icon('link-external', site.icons, 'icon-sm') }}</a>
+{% endif %}
+</div>
 </li>
 {% endfor %}
 </ul>

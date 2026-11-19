@@ -41,7 +41,7 @@ from schedule.parser import normalize_room_name, parse_calendar
 from schedule.renderer import render_site
 from schedule.sitecheck import validate_site
 from schedule.stylesheets import bundle_stylesheet
-from schedule.viewmodels import prepare_evaluation_order
+from schedule.viewmodels import prepare_evaluation_order, prepare_module_progress
 
 
 class ScheduleTests(unittest.TestCase):
@@ -494,6 +494,28 @@ class ScheduleTests(unittest.TestCase):
                         self.assertEqual(marker in html, cls.id in offered)
                     notice = str(escape(self.config.labels["grades"]["bulletin_notice"]))
                     self.assertEqual(notice in html, cls.id in offered)
+
+    def test_module_progress_counts_sessions_and_keeps_upcoming_ones(self):
+        cls = self.classes[0]
+        events = sample_events(self.config, cls)
+        codes = canonical_module_codes(self.config.curriculum)
+        first, second = sorted(events, key=lambda event: event.start_dt)
+        for now, upcoming in (
+            (first.start_dt - timedelta(hours=1), [first, second]),
+            (first.end_dt, [second]),
+            (second.end_dt, []),
+        ):
+            with self.subTest(now=now):
+                progress = prepare_module_progress(reversed(events), codes, now)
+                self.assertEqual(progress, {"R501": {"total": 2, "upcoming": upcoming}})
+        unknown = replace(first, module_code="Forum")
+        self.assertEqual(prepare_module_progress([unknown], codes, first.start_dt), {})
+        with tempfile.TemporaryDirectory() as directory:
+            render_site(self.config, {cls.id: events}, output_dir=directory)
+            html = (Path(directory) / "classes" / cls.id / "ressources.html").read_text()
+        self.assertIn(self.config.labels["resources"]["finished"], html)
+        self.assertIn(self.config.labels["resources"]["no_sessions"], html)
+        self.assertIn("#view=year&amp;search=R501", html)
 
     def test_each_class_publishes_calendar_feeds(self):
         cls = self.classes[0]

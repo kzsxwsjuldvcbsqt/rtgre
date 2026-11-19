@@ -42,8 +42,25 @@
   .shortcuts-box {
     display: none;
   }
-  .calendar-view-year .day-section {
+  .calendar-view-year .day-section,
+  .module-row {
     grid-template-columns: minmax(0, 1fr);
+  }
+  .module-fact {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-sm);
+  }
+  .module-fact:not(:has([data-past="false"])) {
+    display: none;
+  }
+  .module-fact-label {
+    flex: none;
+    width: var(--width-module-fact-label);
+  }
+  .module-links {
+    justify-content: flex-start;
+    margin-block-start: var(--space-2xs);
   }
   .calendar-view-year .calendar-event-item {
     grid-template-columns: var(--width-time-range) minmax(0, 1fr);
