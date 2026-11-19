@@ -102,6 +102,10 @@
   .toggle-pill:has(input:checked) .icon {
     display: none;
   }
+  .filter-form label:has(input:not(:checked)),
+  .toggle-pill:has(input:not(:checked)) {
+    border-style: dashed;
+  }
   .has-filter-bar .results-count {
     display: flex;
     align-self: flex-start;
