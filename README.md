@@ -290,7 +290,7 @@ Côté navigateur, chaque page déclare une Content-Security-Policy définie dan
 
 ## Déploiement
 
-Le déploiement est géré par `.github/workflows/build.yml`. Le workflow s'exécute sur les push vers `main` ou `master`, sur les pull requests, manuellement, et automatiquement : toutes les heures en journée du lundi au vendredi, toutes les six heures le reste du temps.
+Le déploiement est géré par `.github/workflows/build.yml`. Le workflow s'exécute sur les push vers `main` ou `master`, sur les pull requests, manuellement, et automatiquement : deux fois par heure en journée du lundi au vendredi, toutes les trois heures le reste du temps. GitHub ne garantit pas ces déclenchements et en saute une partie, surtout à l'heure pile ; ils sont donc placés à d'autres minutes et doublés, pour qu'une mise à jour passe au moins chaque heure en journée.
 
 Il enchaîne l'installation des dépendances, les contrôles de formatage et de syntaxe, les tests Python, JavaScript et navigateur, la génération du dossier `dist/`, puis l'envoi de l'artefact GitHub Pages. Le déploiement effectif a lieu sauf pour les pull requests.
 
