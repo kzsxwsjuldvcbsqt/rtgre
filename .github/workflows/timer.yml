@@ -3,7 +3,7 @@ name: Update timer
 on:
   workflow_dispatch:
   schedule:
-    - cron: "41 */4 * * *"
+    - cron: '41 */4 * * *'
 
 permissions: {}
 

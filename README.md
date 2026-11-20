@@ -290,11 +290,13 @@ Côté navigateur, chaque page déclare une Content-Security-Policy définie dan
 
 ## Déploiement
 
-Le déploiement est géré par `.github/workflows/build.yml`. Le workflow s'exécute sur les push vers `main` ou `master`, sur les pull requests, manuellement, et automatiquement : deux fois par heure en journée du lundi au vendredi, toutes les trois heures le reste du temps. GitHub ne garantit pas ces déclenchements et en saute une partie, surtout à l'heure pile ; ils sont donc placés à d'autres minutes et doublés, pour qu'une mise à jour passe au moins chaque heure en journée.
+Le déploiement est géré par `.github/workflows/build.yml`. Le workflow s'exécute sur les push vers `main` ou `master`, sur les pull requests, manuellement, et automatiquement toutes les heures.
+
+Les déclenchements planifiés de GitHub ne sont pas garantis : sur ce dépôt, la plupart étaient sautés. La mise à jour horaire repose donc sur un minuteur, `.github/workflows/timer.yml`. Son travail attend une heure grâce au délai de l'environnement `timer`, sans occuper de machine, puis il relance le minuteur et lance la construction. Un déclenchement planifié toutes les quatre heures redémarre la chaîne si elle s'est interrompue, après avoir vérifié qu'aucun minuteur n'attend déjà.
 
 Il enchaîne l'installation des dépendances, les contrôles de formatage et de syntaxe, les tests Python, JavaScript et navigateur, la génération du dossier `dist/`, puis l'envoi de l'artefact GitHub Pages. Le déploiement effectif a lieu sauf pour les pull requests.
 
-Le déclenchement horaire en semaine permet de reprendre dans l'heure un changement de salle ou d'horaire publié dans ADE. Quand ADE ne répond pas, la mise à jour automatique conserve le site en ligne sans échouer, et n'échoue que si le site n'a pas pu être republié depuis vingt-quatre heures.
+La mise à jour horaire permet de reprendre dans l'heure un changement de salle ou d'horaire publié dans ADE. Quand ADE ne répond pas, la mise à jour automatique conserve le site en ligne sans échouer, et n'échoue que si le site n'a pas pu être republié depuis vingt-quatre heures.
 
 ## Données personnelles et limites
 
