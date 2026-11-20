@@ -10,10 +10,13 @@ on:
       - main
       - master
   schedule:
-    - cron: '17,47 5-18 * * 1-5'
-    - cron: '23 0,3,21 * * 1-5'
-    - cron: '23 */3 * * 0,6'
+    - cron: '23 */6 * * *'
   workflow_dispatch:
+    inputs:
+      automatic:
+        description: Started by the update timer rather than by a person
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -21,6 +24,7 @@ permissions:
 env:
   EX_TEMPFAIL: 75
   STALE_AFTER_HOURS: 24
+  AUTOMATIC: ${{ github.event_name == 'schedule' || inputs.automatic == true }}
 
 concurrency:
   group: pages-${{ github.event_name }}-${{ github.ref }}
@@ -87,7 +91,7 @@ jobs:
           status=0
           PYTHONPATH=src python -m schedule.build || status=$?
           echo "status=$status" >> "$GITHUB_OUTPUT"
-          if [ "$status" -ne "$EX_TEMPFAIL" ] || [ "$GITHUB_EVENT_NAME" != "schedule" ]; then
+          if [ "$status" -ne "$EX_TEMPFAIL" ] || [ "$AUTOMATIC" != "true" ]; then
             exit "$status"
           fi
 
@@ -112,7 +116,7 @@ jobs:
 
   keepalive:
     name: Keep scheduled workflows enabled
-    if: github.event_name == 'schedule'
+    if: github.event_name == 'schedule' || inputs.automatic == true
     runs-on: ubuntu-latest
     permissions:
       actions: write

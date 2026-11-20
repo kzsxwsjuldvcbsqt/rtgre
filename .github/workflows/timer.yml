@@ -1,0 +1,52 @@
+name: Update timer
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "41 */4 * * *"
+
+permissions: {}
+
+env:
+  TIMER_WORKFLOW: timer.yml
+  BUILD_WORKFLOW: build.yml
+
+jobs:
+  guard:
+    name: Look for a timer already waiting
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+    outputs:
+      alone: ${{ steps.timers.outputs.alone }}
+    steps:
+      - name: Count the other timers still running
+        id: timers
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          others=$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/$TIMER_WORKFLOW/runs?per_page=30" \
+            --jq "[.workflow_runs[] | select(.id != $GITHUB_RUN_ID and .status != \"completed\")] | length")
+          if [ "$others" -eq 0 ]; then
+            echo "alone=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "alone=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  tick:
+    name: Wait, update the site, start the next timer
+    needs: guard
+    if: github.event_name == 'workflow_dispatch' || needs.guard.outputs.alone == 'true'
+    runs-on: ubuntu-latest
+    environment: timer
+    permissions:
+      actions: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Start the next timer
+        run: gh workflow run "$TIMER_WORKFLOW" --repo "$GITHUB_REPOSITORY" --ref "$GITHUB_REF_NAME"
+
+      - name: Update the site
+        if: always()
+        run: gh workflow run "$BUILD_WORKFLOW" --repo "$GITHUB_REPOSITORY" --ref "$GITHUB_REF_NAME" -f automatic=true
