@@ -116,6 +116,13 @@
       "groupName": "outils mise"
     },
     {
+      "description": "Python : la même version dans mise.toml et dans l'image du Dockerfile",
+      "matchDepNames": [
+        "python"
+      ],
+      "groupName": "Python"
+    },
+    {
       "description": "Python : une version mineure (3.14 vers 3.15) doit être compatible avec les dépendances du site ; elle attend une approbation dans le tableau de bord",
       "matchDepNames": [
         "python"

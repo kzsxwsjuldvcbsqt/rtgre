@@ -1,0 +1,9 @@
+# Exceptions de Trivy : chacune est justifiée et expire, pour être réexaminée.
+misconfigurations:
+  - id: DS-0026
+    paths:
+      - Dockerfile
+    statement: >-
+      Le générateur est une tâche ponctuelle (CronJob) : il publie le site puis s'arrête. Une sonde
+      HEALTHCHECK n'a de sens que pour un processus qui tourne en continu.
+    expired_at: 2027-11-21
