@@ -95,7 +95,7 @@ Pour retirer un thème, il suffit de passer `enabled` à `false`, ou de supprime
 
 ## Architecture
 
-Le projet est un générateur de site statique. Il n'y a pas de serveur applicatif : la génération produit des fichiers HTML, CSS, JavaScript et JSON, puis tout le reste se passe dans le navigateur.
+Le projet est un générateur de site statique. Il n'y a pas de serveur applicatif, seulement un serveur web qui distribue des fichiers : la génération produit des fichiers HTML, CSS, JavaScript et JSON, puis tout le reste se passe dans le navigateur.
 
 ```mermaid
 flowchart TD
@@ -104,7 +104,7 @@ flowchart TD
     C --> D[Normalisation, classement et comparaison des événements]
     D --> E[Rendu des modèles Jinja2 et export des données JSON]
     E --> F[Validation puis publication atomique dans dist/]
-    F --> G[GitHub Pages]
+    F --> G[Serveur web de rtgre-platform]
     G --> H[Interactions locales dans le navigateur]
 ```
 
@@ -136,7 +136,7 @@ Le dossier `static/js/` contient la logique exécutée dans le navigateur : le c
 
 Le calendrier de la classe courante est intégré dans la page générée, sans requête supplémentaire. Les notes utilisent `localStorage` ; les filtres et réglages temporaires utilisent selon la page `sessionStorage` ou l'URL.
 
-Il n'y a pas de serveur applicatif, pas d'API privée, pas de base de données, pas de système de compte ni d'authentification. Les notes ne sont pas envoyées vers un serveur.
+Il n'y a pas de serveur applicatif, pas d'API privée, pas de base de données, pas de système de compte ni d'authentification. Les notes ne sont pas envoyées vers un serveur. Le serveur web ne fait que distribuer les fichiers générés.
 
 ## Organisation du dépôt
 
@@ -319,12 +319,12 @@ flowchart LR
         D --> E[Pull request fusionnée]
         E --> F[ArgoCD synchronise<br>le cluster]
     end
-    P --> G[GitHub Pages]
-    F -. phase 4 .-> H[rtgre.fr]
-    G --> H
+    P --> G[GitHub Pages<br>en secours]
+    F --> H[rtgre.fr]
+    G -. retour arrière .-> H
 ```
 
-Aujourd'hui, GitHub Pages sert rtgre.fr. La phase 4 de rtgre-platform fera servir le site par le cluster : le générateur y tourne en tâche planifiée, et un serveur web sert le volume qu'il remplit. GitHub Pages restera alors en secours.
+rtgre.fr est servi par le cluster de rtgre-platform : le générateur y tourne chaque heure, et un serveur web distribue le volume qu'il remplit. GitHub Pages reste déployé chaque heure, en secours : la zone DNS peut y revenir en changeant une valeur ([runbook](https://github.com/kzsxwsjuldvcbsqt/rtgre-platform/blob/main/docs/runbooks/basculer-rtgre-fr.md)).
 
 ### Image du générateur
 
@@ -354,6 +354,8 @@ docker run --rm --read-only -v "$PWD/site:/srv/site" rtgre
 
 ## Données personnelles et limites
 
+Le serveur web qui distribue le site journalise les requêtes sans adresse IP complète : il n'en garde que le réseau (un /24 en IPv4, un /48 en IPv6), et ses journaux sont détruits chaque semaine, quatorze jours au plus après leur écriture. Ce choix est décrit dans l'[ADR 0014 de rtgre-platform](https://github.com/kzsxwsjuldvcbsqt/rtgre-platform/blob/main/docs/adr/0014-journaux-de-visite-sans-adresse-complete.md). Le site ne pose aucun cookie et n'embarque aucun outil de mesure d'audience.
+
 Les notes personnelles restent dans le `localStorage` du navigateur. L'application ne les envoie à aucun serveur. Elles sont propres au navigateur et à l'appareil utilisés, et peuvent être perdues si le stockage du navigateur est effacé. Les fonctions d'export JSON permettent de les sauvegarder. Une importation doit provenir d'un fichier de confiance, même si son format est validé. Le site est statique et sans compte utilisateur.
 
 Quelques limites à garder en tête :
@@ -363,7 +365,7 @@ Quelques limites à garder en tête :
 - la détection des évaluations repose sur des règles et sur la qualité des informations d'ADE ;
 - les moyennes sont indicatives et ne remplacent pas les résultats officiels ;
 - les balises `noindex` et le fichier `robots.txt` demandent aux moteurs de recherche de ne pas indexer le site, mais ne constituent pas un contrôle d'accès ;
-- les emplois du temps et les fichiers JSON générés sont publics dès que le site est déployé sur GitHub Pages.
+- les emplois du temps et les fichiers JSON générés sont publics dès que le site est en ligne.
 
 L'absence d'indexation ne rend donc pas le site privé.
 
