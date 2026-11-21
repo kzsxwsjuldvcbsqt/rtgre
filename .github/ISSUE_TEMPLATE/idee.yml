@@ -1,0 +1,16 @@
+name: Proposer une idée
+description: Une fonction ou une amélioration pour le site.
+labels: [fonctionnalité]
+body:
+  - type: textarea
+    id: besoin
+    attributes:
+      label: Besoin
+      description: Ce que vous voulez pouvoir faire, et pourquoi.
+    validations:
+      required: true
+  - type: textarea
+    id: proposition
+    attributes:
+      label: Proposition
+      description: À quoi cela pourrait ressembler sur le site.
