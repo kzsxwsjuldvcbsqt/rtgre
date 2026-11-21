@@ -153,8 +153,12 @@ Il n'y a pas de serveur applicatif, pas d'API privée, pas de base de données, 
 │   ├── python/
 │   ├── javascript/
 │   └── browser/
-├── requirements.txt
+├── requirements.in      # dépendances Python directes du site
+├── requirements.txt     # toutes les dépendances, compilées avec leurs empreintes (mise run lock)
 ├── requirements-dev.txt
+├── Dockerfile           # image du générateur, publiée sur ghcr.io
+├── .dockerignore
+├── trivy.yaml           # configuration de Trivy, exceptions justifiées dans .trivyignore.yaml
 ├── package.json
 ├── pyproject.toml
 ├── mise.toml            # versions de Python, Node et des outils, tâches deps, check et build
@@ -234,6 +238,8 @@ Le comportement et le contenu du site sont décrits dans `config/`.
 | `config/labels.json` | textes affichés dans l'interface |
 | `config/themes.json` | thèmes temporaires, avec leur période et leur interrupteur |
 
+Le site est publié dans le dossier `output_directory` de `config/site.json`, à la racine du dépôt. La variable d'environnement `SCHEDULE_OUTPUT_ROOT` place ce dossier ailleurs, dans un dossier absolu existant. C'est ce que fait l'image, pour garder son code en lecture seule.
+
 Pour adapter le site à une nouvelle année :
 
 1. mettre à jour l'année et les paramètres ADE dans `config/site.json` ;
@@ -287,9 +293,35 @@ Le déploiement est géré par `.github/workflows/build.yml`. Le workflow s'exé
 
 Les déclenchements planifiés de GitHub ne sont pas garantis : sur ce dépôt, la plupart étaient sautés. La mise à jour horaire repose donc sur un minuteur, `.github/workflows/timer.yml`. Son travail attend une heure grâce au délai de l'environnement `timer`, sans occuper de machine, puis il relance le minuteur et lance la construction. Un déclenchement planifié toutes les quatre heures redémarre la chaîne si elle s'est interrompue, après avoir vérifié qu'aucun minuteur n'attend déjà.
 
-Il enchaîne l'installation des dépendances, les contrôles de formatage et de syntaxe, les tests Python, JavaScript et navigateur, la génération du dossier `dist/`, puis l'envoi de l'artefact GitHub Pages. Le déploiement effectif a lieu sauf pour les pull requests.
+Il enchaîne l'installation des dépendances, les tests Python, JavaScript et navigateur, la génération du dossier `dist/`, puis l'envoi de l'artefact GitHub Pages. Le déploiement effectif a lieu sauf pour les pull requests. Le formatage et la syntaxe sont vérifiés par le workflow Quality.
 
 La mise à jour horaire permet de reprendre dans l'heure un changement de salle ou d'horaire publié dans ADE. Quand ADE ne répond pas, la mise à jour automatique conserve le site en ligne sans échouer, et n'échoue que si le site n'a pas pu être republié depuis vingt-quatre heures.
+
+### Image du générateur
+
+Le workflow `.github/workflows/image.yml` construit l'image du générateur à partir du `Dockerfile`, pour `linux/amd64` et `linux/arm64`. Il la publie sur `ghcr.io/kzsxwsjuldvcbsqt/rtgre` à chaque changement du site sur `main`. C'est elle que [rtgre-platform](https://github.com/kzsxwsjuldvcbsqt/rtgre-platform) déploie, en la référençant par son empreinte.
+
+- L'image part d'Alpine, épinglée par empreinte. Chaque dépendance Python y est installée depuis `requirements.txt` et vérifiée par son empreinte. pip est retiré de l'image finale.
+- Le générateur tourne sous un utilisateur sans privilège (65532), avec un système de fichiers en lecture seule. Il publie le site dans `$SCHEDULE_OUTPUT_ROOT/dist`, `/srv/site/dist` par défaut, puis s'arrête.
+- Chaque pull request construit l'image pour les deux architectures, la passe à Trivy et lui fait générer le site. Une vulnérabilité HIGH ou CRITICAL fait échouer le workflow.
+- L'image publiée est signée par cosign, sans clé, avec l'identité OIDC du workflow. Elle porte un SBOM et une attestation de provenance.
+
+Vérifier une image avant de l'utiliser :
+
+```bash
+cosign verify ghcr.io/kzsxwsjuldvcbsqt/rtgre@sha256:<empreinte> \
+  --certificate-identity https://github.com/kzsxwsjuldvcbsqt/rtgre/.github/workflows/image.yml@refs/heads/main \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com
+gh attestation verify oci://ghcr.io/kzsxwsjuldvcbsqt/rtgre@sha256:<empreinte> --repo kzsxwsjuldvcbsqt/rtgre
+```
+
+Générer le site avec l'image, en local :
+
+```bash
+docker build -t rtgre .
+mkdir -p site && chmod 0777 site
+docker run --rm --read-only -v "$PWD/site:/srv/site" rtgre
+```
 
 ## Données personnelles et limites
 
