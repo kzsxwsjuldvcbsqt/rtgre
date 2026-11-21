@@ -1,5 +1,11 @@
 # RTGRE
 
+[![Quality](https://github.com/kzsxwsjuldvcbsqt/rtgre/actions/workflows/quality.yml/badge.svg)](https://github.com/kzsxwsjuldvcbsqt/rtgre/actions/workflows/quality.yml)
+[![Security](https://github.com/kzsxwsjuldvcbsqt/rtgre/actions/workflows/security.yml/badge.svg)](https://github.com/kzsxwsjuldvcbsqt/rtgre/actions/workflows/security.yml)
+[![Image](https://github.com/kzsxwsjuldvcbsqt/rtgre/actions/workflows/image.yml/badge.svg)](https://github.com/kzsxwsjuldvcbsqt/rtgre/actions/workflows/image.yml)
+[![Déploiement](https://github.com/kzsxwsjuldvcbsqt/rtgre/actions/workflows/build.yml/badge.svg)](https://github.com/kzsxwsjuldvcbsqt/rtgre/actions/workflows/build.yml)
+[![Licence MIT](https://img.shields.io/github/license/kzsxwsjuldvcbsqt/rtgre)](LICENSE)
+
 Site étudiant qui regroupe l'emploi du temps, les évaluations, les modules, et un calcul de notes indicatif pour la troisième année du BUT Réseaux et Télécommunications de l'IUT1 de Grenoble.
 
 Site en ligne : https://rtgre.fr
@@ -296,6 +302,29 @@ Les déclenchements planifiés de GitHub ne sont pas garantis : sur ce dépôt, 
 Il enchaîne l'installation des dépendances, les tests Python, JavaScript et navigateur, la génération du dossier `dist/`, puis l'envoi de l'artefact GitHub Pages. Le déploiement effectif a lieu sauf pour les pull requests. Le formatage et la syntaxe sont vérifiés par le workflow Quality.
 
 La mise à jour horaire permet de reprendre dans l'heure un changement de salle ou d'horaire publié dans ADE. Quand ADE ne répond pas, la mise à jour automatique conserve le site en ligne sans échouer, et n'échoue que si le site n'a pas pu être republié depuis vingt-quatre heures.
+
+### Chaîne de livraison
+
+Le site est livré par deux dépôts. rtgre, ce dépôt, contient le générateur et publie son image. [rtgre-platform](https://github.com/kzsxwsjuldvcbsqt/rtgre-platform) décrit l'infrastructure qui l'exécute : Oracle Cloud, Kubernetes et GitOps.
+
+```mermaid
+flowchart LR
+    subgraph rtgre
+        A[Commit sur main] --> B[Workflow Image]
+        B --> C[ghcr.io/kzsxwsjuldvcbsqt/rtgre<br>signée, SBOM, provenance]
+        A --> P[Workflow de déploiement]
+    end
+    subgraph rtgre-platform
+        C --> D[Renovate propose<br>la nouvelle empreinte]
+        D --> E[Pull request fusionnée]
+        E --> F[ArgoCD synchronise<br>le cluster]
+    end
+    P --> G[GitHub Pages]
+    F -. phase 4 .-> H[rtgre.fr]
+    G --> H
+```
+
+Aujourd'hui, GitHub Pages sert rtgre.fr. La phase 4 de rtgre-platform fera servir le site par le cluster : le générateur y tourne en tâche planifiée, et un serveur web sert le volume qu'il remplit. GitHub Pages restera alors en secours.
 
 ### Image du générateur
 
