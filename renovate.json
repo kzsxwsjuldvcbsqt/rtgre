@@ -1,0 +1,129 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "helpers:pinGitHubActionDigests"
+  ],
+  "timezone": "Europe/Paris",
+  "schedule": [
+    "before 7am on monday"
+  ],
+  "minimumReleaseAge": "7 days",
+  "prConcurrentLimit": 5,
+  "labels": [
+    "dépendances"
+  ],
+  "dependencyDashboard": {
+    "enabled": true,
+    "title": "Tableau de bord des dépendances"
+  },
+  "platformCommit": "enabled",
+  "semanticCommits": "enabled",
+  "semanticCommitType": "chore",
+  "semanticCommitScope": "deps",
+  "commitMessageAction": "met à jour",
+  "commitMessageTopic": "{{depName}}",
+  "commitMessageExtra": "vers {{#if isPinDigest}}{{{newDigestShort}}}{{else}}{{#if isMajor}}{{prettyNewMajor}}{{else}}{{#if isSingleVersion}}{{prettyNewVersion}}{{else}}{{#if newValue}}{{{newValue}}}{{else}}{{{newDigestShort}}}{{/if}}{{/if}}{{/if}}{{/if}}",
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "minimumReleaseAge": null,
+    "schedule": [
+      "at any time"
+    ],
+    "labels": [
+      "dépendances",
+      "sécurité"
+    ]
+  },
+  "pre-commit": {
+    "enabled": true
+  },
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Versions annotées d'un commentaire « renovate: » dans les fichiers YAML (workflows)",
+      "managerFilePatterns": [
+        "/\\.ya?ml$/"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( registryUrl=(?<registryUrl>\\S+))?( extractVersion=(?<extractVersion>\\S+))?\\s+[A-Za-z0-9_]+: ['\"]?(?<currentValue>[^'\"\\s]+)['\"]?"
+      ]
+    },
+    {
+      "customType": "regex",
+      "description": "Image de Semgrep, épinglée par version et par empreinte dans le workflow Security",
+      "managerFilePatterns": [
+        "/^\\.github/workflows/security\\.yml$/"
+      ],
+      "matchStrings": [
+        "SEMGREP_IMAGE: (?<depName>[a-z0-9./-]+):(?<currentValue>[^@\\s]+)@(?<currentDigest>sha256:[a-f0-9]{64})"
+      ],
+      "datasourceTemplate": "docker"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Dépendances Python du site et de ses tests",
+      "matchManagers": [
+        "pip_requirements"
+      ],
+      "groupName": "dépendances Python"
+    },
+    {
+      "description": "Dépendances JavaScript des outils et des tests",
+      "matchManagers": [
+        "npm"
+      ],
+      "groupName": "dépendances JavaScript"
+    },
+    {
+      "description": "Hooks pre-commit",
+      "matchManagers": [
+        "pre-commit"
+      ],
+      "groupName": "hooks pre-commit"
+    },
+    {
+      "description": "Actions GitHub, épinglées par SHA",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "groupName": "actions GitHub"
+    },
+    {
+      "description": "Outils épinglés dans mise.toml",
+      "matchManagers": [
+        "mise"
+      ],
+      "groupName": "outils mise"
+    },
+    {
+      "description": "Version de mise utilisée par les workflows, avec les outils qu'elle installe",
+      "matchDepNames": [
+        "jdx/mise"
+      ],
+      "groupName": "outils mise"
+    },
+    {
+      "description": "Python : une version mineure (3.14 vers 3.15) doit être compatible avec les dépendances du site ; elle attend une approbation dans le tableau de bord",
+      "matchDepNames": [
+        "python"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "major"
+      ],
+      "dependencyDashboardApproval": true
+    },
+    {
+      "description": "Node : une version majeure n'est adoptée qu'une fois LTS ; elle attend une approbation dans le tableau de bord",
+      "matchDepNames": [
+        "node"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "dependencyDashboardApproval": true
+    }
+  ]
+}
