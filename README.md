@@ -138,8 +138,7 @@ Il n'y a pas de serveur applicatif, pas d'API privée, pas de base de données, 
 .
 ├── .github/
 │   ├── workflows/       # intégration continue, analyses de sécurité et déploiement GitHub Pages
-│   ├── ISSUE_TEMPLATE/  # modèles d'issue : erreur, idée, tâche
-│   └── dependabot.yml   # mises à jour automatiques des dépendances et des actions
+│   └── ISSUE_TEMPLATE/  # modèles d'issue : erreur, idée, tâche
 ├── config/              # données de l'année, classes, modules et règles
 ├── src/schedule/        # générateur Python
 ├── templates/           # modèles HTML Jinja2
@@ -159,6 +158,7 @@ Il n'y a pas de serveur applicatif, pas d'API privée, pas de base de données, 
 ├── package.json
 ├── pyproject.toml
 ├── mise.toml            # versions de Python, Node et des outils, tâches deps, check et build
+├── renovate.json        # mises à jour automatiques des dépendances, des outils et des actions
 ├── .pre-commit-config.yaml
 ├── CONTRIBUTING.md      # façon de travailler, messages de commit, signature
 └── SECURITY.md          # signalement privé des vulnérabilités
@@ -176,7 +176,7 @@ Le dossier `dist/` est généré par la construction et n'est pas suivi par Git.
 - unittest et node:test pour les tests
 - Ruff et Prettier pour le formatage et les contrôles
 - GitHub Actions et GitHub Pages
-- Semgrep, Trivy, Gitleaks, zizmor et Dependabot pour la sécurité
+- Semgrep, Trivy, Gitleaks, zizmor et Renovate pour la sécurité
 
 Node.js ne fait pas fonctionner le site en production. Il sert aux dépendances, aux contrôles et aux tests.
 
@@ -267,14 +267,15 @@ Les analyses de sécurité sont regroupées dans `.github/workflows/security.yml
 | [Semgrep](https://semgrep.dev) | analyse statique du code Python et JavaScript et des workflows |
 | [Trivy](https://trivy.dev) | vulnérabilités connues des dépendances Python et npm, secrets et erreurs de configuration |
 | [Gitleaks](https://gitleaks.io) | secrets présents dans tout l'historique Git |
-| [Dependabot](https://docs.github.com/code-security/dependabot) | mises à jour hebdomadaires groupées des dépendances pip et npm et des actions GitHub |
+| [Renovate](https://docs.renovatebot.com) | mises à jour hebdomadaires groupées des dépendances pip et npm, des hooks, des outils de `mise.toml`, de l'image Semgrep et des actions GitHub ; correctifs de sécurité sans attendre |
+| [Alertes Dependabot](https://docs.github.com/code-security/dependabot/dependabot-alerts) | signalement des vulnérabilités connues dans les dépendances |
 
 Chaque analyse publie un rapport SARIF consultable dans l'onglet Security du dépôt. Les deux règles Semgrep désactivées dans le workflow sont des faux positifs analysés : la règle Jinja2 vise Flask, alors que l'échappement automatique est activé ici, et les `Object.assign` signalés portent sur des données validées ou filtrées par liste blanche avant usage.
 
 Les mesures appliquées à la chaîne de livraison :
 
-- toutes les actions GitHub sont épinglées par empreinte de commit et non par tag, et Dependabot les maintient à jour avec un délai de sept jours avant d'adopter une nouvelle version ;
-- les outils téléchargés dans les workflows sont vérifiés par somme SHA-256 et l'image Semgrep est épinglée par empreinte ;
+- toutes les actions GitHub sont épinglées par empreinte de commit et non par tag, ce que le dépôt exige, et Renovate les maintient à jour avec un délai de sept jours avant d'adopter une nouvelle version ;
+- Trivy et Gitleaks sont installés par mise aux versions de `mise.toml`, qui vérifie leurs sommes de contrôle, et l'image Semgrep est épinglée par empreinte ;
 - les workflows démarrent sans permission et n'accordent à chaque job que celles dont il a besoin ;
 - les jetons GitHub ne sont pas conservés dans le dépôt cloné.
 
