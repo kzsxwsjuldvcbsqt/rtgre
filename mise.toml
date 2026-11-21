@@ -19,6 +19,10 @@ run = [
   "npm ci",
 ]
 
+[tasks.lock]
+description = "Recompile requirements.txt depuis requirements.in, avec l'empreinte de chaque paquet"
+run = "uv pip compile requirements.in --universal --python-version 3.14 --generate-hashes -o requirements.txt"
+
 [tasks.check]
 description = "Lance les contrôles de la CI : hooks, tests JavaScript, Python et navigateur"
 env = { PYTHONPATH = "src" }

@@ -63,8 +63,19 @@
   ],
   "packageRules": [
     {
-      "description": "Dépendances Python du site et de ses tests",
+      "description": "requirements.txt est compilé depuis requirements.in : seul pip-compile le met à jour",
       "matchManagers": [
+        "pip_requirements"
+      ],
+      "matchFileNames": [
+        "requirements.txt"
+      ],
+      "enabled": false
+    },
+    {
+      "description": "Dépendances Python du site (requirements.in compilé avec ses empreintes dans requirements.txt) et de ses tests",
+      "matchManagers": [
+        "pip-compile",
         "pip_requirements"
       ],
       "groupName": "dépendances Python"
@@ -125,5 +136,10 @@
       ],
       "dependencyDashboardApproval": true
     }
-  ]
+  ],
+  "pip-compile": {
+    "managerFilePatterns": [
+      "/(^|/)requirements\\.txt$/"
+    ]
+  }
 }
