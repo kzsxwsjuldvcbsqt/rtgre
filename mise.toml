@@ -1,0 +1,33 @@
+[tools]
+actionlint = "1.7.12"
+gitleaks = "8.30.1"
+node = "26.13.1"
+"pipx:pre-commit" = "4.7.0"
+python = "3.14.10"
+shellcheck = "0.11.0"
+uv = "0.13.7"
+
+# Les dépendances Python du site et de ses tests vivent dans un environnement virtuel propre au dépôt.
+[env]
+_.python.venv = { path = ".venv", create = true }
+
+[tasks.deps]
+description = "Installe les dépendances Python et JavaScript aux versions figées"
+run = [
+  "uv pip install --quiet -r requirements.txt -r requirements-dev.txt",
+  "npm ci",
+]
+
+[tasks.check]
+description = "Lance les contrôles de la CI : hooks, tests JavaScript, Python et navigateur"
+env = { PYTHONPATH = "src" }
+run = [
+  "pre-commit run --all-files",
+  "npm test",
+  "python -m unittest discover -s tests -v",
+]
+
+[tasks.build]
+description = "Génère le site dans dist/ à partir d'ADE"
+env = { PYTHONPATH = "src" }
+run = "python -m schedule.build"
