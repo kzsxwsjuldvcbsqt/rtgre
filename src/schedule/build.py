@@ -19,6 +19,7 @@ from .stylesheets import bundle_stylesheet
 GENERATED_MARKER = ".schedule-generated"
 # Dossier où publier le site, s'il doit être séparé du code (conteneur en lecture seule).
 OUTPUT_ROOT_VARIABLE = "SCHEDULE_OUTPUT_ROOT"
+PUBLISHED_DIRECTORY_MODE = 0o755
 
 
 def output_path(value: str, project_root: Path) -> Path:
@@ -102,6 +103,9 @@ def _publish_site(app_config, events_by_class, matching_matrix, project_root: Pa
         bundle_stylesheet(dist_static / app_config.site["stylesheet"])
         validate_site(staging, app_config.site.get("base_path", "/"))
         (staging / GENERATED_MARKER).write_text("schedule\n", encoding="utf-8")
+        # mkdtemp crée un dossier privé (0700) : le site publié doit rester lisible par un
+        # serveur web qui tourne sous un autre utilisateur.
+        staging.chmod(PUBLISHED_DIRECTORY_MODE)
         if backup.exists():
             if not backup.is_dir() or not (backup / GENERATED_MARKER).is_file():
                 raise ValueError("Refusing to replace an unmanaged backup directory")

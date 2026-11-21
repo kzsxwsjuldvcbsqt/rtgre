@@ -655,6 +655,15 @@ class ScheduleTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 output_path("unmanaged", project)
 
+    def test_published_site_is_readable_by_another_user(self):
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            shutil.copytree("static", project / "static")
+            config = copy.deepcopy(self.config)
+            config.site["output_directory"] = "site-output"
+            publish_site(config, {}, None, project)
+            self.assertEqual((project / "site-output").stat().st_mode & 0o777, 0o755)
+
     def test_output_root_publishes_the_site_outside_the_project(self):
         with tempfile.TemporaryDirectory() as directory, tempfile.TemporaryDirectory() as output:
             project = Path(directory)
