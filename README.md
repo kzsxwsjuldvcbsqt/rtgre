@@ -138,6 +138,7 @@ Il n'y a pas de serveur applicatif, pas d'API privée, pas de base de données, 
 .
 ├── .github/
 │   ├── workflows/       # intégration continue, analyses de sécurité et déploiement GitHub Pages
+│   ├── ISSUE_TEMPLATE/  # modèles d'issue : erreur, idée, tâche
 │   └── dependabot.yml   # mises à jour automatiques des dépendances et des actions
 ├── config/              # données de l'année, classes, modules et règles
 ├── src/schedule/        # générateur Python
@@ -156,17 +157,22 @@ Il n'y a pas de serveur applicatif, pas d'API privée, pas de base de données, 
 ├── requirements.txt
 ├── requirements-dev.txt
 ├── package.json
-└── pyproject.toml
+├── pyproject.toml
+├── mise.toml            # versions de Python, Node et des outils, tâches deps, check et build
+├── .pre-commit-config.yaml
+├── CONTRIBUTING.md      # façon de travailler, messages de commit, signature
+└── SECURITY.md          # signalement privé des vulnérabilités
 ```
 
 Le dossier `dist/` est généré par la construction et n'est pas suivi par Git.
 
 ## Technologies
 
-- Python 3.12
+- Python 3.14
 - requests, icalendar, Jinja2
 - HTML, CSS, JavaScript sans framework côté navigateur
-- Node.js 22 pour les outils et les tests JavaScript
+- Node.js 26 pour les outils et les tests JavaScript
+- mise pour fixer les versions, pre-commit pour les contrôles avant chaque commit
 - unittest et node:test pour les tests
 - Ruff et Prettier pour le formatage et les contrôles
 - GitHub Actions et GitHub Pages
@@ -178,8 +184,7 @@ Node.js ne fait pas fonctionner le site en production. Il sert aux dépendances,
 
 Prérequis :
 
-- Python 3.12
-- Node.js 22 et npm
+- [mise](https://mise.jdx.dev), qui installe Python, Node et les outils aux versions de `mise.toml`
 - un accès réseau à ADE pour une génération réelle
 
 Toutes les commandes se lancent depuis la racine du dépôt.
@@ -188,19 +193,17 @@ Toutes les commandes se lancent depuis la racine du dépôt.
 git clone https://github.com/kzsxwsjuldvcbsqt/rtgre.git
 cd rtgre
 
-python3.12 -m venv .venv
-source .venv/bin/activate
-
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt -r requirements-dev.txt
-
-npm ci
+mise install
+mise run deps
+pre-commit install
 ```
+
+`mise run deps` crée l'environnement virtuel `.venv` et installe les dépendances Python et JavaScript. `pre-commit install` active les contrôles avant chaque commit.
 
 Construction du site :
 
 ```bash
-PYTHONPATH=src python -m schedule.build
+mise run build
 ```
 
 Le résultat est placé dans `dist/`. Cette commande contacte ADE : elle peut échouer si le service est inaccessible ou si la configuration n'est plus valable.
@@ -244,24 +247,13 @@ Pour adapter le site à une nouvelle année :
 
 Toutes les commandes se lancent depuis la racine du dépôt.
 
-Contrôles Python :
+Contrôles complets, comme en intégration continue :
 
 ```bash
-ruff check src tests
-ruff format --check src tests
+mise run check
 ```
 
-Contrôles JavaScript (formatage, tests unitaires et vérification de syntaxe) :
-
-```bash
-npm run check
-```
-
-Suite complète, y compris les tests navigateur :
-
-```bash
-PYTHONPATH=src python -m unittest discover -s tests -v
-```
+Cette commande lance d'abord les hooks pre-commit sur tout le dépôt : Ruff, Prettier, vérification de syntaxe JavaScript, yamllint, actionlint, zizmor et Gitleaks. Elle lance ensuite les tests JavaScript, Python et navigateur. La façon de travailler et le format des messages de commit sont décrits dans [CONTRIBUTING.md](CONTRIBUTING.md).
 
 Les tests couvrent notamment la validation de la configuration, l'analyse et le rapprochement des événements, le rendu du site et ses liens, les calculs de notes, les imports et exports, les limites de stockage, les interactions dans un navigateur, le responsive, le comportement sous préférence système claire ou sombre, ainsi que certains cas d'injection et de données invalides.
 
