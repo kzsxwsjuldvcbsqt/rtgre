@@ -1,5 +1,6 @@
 [tools]
 actionlint = "1.7.12"
+cosign = "3.1.4"
 gitleaks = "8.30.1"
 node = "26.13.1"
 "pipx:pre-commit" = "4.7.0"
@@ -18,6 +19,10 @@ run = [
   "uv pip install --quiet -r requirements.txt -r requirements-dev.txt",
   "npm ci",
 ]
+
+[tasks.lock]
+description = "Recompile requirements.txt depuis requirements.in, avec l'empreinte de chaque paquet"
+run = "uv pip compile requirements.in --universal --python-version 3.14 --generate-hashes -o requirements.txt"
 
 [tasks.check]
 description = "Lance les contrôles de la CI : hooks, tests JavaScript, Python et navigateur"

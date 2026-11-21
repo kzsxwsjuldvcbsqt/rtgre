@@ -52,6 +52,16 @@ La portée désigne la partie du site touchée : `emploi-du-temps`, `evaluations
 
 L'historique a été réécrit le 21 novembre 2026 pour suivre cette convention et pour signer tous les commits (#8). Les arbres, les auteurs et les dates sont restés identiques.
 
+## Dépendances
+
+Les dépendances Python directes du site sont dans `requirements.in`. `requirements.txt` en est compilé, avec toutes les dépendances transitives et leurs empreintes : la CI et l'image les vérifient à l'installation. Après une modification de `requirements.in` :
+
+```bash
+mise run lock
+```
+
+Renovate propose les mises à jour chaque lundi et met les deux fichiers à jour ensemble.
+
 ## Signature des commits
 
 Tous les commits sont signés. Avec une clé SSH déjà déclarée sur GitHub comme clé de signature :

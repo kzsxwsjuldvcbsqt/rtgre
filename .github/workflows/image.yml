@@ -1,0 +1,203 @@
+name: Image
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - Dockerfile
+      - .dockerignore
+      - requirements.txt
+      - config/**
+      - src/**
+      - static/**
+      - templates/**
+      - .github/workflows/image.yml
+  pull_request:
+    branches:
+      - main
+    paths:
+      - Dockerfile
+      - .dockerignore
+      - requirements.txt
+      - config/**
+      - src/**
+      - static/**
+      - templates/**
+      - .trivyignore.yaml
+      - .github/workflows/image.yml
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: image-${{ github.ref }}
+  # Une publication en cours sur main va jusqu'au bout : signature et attestation comprises.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  # renovate: datasource=github-releases depName=jdx/mise extractVersion=^v(?<version>.+)$
+  MISE_VERSION: '2026.11.11'
+  IMAGE_NAME: ghcr.io/${{ github.repository }}
+  # Code de sortie du générateur quand ADE ne répond pas (os.EX_TEMPFAIL).
+  EX_TEMPFAIL: 75
+
+jobs:
+  scan:
+    name: Image (build and scan)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up QEMU for arm64
+        uses: docker/setup-qemu-action@99012661954931238ded8c8b007157a8430204e1 # v4.4.0
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+
+      # Sans cache : un workflow qui publie l'image ne réutilise rien d'une exécution précédente.
+      - name: Install pinned tools
+        uses: jdx/mise-action@90f833d396d0cc3674b631d2d225e306476c303a # v5.2.10
+        with:
+          version: ${{ env.MISE_VERSION }}
+          cache: false
+
+      - name: Build the amd64 image
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: .
+          platforms: linux/amd64
+          load: true
+          tags: rtgre:scan
+
+      # Exceptions justifiées et datées dans .trivyignore.yaml.
+      - name: Scan the image for known vulnerabilities
+        run: trivy image --scanners vuln --severity HIGH,CRITICAL --exit-code 1 rtgre:scan
+
+      # Le conteneur tourne comme dans le cluster : système de fichiers en lecture seule, aucune capacité.
+      - name: Generate the site with the image
+        run: |
+          site=$(mktemp --directory)
+          chmod 0777 "$site"
+          status=0
+          docker run --rm --read-only --cap-drop ALL --security-opt no-new-privileges \
+            --volume "$site:/srv/site" rtgre:scan || status=$?
+          if [ "$status" -eq "$EX_TEMPFAIL" ]; then
+            echo "::warning::ADE is unreachable, the generated site could not be checked"
+            exit 0
+          fi
+          test "$status" -eq 0
+          test -f "$site/dist/index.html"
+          echo "$(find "$site/dist" -type f | wc -l) files generated"
+
+      - name: Build the arm64 image
+        if: github.event_name == 'pull_request'
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: .
+          platforms: linux/arm64
+
+  publish:
+    name: Image (publish and sign)
+    needs: scan
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      # Signature sans clé (cosign) et attestation de provenance : identité OIDC du workflow.
+      id-token: write
+      attestations: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up QEMU for arm64
+        uses: docker/setup-qemu-action@99012661954931238ded8c8b007157a8430204e1 # v4.4.0
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+
+      # Sans cache : un workflow qui publie l'image ne réutilise rien d'une exécution précédente.
+      - name: Install pinned tools
+        uses: jdx/mise-action@90f833d396d0cc3674b631d2d225e306476c303a # v5.2.10
+        with:
+          version: ${{ env.MISE_VERSION }}
+          cache: false
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Describe the image
+        id: meta
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
+        with:
+          images: ${{ env.IMAGE_NAME }}
+          tags: |
+            type=sha
+            type=raw,value=latest
+
+      - name: Build and push the image for amd64 and arm64
+        id: build
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          annotations: ${{ steps.meta.outputs.annotations }}
+          sbom: true
+          provenance: mode=max
+
+      - name: Sign the image
+        env:
+          DIGEST: ${{ steps.build.outputs.digest }}
+        run: cosign sign --yes "$IMAGE_NAME@$DIGEST"
+
+      - name: Attest the build provenance
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-name: ${{ env.IMAGE_NAME }}
+          subject-digest: ${{ steps.build.outputs.digest }}
+          push-to-registry: true
+
+      - name: Verify the signature and the provenance
+        env:
+          DIGEST: ${{ steps.build.outputs.digest }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cosign verify "$IMAGE_NAME@$DIGEST" \
+            --certificate-identity "https://github.com/$GITHUB_REPOSITORY/.github/workflows/image.yml@refs/heads/main" \
+            --certificate-oidc-issuer https://token.actions.githubusercontent.com > /dev/null
+          gh attestation verify "oci://$IMAGE_NAME@$DIGEST" --repo "$GITHUB_REPOSITORY"
+
+      - name: Scan the published arm64 image
+        env:
+          DIGEST: ${{ steps.build.outputs.digest }}
+        run: |
+          trivy image --platform linux/arm64 --scanners vuln --severity HIGH,CRITICAL --exit-code 1 \
+            "$IMAGE_NAME@$DIGEST"
+
+      - name: Summarize the published image
+        env:
+          DIGEST: ${{ steps.build.outputs.digest }}
+        run: |
+          {
+            echo "### Image publiée"
+            echo
+            echo "\`$IMAGE_NAME@$DIGEST\`"
+            echo
+            echo "Signée par cosign, avec SBOM et attestation de provenance."
+          } >> "$GITHUB_STEP_SUMMARY"

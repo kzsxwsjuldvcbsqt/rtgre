@@ -17,6 +17,9 @@ from .sitecheck import validate_site
 from .stylesheets import bundle_stylesheet
 
 GENERATED_MARKER = ".schedule-generated"
+# Dossier où publier le site, s'il doit être séparé du code (conteneur en lecture seule).
+OUTPUT_ROOT_VARIABLE = "SCHEDULE_OUTPUT_ROOT"
+PUBLISHED_DIRECTORY_MODE = 0o755
 
 
 def output_path(value: str, project_root: Path) -> Path:
@@ -34,6 +37,16 @@ def output_path(value: str, project_root: Path) -> Path:
     if path.exists() and value != "dist" and not (path / GENERATED_MARKER).is_file():
         raise ValueError("Refusing to replace an unmanaged directory")
     return path
+
+
+def output_root(project_root: Path) -> Path:
+    value = os.environ.get(OUTPUT_ROOT_VARIABLE)
+    if not value:
+        return project_root
+    path = Path(value)
+    if not path.is_absolute() or path.is_symlink() or not path.is_dir():
+        raise ValueError(f"{OUTPUT_ROOT_VARIABLE} must be an existing absolute directory")
+    return path.resolve()
 
 
 def source_path(value: str, project_root: Path) -> Path:
@@ -60,14 +73,14 @@ def build_lock(target: Path):
 
 def publish_site(app_config, events_by_class, matching_matrix, project_root: Path | None = None):
     root = (project_root or Path.cwd()).resolve()
-    target = output_path(app_config.site["output_directory"], root)
+    target = output_path(app_config.site["output_directory"], output_root(root))
     with build_lock(target):
         _publish_site(app_config, events_by_class, matching_matrix, root)
 
 
 def _publish_site(app_config, events_by_class, matching_matrix, project_root: Path | None = None):
     root = (project_root or Path.cwd()).resolve()
-    target = output_path(app_config.site["output_directory"], root)
+    target = output_path(app_config.site["output_directory"], output_root(root))
     static = source_path(app_config.site["static_directory"], root)
     staging = Path(tempfile.mkdtemp(prefix=f".{target.name}-", dir=target.parent))
     backup = target.with_name(f".{target.name}-previous")
@@ -90,6 +103,9 @@ def _publish_site(app_config, events_by_class, matching_matrix, project_root: Pa
         bundle_stylesheet(dist_static / app_config.site["stylesheet"])
         validate_site(staging, app_config.site.get("base_path", "/"))
         (staging / GENERATED_MARKER).write_text("schedule\n", encoding="utf-8")
+        # mkdtemp crée un dossier privé (0700) : le site publié doit rester lisible par un
+        # serveur web qui tourne sous un autre utilisateur.
+        staging.chmod(PUBLISHED_DIRECTORY_MODE)
         if backup.exists():
             if not backup.is_dir() or not (backup / GENERATED_MARKER).is_file():
                 raise ValueError("Refusing to replace an unmanaged backup directory")

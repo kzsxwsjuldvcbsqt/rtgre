@@ -1,0 +1,8 @@
+# Seuls le code, la configuration et les dépendances figées entrent dans l'image.
+*
+!config/
+!src/
+!static/
+!templates/
+!requirements.txt
+**/__pycache__

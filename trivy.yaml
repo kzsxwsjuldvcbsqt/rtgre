@@ -1,0 +1,9 @@
+# Configuration de Trivy, lue par « trivy config », « trivy fs » et « trivy image » depuis la racine du dépôt.
+ignorefile: .trivyignore.yaml
+scan:
+  # Code tiers installé localement : analysé par ses propres auteurs, pas par ce dépôt.
+  skip-dirs:
+    - .venv
+    - node_modules
+    # Cache de pre-commit, placé dans le dépôt par la CI : il contient les dépôts des hooks.
+    - .cache
