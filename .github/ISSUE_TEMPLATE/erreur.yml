@@ -1,0 +1,31 @@
+name: Signaler une erreur
+description: Un cours, une évaluation, une note ou un affichage incorrect sur rtgre.fr.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: ADE reste la référence. Vérifiez d'abord que l'information est juste dans ADE.
+  - type: input
+    id: page
+    attributes:
+      label: Page concernée
+      description: L'adresse de la page, par exemple https://rtgre.fr/…
+    validations:
+      required: true
+  - type: textarea
+    id: constat
+    attributes:
+      label: Ce qui est affiché
+    validations:
+      required: true
+  - type: textarea
+    id: attendu
+    attributes:
+      label: Ce qui était attendu
+    validations:
+      required: true
+  - type: input
+    id: appareil
+    attributes:
+      label: Appareil et navigateur
+      placeholder: iPhone, Safari ; ordinateur, Firefox…

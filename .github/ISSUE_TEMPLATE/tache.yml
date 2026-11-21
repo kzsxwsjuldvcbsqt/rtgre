@@ -1,0 +1,26 @@
+name: Tâche
+description: Un travail à réaliser sur le dépôt.
+labels: [tâche]
+body:
+  - type: textarea
+    id: objectif
+    attributes:
+      label: Objectif
+      description: Ce qui doit être vrai une fois la tâche terminée.
+    validations:
+      required: true
+  - type: textarea
+    id: criteres
+    attributes:
+      label: Critères d'acceptation
+      description: Les vérifications qui prouvent que l'objectif est atteint.
+      placeholder: |
+        - [ ] mise run check passe
+        - [ ] ...
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Liens, contraintes, pistes.
