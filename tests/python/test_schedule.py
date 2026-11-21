@@ -655,6 +655,28 @@ class ScheduleTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 output_path("unmanaged", project)
 
+    def test_output_root_publishes_the_site_outside_the_project(self):
+        with tempfile.TemporaryDirectory() as directory, tempfile.TemporaryDirectory() as output:
+            project = Path(directory)
+            shutil.copytree("static", project / "static")
+            config = copy.deepcopy(self.config)
+            config.site["output_directory"] = "site-output"
+            with patch.dict(os.environ, {"SCHEDULE_OUTPUT_ROOT": output}):
+                publish_site(config, {}, None, project)
+            self.assertTrue((Path(output) / "site-output" / "index.html").is_file())
+            self.assertFalse((project / "site-output").exists())
+            self.assertEqual(
+                sorted(path.name for path in Path(output).iterdir()),
+                [".site-output.lock", "site-output"],
+            )
+            for invalid in ("relative/path", str(project / "missing")):
+                with (
+                    self.subTest(root=invalid),
+                    patch.dict(os.environ, {"SCHEDULE_OUTPUT_ROOT": invalid}),
+                ):
+                    with self.assertRaisesRegex(ValueError, "SCHEDULE_OUTPUT_ROOT"):
+                        publish_site(config, {}, None, project)
+
     def test_invalid_calendar_occurrences_are_skipped(self):
         start = datetime(2026, 9, 8, 8, tzinfo=self.config.timezone)
         events = parse_calendar(
