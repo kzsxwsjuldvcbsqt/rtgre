@@ -57,13 +57,6 @@ jobs:
       - name: Install dependencies
         run: mise run deps
 
-      - name: Check formatting and syntax
-        run: |
-          ruff check src tests
-          ruff format --check src tests
-          npm run format:check
-          for script in static/js/*.js; do node --check "$script"; done
-
       - name: Run JavaScript tests
         run: npm test
 
