@@ -17,11 +17,20 @@
 <li class="box-row setting-row js-only">
 <span class="box-row-main"><span class="setting-name" id="appearance-label">{{ labels.notice.appearance }}</span><span class="setting-help">{{ labels.notice.appearance_help }}</span></span>
 <div class="segmented" role="group" aria-labelledby="appearance-label" data-color-scheme-choice>
-<button type="button" class="segmented-option" data-value="auto" aria-pressed="false">{{ labels.notice.scheme_auto }}</button>
-<button type="button" class="segmented-option" data-value="light" aria-pressed="false">{{ labels.notice.scheme_light }}</button>
-<button type="button" class="segmented-option" data-value="dark" aria-pressed="false">{{ labels.notice.scheme_dark }}</button>
+<button type="button" class="segmented-option" data-value="auto" aria-pressed="false" data-umami-event="Apparence" data-umami-event-choix="automatique">{{ labels.notice.scheme_auto }}</button>
+<button type="button" class="segmented-option" data-value="light" aria-pressed="false" data-umami-event="Apparence" data-umami-event-choix="clair">{{ labels.notice.scheme_light }}</button>
+<button type="button" class="segmented-option" data-value="dark" aria-pressed="false" data-umami-event="Apparence" data-umami-event-choix="sombre">{{ labels.notice.scheme_dark }}</button>
 </div>
 </li>
+{% if 'audience' in site %}
+<li class="box-row setting-row js-only" id="audience">
+<span class="box-row-main"><span class="setting-name" id="audience-label">{{ labels.notice.audience }}</span><span class="setting-help">{{ labels.notice.audience_help }}</span></span>
+<div class="segmented" role="group" aria-labelledby="audience-label" data-audience-choice>
+<button type="button" class="segmented-option" data-value="counted" aria-pressed="false" data-umami-event="Mesure d'audience" data-umami-event-choix="acceptée">{{ labels.notice.audience_counted }}</button>
+<button type="button" class="segmented-option" data-value="refused" aria-pressed="false">{{ labels.notice.audience_refused }}</button>
+</div>
+</li>
+{% endif %}
 {% if class_config %}
 <li class="box-row setting-row" id="agenda">
 <span class="box-row-main"><span class="setting-name">{{ labels.feeds.row_all }}</span><span class="setting-help">{{ labels.feeds.row_all_help }}</span></span>
@@ -52,8 +61,11 @@
 <p>{{ labels.notice.p5 }}</p>
 <p>{{ labels.notice.p6 }}</p>
 <p>{{ labels.notice.p6_server }}</p>
-<p>{{ labels.notice.p7 }} <a href="{{ site.github_url }}" target="_blank" rel="noopener noreferrer" class="external-link">{{ site.github_profile }}{{ icon('link-external', site.icons, 'icon-sm') }}</a>.</p>
-<p>{{ labels.notice.feedback }} <a href="{{ site.feedback_url }}" target="_blank" rel="noopener noreferrer" class="external-link">{{ labels.notice.feedback_link }}{{ icon('link-external', site.icons, 'icon-sm') }}</a>.</p>
+{% if 'audience' in site %}
+<p>{{ labels.notice.p6_audience }}</p>
+{% endif %}
+<p>{{ labels.notice.p7 }} <a href="{{ site.github_url }}" target="_blank" rel="noopener noreferrer" class="external-link" data-umami-event="Lien externe" data-umami-event-cible="GitHub">{{ site.github_profile }}{{ icon('link-external', site.icons, 'icon-sm') }}</a>.</p>
+<p>{{ labels.notice.feedback }} <a href="{{ site.feedback_url }}" target="_blank" rel="noopener noreferrer" class="external-link" data-umami-event="Lien externe" data-umami-event-cible="Signalement">{{ labels.notice.feedback_link }}{{ icon('link-external', site.icons, 'icon-sm') }}</a>.</p>
 </div>
 </div>
 {% endblock %}

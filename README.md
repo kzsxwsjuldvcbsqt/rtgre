@@ -134,7 +134,7 @@ Le chargement des pages est gardé léger sans outil de construction supplément
 
 Le dossier `static/js/` contient la logique exécutée dans le navigateur : le calendrier, les filtres des évaluations, le calcul des notes, l'import et l'export JSON, ainsi qu'un accès protégé aux données modifiables entre plusieurs onglets.
 
-Le calendrier de la classe courante est intégré dans la page générée, sans requête supplémentaire. Les notes utilisent `localStorage` ; les filtres et réglages temporaires utilisent selon la page `sessionStorage` ou l'URL.
+Le calendrier de la classe courante est intégré dans la page générée, sans requête supplémentaire. La seule requête que le site émet est celle de la mesure d'audience, vers son propre nom. Les notes utilisent `localStorage` ; les filtres et réglages temporaires utilisent selon la page `sessionStorage` ou l'URL.
 
 Il n'y a pas de serveur applicatif, pas d'API privée, pas de base de données, pas de système de compte ni d'authentification. Les notes ne sont pas envoyées vers un serveur. Le serveur web ne fait que distribuer les fichiers générés.
 
@@ -291,11 +291,13 @@ Les mesures appliquées à la chaîne de livraison :
 - les workflows démarrent sans permission et n'accordent à chaque job que celles dont il a besoin ;
 - les jetons GitHub ne sont pas conservés dans le dépôt cloné.
 
-Côté navigateur, chaque page déclare une Content-Security-Policy définie dans `config/site.json`. Elle n'autorise que les scripts et styles du site lui-même, et aucune requête réseau ; aucun script n'est écrit dans le HTML. Les tests vérifient cette politique et échouent sur toute violation détectée dans le navigateur.
+Côté navigateur, chaque page déclare une Content-Security-Policy définie dans `config/site.json`. Elle n'autorise que les scripts et styles du site lui-même, et aucune requête réseau vers un autre nom que le sien ; aucun script n'est écrit dans le HTML. Les tests vérifient cette politique et échouent sur toute violation détectée dans le navigateur.
 
 ## Déploiement
 
-Le déploiement est géré par `.github/workflows/build.yml`. Le workflow s'exécute sur les push vers `main` ou `master`, sur les pull requests, manuellement, et automatiquement toutes les heures.
+rtgre.fr est servi par le cluster de [rtgre-platform](https://github.com/kzsxwsjuldvcbsqt/rtgre-platform), qui régénère le site chaque heure avec l'image de ce dépôt (voir la chaîne de livraison, plus bas). GitHub Pages reste déployé en secours : la zone DNS y revient en changeant une valeur, si le cluster ne répond plus. Les deux se mettent à jour chaque heure, indépendamment.
+
+Le déploiement de secours est géré par `.github/workflows/build.yml`. Le workflow s'exécute sur les push vers `main` ou `master`, sur les pull requests, manuellement, et automatiquement toutes les heures.
 
 Les déclenchements planifiés de GitHub ne sont pas garantis : sur ce dépôt, la plupart étaient sautés. La mise à jour horaire repose donc sur un minuteur, `.github/workflows/timer.yml`. Son travail attend une heure grâce au délai de l'environnement `timer`, sans occuper de machine, puis il relance le minuteur et lance la construction. Un déclenchement planifié toutes les quatre heures redémarre la chaîne si elle s'est interrompue, après avoir vérifié qu'aucun minuteur n'attend déjà.
 
@@ -354,7 +356,9 @@ docker run --rm --read-only -v "$PWD/site:/srv/site" rtgre
 
 ## Données personnelles et limites
 
-Le serveur web qui distribue le site journalise les requêtes sans adresse IP complète : il n'en garde que le réseau (un /24 en IPv4, un /48 en IPv6), et ses journaux sont détruits chaque semaine, quatorze jours au plus après leur écriture. Ce choix est décrit dans l'[ADR 0014 de rtgre-platform](https://github.com/kzsxwsjuldvcbsqt/rtgre-platform/blob/main/docs/adr/0014-journaux-de-visite-sans-adresse-complete.md). Le site ne pose aucun cookie et n'embarque aucun outil de mesure d'audience.
+Le serveur web qui distribue le site journalise les requêtes sans adresse IP complète : il n'en garde que le réseau (un /24 en IPv4, un /48 en IPv6), et ses journaux sont détruits chaque semaine, quatorze jours au plus après leur écriture. Ce choix est décrit dans l'[ADR 0014 de rtgre-platform](https://github.com/kzsxwsjuldvcbsqt/rtgre-platform/blob/main/docs/adr/0014-journaux-de-visite-sans-adresse-complete.md). Le site ne pose aucun cookie.
+
+L'audience est mesurée par [Umami](https://umami.is), hébergé sur la plateforme et sans cookie ([ADR 0025 de rtgre-platform](https://github.com/kzsxwsjuldvcbsqt/rtgre-platform/blob/main/docs/adr/0025-mesurer-l-audience-avec-umami.md)). `static/js/audience.js` charge son script, `/mesure.js`, sur le seul nom de production, et les envois vont à ce même nom : la politique de sécurité n'autorise rien d'autre. Sont comptés les pages consultées, la durée de la visite, le type d'appareil et de navigateur, une ville approximative déduite de l'adresse IP, qui n'est pas conservée, et les boutons qui portent un attribut `data-umami-event` : abonnement à l'agenda, export et import des notes, liens externes, apparence. La page « À savoir » le dit aux visiteurs, et un réglage leur permet de refuser d'être comptés ; le script n'est alors plus chargé. Servi par GitHub Pages, en secours, le site ne mesure rien : le script n'y existe pas. L'identifiant du site dans Umami est dans `config/site.json`, sous `audience` ; retirer cette entrée retire la mesure.
 
 Les notes personnelles restent dans le `localStorage` du navigateur. L'application ne les envoie à aucun serveur. Elles sont propres au navigateur et à l'appareil utilisés, et peuvent être perdues si le stockage du navigateur est effacé. Les fonctions d'export JSON permettent de les sauvegarder. Une importation doit provenir d'un fichier de confiance, même si son format est validé. Le site est statique et sans compte utilisateur.
 

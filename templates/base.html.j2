@@ -31,6 +31,13 @@
   data-relative-days-max="{{ site.evaluations.relative_days_max }}"
   data-relative-weeks-max="{{ site.evaluations.relative_weeks_max }}"
 ></script>
+{% if 'audience' in site %}
+<script defer src="{{ url_for('static/js/audience.js') }}"
+  data-tracker="{{ site.audience.tracker }}"
+  data-website-id="{{ site.audience.website_id }}"
+  data-domain="{{ site.audience.domain }}"
+></script>
+{% endif %}
 <script defer src="{{ url_for('static/js/menu.js') }}"></script>
 {% block head_scripts %}{% endblock %}
 <script defer src="{{ url_for('static/js/mobile-shell.js') }}"

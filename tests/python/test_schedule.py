@@ -636,6 +636,63 @@ class ScheduleTests(unittest.TestCase):
             with self.subTest(policy=policy), self.assertRaises(ValueError):
                 validate_site_config(site)
 
+    def test_pages_load_the_audience_script_only_when_it_is_configured(self):
+        events = sample_events(self.config, self.classes[0])
+        tag = re.compile(r'<script defer src="[^"]*static/js/audience\.js"[^>]*>')
+        for configured in (True, False):
+            config = copy.deepcopy(self.config)
+            if not configured:
+                del config.site["audience"]
+            with self.subTest(configured=configured), tempfile.TemporaryDirectory() as directory:
+                render_site(config, {self.classes[0].id: events}, output_dir=directory)
+                for page in Path(directory).rglob("*.html"):
+                    html = page.read_text()
+                    if "static/js/utils.js" not in html:
+                        continue
+                    found = tag.search(html)
+                    self.assertEqual(bool(found), configured, page.name)
+                    if found:
+                        audience = config.site["audience"]
+                        self.assertIn(f'data-tracker="{audience["tracker"]}"', found.group())
+                        self.assertIn(f'data-website-id="{audience["website_id"]}"', found.group())
+                        self.assertIn(f'data-domain="{audience["domain"]}"', found.group())
+                notices = [
+                    html
+                    for html in (page.read_text() for page in Path(directory).rglob("*.html"))
+                    if "data-color-scheme-choice" in html
+                ]
+                self.assertTrue(notices)
+                for notice in notices:
+                    self.assertEqual("data-audience-choice" in notice, configured)
+                    self.assertEqual(
+                        str(escape(self.config.labels["notice"]["p6_audience"])) in notice,
+                        configured,
+                    )
+
+    def test_audience_only_talks_to_the_site_itself(self):
+        policy = self.config.site["content_security_policy"]
+        self.assertEqual(policy["connect-src"], ["'self'"])
+        self.assertEqual(policy["script-src"], ["'self'"])
+        self.assertTrue(self.config.site["audience"]["tracker"].startswith("/"))
+
+    def test_audience_configuration_is_validated(self):
+        valid = self.config.site["audience"]
+        for change in (
+            {"tracker": "https://example.org/script.js"},
+            {"tracker": "mesure.js"},
+            {"website_id": "not-an-identifier"},
+            {"domain": "rtgre.fr/path"},
+            {"domain": ""},
+        ):
+            site = copy.deepcopy(self.config.site)
+            site["audience"] = {**valid, **change}
+            with self.subTest(change=change), self.assertRaises(ValueError):
+                validate_site_config(site)
+        site = copy.deepcopy(self.config.site)
+        site["audience"] = "rtgre.fr"
+        with self.assertRaises(ValueError):
+            validate_site_config(site)
+
     def test_repeated_publish_removes_only_stale_generated_files(self):
         with tempfile.TemporaryDirectory() as directory:
             project = Path(directory)

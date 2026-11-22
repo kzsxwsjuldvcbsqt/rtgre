@@ -29,7 +29,7 @@
 <ul class="app-nav-links">
 {% for sec in sections %}
 {% if sec.kind == 'external' %}
-<li><a href="{{ sec.url }}" target="_blank" rel="noopener noreferrer" class="nav-external"><span>{{ sec.label }}</span>{{ icon('link-external', site.icons, 'icon-sm') }}</a></li>
+<li><a href="{{ sec.url }}" target="_blank" rel="noopener noreferrer" class="nav-external" data-umami-event="Lien externe" data-umami-event-cible="{{ sec.label }}"><span>{{ sec.label }}</span>{{ icon('link-external', site.icons, 'icon-sm') }}</a></li>
 {% endif %}
 {% endfor %}
 </ul>
