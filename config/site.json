@@ -17,11 +17,17 @@
     "default-src": ["'none'"],
     "script-src": ["'self'"],
     "style-src": ["'self'"],
+    "connect-src": ["'self'"],
     "font-src": ["'self'"],
     "img-src": ["'self'"],
     "form-action": ["'self'"],
     "base-uri": ["'none'"],
     "object-src": ["'none'"]
+  },
+  "audience": {
+    "tracker": "/mesure.js",
+    "website_id": "8cb8d8c2-3a9c-41d3-929f-7f353cb8f2ee",
+    "domain": "rtgre.fr"
   },
   "favicons": [
     {

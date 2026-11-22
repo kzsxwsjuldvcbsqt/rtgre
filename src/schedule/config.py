@@ -84,6 +84,17 @@ def validate_site_config(site: dict):
         )
     ):
         raise ValueError("Invalid configuration: content_security_policy")
+    audience = site.get("audience")
+    if audience is not None and (
+        not isinstance(audience, dict)
+        or not re.fullmatch(r"/[a-z0-9._/-]+\.js", str(audience.get("tracker", "")))
+        or not re.fullmatch(
+            r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
+            str(audience.get("website_id", "")),
+        )
+        or not re.fullmatch(r"[a-z0-9]([a-z0-9.-]*[a-z0-9])?", str(audience.get("domain", "")))
+    ):
+        raise ValueError("Invalid configuration: audience")
 
 
 def valid_public_id(value: object) -> bool:
