@@ -36,7 +36,7 @@
 <a class="btn" href="{{ url_for('classes/' ~ class_config.id ~ '/' ~ section_files.calendar) }}#view=year&amp;search={{ mod.code | urlencode }}">{{ labels.resources.sessions_btn }}</a>
 {% endif %}
 {% if mod.chamilo_url %}
-<a class="btn" href="{{ mod.chamilo_url }}" target="_blank" rel="noopener noreferrer">{{ labels.resources.chamilo_btn }}{{ icon('link-external', site.icons, 'icon-sm') }}</a>
+<a class="btn" href="{{ mod.chamilo_url }}" target="_blank" rel="noopener noreferrer" data-umami-event="Lien externe" data-umami-event-cible="Chamilo">{{ labels.resources.chamilo_btn }}{{ icon('link-external', site.icons, 'icon-sm') }}</a>
 {% endif %}
 </div>
 </li>

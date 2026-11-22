@@ -4,8 +4,8 @@
 {% endmacro %}
 {% macro feed_choices(file, labels, site) %}
 <div class="feed-choices">
-<a class="btn" href="{{ file }}" data-feed-device>{{ labels.feeds.device }}</a>
-<a class="btn js-only" href="{{ file }}" data-feed-google="{{ site.feeds.google_url }}" target="_blank" rel="noopener noreferrer">{{ labels.feeds.google }}{{ icon('link-external', site.icons, 'icon-sm') }}</a>
-<button type="button" class="btn btn-ghost js-only" data-feed-copy="{{ file }}" data-copied="{{ labels.feeds.copied }}" data-message-duration="{{ site.grades.message_duration_ms }}"><span class="btn-label">{{ labels.feeds.copy_link }}</span></button>
+<a class="btn" href="{{ file }}" data-feed-device data-umami-event="Abonnement à l'agenda" data-umami-event-moyen="appareil">{{ labels.feeds.device }}</a>
+<a class="btn js-only" href="{{ file }}" data-feed-google="{{ site.feeds.google_url }}" target="_blank" rel="noopener noreferrer" data-umami-event="Abonnement à l'agenda" data-umami-event-moyen="Google">{{ labels.feeds.google }}{{ icon('link-external', site.icons, 'icon-sm') }}</a>
+<button type="button" class="btn btn-ghost js-only" data-umami-event="Abonnement à l'agenda" data-umami-event-moyen="lien copié" data-feed-copy="{{ file }}" data-copied="{{ labels.feeds.copied }}" data-message-duration="{{ site.grades.message_duration_ms }}"><span class="btn-label">{{ labels.feeds.copy_link }}</span></button>
 </div>
 {% endmacro %}

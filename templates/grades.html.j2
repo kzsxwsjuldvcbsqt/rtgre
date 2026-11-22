@@ -7,15 +7,15 @@
 {% block topbar %}{% call app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.calendar))], (sections | selectattr('id', 'equalto', 'grades') | first).label, labels, url_for, site, class_config.label) %}
 <div class="grades-actions" id="grades-actions" role="group" aria-label="{{ labels.grades.actions }}" hidden>
 <div class="grades-backup" data-mobile-slot="grades-reset-slot">
-<button type="button" class="btn btn-ghost btn-danger" id="grades-reset-btn" data-sheet-dismiss>{{ icon('trash', site.icons) }}<span class="btn-label"><span class="label-short">{{ labels.grades.reset_btn }}</span><span class="label-long">{{ labels.grades.reset_row }}</span></span></button>
+<button type="button" class="btn btn-ghost btn-danger" id="grades-reset-btn" data-umami-event="Notes : tout effacer" data-sheet-dismiss>{{ icon('trash', site.icons) }}<span class="btn-label"><span class="label-short">{{ labels.grades.reset_btn }}</span><span class="label-long">{{ labels.grades.reset_row }}</span></span></button>
 </div>
 <div class="grades-backup" data-mobile-slot="grades-backup-slot">
-<button type="button" class="btn" id="grades-import-btn" data-sheet-dismiss>{{ icon('upload', site.icons) }}<span class="btn-label"><span class="label-short">{{ labels.grades.import_btn }}</span><span class="label-long">{{ labels.grades.import_row }}</span></span></button>
+<button type="button" class="btn" id="grades-import-btn" data-umami-event="Notes : importer" data-sheet-dismiss>{{ icon('upload', site.icons) }}<span class="btn-label"><span class="label-short">{{ labels.grades.import_btn }}</span><span class="label-long">{{ labels.grades.import_row }}</span></span></button>
 <input type="file" id="grades-import-file" accept=".json" hidden>
-<button type="button" class="btn" id="grades-export-btn" data-sheet-dismiss>{{ icon('download', site.icons) }}<span class="btn-label"><span class="label-short">{{ labels.grades.export_btn }}</span><span class="label-long">{{ labels.grades.export_row }}</span></span></button>
+<button type="button" class="btn" id="grades-export-btn" data-umami-event="Notes : exporter" data-sheet-dismiss>{{ icon('download', site.icons) }}<span class="btn-label"><span class="label-short">{{ labels.grades.export_btn }}</span><span class="label-long">{{ labels.grades.export_row }}</span></span></button>
 </div>
 {% if bulletin_enabled %}
-<button type="button" class="btn btn-primary" id="grades-bulletin-btn">{{ icon('file-pdf', site.icons) }}<span class="btn-label">{{ labels.grades.bulletin_btn }}</span></button>
+<button type="button" class="btn btn-primary" id="grades-bulletin-btn" data-umami-event="Notes : bulletin">{{ icon('file-pdf', site.icons) }}<span class="btn-label">{{ labels.grades.bulletin_btn }}</span></button>
 <input type="file" id="grades-bulletin-file" accept="application/pdf,.pdf" hidden>
 {% endif %}
 <button type="button" class="filters-toggle" aria-expanded="false" aria-controls="grades-options" aria-label="{{ labels.grades.options_btn }}">{{ icon('filter', site.icons) }}</button>
