@@ -17,6 +17,8 @@ const config = {
   missing_grade: "~",
   ignored_texts: ["Provisoire"],
   module_prefixes: ["SAE", "R"],
+  status_markers: { fi: "FI", fa: "FAP" },
+  code_suffixes: { fa: "A" },
   row_tolerance: 3,
   column_tolerance: 5,
   wrap_gap: 12,
@@ -138,13 +140,99 @@ test("bulletin rows are grouped by line and watermark is dropped", () => {
 });
 
 test("bulletin grades are matched to site modules and evaluations", () => {
-  const result = model.match(model.read(pages, info, config), gradesConfig);
+  const result = model.match(
+    model.read(pages, info, config),
+    gradesConfig,
+    config,
+  );
   assert.deepEqual(result.tracks, ["dc"]);
   assert.deepEqual(result.statuses, ["fi"]);
   assert.equal(result.known, 2);
   assert.deepEqual(result.grades, { R501: 14 });
   assert.deepEqual(result.evaluations, { R501: { "ds-wifi": 14 } });
   assert.equal(result.ignored, 2);
+});
+
+test("apprenticeship bulletins are matched without their code suffix", () => {
+  const apprenticeInfo = {
+    Title:
+      "Bulletin BUT Réseaux et Télécommunications 2023 semestre 5 FAP (Août 2026 - Fév 2027)",
+    Author: "ScoDoc 9",
+  };
+  const apprenticePages = [
+    [].concat(
+      row(765, [[223, "RELEVÉ DE NOTES"]]),
+      row(726, [
+        [34, "Formation: BUT Réseaux et Télécommunications 2023 semestre 5"],
+      ]),
+      row(683, [
+        [40, "Unités d'enseignement"],
+        [473, "Coef."],
+        [519, "Note/20"],
+      ]),
+      row(597, [
+        [40, "R5.01A Wifi - Wifi avancé"],
+        [484, "5.0"],
+        [530, "13.00"],
+      ]),
+      row(579, [
+        [40, "SAE5.EntrepriseA Alternance en entreprise (Parcours ALT)"],
+        [484, "22.0"],
+        [530, "16.00"],
+      ]),
+      row(561, [
+        [40, "R5.dc.09A DevOps - Outils"],
+        [484, "8.0"],
+        [549, "~"],
+      ]),
+      row(390, [
+        [40, "Situations d'apprentissage et d'évaluation"],
+        [474, "Coef."],
+        [510, "Note/20"],
+      ]),
+      row(370, [
+        [40, "SAE5.EntrepriseA - Alternance en entreprise (Parcours ALT)"],
+      ]),
+      row(352, [
+        [40, "CR1"],
+        [478, "01.00"],
+        [530, "16.00"],
+      ]),
+    ),
+  ];
+  const apprenticeConfig = {
+    track: "dc",
+    status: "fa",
+    track_ids: ["cy", "dc"],
+    status_ids: ["fi", "fa"],
+    has_details: true,
+    semesters: [
+      {
+        id: "s5",
+        subjects: [
+          { code: "R501", evaluations: [] },
+          { code: "R5dc09", evaluations: [] },
+          {
+            code: "SAE5Entreprise",
+            evaluations: [{ id: "cr1", label: "CR1" }],
+          },
+        ],
+      },
+    ],
+  };
+  const parsed = model.read(apprenticePages, apprenticeInfo, config);
+
+  const result = model.match(parsed, apprenticeConfig, config);
+  assert.deepEqual(result.tracks, ["dc"]);
+  assert.deepEqual(result.statuses, ["fa"]);
+  assert.equal(result.known, 3);
+  assert.deepEqual(result.grades, { R501: 13, SAE5Entreprise: 16 });
+  assert.deepEqual(result.evaluations, { SAE5Entreprise: { cr1: 16 } });
+  assert.equal(result.ignored, 0);
+
+  const elsewhere = model.match(parsed, gradesConfig, config);
+  assert.deepEqual(elsewhere.statuses, ["fa"]);
+  assert.equal(elsewhere.known, 2);
 });
 
 test("documents that are not a ScoDoc bulletin are rejected", () => {

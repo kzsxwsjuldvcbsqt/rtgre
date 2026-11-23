@@ -82,6 +82,8 @@
     "message_duration_ms": 5000,
     "bulletin": {
       "classes": ["b3dc3"],
+      "status_markers": { "fi": "FI", "fa": "FAP" },
+      "code_suffixes": { "fa": "A" },
       "max_bytes": 2000000,
       "max_pages": 10,
       "producer_marker": "ScoDoc",

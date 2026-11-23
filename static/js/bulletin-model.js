@@ -191,11 +191,14 @@
     return { header: header, modules: modules, evaluations: evaluations };
   }
 
-  function siteCode(code) {
-    return code.replace(/\./g, "");
+  function siteCode(code, suffix) {
+    const plain = code.replace(/\./g, "");
+    return suffix && plain.endsWith(suffix)
+      ? plain.slice(0, -suffix.length)
+      : plain;
   }
 
-  function match(parsed, gradesConfig) {
+  function match(parsed, gradesConfig, config) {
     const subjects = {};
     gradesConfig.semesters.forEach(function (semester) {
       semester.subjects.forEach(function (subject) {
@@ -219,15 +222,17 @@
     });
     const words = parsed.header.toLowerCase().split(/[^a-z0-9]+/);
     const statuses = gradesConfig.status_ids.filter(function (status) {
-      return words.indexOf(status.toLowerCase()) !== -1;
+      return words.indexOf(config.status_markers[status].toLowerCase()) !== -1;
     });
+    const suffix =
+      statuses.length === 1 ? config.code_suffixes[statuses[0]] : undefined;
 
     const grades = {};
     const evaluations = {};
     let ignored = 0;
     let known = 0;
     Object.keys(parsed.modules).forEach(function (code) {
-      const subject = subjects[siteCode(code)];
+      const subject = subjects[siteCode(code, suffix)];
       if (subject) known++;
       const grade = parsed.modules[code];
       if (grade === null) return;
@@ -236,7 +241,7 @@
     });
     parsed.evaluations.forEach(function (evaluation) {
       if (evaluation.grade === null) return;
-      const subject = subjects[siteCode(evaluation.module)];
+      const subject = subjects[siteCode(evaluation.module, suffix)];
       if (!subject || !subject.evaluations.length) {
         if (gradesConfig.has_details) ignored++;
         return;

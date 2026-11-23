@@ -163,6 +163,12 @@ def validate_bulletin_config(bulletin):
         or not bulletin["evaluation_sections"]
         or not bulletin["module_prefixes"]
         or any(
+            not isinstance(bulletin.get(key), dict)
+            or not all(isinstance(item, str) and item.strip() for item in bulletin[key].values())
+            for key in ("status_markers", "code_suffixes")
+        )
+        or len(set(bulletin["status_markers"].values())) != len(bulletin["status_markers"])
+        or any(
             type(bulletin.get(key)) is not int or bulletin[key] <= 0
             for key in ("max_bytes", "max_pages")
         )
@@ -526,6 +532,11 @@ def load_config(config_dir: str = "config") -> AppConfig:
     class_ids = {cls.id for program in programs for cls in program.classes}
     if not set(grades["bulletin"]["classes"]) <= class_ids:
         raise ValueError("Unknown class in bulletin configuration")
+    if (
+        grades["bulletin"]["status_markers"].keys() != statuses
+        or not grades["bulletin"]["code_suffixes"].keys() <= statuses
+    ):
+        raise ValueError("Bulletin statuses differ from curriculum statuses")
 
     tz = ZoneInfo(site["timezone"])
 

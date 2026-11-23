@@ -144,11 +144,30 @@ class ScheduleTests(unittest.TestCase):
             ("evaluation_sections", []),
             ("max_pages", 0),
             ("wrap_gap", -1),
+            ("status_markers", {"fi": "FI", "fa": "FI"}),
+            ("status_markers", {"fi": " "}),
+            ("code_suffixes", ["A"]),
         ):
             broken = copy.deepcopy(valid)
             broken[key] = value
             with self.subTest(key=key), self.assertRaises(ValueError):
                 validate_bulletin_config(broken)
+
+    def test_bulletin_classes_and_statuses_must_exist(self):
+        for key, value in (
+            ("classes", ["inconnue"]),
+            ("status_markers", {"fi": "FI"}),
+            ("code_suffixes", {"xx": "A"}),
+        ):
+            with self.subTest(key=key), tempfile.TemporaryDirectory() as directory:
+                config_dir = Path(directory) / "config"
+                shutil.copytree("config", config_dir)
+                site_path = config_dir / "site.json"
+                site = json.loads(site_path.read_text())
+                site["grades"]["bulletin"][key] = value
+                site_path.write_text(json.dumps(site))
+                with self.assertRaises(ValueError):
+                    load_config(str(config_dir))
 
     def test_evaluation_details_are_validated(self):
         valid = [{"id": "ds", "label": "DS", "weight": 1}]
