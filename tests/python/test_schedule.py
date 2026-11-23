@@ -195,7 +195,8 @@ class ScheduleTests(unittest.TestCase):
             for cls in self.classes
         }
         self.assertTrue(detailed["b3dc3"])
-        self.assertFalse(detailed["b3dcc"])
+        self.assertTrue(detailed["b3dcc"])
+        self.assertFalse(detailed["b3cya"])
 
     def test_rejects_duplicate_modules(self):
         config = copy.deepcopy(self.config.curriculum)
