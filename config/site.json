@@ -81,7 +81,7 @@
     "max_entries": 500,
     "message_duration_ms": 5000,
     "bulletin": {
-      "classes": ["b3dc3"],
+      "classes": ["b3dc3", "b3dcc"],
       "status_markers": { "fi": "FI", "fa": "FAP" },
       "code_suffixes": { "fa": "A" },
       "max_bytes": 2000000,
