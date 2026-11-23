@@ -633,7 +633,7 @@
           source.info,
           bulletinConfig,
         );
-        result = BulletinModel.match(parsed, gradesConfig);
+        result = BulletinModel.match(parsed, gradesConfig, bulletinConfig);
       } catch (error) {
         showMessage(
           bulletinText(
