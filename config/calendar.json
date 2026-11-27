@@ -13,6 +13,7 @@
   ],
   "search_delay_ms": 250,
   "time_marker_interval_ms": 60000,
+  "year_load_hours": [2, 4, 6],
   "breaks": [
     { "boundary": "10:00", "before": "09:50", "after": "10:10" },
     { "boundary": "15:30", "before": "15:20", "after": "15:40" }

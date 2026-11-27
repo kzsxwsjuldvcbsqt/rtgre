@@ -263,6 +263,14 @@ def validate_calendar_config(calendar: dict):
         or calendar["time_marker_interval_ms"] <= 0
     ):
         raise ValueError("Invalid calendar timers")
+    steps = calendar["year_load_hours"]
+    if (
+        not isinstance(steps, list)
+        or not steps
+        or any(type(step) not in (int, float) or step <= 0 for step in steps)
+        or steps != sorted(set(steps))
+    ):
+        raise ValueError("Year load hours must be distinct positive numbers in ascending order")
     from datetime import time
 
     for entry in calendar.get("breaks", []):

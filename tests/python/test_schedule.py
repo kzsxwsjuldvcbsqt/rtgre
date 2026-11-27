@@ -306,6 +306,11 @@ class ScheduleTests(unittest.TestCase):
             with self.subTest(days=days), self.assertRaises(ValueError):
                 validate_calendar_config({**self.config.calendar_config, "days_of_week": days})
 
+    def test_calendar_rejects_invalid_year_load_hours(self):
+        for steps in ([], [0], [4, 2], [2, 2], ["2"], None):
+            with self.subTest(steps=steps), self.assertRaises(ValueError):
+                validate_calendar_config({**self.config.calendar_config, "year_load_hours": steps})
+
     def test_external_links_follow_navigation_order(self):
         external_urls = {
             section.id: section.url
