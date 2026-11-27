@@ -1,0 +1,118 @@
+@layer theme {
+  @media screen {
+    :root {
+      --hiver-night: #0c1b31;
+      --hiver-dusk: #1c3260;
+      --hiver-dusk-soft: rgba(28, 50, 96, 0.5);
+      --hiver-dusk-clear: rgba(28, 50, 96, 0);
+      --hiver-twilight: #3a4d8c;
+      --hiver-glacier: #5db3e6;
+      --hiver-snow: #ffffff;
+      --hiver-glow: #e9a9b6;
+      --hiver-cover: url("cover.svg");
+      --hiver-cover-ratio: 16 / 9;
+      --hiver-cover-fade: 46%;
+      --hiver-cover-overlap: var(--space-2xl);
+      --hiver-dusk-height: 52%;
+      --hiver-horizon: var(--space-md);
+      --hiver-ink-shadow: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.4);
+      --hiver-line: 0.1875rem;
+      --hiver-snowfall: url("snow.svg");
+      --hiver-snow-fade: 58%;
+      --hiver-skyline: linear-gradient(
+        90deg,
+        var(--hiver-night),
+        var(--hiver-twilight) 24%,
+        var(--hiver-glacier) 44%,
+        var(--hiver-snow) 50%,
+        var(--hiver-glow) 58%,
+        var(--hiver-twilight) 78%,
+        var(--hiver-night)
+      );
+
+      --color-navbar: var(--hiver-night);
+      --color-highlight: var(--hiver-glacier);
+      --color-accent: #1b6aa5;
+      --color-accent-emphasis: #114e7e;
+      --color-accent-soft: rgba(93, 179, 230, 0.2);
+      --color-soon: rgba(93, 179, 230, 0.1);
+      --color-kind-special: #f1e6cf;
+      --color-sae-1: #cfe2f6;
+      --color-sae-2: #cde6da;
+      --color-sae-3: #dcd6f4;
+      --color-sae-4: #c6e6ea;
+      --color-sae-5: #f6d5dc;
+      --color-sae-6: #eee5c2;
+    }
+    :root[data-color-scheme="dark"] {
+      --color-accent: #8ccbf5;
+      --color-accent-emphasis: #b9e0fb;
+      --color-accent-soft: rgba(93, 179, 230, 0.18);
+      --color-kind-special: #352c1f;
+      --color-sae-1: #1b2c45;
+      --color-sae-2: #1a3329;
+      --color-sae-3: #2a2648;
+      --color-sae-4: #183438;
+      --color-sae-5: #3f2530;
+      --color-sae-6: #34311d;
+    }
+    .app-sidebar {
+      background:
+        linear-gradient(
+            to top,
+            var(--hiver-glow) 0,
+            var(--hiver-twilight) var(--hiver-horizon),
+            var(--hiver-dusk) 46%,
+            var(--hiver-dusk-soft) 74%,
+            var(--hiver-dusk-clear) 100%
+          )
+          bottom / 100% var(--hiver-dusk-height) no-repeat local,
+        var(--color-navbar);
+    }
+    .app-sidebar::before {
+      content: "";
+      flex: none;
+      aspect-ratio: var(--hiver-cover-ratio);
+      margin: calc(-1 * var(--space-md)) calc(-1 * var(--space-sm))
+        calc(-1 * var(--hiver-cover-overlap));
+      background:
+        linear-gradient(
+          to top,
+          var(--color-navbar),
+          transparent var(--hiver-cover-fade)
+        ),
+        var(--hiver-cover) center / cover no-repeat var(--hiver-dusk);
+    }
+    .app-sidebar::after {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      aspect-ratio: var(--hiver-cover-ratio);
+      pointer-events: none;
+      background: var(--hiver-snowfall) center / cover no-repeat;
+      mask-image: linear-gradient(
+        to bottom,
+        var(--hiver-night) var(--hiver-snow-fade),
+        transparent
+      );
+    }
+    .app-nav a {
+      text-shadow: var(--hiver-ink-shadow);
+    }
+    .app-nav-classes a[aria-current="page"] {
+      color: var(--color-navbar-text);
+    }
+  }
+  @media screen and (prefers-reduced-motion: reduce) {
+    .app-sidebar::after {
+      display: none;
+    }
+  }
+  @media screen and (max-width: 74.99em) {
+    .app-topbar-main {
+      background:
+        var(--hiver-skyline) bottom / 100% var(--hiver-line) no-repeat,
+        var(--color-navbar);
+    }
+  }
+}
