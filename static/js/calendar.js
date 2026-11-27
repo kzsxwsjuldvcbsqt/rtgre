@@ -776,6 +776,12 @@
       });
     }
 
+    if (periodHeading) {
+      periodHeading.addEventListener("click", function () {
+        if (mobileQuery.matches) AppUtils.press(todayBtn);
+      });
+    }
+
     const shortcuts = {
       ArrowLeft: function () {
         return AppUtils.press(prevBtn);
