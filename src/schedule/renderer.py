@@ -20,6 +20,7 @@ from .viewmodels import (
     long_date,
     prepare_evaluation_order,
     prepare_initial_week,
+    prepare_module_groups,
     prepare_module_progress,
     short_date,
 )
@@ -398,8 +399,10 @@ def render_site(
                 labels=app_config.labels,
                 class_config=cls,
                 sections=class_sections,
-                resource_groups=resource_groups,
-                module_progress=prepare_module_progress(all_cls_events, module_codes, now),
+                module_groups=prepare_module_groups(
+                    resource_groups,
+                    prepare_module_progress(all_cls_events, module_codes, now),
+                ),
                 categories=app_config.categories,
                 favicons=active_favicons,
                 generated_at=now_str,

@@ -41,7 +41,11 @@ from schedule.parser import normalize_room_name, parse_calendar
 from schedule.renderer import render_site
 from schedule.sitecheck import validate_site
 from schedule.stylesheets import bundle_stylesheet
-from schedule.viewmodels import prepare_evaluation_order, prepare_module_progress
+from schedule.viewmodels import (
+    prepare_evaluation_order,
+    prepare_module_groups,
+    prepare_module_progress,
+)
 
 
 class ScheduleTests(unittest.TestCase):
@@ -533,9 +537,29 @@ class ScheduleTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             render_site(self.config, {cls.id: events}, output_dir=directory)
             html = (Path(directory) / "classes" / cls.id / "ressources.html").read_text()
-        self.assertIn(self.config.labels["resources"]["finished"], html)
-        self.assertIn(self.config.labels["resources"]["no_sessions"], html)
-        self.assertIn("#view=year&amp;search=R501", html)
+        self.assertIn('href="https://chamilo.univ-grenoble-alpes.fr/courses/IUT1RT3R501"', html)
+        self.assertNotIn("#view=year", html)
+
+    def test_module_groups_open_on_what_is_in_progress(self):
+        def group(group_id, *codes):
+            return ({"id": group_id, "label": group_id}, [({}, [{"code": c} for c in codes])])
+
+        groups = [group("s5", "R501", "R502"), group("s6", "R601"), group("extra", "GIT")]
+        session = object()
+
+        def opened(progress):
+            return [g["id"] for g in prepare_module_groups(groups, progress) if g["open"]]
+
+        started = {"total": 3, "upcoming": [session]}
+        waiting = {"total": 2, "upcoming": [session, session]}
+        over = {"total": 2, "upcoming": []}
+        self.assertEqual(opened({"R501": started, "R601": waiting}), ["s5"])
+        self.assertEqual(opened({"R501": waiting, "R601": waiting}), ["s5"])
+        self.assertEqual(opened({"R501": over, "R601": waiting}), ["s6"])
+        self.assertEqual(opened({"R501": started, "R601": started}), ["s5", "s6"])
+        self.assertEqual(opened({"R501": over}), ["s5", "s6", "extra"])
+        modules = prepare_module_groups(groups, {"R501": started})[0]["modules"]
+        self.assertEqual([module["code"] for module in modules], ["R501", "R502"])
 
     def test_each_class_publishes_calendar_feeds(self):
         cls = self.classes[0]
