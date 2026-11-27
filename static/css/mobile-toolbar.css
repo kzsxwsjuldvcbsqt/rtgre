@@ -73,6 +73,7 @@
     font-size: var(--text-base);
     text-align: center;
     white-space: normal;
+    cursor: pointer;
   }
   .cal-nav-center #cal-prev-btn {
     grid-column: 1;
