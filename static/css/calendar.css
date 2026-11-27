@@ -408,7 +408,9 @@ a.year-day {
   grid-template-columns:
     var(--width-hour-axis)
     repeat(var(--calendar-day-count), minmax(0, 1fr));
-  grid-template-rows: [before] auto [heading] auto [body] auto [after] auto;
+  grid-template-rows:
+    [before] auto [heading] auto [lead] var(--height-grid-lead)
+    [body] auto [after] auto;
   row-gap: 0;
 }
 .calendar-view-container.is-grid > .day-section {
@@ -419,6 +421,12 @@ a.year-day {
 }
 .calendar-view-container.is-grid > .day-section > h3 {
   grid-row: heading;
+  margin-block-end: 0;
+}
+.calendar-view-container.is-grid > .day-section > .current-time-marker {
+  grid-row: lead;
+  align-self: center;
+  margin: 0;
 }
 .calendar-view-container.is-grid > .current-time-marker {
   grid-row: before;

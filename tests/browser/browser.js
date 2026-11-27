@@ -417,11 +417,21 @@
     );
     calendar.remove();
     const dayGrid = await frame(
-      "classes/b3cya/index.html#view=day&layout=grid&date=2026-09-08",
+      "classes/b3cya/index.html#view=day&layout=grid&date=2026-09-08&now=2026-09-08T06:00",
       1280,
     );
     const gridItems = Array.from(
       dayGrid.contentDocument.querySelectorAll(".is-grid .calendar-event-item"),
+    );
+    const earlyMarker = dayGrid.contentDocument.getElementById(
+      "current-time-marker",
+    );
+    assert(
+      !earlyMarker.classList.contains("is-line") &&
+        earlyMarker.textContent === "06:00" &&
+        earlyMarker.getBoundingClientRect().bottom <=
+          gridItems[0].getBoundingClientRect().top,
+      "Before the first hour, the time marker sits above the grid with its time",
     );
     assert(
       gridItems.length > 0 &&
