@@ -318,6 +318,13 @@ AppUtils.onDOMReady(function () {
       }
     });
 
+    const next = rows.find(function (row) {
+      return !row.hidden && row.dataset.past === "false";
+    });
+    rows.forEach(function (row) {
+      row.classList.toggle("is-next", row === next);
+    });
+
     const monthCards = document.querySelectorAll(".month-card");
     monthCards.forEach(function (card) {
       const shown = card.querySelectorAll(".eval-row:not([hidden])").length;

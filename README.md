@@ -49,7 +49,7 @@ Il permet aussi de filtrer les évaluations et de masquer les cours sans enseign
 
 Le générateur repère certaines évaluations à partir de leur titre dans ADE. Les règles de reconnaissance sont définies dans `config/categories.json` et couvrent actuellement : DS surveillé, partiel machine, partiel, soutenance, oral noté, revue et une catégorie « surveillé par la scolarité ».
 
-Les évaluations sont affichées par mois et peuvent être filtrées par catégorie, module et période, ou recherchées. Une page de détail donne l'ordre de passage des classes pour une même évaluation : les créneaux sont triés par heure, la classe consultée est mise en évidence, et les différences de date, de salle ou d'enseignant sont signalées sur chaque créneau.
+Les évaluations sont affichées par mois et peuvent être filtrées par catégorie, module et période, ou recherchées. Le délai (« dans 11 jours ») n'accompagne que la prochaine évaluation de la liste affichée et celles des jours qui viennent, selon `soon_days` : les autres lignes ne portent que leur date. Une page de détail donne l'ordre de passage des classes pour une même évaluation : les créneaux sont triés par heure, la classe consultée est mise en évidence, et les différences de date, de salle ou d'enseignant sont signalées sur chaque créneau.
 
 Cette détection dépend des règles de configuration et des informations présentes dans ADE. Elle n'est pas infaillible : un titre inhabituel ou une donnée manquante peut fausser le résultat.
 
