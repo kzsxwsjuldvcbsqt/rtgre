@@ -39,7 +39,7 @@ Ce projet rassemble ces usages sur un site unique, plus simple à consulter, ada
 
 ### Emploi du temps
 
-L'emploi du temps est la première page de chaque classe ; l'ancienne adresse `calendar.html` redirige vers elle. Le calendrier est construit à partir des flux iCalendar d'ADE. Il propose une vue par jour, par semaine et une vue annuelle, ainsi que la navigation par date. Sur ordinateur, les vues jour et semaine s'affichent en grille horaire ou en liste. La recherche porte sur le cours, le module, la salle, l'enseignant ou le groupe.
+L'emploi du temps est la première page de chaque classe ; l'ancienne adresse `calendar.html` redirige vers elle. Le calendrier est construit à partir des flux iCalendar d'ADE. Il propose une vue par jour, par semaine et une vue annuelle, ainsi que la navigation par date. Sur ordinateur, les vues jour et semaine s'affichent en grille horaire ou en liste. Un cours y a deux formes seulement : un bloc dans la grille, dont le détail s'ouvre dans une bulle au survol ou au clic, et une carte dans les listes. La recherche porte sur le cours, le module, la salle, l'enseignant ou le groupe.
 
 La vue annuelle donne l'année d'un coup d'œil : une grille de mois où chaque jour est d'autant plus foncé qu'il compte d'heures de cours, avec un point les jours d'évaluation et un cercle sur aujourd'hui. Un numéro de semaine ouvre cette semaine, un jour ouvre sa journée. Avec une recherche ou un filtre, seuls les jours concernés restent marqués et les cours trouvés sont listés à côté, avec les cartes de la vue semaine et un repère qui situe aujourd'hui parmi eux : c'est la façon de suivre un module sur l'année. Les seuils d'heures se règlent dans `year_load_hours` de `config/calendar.json`.
 

@@ -485,7 +485,7 @@
             );
             item.style.setProperty("--event-lane", placement.lane);
             item.style.setProperty("--event-lanes", placement.lanes);
-            if (state.view === "week") buildEventCard(item);
+            buildEventCard(item);
           });
         });
     }

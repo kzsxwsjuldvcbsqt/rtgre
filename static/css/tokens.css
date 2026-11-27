@@ -137,7 +137,8 @@
   --icon-size-nav: 1.125rem;
 
   --width-grade-input: 5rem;
-  --width-event-time: 6.5rem;
+  --width-day-list: 26rem;
+  --offset-day-card: 20rem;
   --width-event-card: 18rem;
   --width-summary-label: 6.5rem;
   --width-grades-panel: 20rem;

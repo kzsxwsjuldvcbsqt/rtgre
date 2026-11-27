@@ -49,9 +49,9 @@
   gap: var(--space-xs);
 }
 .calendar-event-item {
-  display: grid;
-  grid-template-columns: var(--width-event-time) minmax(0, 1fr);
-  gap: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
   min-width: 0;
   padding: var(--space-sm);
   --event-surface: var(--event-fill, var(--color-surface));
@@ -104,12 +104,6 @@
   border: var(--rule-width) solid var(--color-field-border);
   background: transparent;
   color: var(--color-text-muted);
-}
-.calendar-view-week .calendar-event-item,
-.calendar-view-year .calendar-event-item {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2xs);
 }
 .event-time {
   color: var(--color-text-muted);
@@ -487,12 +481,6 @@ a.year-day {
   );
   padding: var(--space-xs);
 }
-.calendar-view-day.is-grid .calendar-event-item {
-  display: grid;
-  align-content: start;
-  padding: var(--space-xs) var(--space-sm);
-  overflow: hidden;
-}
 .calendar-view-container.is-grid .calendar-event-item {
   transition: var(--transition-undim);
 }
@@ -669,10 +657,19 @@ a.year-day {
 .event-card-facts dd {
   margin: 0;
 }
-.calendar-view-container.is-grid
+.calendar-view-week.is-grid
   .day-section:nth-last-child(-n + 2 of .day-section)
   .event-card {
   inset-inline: auto calc(100% + var(--space-xs));
+}
+.calendar-view-day.is-grid .day-section .calendar-event-item > .event-card {
+  inset-inline-start: min(
+    var(--offset-day-card),
+    100% - var(--width-event-card)
+  );
+}
+.calendar-view-day:not(.is-grid) > .day-section {
+  max-width: var(--width-day-list);
 }
 .calendar-view-container.is-grid .calendar-events-list > .current-time-marker {
   inset-block-start: calc(

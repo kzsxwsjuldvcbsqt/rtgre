@@ -416,6 +416,35 @@
       "Current day is not highlighted in day view",
     );
     calendar.remove();
+    const dayGrid = await frame(
+      "classes/b3cya/index.html#view=day&layout=grid&date=2026-09-08",
+      1280,
+    );
+    const gridItems = Array.from(
+      dayGrid.contentDocument.querySelectorAll(".is-grid .calendar-event-item"),
+    );
+    assert(
+      gridItems.length > 0 &&
+        gridItems.every(
+          (item) =>
+            item.querySelector(".event-summary") &&
+            item.querySelector(".event-card"),
+        ),
+      "Day grid shows course blocks with their detail card",
+    );
+    gridItems[0].click();
+    const pinnedCard = gridItems[0]
+      .querySelector(".event-card")
+      .getBoundingClientRect();
+    const pinnedBlock = gridItems[0].getBoundingClientRect();
+    assert(
+      gridItems[0].classList.contains("is-pinned") &&
+        pinnedCard.width > 100 &&
+        pinnedCard.left >= pinnedBlock.left &&
+        pinnedCard.right <= pinnedBlock.right,
+      "Clicking a day grid block opens its detail card inside the block",
+    );
+    dayGrid.remove();
     const malformed = await frame("classes/b3cya/index.html#search=%");
     assert(
       malformed.contentDocument.getElementById("cal-results-count").textContent
