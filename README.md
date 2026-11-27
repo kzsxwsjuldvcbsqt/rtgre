@@ -57,7 +57,7 @@ Chaque classe publie deux calendriers au format iCalendar : tous ses cours (`cal
 
 ### Modules et ressources
 
-La page des modules regroupe les enseignements par semestre, type de module, parcours et statut de la classe. Elle construit les liens vers les espaces Chamilo correspondants lorsqu'ils sont disponibles. La navigation propose aussi des liens vers la messagerie étudiante, les GitLab IM2AG et GRICAD, et le compte OpenStack de l'IUT. Chaque module y indique son avancement (séances passées sur le total), sa prochaine séance et sa prochaine évaluation, avec un lien vers toutes ses séances dans l'emploi du temps et un lien vers son espace Chamilo. Ces repères restent justes entre deux mises à jour : la page contient les séances à venir et le navigateur écarte celles qui sont passées.
+La page des modules est l'annuaire des espaces Chamilo : une liste par semestre, selon le parcours et le statut de la classe, et les modules complémentaires à part. Chaque ligne ouvre l'espace Chamilo du module. Le semestre en cours est ouvert, les autres groupes sont repliés. La navigation propose aussi des liens vers la messagerie étudiante, les GitLab IM2AG et GRICAD, et le compte OpenStack de l'IUT.
 
 ### Calcul des notes
 
