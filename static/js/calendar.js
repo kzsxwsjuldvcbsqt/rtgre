@@ -387,13 +387,21 @@
         const courseMarker = buildTimeMarker("div", nowTimeStr);
         courseMarker.classList.add("is-line");
         ongoingItem.appendChild(courseMarker);
+      } else if (
+        viewContainer.classList.contains("is-grid") &&
+        nowMinutes < gridRange.start
+      ) {
+        todaySection.insertBefore(
+          buildTimeMarker("div", nowTimeStr),
+          eventsList,
+        );
       } else if (viewContainer.classList.contains("is-grid")) {
         const gridMarker = buildTimeMarker("li", nowTimeStr);
         gridMarker.classList.add("is-line");
         gridMarker.style.setProperty(
           "--calendar-offset",
           Math.min(
-            Math.max(Math.floor(nowMinutes) - gridRange.start, 0),
+            Math.floor(nowMinutes) - gridRange.start,
             gridRange.end - gridRange.start,
           ),
         );
