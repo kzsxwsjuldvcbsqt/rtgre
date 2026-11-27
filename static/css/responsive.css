@@ -32,10 +32,6 @@
   .filter-group-scroll {
     grid-template-columns: 1fr;
   }
-  .calendar-event-item {
-    grid-template-columns: 1fr;
-    gap: var(--space-2xs);
-  }
 }
 @media (min-width: 60em) {
   .has-filter-bar > .filter-bar > #calendar-controls[hidden] {
