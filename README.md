@@ -86,8 +86,11 @@ Les thèmes sont déclarés dans `config/themes.json`. Chacun a un interrupteur 
 | Thème | Ambiance |
 | --- | --- |
 | `vice` | coucher de soleil rose et violet sur la barre latérale, accent rose à la place du jaune |
+| `hiver` | l'heure bleue sur des crêtes enneigées : barre latérale bleu nuit, accent bleu glacier, une lueur rose en bas de barre et une neige légère devant l'illustration |
 
-D'autres thèmes sont prévus, dont un thème d'hiver. Pour en ajouter un :
+L'illustration du thème `hiver` est un dessin vectoriel fait pour le site, sans image tierce. Sa neige est une seconde image vectorielle, animée flocon par flocon et posée devant l'illustration ; elle est masquée pour les visiteurs qui ont demandé moins de mouvement à leur système. Ses couleurs, y compris celles des SAÉ, gardent un contraste d'au moins 4,5 pour 1 avec le texte, en clair comme en sombre.
+
+D'autres thèmes sont prévus. Pour en ajouter un :
 
 1. créer `static/themes/<identifiant>/theme.css`, en s'appuyant sur les variables de `static/css/tokens.css` ;
 2. ajouter son entrée dans `config/themes.json` avec sa période ;
