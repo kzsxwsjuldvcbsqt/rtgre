@@ -111,3 +111,28 @@ test("search text holds the title as displayed and as published", () => {
     assert.ok(text.includes(wanted), wanted);
   }
 });
+
+test("a day's load counts occupied time once and maps to levels", () => {
+  const morning = event();
+  const parallel = event({
+    occurrence_id: "two",
+    start: "2026-09-08T09:00:00+02:00",
+    end: "2026-09-08T11:00:00+02:00",
+  });
+  const afternoon = event({
+    occurrence_id: "three",
+    start: "2026-09-08T13:30:00+02:00",
+    end: "2026-09-08T15:30:00+02:00",
+  });
+  assert.equal(model.occupiedMinutes([]), 0);
+  assert.equal(model.occupiedMinutes([morning]), 120);
+  assert.equal(model.occupiedMinutes([parallel, morning]), 180);
+  assert.equal(model.occupiedMinutes([afternoon, morning, parallel]), 300);
+
+  const steps = [2, 4, 6];
+  assert.equal(model.loadLevel(0, steps), 0);
+  assert.equal(model.loadLevel(120, steps), 1);
+  assert.equal(model.loadLevel(121, steps), 2);
+  assert.equal(model.loadLevel(300, steps), 3);
+  assert.equal(model.loadLevel(450, steps), 4);
+});

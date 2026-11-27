@@ -1,5 +1,6 @@
 (async function () {
-  const { results, errors, assert, frame, change } = BrowserTest.create();
+  const { results, errors, pause, assert, frame, change } =
+    BrowserTest.create();
   try {
     for (const width of [320, 390, 768, 959, 960, 1440]) {
       for (const page of [
@@ -379,14 +380,33 @@
     );
     change(cw, cd.getElementById("cal-view-select"), "year");
     assert(
-      cd.querySelectorAll(".calendar-event-item").length === 3,
-      "Annual view shares day preparation",
+      cd.querySelectorAll(".calendar-event-item").length === 0 &&
+        cd.querySelectorAll("a.year-day").length > 0,
+      "Annual view shows the year as days without listing courses",
     );
     assert(
-      cd
-        .querySelector("#day-section-2026-09-08")
-        .classList.contains("is-today"),
-      "Current day is identified in year view",
+      cd.querySelector("a.year-day.is-today").textContent === "8" &&
+        /load-[1-9]/.test(cd.querySelector("a.year-day.is-today").className),
+      "Current day is identified and weighted in year view",
+    );
+    const evalsOnly = cd.getElementById("cal-evals-only");
+    evalsOnly.checked = true;
+    evalsOnly.dispatchEvent(new cw.Event("change", { bubbles: true }));
+    assert(
+      cd.querySelectorAll(".year-results .calendar-event-item").length ===
+        Number(cd.querySelector(".year-results .data-box-meta").textContent) &&
+        cd.querySelectorAll("a.year-day").length ===
+          cd.querySelectorAll(".year-results .day-section").length,
+      "Filtered annual view lists the matching courses beside their days",
+    );
+    evalsOnly.checked = false;
+    evalsOnly.dispatchEvent(new cw.Event("change", { bubbles: true }));
+    cd.querySelector("a.year-day.is-today").click();
+    await pause();
+    assert(
+      cd.getElementById("cal-view-select").value === "day" &&
+        cd.querySelector("#day-section-2026-09-08") !== null,
+      "A day of the annual view opens that day",
     );
     change(cw, cd.getElementById("cal-view-select"), "day");
     assert(

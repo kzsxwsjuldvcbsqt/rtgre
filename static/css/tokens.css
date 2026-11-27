@@ -152,13 +152,16 @@
   --width-time-range: 7.5rem;
   --width-eval-date: 9rem;
   --width-fact: 9rem;
-  --width-year-title: 16rem;
+  --width-year-month: 13rem;
+  --width-year-week: 1.5rem;
+  --width-year-day: 15rem;
+  --width-year-results: 20rem;
+  --size-year-day: 1.75rem;
+  --size-year-dot: 0.25rem;
   --width-setting-label: 14rem;
   --width-shortcut-keys: 4rem;
   --size-key: 1.375rem;
   --radius-key: 0.25rem;
-  --grid-year-row: minmax(0, 10fr) minmax(0, 6fr) minmax(0, 5fr) minmax(0, 5fr);
-  --size-module-dot: 0.625rem;
   --width-eval-category: 9.5rem;
   --size-order-rank: 1.5rem;
   --menu-min-width: 13rem;
@@ -173,6 +176,10 @@
   --opacity-indicator: 0.6;
   --mix-past: 35%;
   --mix-event-edge: 82%;
+  --mix-load-1: 10%;
+  --mix-load-2: 20%;
+  --mix-load-3: 32%;
+  --mix-load-4: 46%;
   --transition-fast: 180ms ease;
   --transition-undim: opacity 0s 150ms;
   --motion-spotlight: 1400ms linear 250ms;
@@ -184,7 +191,6 @@
   --shadow-overlay: 0 18px 48px rgba(0, 0, 0, 0.18);
   --shadow-menu: 0 8px 24px rgba(0, 0, 0, 0.12);
 
-  --site-header-height: 0px;
 
   --z-raised: 1;
   --z-menu: 30;

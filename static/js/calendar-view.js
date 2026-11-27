@@ -31,6 +31,8 @@
     filterEvents,
     isTimeGrid,
     gridRange,
+    todayIso,
+    yearLoadHours,
   }) {
     const eventByItem = new WeakMap();
 
@@ -502,26 +504,18 @@
       if (includeHeading) {
         const dayIdx = (dDate.getDay() + 6) % 7;
         const heading = document.createElement("h3");
-        if (state.view === "week") {
-          const headingName = document.createElement("span");
-          headingName.className = "day-heading-name";
-          headingName.textContent = dayNames[dayIdx];
-          const headingDate = document.createElement("span");
-          headingDate.className = "day-heading-date";
-          headingDate.textContent = AppUtils.formatText(labels.week_day_date, {
-            day_num: dDate.getDate(),
-            month_name: monthNames[dDate.getMonth()],
-          });
-          heading.appendChild(headingName);
-          heading.appendChild(document.createTextNode(" "));
-          heading.appendChild(headingDate);
-        } else {
-          heading.textContent = AppUtils.formatText(labels.day_title_short, {
-            day_name: labels.days_short[dayIdx],
-            day_num: dDate.getDate(),
-            month_name: labels.months_short[dDate.getMonth()],
-          });
-        }
+        const headingName = document.createElement("span");
+        headingName.className = "day-heading-name";
+        headingName.textContent = dayNames[dayIdx];
+        const headingDate = document.createElement("span");
+        headingDate.className = "day-heading-date";
+        headingDate.textContent = AppUtils.formatText(labels.week_day_date, {
+          day_num: dDate.getDate(),
+          month_name: monthNames[dDate.getMonth()],
+        });
+        heading.appendChild(headingName);
+        heading.appendChild(document.createTextNode(" "));
+        heading.appendChild(headingDate);
         daySection.appendChild(heading);
       }
 
@@ -542,120 +536,226 @@
       return daySection;
     }
 
+    function element(tagName, className, text) {
+      const node = document.createElement(tagName);
+      node.className = className;
+      if (text !== undefined) node.textContent = text;
+      return node;
+    }
+
+    function countLabel(count) {
+      return (
+        count +
+        " " +
+        (count < 2
+          ? labels.results_count_singular
+          : labels.results_count_plural)
+      );
+    }
+
+    function yearDay(dayData, today, dayNames, monthNames) {
+      const date = dayData.dDate;
+      const taught = dayData.dayCount > 0;
+      const cell = element(taught ? "a" : "span", "year-day", date.getDate());
+      if (dayData.dIso === today) cell.classList.add("is-today");
+      if (!taught) return cell;
+
+      const assessed = dayData.events.some(function (event) {
+        return event.category && categoryMap[event.category];
+      });
+      const summary = AppUtils.formatText(labels.year_day, {
+        date: AppUtils.formatText(labels.day_title, {
+          day_name: dayNames[(date.getDay() + 6) % 7],
+          day_num: date.getDate(),
+          month_name: monthNames[date.getMonth()],
+          year: date.getFullYear(),
+        }),
+        count: countLabel(dayData.dayCount),
+      });
+      const label = assessed
+        ? AppUtils.formatText(labels.year_day_evaluation, { summary: summary })
+        : summary;
+      cell.classList.add(
+        "load-" +
+          CalendarModel.loadLevel(
+            CalendarModel.occupiedMinutes(dayData.events),
+            yearLoadHours,
+          ),
+      );
+      if (assessed) cell.classList.add("has-evaluation");
+      cell.href = AppUtils.buildHash({ view: "day", date: dayData.dIso });
+      cell.title = label;
+      cell.setAttribute("aria-label", label);
+      return cell;
+    }
+
+    function yearLegend() {
+      const legend = element("p", "year-legend");
+      function item(marks, text) {
+        const entry = element("span", "year-legend-item");
+        marks.forEach(function (mark) {
+          const sample = element("span", "year-day " + mark);
+          sample.setAttribute("aria-hidden", "true");
+          entry.appendChild(sample);
+        });
+        entry.appendChild(document.createTextNode(text));
+        legend.appendChild(entry);
+      }
+      item(["is-sample"], labels.year_legend_none);
+      item(
+        yearLoadHours
+          .map(function (hours, index) {
+            return "is-sample load-" + (index + 1);
+          })
+          .concat("is-sample load-" + (yearLoadHours.length + 1)),
+        labels.year_legend_load,
+      );
+      item(["is-sample load-1 has-evaluation"], labels.year_legend_evaluation);
+      item(["is-sample is-today"], labels.year_legend_today);
+      item([], labels.year_legend_week);
+      return legend;
+    }
+
+    function resultsTitle(searchNorm) {
+      const query = state.search.trim();
+      if (!query) return labels.year_results;
+      const code = Object.keys(moduleInfo).find(function (key) {
+        return AppUtils.normalizeSearch(key) === searchNorm;
+      });
+      return code
+        ? AppUtils.formatText(labels.year_results_module, {
+            code: code,
+            label: moduleInfo[code].label,
+          })
+        : AppUtils.formatText(labels.year_results_query, { query: query });
+    }
+
+    function yearResults(title, count, sections) {
+      const results = element("section", "year-results");
+      const head = element("header", "data-box-head");
+      head.appendChild(element("h2", "", title));
+      head.appendChild(element("span", "data-box-meta", count));
+      const days = element("div", "year-days");
+      sections.forEach(function (section) {
+        days.appendChild(section);
+      });
+      results.appendChild(head);
+      results.appendChild(days);
+      return results;
+    }
+
     function renderYearView(events, searchNorm, dayNames, monthNames) {
-      const frag = document.createDocumentFragment();
-      let totalYearItems = 0;
       const hasFilter = Boolean(
         state.evals ||
         state.withTeacher ||
         (searchNorm && searchNorm.length > 0),
       );
-
       const eventsByDate = indexByDate(events);
+      const today = todayIso();
+      const months = element("div", "year-months");
+      months.style.setProperty("--year-day-count", allowedDays.length);
+      const sections = [];
+      let total = 0;
 
-      const startY = parseISODate(firstDateStr).getFullYear();
-      const startM = parseISODate(firstDateStr).getMonth();
-      const endY = parseISODate(lastDateStr).getFullYear();
-      const endM = parseISODate(lastDateStr).getMonth();
-
-      const monthsList = [];
-      let curY = startY;
-      let curM = startM;
-      while (curY < endY || (curY === endY && curM <= endM)) {
-        monthsList.push({ year: curY, month: curM });
-        curM++;
-        if (curM > 11) {
-          curM = 0;
-          curY++;
-        }
-      }
-
-      monthsList.forEach(function (mObj) {
-        const mYear = mObj.year;
-        const mMonth = mObj.month;
-        const daysInMonth = new Date(mYear, mMonth + 1, 0).getDate();
-
-        let monthNameCap = monthNames[mMonth];
-        monthNameCap =
-          monthNameCap.charAt(0).toUpperCase() + monthNameCap.slice(1);
-        const monthHeadingText = monthNameCap + " " + mYear;
-
-        const monthFrag = document.createDocumentFragment();
-
-        const weeksInMonth = {};
-        const weekOrder = [];
-        for (let day = 1; day <= daysInMonth; day++) {
-          const d = new Date(mYear, mMonth, day);
-          const dayOfWeek = d.getDay();
-          if (allowedDays.indexOf(dayOfWeek || 7) === -1) continue;
-          const iso = formatISODate(d);
-          if (iso < firstDateStr || iso > lastDateStr) continue;
-
-          const wStart = getWeekStart(d);
-          const wKey = formatISODate(wStart);
-          if (!weeksInMonth[wKey]) {
-            weeksInMonth[wKey] = [];
-            weekOrder.push(wKey);
-          }
-          weeksInMonth[wKey].push(d);
-        }
-
-        weekOrder.forEach(function (wKey) {
-          const weekDays = weeksInMonth[wKey];
-          const weekDataList = [];
-          let weekItemCount = 0;
-
-          weekDays.forEach(function (date) {
-            const data = prepareDay(date, eventsByDate, searchNorm);
-            weekItemCount += data.dayCount;
-            weekDataList.push(data);
-          });
-
-          totalYearItems += weekItemCount;
-
-          if (!hasFilter && weekItemCount === 0) {
-            const emptyWeekP = document.createElement("p");
-            emptyWeekP.className = "empty-state-message";
-            emptyWeekP.textContent =
-              labels.week_prefix +
-              " " +
-              getISOWeekNumber(weekDays[0]) +
-              " : " +
-              labels.no_courses_week;
-            emptyWeekP.setAttribute("data-date", formatISODate(weekDays[0]));
-            monthFrag.appendChild(emptyWeekP);
-            return;
-          }
-          weekDataList.forEach(function (dayData) {
-            if (dayData.dayCount === 0) return;
-            monthFrag.appendChild(
-              buildDaySection(dayData, dayNames, monthNames, true),
-            );
-          });
+      const cursor = parseISODate(firstDateStr);
+      cursor.setDate(1);
+      const lastDate = parseISODate(lastDateStr);
+      while (cursor <= lastDate) {
+        const mYear = cursor.getFullYear();
+        const mMonth = cursor.getMonth();
+        const month = element("section", "year-month");
+        month.appendChild(
+          element(
+            "h3",
+            "",
+            AppUtils.formatText(labels.year_month, {
+              month_name:
+                monthNames[mMonth].charAt(0).toUpperCase() +
+                monthNames[mMonth].slice(1),
+              year: mYear,
+            }),
+          ),
+        );
+        const grid = element("div", "year-month-grid");
+        grid.appendChild(element("span", "year-weekday"));
+        allowedDays.forEach(function (isoDay) {
+          grid.appendChild(
+            element(
+              "span",
+              "year-weekday",
+              dayNames[isoDay - 1].charAt(0).toUpperCase(),
+            ),
+          );
         });
 
-        if (monthFrag.hasChildNodes()) {
-          const mTitle = document.createElement("h2");
-          mTitle.className = "year-month-title";
-          mTitle.textContent = monthHeadingText;
-          mTitle.setAttribute(
-            "data-date",
-            formatISODate(new Date(mYear, mMonth, 1)),
-          );
-          frag.appendChild(mTitle);
-          frag.appendChild(monthFrag);
+        const weekStart = getWeekStart(new Date(mYear, mMonth, 1));
+        const monthEnd = new Date(mYear, mMonth + 1, 0);
+        let filled = false;
+        while (weekStart <= monthEnd) {
+          const days = allowedDays
+            .map(function (isoDay) {
+              const date = new Date(weekStart.getTime());
+              date.setDate(date.getDate() + isoDay - 1);
+              return date;
+            })
+            .map(function (date) {
+              const iso = formatISODate(date);
+              return date.getMonth() === mMonth &&
+                iso >= firstDateStr &&
+                iso <= lastDateStr
+                ? prepareDay(date, eventsByDate, searchNorm)
+                : null;
+            });
+          if (days.some(Boolean)) {
+            filled = true;
+            const week = element("a", "year-week", getISOWeekNumber(weekStart));
+            week.href = AppUtils.buildHash({
+              view: "week",
+              date: formatISODate(weekStart),
+            });
+            week.setAttribute(
+              "aria-label",
+              labels.week_prefix + " " + getISOWeekNumber(weekStart),
+            );
+            grid.appendChild(week);
+            days.forEach(function (dayData) {
+              if (!dayData) {
+                grid.appendChild(element("span", "year-day is-outside"));
+                return;
+              }
+              grid.appendChild(yearDay(dayData, today, dayNames, monthNames));
+              total += dayData.dayCount;
+              if (hasFilter && dayData.dayCount > 0) {
+                sections.push(
+                  buildDaySection(dayData, dayNames, monthNames, true),
+                );
+              }
+            });
+          }
+          weekStart.setDate(weekStart.getDate() + 7);
         }
-      });
 
-      if (hasFilter && totalYearItems === 0) {
-        const emptyP = document.createElement("p");
-        emptyP.className = "empty-state-message";
-        emptyP.textContent = labels.no_courses;
-        frag.appendChild(emptyP);
+        if (filled) {
+          month.appendChild(grid);
+          months.appendChild(month);
+        }
+        cursor.setMonth(mMonth + 1);
       }
 
-      viewContainer.appendChild(frag);
-      return totalYearItems;
+      if (hasFilter && total === 0) {
+        viewContainer.appendChild(
+          element("p", "empty-state-message", labels.year_no_results),
+        );
+      } else if (hasFilter) {
+        viewContainer.appendChild(
+          yearResults(resultsTitle(searchNorm), total, sections),
+        );
+      }
+      const overview = element("div", "year-overview");
+      overview.appendChild(months);
+      overview.appendChild(yearLegend());
+      viewContainer.appendChild(overview);
+      return total;
     }
 
     function getDayBounds(events) {

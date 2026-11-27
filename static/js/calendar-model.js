@@ -171,6 +171,34 @@
     );
   }
 
+  function occupiedMinutes(events) {
+    const spans = events
+      .map(function (event) {
+        return [Date.parse(event.start), Date.parse(event.end)];
+      })
+      .sort(function (a, b) {
+        return a[0] - b[0];
+      });
+    let total = 0;
+    let reached = -Infinity;
+    spans.forEach(function (span) {
+      if (span[1] <= reached) return;
+      total += span[1] - Math.max(span[0], reached);
+      reached = span[1];
+    });
+    return total / 60000;
+  }
+
+  function loadLevel(minutes, stepHours) {
+    if (minutes <= 0) return 0;
+    return (
+      1 +
+      stepHours.filter(function (hours) {
+        return minutes > hours * 60;
+      }).length
+    );
+  }
+
   function searchText(event, moduleLabel) {
     return [
       event.code + " " + event.session,
@@ -185,7 +213,9 @@
   const api = {
     applyBreaks,
     inSiteTimezone,
+    loadLevel,
     normalizeEnvelope,
+    occupiedMinutes,
     parseCivilDate,
     searchText,
     validInstant,

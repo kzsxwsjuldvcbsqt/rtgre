@@ -275,7 +275,8 @@
     function placeOffViewMarker(now, todayIso, nowTimeStr) {
       const rangeStart = viewContainer.getAttribute("data-range-start");
       const rangeEnd = viewContainer.getAttribute("data-range-end");
-      if (!rangeStart || !rangeEnd) return false;
+      const blocks = Array.from(viewContainer.querySelectorAll("[data-date]"));
+      if (!rangeStart || !rangeEnd || blocks.length === 0) return false;
 
       const lowerBound = getPrevWeekday(parseISODate(rangeStart));
       lowerBound.setDate(lowerBound.getDate() + 1);
@@ -298,11 +299,11 @@
       );
       markerEl.classList.add("is-off-view");
 
-      const nextBlock = Array.from(viewContainer.children).find(function (el) {
-        const date = el.getAttribute("data-date");
-        return date && date > todayIso;
+      const nextBlock = blocks.find(function (el) {
+        return el.getAttribute("data-date") > todayIso;
       });
-      viewContainer.insertBefore(markerEl, nextBlock || null);
+      if (nextBlock) nextBlock.before(markerEl);
+      else blocks[blocks.length - 1].after(markerEl);
       return true;
     }
 
@@ -410,15 +411,17 @@
       scheduleTimeMarker(nowInfo.isSimulated);
     }
 
-    function stickyBarHeight() {
-      const bar = document.querySelector(".app-topbar-main");
-      return bar ? bar.getBoundingClientRect().height : 0;
+    function todayTarget() {
+      return (
+        document.getElementById("current-time-marker") ||
+        viewContainer.querySelector(".year-day.is-today")
+      );
     }
 
     function spotlightNow() {
       if (!spotlightPending) return;
       spotlightPending = false;
-      const target = document.getElementById("current-time-marker");
+      const target = todayTarget();
       if (!target) return;
       target.classList.add("is-spotlit");
       target.addEventListener(
@@ -595,6 +598,10 @@
       sessionMarks,
       labels,
       externalIcon: scriptEl.getAttribute("data-icon-external"),
+      todayIso: function () {
+        return formatISODate(getNowDate().date);
+      },
+      yearLoadHours: calendarConfig.year_load_hours,
       evaluationHref: scriptEl.getAttribute("data-evaluation-href"),
       classLabel,
       prevBtn,
@@ -747,21 +754,9 @@
         spotlightPending = true;
 
         if (state.view === "year") {
-          document.documentElement.style.setProperty(
-            "--site-header-height",
-            stickyBarHeight() + "px",
-          );
-          const todayEl =
-            document.getElementById(
-              "day-section-" + formatISODate(nowObj.date),
-            ) || document.getElementById("current-time-marker");
-          if (todayEl) {
-            todayEl.scrollIntoView({ behavior: "smooth", block: "start" });
-          } else {
-            const firstDayEl = viewContainer.querySelector(".day-section");
-            if (firstDayEl)
-              firstDayEl.scrollIntoView({ behavior: "smooth", block: "start" });
-          }
+          const target = todayTarget();
+          if (target)
+            target.scrollIntoView({ behavior: "smooth", block: "center" });
           spotlightNow();
           return;
         }
