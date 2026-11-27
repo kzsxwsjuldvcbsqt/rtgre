@@ -61,6 +61,36 @@ def prepare_module_progress(events, module_codes, now):
     return progress
 
 
+def prepare_module_groups(resource_groups, progress):
+    groups = []
+    for semester, kinds in resource_groups:
+        modules = [module for _kind, kind_modules in kinds for module in kind_modules]
+        entries = [progress[module["code"]] for module in modules if module["code"] in progress]
+        groups.append(
+            {
+                "id": semester["id"],
+                "label": semester["label"],
+                "modules": modules,
+                "pending": any(entry["upcoming"] for entry in entries),
+                "started": any(
+                    entry["upcoming"] and len(entry["upcoming"]) < entry["total"]
+                    for entry in entries
+                ),
+            }
+        )
+    first_pending = next((group for group in groups if group["pending"]), None)
+    opened = [group for group in groups if group["started"] or group is first_pending]
+    return [
+        {
+            "id": group["id"],
+            "label": group["label"],
+            "modules": group["modules"],
+            "open": group in opened or not opened,
+        }
+        for group in groups
+    ]
+
+
 def short_date(labels, moment):
     return labels["calendar"]["day_title_short"].format(
         day_name=labels["days_short"][moment.weekday()],

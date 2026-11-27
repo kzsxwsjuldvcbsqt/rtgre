@@ -23,15 +23,6 @@
   "resources": {
     "title": "Modules",
     "chamilo_space": "Espace Chamilo",
-    "progress": "Séances passées : {done} sur {total}",
-    "finished": "Module terminé",
-    "no_sessions": "Aucune séance planifiée",
-    "next_session": "Prochaine séance",
-    "next_session_none": "Aucune",
-    "next_evaluation": "Évaluation",
-    "next_evaluation_none": "Aucune à venir",
-    "sessions_btn": "Séances",
-    "chamilo_btn": "Chamilo",
     "no_semester": "Complémentaires"
   },
   "grades": {
