@@ -494,10 +494,21 @@
       "Evaluation layout is revealed only after initialization",
     );
     const row = fd.querySelector(".eval-row");
+    const delayShown = (item) =>
+      fw.getComputedStyle(item.querySelector(".eval-delay")).display !== "none";
+    row.dataset.endTimestamp = String((Date.now() + 86400000) / 1000);
+    fd.dispatchEvent(new fw.Event("visibilitychange"));
+    assert(
+      row.classList.contains("is-next") &&
+        Array.from(fd.querySelectorAll(".eval-row")).every(
+          (item) => delayShown(item) === (item === row),
+        ),
+      "Only the next evaluation shows its delay",
+    );
     row.dataset.endTimestamp = String((Date.now() - 1000) / 1000);
     fd.dispatchEvent(new fw.Event("visibilitychange"));
     assert(
-      row.dataset.past === "true",
+      row.dataset.past === "true" && !delayShown(row),
       "Past status updates without rebuilding",
     );
     filters.remove();

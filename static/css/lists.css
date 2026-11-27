@@ -109,7 +109,9 @@
 }
 .eval-date {
   display: flex;
-  flex-direction: column;
+  align-items: baseline;
+  gap: var(--space-xs);
+  white-space: nowrap;
 }
 .eval-day {
   font-weight: var(--weight-medium);
@@ -125,7 +127,8 @@
   color: var(--color-accent-emphasis);
   font-weight: var(--weight-medium);
 }
-.eval-delay:empty {
+.eval-delay:empty,
+.eval-row:not(.is-soon, .is-next) .eval-delay {
   display: none;
 }
 .eval-delay::first-letter {
@@ -134,6 +137,12 @@
 .eval-time {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.eval-module {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 .eval-module strong {
