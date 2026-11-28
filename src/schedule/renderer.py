@@ -180,7 +180,11 @@ def render_site(
         return list(groups)
 
     tpl_index = env.get_template("index.html.j2")
-    tpl_notice = env.get_template("notice.html.j2")
+    global_templates = {
+        section.id: env.get_template(f"{section.id}.html.j2")
+        for section in app_config.sections
+        if section.kind == "global"
+    }
     tpl_404 = env.get_template("404.html.j2")
     tpl_redirect = env.get_template("redirect.html.j2")
 
@@ -196,18 +200,19 @@ def render_site(
     with open(out_path / "index.html", "w", encoding="utf-8") as f:
         f.write(html_index)
 
-    notice_page_path = section_files["notice"]
-    html_notice = tpl_notice.render(
-        site=app_config.site,
-        labels=app_config.labels,
-        sections=app_config.sections,
-        class_config=None,
-        favicons=active_favicons,
-        generated_at=now_str,
-        url_for=lambda target, p=notice_page_path: get_rel_path(p, target),
-    )
-    with open(out_path / notice_page_path, "w", encoding="utf-8") as f:
-        f.write(html_notice)
+    for section_id, template in global_templates.items():
+        global_page_path = section_files[section_id]
+        global_html = template.render(
+            site=app_config.site,
+            labels=app_config.labels,
+            sections=app_config.sections,
+            class_config=None,
+            favicons=active_favicons,
+            generated_at=now_str,
+            url_for=lambda target, p=global_page_path: get_rel_path(p, target),
+        )
+        with open(out_path / global_page_path, "w", encoding="utf-8") as f:
+            f.write(global_html)
 
     if not base_path:
         base_path = app_config.site.get("base_path", "/")
@@ -360,18 +365,19 @@ def render_site(
                     with open(class_dir / previous_file, "w", encoding="utf-8") as f:
                         f.write(redirect_html)
 
-            cls_notice_page_path = f"classes/{cls.id}/{section_files['notice']}"
-            cls_notice_html = tpl_notice.render(
-                site=app_config.site,
-                labels=app_config.labels,
-                sections=class_sections,
-                class_config=cls,
-                favicons=active_favicons,
-                generated_at=now_str,
-                url_for=lambda target, p=cls_notice_page_path: get_rel_path(p, target),
-            )
-            with open(class_dir / section_files["notice"], "w", encoding="utf-8") as f:
-                f.write(cls_notice_html)
+            for section_id, template in global_templates.items():
+                cls_global_page_path = f"classes/{cls.id}/{section_files[section_id]}"
+                cls_global_html = template.render(
+                    site=app_config.site,
+                    labels=app_config.labels,
+                    sections=class_sections,
+                    class_config=cls,
+                    favicons=active_favicons,
+                    generated_at=now_str,
+                    url_for=lambda target, p=cls_global_page_path: get_rel_path(p, target),
+                )
+                with open(class_dir / section_files[section_id], "w", encoding="utf-8") as f:
+                    f.write(cls_global_html)
 
             grades_data = get_class_grades_data(cls, app_config.curriculum, app_config.labels)
             grades_page_path = f"classes/{cls.id}/{section_files['grades']}"

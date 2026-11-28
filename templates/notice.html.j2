@@ -1,58 +1,11 @@
 {% extends "base.html.j2" %}
-{% from "_feeds.html.j2" import feed_choices %}
 {% from "_nav.html.j2" import app_sidebar, app_topbar %}
 {% from "_icons.html.j2" import icon %}
 {% block title %}{{ labels.notice.title }} - {{ site.title }}{% endblock %}
 {% block sidebar %}{{ app_sidebar(sections, 'notice', class_config, section_files.notice, url_for, labels, site) }}{% endblock %}
 {% block topbar %}{% if class_config %}{{ app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.calendar))], labels.notice.title, labels, url_for, site, class_config.label) }}{% else %}{{ app_topbar([(labels.index.heading, url_for('index.html'))], labels.notice.title, labels, url_for, site) }}{% endif %}{% endblock %}
-{% block head_scripts %}
-<script defer src="{{ url_for('static/js/appearance.js') }}"></script>
-<script defer src="{{ url_for('static/js/feeds.js') }}"></script>
-{% endblock %}
 {% block content %}
 <div class="page-container">
-<section class="data-box">
-<header class="data-box-head"><h2>{{ labels.notice.settings_title }}</h2></header>
-<ul class="box-list">
-<li class="box-row setting-row js-only">
-<span class="box-row-main"><span class="setting-name" id="appearance-label">{{ labels.notice.appearance }}</span><span class="setting-help">{{ labels.notice.appearance_help }}</span></span>
-<div class="segmented" role="group" aria-labelledby="appearance-label" data-color-scheme-choice>
-<button type="button" class="segmented-option" data-value="auto" aria-pressed="false" data-umami-event="Apparence" data-umami-event-choix="automatique">{{ labels.notice.scheme_auto }}</button>
-<button type="button" class="segmented-option" data-value="light" aria-pressed="false" data-umami-event="Apparence" data-umami-event-choix="clair">{{ labels.notice.scheme_light }}</button>
-<button type="button" class="segmented-option" data-value="dark" aria-pressed="false" data-umami-event="Apparence" data-umami-event-choix="sombre">{{ labels.notice.scheme_dark }}</button>
-</div>
-</li>
-{% if 'audience' in site %}
-<li class="box-row setting-row js-only" id="audience">
-<span class="box-row-main"><span class="setting-name" id="audience-label">{{ labels.notice.audience }}</span><span class="setting-help">{{ labels.notice.audience_help }}</span></span>
-<div class="segmented" role="group" aria-labelledby="audience-label" data-audience-choice>
-<button type="button" class="segmented-option" data-value="counted" aria-pressed="false" data-umami-event="Mesure d'audience" data-umami-event-choix="acceptée">{{ labels.notice.audience_counted }}</button>
-<button type="button" class="segmented-option" data-value="refused" aria-pressed="false">{{ labels.notice.audience_refused }}</button>
-</div>
-</li>
-{% endif %}
-{% if class_config %}
-<li class="box-row setting-row" id="agenda">
-<span class="box-row-main"><span class="setting-name">{{ labels.feeds.row_all }}</span><span class="setting-help">{{ labels.feeds.row_all_help }}</span></span>
-{{ feed_choices(site.feeds.calendar_file, labels, site) }}
-</li>
-<li class="box-row setting-row">
-<span class="box-row-main"><span class="setting-name">{{ labels.feeds.row_evaluations }}</span><span class="setting-help">{{ labels.feeds.row_evaluations_help }}</span></span>
-{{ feed_choices(site.feeds.evaluations_file, labels, site) }}
-</li>
-{% endif %}
-</ul>
-</section>
-<section class="data-box shortcuts-box">
-<header class="data-box-head"><h2>{{ labels.shortcuts.title }}</h2></header>
-<ul class="box-list">
-<li class="box-row"><span class="shortcut-keys"><kbd>{{ labels.shortcuts.previous_key }}</kbd><kbd>{{ labels.shortcuts.next_key }}</kbd></span><span class="box-row-main">{{ labels.shortcuts.previous }}, {{ labels.shortcuts.next | lower }}</span></li>
-<li class="box-row"><span class="shortcut-keys"><kbd>{{ site.shortcuts.today | upper }}</kbd></span><span class="box-row-main">{{ labels.shortcuts.today }}</span></li>
-<li class="box-row"><span class="shortcut-keys"><kbd>{{ site.shortcuts.reset | upper }}</kbd></span><span class="box-row-main">{{ labels.shortcuts.reset }}</span></li>
-<li class="box-row"><span class="shortcut-keys"><kbd>{{ site.shortcuts.search | upper }}</kbd></span><span class="box-row-main">{{ labels.shortcuts.search }}</span></li>
-</ul>
-</section>
-<h2>{{ labels.notice.about_title }}</h2>
 <div class="text-block">
 <p>{{ labels.notice.p1 }}</p>
 <p>{{ labels.notice.p2 }}</p>
@@ -62,7 +15,7 @@
 <p>{{ labels.notice.p6 }}</p>
 <p>{{ labels.notice.p6_server }}</p>
 {% if 'audience' in site %}
-<p>{{ labels.notice.p6_audience }}</p>
+<p>{{ labels.notice.p6_audience }} <a href="{{ url_for(('classes/' ~ class_config.id ~ '/' if class_config else '') ~ section_files.settings) }}#audience">{{ labels.notice.p6_audience_link }}</a>.</p>
 {% endif %}
 <p>{{ labels.notice.p7 }} <a href="{{ site.github_url }}" target="_blank" rel="noopener noreferrer" class="external-link" data-umami-event="Lien externe" data-umami-event-cible="GitHub">{{ site.github_profile }}{{ icon('link-external', site.icons, 'icon-sm') }}</a>.</p>
 <p>{{ labels.notice.feedback }} <a href="{{ site.feedback_url }}" target="_blank" rel="noopener noreferrer" class="external-link" data-umami-event="Lien externe" data-umami-event-cible="Signalement">{{ labels.notice.feedback_link }}{{ icon('link-external', site.icons, 'icon-sm') }}</a>.</p>

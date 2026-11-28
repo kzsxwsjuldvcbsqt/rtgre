@@ -101,6 +101,9 @@
 .text-block > :first-child {
   margin-block-start: 0;
 }
+.text-block a {
+  text-decoration: underline;
+}
 .eval-link {
   display: grid;
   grid-template-columns:
