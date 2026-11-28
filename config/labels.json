@@ -183,6 +183,8 @@
     "theme_help": "De saison suit le calendrier : {theme} en ce moment.",
     "theme_seasonal": "De saison",
     "theme_classic": "Classique",
+    "accent": "Couleur",
+    "accent_help": "La couleur principale du thème Classique.",
     "agenda_title": "Agenda",
     "privacy_title": "Confidentialité",
     "audience": "Mesure d'audience",

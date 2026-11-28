@@ -17,7 +17,7 @@
 {% for theme in themes %}
 <link rel="stylesheet" href="{{ url_for('static/' ~ theme.stylesheet) }}" data-theme-id="{{ theme.id }}" data-preload-images='{{ theme.preload_images | tojson }}'>
 {% endfor %}
-<script src="{{ url_for('static/js/boot.js') }}" data-theme-seasonal="{{ theme_choices.seasonal }}" data-theme-classic="{{ theme_choices.classic }}"></script>
+<script src="{{ url_for('static/js/boot.js') }}" data-theme-seasonal="{{ theme_choices.seasonal }}" data-theme-classic="{{ theme_choices.classic }}" data-accents="{{ accents | map(attribute='id') | join(' ') }}"></script>
 {% if class_config is defined and class_config %}
 <script src="{{ url_for('static/js/remember-class.js') }}" data-remember-class="{{ class_config.id }}"></script>
 {% endif %}

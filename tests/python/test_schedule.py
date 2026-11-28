@@ -407,6 +407,7 @@ class ScheduleTests(unittest.TestCase):
             "directory": "themes",
             "stylesheet": "theme.css",
             "choices": {"seasonal": "auto", "classic": "classic"},
+            "accents": [{"id": "yellow", "label": "Jaune"}, {"id": "blue", "label": "Bleu"}],
             "themes": [
                 {
                     "id": "first",
@@ -457,6 +458,10 @@ class ScheduleTests(unittest.TestCase):
             ("stylesheet", "/theme.css"),
             ("choices", {"seasonal": "same", "classic": "same"}),
             ("choices", {"seasonal": "auto"}),
+            ("accents", []),
+            ("accents", [{"id": "blue", "label": "Bleu"}, {"id": "blue", "label": "Bleu"}]),
+            ("accents", [{"id": "Bleu ciel", "label": "Bleu"}]),
+            ("accents", [{"id": "blue", "label": " "}]),
         ):
             with self.subTest(key=key):
                 broken = copy.deepcopy(themes)
@@ -469,6 +474,7 @@ class ScheduleTests(unittest.TestCase):
             "directory": "themes",
             "stylesheet": "theme.css",
             "choices": {"seasonal": "auto", "classic": "classic"},
+            "accents": [{"id": "yellow", "label": "Jaune"}, {"id": "blue", "label": "Bleu"}],
             "themes": [
                 {
                     "id": "sample",
@@ -536,6 +542,13 @@ class ScheduleTests(unittest.TestCase):
                 ),
                 ["auto", "classic", "sample"],
             )
+            self.assertEqual(
+                re.findall(
+                    r'data-value="([^"]+)"[^>]*data-umami-event="Couleur"', settings.read_text()
+                ),
+                ["yellow", "blue"],
+            )
+            self.assertIn('data-accents="yellow blue"', plain)
             stylesheet.write_text(".app-sidebar {}")
             with self.assertRaises(ValueError):
                 render("2026-11-20")
@@ -628,6 +641,11 @@ class ScheduleTests(unittest.TestCase):
                 {event.category_label for event in evaluations},
             )
             self.assertTrue(str(entry["UID"]).endswith("@" + feeds["uid_domain"]))
+
+    def test_every_configured_accent_has_its_colours(self):
+        stylesheet = Path("static/css/accents.css").read_text()
+        declared = set(re.findall(r'\[data-accent="([^"]+)"\]', stylesheet))
+        self.assertEqual(declared, {accent["id"] for accent in self.config.themes["accents"]})
 
     def test_stylesheet_imports_are_bundled_into_their_layers(self):
         with tempfile.TemporaryDirectory() as directory:

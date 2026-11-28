@@ -548,14 +548,43 @@
     );
     elsewhere.remove();
     classicChoice.click();
+    const sidebarCover = () =>
+      settings.contentWindow.getComputedStyle(
+        sd.getElementById("app-sidebar"),
+        "::before",
+      ).content;
     assert(
       pressed() === classicChoice &&
         themed(sd) === "" &&
-        settings.contentWindow.getComputedStyle(
-          sd.getElementById("app-sidebar"),
-          "::before",
-        ).content === "none",
+        sidebarCover() === "none",
       "The classic choice removes every theme",
+    );
+    const accentRow = sd.querySelector(".accent-setting");
+    const accentChoices = Array.from(
+      sd.querySelectorAll("[data-accent-choice] [data-value]"),
+    );
+    const highlight = () =>
+      settings.contentWindow
+        .getComputedStyle(sd.documentElement)
+        .getPropertyValue("--color-highlight");
+    const defaultHighlight = highlight();
+    accentChoices[1].click();
+    assert(
+      settings.contentWindow.getComputedStyle(accentRow).display !== "none" &&
+        sd.documentElement.dataset.accent === accentChoices[1].dataset.value &&
+        accentChoices[1].getAttribute("aria-pressed") === "true" &&
+        highlight() !== defaultHighlight,
+      "Choosing a colour changes the accent of the classic theme",
+    );
+    chosenTheme.click();
+    assert(
+      settings.contentWindow.getComputedStyle(accentRow).display === "none",
+      "The colour choice is hidden while a theme is applied",
+    );
+    accentChoices[0].click();
+    assert(
+      !("accent" in sd.documentElement.dataset),
+      "The default colour leaves no mark",
     );
     seasonalChoice.click();
     assert(

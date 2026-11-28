@@ -40,8 +40,8 @@
 }
 .calendar-view-week .day-section.is-today > h3,
 .calendar-view-year .day-section.is-today > h3 {
-  border-block-end-color: var(--color-highlight);
-  box-shadow: 0 var(--rule-width) 0 var(--color-highlight);
+  border-block-end-color: var(--color-today-rule);
+  box-shadow: 0 var(--rule-width) 0 var(--color-today-rule);
 }
 .calendar-events-list {
   display: flex;

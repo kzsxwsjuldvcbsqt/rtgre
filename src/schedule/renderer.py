@@ -113,6 +113,7 @@ def render_site(
         generated_iso=now.isoformat(timespec="seconds"),
         themes=themes,
         theme_choices=app_config.themes["choices"],
+        accents=app_config.themes["accents"],
         seasonal_theme=seasonal_theme,
         section_files=section_files,
         programs=app_config.programs,

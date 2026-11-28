@@ -3,7 +3,6 @@
 
   --color-canvas: #f5f5f5;
   --classic-navbar: #000000;
-  --classic-highlight: #f7c948;
   --color-navbar: var(--classic-navbar);
   --color-navbar-text: #ffffff;
   --color-navbar-muted: rgba(255, 255, 255, 0.7);
@@ -25,11 +24,12 @@
   --color-text-muted: #545454;
   --color-text-faint: #6b6b6b;
 
-  --color-accent: #9a6700;
-  --color-accent-emphasis: #704b00;
-  --color-accent-soft: rgba(247, 201, 72, 0.22);
-  --color-soon: rgba(247, 201, 72, 0.12);
+  --color-accent: var(--classic-accent);
+  --color-accent-emphasis: var(--classic-accent-emphasis);
+  --color-accent-soft: var(--classic-accent-soft);
+  --color-soon: var(--classic-soon);
   --color-highlight: var(--classic-highlight);
+  --color-today-rule: var(--color-highlight);
   --color-on-highlight: #000000;
 
   --color-danger: #9b1c1c;
@@ -164,6 +164,8 @@
   --size-year-dot: 0.25rem;
   --width-setting-label: 14rem;
   --width-theme-choice: 7rem;
+  --width-accent-choice: 4.5rem;
+  --size-accent-swatch: 1.75rem;
   --width-theme-choice-min: 4rem;
   --width-swatch-nav: 40%;
   --ratio-theme-swatch: 3 / 2;
@@ -227,11 +229,6 @@
     --color-text: #f2f2f2;
     --color-text-muted: #b0b0b0;
     --color-text-faint: #8f8f8f;
-
-    --color-accent: #f0c14b;
-    --color-accent-emphasis: #f7c948;
-    --color-accent-soft: rgba(247, 201, 72, 0.18);
-    --color-soon: rgba(247, 201, 72, 0.1);
 
     --color-danger: #ff8a8a;
     --color-danger-soft: rgba(229, 72, 77, 0.16);

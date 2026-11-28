@@ -2,6 +2,7 @@ AppUtils.onDOMReady(function () {
   [
     ["[data-color-scheme-choice]", ColorScheme],
     ["[data-theme-choice]", Theme],
+    ["[data-accent-choice]", Accent],
   ].forEach(function (entry) {
     const setting = entry[1];
     document.querySelectorAll(entry[0]).forEach(function (group) {
