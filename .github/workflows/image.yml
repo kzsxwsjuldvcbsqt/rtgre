@@ -201,3 +201,95 @@ jobs:
             echo
             echo "Signée par cosign, avec SBOM et attestation de provenance."
           } >> "$GITHUB_STEP_SUMMARY"
+
+  # Met l'image en ligne : lance le workflow de promotion de la plateforme, puis attend son
+  # résultat. Rien ne lui est transmis : il lit lui-même l'empreinte dans le registre et vérifie
+  # sa signature.
+  promote:
+    name: Image (promote to the platform)
+    needs: publish
+    # Sans plateforme déclarée, l'image est publiée et sa mise en ligne reste manuelle.
+    if: vars.PLATFORM_REPOSITORY != ''
+    runs-on: ubuntu-latest
+    # Garde-fou : une promotion dure quelques minutes.
+    timeout-minutes: 30
+    # La clé de l'application de déclenchement n'est lisible que depuis main.
+    environment: platform
+    permissions: {}
+    env:
+      PLATFORM: ${{ github.repository_owner }}/${{ vars.PLATFORM_REPOSITORY }}
+      PROMOTE_WORKFLOW: promote.yml
+      # La promotion démarre en quelques secondes : 30 essais au plus, puis son état est relu, au
+      # même intervalle, en secondes.
+      START_ATTEMPTS: 30
+      INTERVAL: 10
+    steps:
+      # L'application n'a qu'un droit sur la plateforme : y lancer des workflows.
+      - name: Create a token for the trigger application
+        id: token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          client-id: ${{ vars.PLATFORM_TRIGGER_APP_CLIENT_ID }}
+          private-key: ${{ secrets.PLATFORM_TRIGGER_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ vars.PLATFORM_REPOSITORY }}
+          permission-actions: write
+
+      - name: Start the promotion
+        id: start
+        env:
+          GH_TOKEN: ${{ steps.token.outputs.token }}
+        run: |
+          # Dernière promotion connue : celle que ce travail lance portera un numéro plus grand.
+          previous=$(gh run list --repo "$PLATFORM" --workflow "$PROMOTE_WORKFLOW" --limit 1 \
+            --json databaseId --jq '.[0].databaseId // 0')
+          gh workflow run "$PROMOTE_WORKFLOW" --repo "$PLATFORM"
+          echo "previous=$previous" >> "$GITHUB_OUTPUT"
+
+      - name: Wait for the promotion
+        env:
+          GH_TOKEN: ${{ steps.token.outputs.token }}
+          PREVIOUS: ${{ steps.start.outputs.previous }}
+        run: |
+          run=
+          for _ in $(seq "$START_ATTEMPTS"); do
+            run=$(gh run list --repo "$PLATFORM" --workflow "$PROMOTE_WORKFLOW" --limit 1 \
+              --json databaseId --jq ".[0].databaseId // 0 | select(. > $PREVIOUS)")
+            if [ -n "$run" ]; then
+              break
+            fi
+            sleep "$INTERVAL"
+          done
+          if [ -z "$run" ]; then
+            echo "::error::La promotion n'a pas démarré sur $PLATFORM."
+            exit 1
+          fi
+
+          while :; do
+            state=$(gh run view "$run" --repo "$PLATFORM" --json status,conclusion,url \
+              --jq '"\(.status) \(.conclusion) \(.url)"')
+            case "$state" in
+              completed*) break ;;
+            esac
+            sleep "$INTERVAL"
+          done
+          read -r _ conclusion url <<< "$state"
+
+          case "$conclusion" in
+            success)
+              echo "Promotion réussie : $url"
+              ;;
+            cancelled)
+              # Une image publiée juste après celle-ci a pris sa place dans la file.
+              echo "::warning::Promotion remplacée par une plus récente : $url"
+              ;;
+            *)
+              echo "::error::Promotion en échec ($conclusion) : $url"
+              exit 1
+              ;;
+          esac
+          {
+            echo "### Mise en ligne"
+            echo
+            echo "Promotion : $conclusion. $url"
+          } >> "$GITHUB_STEP_SUMMARY"
