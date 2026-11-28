@@ -105,12 +105,20 @@ def validate_themes_config(config: dict) -> None:
     themes = config["themes"]
     choices = config["choices"]
     ids = [*choices.values(), *(theme["id"] for theme in themes)]
+    accents = config["accents"]
+    accent_ids = [accent["id"] for accent in accents]
     if (
         not valid_relative_file(config["stylesheet"])
         or not valid_public_id(config["directory"])
         or set(choices) != {"seasonal", "classic"}
         or len(set(ids)) != len(ids)
         or not all(valid_public_id(theme_id) for theme_id in ids)
+        or not accents
+        or len(set(accent_ids)) != len(accent_ids)
+        or not all(valid_public_id(accent_id) for accent_id in accent_ids)
+        or not all(
+            isinstance(accent["label"], str) and accent["label"].strip() for accent in accents
+        )
     ):
         raise ValueError("Invalid themes configuration")
     for theme in themes:

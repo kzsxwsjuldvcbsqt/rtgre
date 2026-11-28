@@ -42,7 +42,7 @@
   .shortcuts-box {
     display: none;
   }
-  .theme-choices {
+  .tile-choices {
     display: grid;
     grid-template-columns: repeat(
       auto-fit,
@@ -51,7 +51,7 @@
     flex-basis: 100%;
     gap: var(--space-xs);
   }
-  .theme-choice {
+  .tile-choice {
     width: auto;
   }
   .order-slot {

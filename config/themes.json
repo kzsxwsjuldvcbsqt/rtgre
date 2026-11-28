@@ -5,6 +5,12 @@
     "seasonal": "auto",
     "classic": "classic"
   },
+  "accents": [
+    { "id": "yellow", "label": "Jaune" },
+    { "id": "blue", "label": "Bleu" },
+    { "id": "violet", "label": "Violet" },
+    { "id": "grey", "label": "Gris" }
+  ],
   "themes": [
     {
       "id": "vice",

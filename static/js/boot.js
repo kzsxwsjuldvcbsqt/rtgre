@@ -1,42 +1,58 @@
 document.documentElement.classList.add("js-enabled");
-window.ColorScheme = (function () {
-  const STORAGE_KEY = "color_scheme";
-  const AUTO = "auto";
-  const system = window.matchMedia("(prefers-color-scheme: dark)");
-
-  function choice() {
-    try {
-      return localStorage.getItem(STORAGE_KEY) || AUTO;
-    } catch (error) {
-      return AUTO;
-    }
-  }
-
-  function apply() {
-    const chosen = choice();
-    const dark = chosen === "dark" || (chosen === AUTO && system.matches);
-    document.documentElement.dataset.colorScheme = dark ? "dark" : "light";
-  }
-
-  function choose(value) {
-    try {
-      if (value === AUTO) localStorage.removeItem(STORAGE_KEY);
-      else localStorage.setItem(STORAGE_KEY, value);
-    } catch (error) {
-      return;
-    } finally {
-      apply();
-    }
-  }
-
-  system.addEventListener("change", apply);
-  apply();
-  return { choice: choice, choose: choose };
-})();
-window.Theme = (function () {
-  const STORAGE_KEY = "theme";
+(function () {
   const root = document.documentElement;
   const source = document.currentScript.dataset;
+
+  function storedSetting(key, fallback, allowed, apply) {
+    function choice() {
+      try {
+        const stored = localStorage.getItem(key);
+        return allowed(stored) ? stored : fallback;
+      } catch (error) {
+        return fallback;
+      }
+    }
+
+    function refresh() {
+      apply(choice());
+    }
+
+    function choose(value) {
+      try {
+        if (value === fallback) localStorage.removeItem(key);
+        else localStorage.setItem(key, value);
+      } catch (error) {
+        return;
+      } finally {
+        refresh();
+      }
+    }
+
+    refresh();
+    return { choice: choice, choose: choose, refresh: refresh };
+  }
+
+  function mark(name, value) {
+    if (value) root.dataset[name] = value;
+    else delete root.dataset[name];
+  }
+
+  const AUTO = "auto";
+  const SCHEMES = ["light", "dark"];
+  const system = window.matchMedia("(prefers-color-scheme: dark)");
+  window.ColorScheme = storedSetting(
+    "color_scheme",
+    AUTO,
+    function (stored) {
+      return SCHEMES.includes(stored);
+    },
+    function (chosen) {
+      const dark = chosen === "dark" || (chosen === AUTO && system.matches);
+      mark("colorScheme", dark ? "dark" : "light");
+    },
+  );
+  system.addEventListener("change", window.ColorScheme.refresh);
+
   const SEASONAL = source.themeSeasonal;
   const CLASSIC = source.themeClassic;
   const seasonal = root.dataset.theme || CLASSIC;
@@ -44,36 +60,18 @@ window.Theme = (function () {
   document.querySelectorAll("link[data-theme-id]").forEach(function (link) {
     sheets.set(link.dataset.themeId, link);
   });
-
-  function choice() {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      return stored === CLASSIC || sheets.has(stored) ? stored : SEASONAL;
-    } catch (error) {
-      return SEASONAL;
-    }
-  }
-
-  function apply() {
-    const chosen = choice();
-    const id = chosen === SEASONAL ? seasonal : chosen;
-    if (sheets.has(id)) root.dataset.theme = id;
-    else delete root.dataset.theme;
-    return sheets.get(id);
-  }
-
-  function choose(value) {
-    try {
-      if (value === SEASONAL) localStorage.removeItem(STORAGE_KEY);
-      else localStorage.setItem(STORAGE_KEY, value);
-    } catch (error) {
-      return;
-    } finally {
-      apply();
-    }
-  }
-
-  const sheet = apply();
+  window.Theme = storedSetting(
+    "theme",
+    SEASONAL,
+    function (stored) {
+      return stored === CLASSIC || sheets.has(stored);
+    },
+    function (chosen) {
+      const id = chosen === SEASONAL ? seasonal : chosen;
+      mark("theme", sheets.has(id) ? id : "");
+    },
+  );
+  const sheet = sheets.get(root.dataset.theme);
   if (sheet)
     JSON.parse(sheet.dataset.preloadImages).forEach(function (image) {
       const preload = document.createElement("link");
@@ -82,7 +80,18 @@ window.Theme = (function () {
       preload.href = new URL(image, sheet.href).href;
       document.head.appendChild(preload);
     });
-  return { choice: choice, choose: choose };
+
+  const accents = source.accents.split(" ");
+  window.Accent = storedSetting(
+    "accent",
+    accents[0],
+    function (stored) {
+      return accents.includes(stored);
+    },
+    function (chosen) {
+      mark("accent", chosen === accents[0] ? "" : chosen);
+    },
+  );
 })();
 function markScrolled() {
   document.documentElement.classList.toggle("is-scrolled", window.scrollY > 0);

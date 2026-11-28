@@ -24,11 +24,21 @@
 {% if themes %}
 <li class="box-row setting-row">
 <span class="box-row-main"><span class="setting-name" id="theme-label">{{ labels.settings.theme }}</span><span class="setting-help">{{ labels.settings.theme_help.format(theme=seasonal_theme.label if seasonal_theme else labels.settings.theme_classic) }}</span></span>
-<div class="theme-choices" role="group" aria-labelledby="theme-label" data-theme-choice>
-<button type="button" class="theme-choice" data-value="{{ theme_choices.seasonal }}" aria-pressed="false" data-umami-event="Thème" data-umami-event-choix="{{ labels.settings.theme_seasonal | lower }}"><span class="theme-swatch" data-swatch="{{ seasonal_theme.id if seasonal_theme else theme_choices.classic }}"></span>{{ labels.settings.theme_seasonal }}</button>
-<button type="button" class="theme-choice" data-value="{{ theme_choices.classic }}" aria-pressed="false" data-umami-event="Thème" data-umami-event-choix="{{ labels.settings.theme_classic | lower }}"><span class="theme-swatch" data-swatch="{{ theme_choices.classic }}"></span>{{ labels.settings.theme_classic }}</button>
+<div class="tile-choices" role="group" aria-labelledby="theme-label" data-theme-choice>
+<button type="button" class="tile-choice" data-value="{{ theme_choices.seasonal }}" aria-pressed="false" data-umami-event="Thème" data-umami-event-choix="{{ labels.settings.theme_seasonal | lower }}"><span class="tile-swatch theme-swatch" data-swatch="{{ seasonal_theme.id if seasonal_theme else theme_choices.classic }}"></span>{{ labels.settings.theme_seasonal }}</button>
+<button type="button" class="tile-choice" data-value="{{ theme_choices.classic }}" aria-pressed="false" data-umami-event="Thème" data-umami-event-choix="{{ labels.settings.theme_classic | lower }}"><span class="tile-swatch theme-swatch" data-swatch="{{ theme_choices.classic }}"></span>{{ labels.settings.theme_classic }}</button>
 {% for theme in themes %}
-<button type="button" class="theme-choice" data-value="{{ theme.id }}" aria-pressed="false" data-umami-event="Thème" data-umami-event-choix="{{ theme.label | lower }}"><span class="theme-swatch" data-swatch="{{ theme.id }}"></span>{{ theme.label }}</button>
+<button type="button" class="tile-choice" data-value="{{ theme.id }}" aria-pressed="false" data-umami-event="Thème" data-umami-event-choix="{{ theme.label | lower }}"><span class="tile-swatch theme-swatch" data-swatch="{{ theme.id }}"></span>{{ theme.label }}</button>
+{% endfor %}
+</div>
+</li>
+{% endif %}
+{% if accents | length > 1 %}
+<li class="box-row setting-row accent-setting">
+<span class="box-row-main"><span class="setting-name" id="accent-label">{{ labels.settings.accent }}</span><span class="setting-help">{{ labels.settings.accent_help }}</span></span>
+<div class="tile-choices accent-choices" role="group" aria-labelledby="accent-label" data-accent-choice>
+{% for accent in accents %}
+<button type="button" class="tile-choice" data-value="{{ accent.id }}" aria-pressed="false" data-umami-event="Couleur" data-umami-event-choix="{{ accent.label | lower }}"><span class="tile-swatch accent-swatch" data-accent="{{ accent.id }}"></span>{{ accent.label }}</button>
 {% endfor %}
 </div>
 </li>

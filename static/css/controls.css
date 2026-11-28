@@ -206,16 +206,17 @@ kbd {
   box-shadow: 0 0 0 var(--rule-width) var(--color-border);
   color: var(--color-text);
 }
-.theme-choices {
+.tile-choices {
+  --tile-width: var(--width-theme-choice);
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: var(--space-sm);
 }
-.theme-choice {
+.tile-choice {
   display: grid;
   gap: var(--space-2xs);
-  width: var(--width-theme-choice);
+  width: var(--tile-width);
   padding: 0;
   border: 0;
   background: none;
@@ -224,7 +225,7 @@ kbd {
   font-weight: var(--weight-medium);
   text-align: center;
 }
-.theme-choice[aria-pressed="true"] {
+.tile-choice[aria-pressed="true"] {
   color: var(--color-text);
 }
 .theme-swatch {
@@ -258,7 +259,22 @@ kbd {
     linear-gradient(var(--color-border) 0 0) 0 100% / 75%
       var(--size-swatch-line) no-repeat;
 }
-.theme-choice[aria-pressed="true"] .theme-swatch {
+.accent-choices {
+  --tile-width: var(--width-accent-choice);
+}
+.accent-swatch {
+  display: block;
+  justify-self: center;
+  width: var(--size-accent-swatch);
+  aspect-ratio: 1;
+  border: var(--rule-width) solid var(--color-border);
+  border-radius: 50%;
+  background: var(--classic-highlight);
+}
+:root[data-theme] .accent-setting {
+  display: none;
+}
+.tile-choice[aria-pressed="true"] .tile-swatch {
   border-color: var(--color-accent);
   box-shadow: 0 0 0 var(--rule-width) var(--color-accent);
 }

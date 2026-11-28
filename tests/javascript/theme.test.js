@@ -5,6 +5,7 @@ const vm = require("node:vm");
 
 const SEASONAL = "auto";
 const CLASSIC = "classic";
+const ACCENTS = ["yellow", "blue", "grey"];
 const BASE = "https://example.org/static/themes/";
 
 function load(options) {
@@ -31,7 +32,11 @@ function load(options) {
     document: {
       documentElement: root,
       currentScript: {
-        dataset: { themeSeasonal: SEASONAL, themeClassic: CLASSIC },
+        dataset: {
+          themeSeasonal: SEASONAL,
+          themeClassic: CLASSIC,
+          accents: ACCENTS.join(" "),
+        },
       },
       querySelectorAll: (selector) =>
         selector === "link[data-theme-id]" ? links : [],
@@ -42,7 +47,13 @@ function load(options) {
   context.window = context;
   vm.createContext(context);
   vm.runInContext(fs.readFileSync("static/js/boot.js", "utf8"), context);
-  return { theme: context.Theme, root, storage, preloads };
+  return {
+    theme: context.Theme,
+    accent: context.Accent,
+    root,
+    storage,
+    preloads,
+  };
 }
 
 test("follows the seasonal theme until a choice is stored", () => {
@@ -92,4 +103,29 @@ test("choosing a theme stores it and applies it at once", () => {
   page.theme.choose(SEASONAL);
   assert.equal(page.storage.has("theme"), false);
   assert.equal(page.root.dataset.theme, "hiver");
+});
+
+test("the first accent is the default and leaves no mark", () => {
+  const page = load({ themes: [] });
+  assert.equal(page.accent.choice(), ACCENTS[0]);
+  assert.equal("accent" in page.root.dataset, false);
+});
+
+test("a stored accent is applied, an unknown one is ignored", () => {
+  const stored = load({ themes: [], stored: { accent: "blue" } });
+  assert.equal(stored.accent.choice(), "blue");
+  assert.equal(stored.root.dataset.accent, "blue");
+  const unknown = load({ themes: [], stored: { accent: "red" } });
+  assert.equal(unknown.accent.choice(), ACCENTS[0]);
+  assert.equal("accent" in unknown.root.dataset, false);
+});
+
+test("choosing the default accent forgets the stored one", () => {
+  const page = load({ themes: [] });
+  page.accent.choose("grey");
+  assert.equal(page.storage.get("accent"), "grey");
+  assert.equal(page.root.dataset.accent, "grey");
+  page.accent.choose(ACCENTS[0]);
+  assert.equal(page.storage.has("accent"), false);
+  assert.equal("accent" in page.root.dataset, false);
 });

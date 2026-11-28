@@ -56,7 +56,7 @@ select:disabled {
       .heading-toggle-btn,
       .picker-back,
       .segmented button,
-      .theme-choice
+      .tile-choice
     ),
   select:hover:not(:disabled):not(:focus):not([aria-invalid="true"]),
   input:hover:not(:disabled):not(:focus):not([aria-invalid="true"]),
@@ -69,10 +69,10 @@ select:disabled {
     text-decoration: none;
   }
   .segmented .segmented-option:not([aria-pressed="true"]):hover,
-  .theme-choice:not([aria-pressed="true"]):hover {
+  .tile-choice:not([aria-pressed="true"]):hover {
     color: var(--color-text);
   }
-  .theme-choice:not([aria-pressed="true"]):hover .theme-swatch {
+  .tile-choice:not([aria-pressed="true"]):hover .tile-swatch {
     border-color: var(--color-text-faint);
   }
   [data-shortcut]:hover::after,
