@@ -2,7 +2,9 @@
   color-scheme: light;
 
   --color-canvas: #f5f5f5;
-  --color-navbar: #000000;
+  --classic-navbar: #000000;
+  --classic-highlight: #f7c948;
+  --color-navbar: var(--classic-navbar);
   --color-navbar-text: #ffffff;
   --color-navbar-muted: rgba(255, 255, 255, 0.7);
   --color-navbar-faint: rgba(255, 255, 255, 0.55);
@@ -27,7 +29,7 @@
   --color-accent-emphasis: #704b00;
   --color-accent-soft: rgba(247, 201, 72, 0.22);
   --color-soon: rgba(247, 201, 72, 0.12);
-  --color-highlight: #f7c948;
+  --color-highlight: var(--classic-highlight);
   --color-on-highlight: #000000;
 
   --color-danger: #9b1c1c;
@@ -161,6 +163,13 @@
   --size-year-day: 1.75rem;
   --size-year-dot: 0.25rem;
   --width-setting-label: 14rem;
+  --width-theme-choice: 7rem;
+  --width-theme-choice-min: 4rem;
+  --width-swatch-nav: 40%;
+  --ratio-theme-swatch: 3 / 2;
+  --size-swatch-line: 0.3125rem;
+  --inset-swatch-lines: 20% 12% auto calc(var(--width-swatch-nav) + 10%);
+  --height-swatch-lines: 46%;
   --width-shortcut-keys: 4rem;
   --size-key: 1.375rem;
   --radius-key: 0.25rem;

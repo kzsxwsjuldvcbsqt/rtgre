@@ -522,6 +522,47 @@
       "Past status updates without rebuilding",
     );
     filters.remove();
+    const settings = await frame("classes/b3cya/reglages.html", 1440);
+    const sd = settings.contentDocument;
+    const themed = (doc) => doc.documentElement.dataset.theme || "";
+    const pressed = () =>
+      sd.querySelector("[data-theme-choice] [aria-pressed='true']");
+    const [seasonalChoice, classicChoice, ...themeChoices] =
+      sd.querySelectorAll("[data-theme-choice] [data-value]");
+    const seasonalTheme = themed(sd);
+    const chosenTheme = themeChoices[themeChoices.length - 1];
+    assert(pressed() === seasonalChoice, "Theme follows the season by default");
+    chosenTheme.click();
+    assert(
+      pressed() === chosenTheme && themed(sd) === chosenTheme.dataset.value,
+      "Choosing a theme applies it at once",
+    );
+    const elsewhere = await frame("classes/b3cya/a-savoir.html", 1440);
+    assert(
+      themed(elsewhere.contentDocument) === chosenTheme.dataset.value &&
+        elsewhere.contentWindow.getComputedStyle(
+          elsewhere.contentDocument.getElementById("app-sidebar"),
+          "::before",
+        ).content !== "none",
+      "The chosen theme is applied on the other pages",
+    );
+    elsewhere.remove();
+    classicChoice.click();
+    assert(
+      pressed() === classicChoice &&
+        themed(sd) === "" &&
+        settings.contentWindow.getComputedStyle(
+          sd.getElementById("app-sidebar"),
+          "::before",
+        ).content === "none",
+      "The classic choice removes every theme",
+    );
+    seasonalChoice.click();
+    assert(
+      pressed() === seasonalChoice && themed(sd) === seasonalTheme,
+      "The seasonal choice restores the theme of the day",
+    );
+    settings.remove();
     assert(errors.length === 0, "No browser errors: " + errors.join(", "));
     document.body.textContent = JSON.stringify({
       checks: results.length,

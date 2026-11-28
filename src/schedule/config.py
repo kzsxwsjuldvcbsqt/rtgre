@@ -103,10 +103,12 @@ def valid_public_id(value: object) -> bool:
 
 def validate_themes_config(config: dict) -> None:
     themes = config["themes"]
-    ids = [theme["id"] for theme in themes]
+    choices = config["choices"]
+    ids = [*choices.values(), *(theme["id"] for theme in themes)]
     if (
         not valid_relative_file(config["stylesheet"])
         or not valid_public_id(config["directory"])
+        or set(choices) != {"seasonal", "classic"}
         or len(set(ids)) != len(ids)
         or not all(valid_public_id(theme_id) for theme_id in ids)
     ):
@@ -129,6 +131,10 @@ def active_theme(config: dict, today: date) -> dict | None:
         ) <= today <= date.fromisoformat(theme["last_date"]):
             return theme
     return None
+
+
+def theme_selector(theme: dict) -> str:
+    return f'[data-theme="{theme["id"]}"]'
 
 
 def theme_files(config: dict, theme: dict) -> dict:

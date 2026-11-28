@@ -4,7 +4,7 @@ from pathlib import Path
 
 from jinja2 import ChoiceLoader, Environment, FileSystemLoader, PrefixLoader, StrictUndefined
 
-from .config import AppConfig, active_theme, theme_files
+from .config import AppConfig, active_theme, theme_files, theme_selector
 from .curriculum import (
     canonical_module_codes,
     get_class_grades_data,
@@ -95,22 +95,25 @@ def render_site(
         icon_sprite_template=f"{STATIC_TEMPLATE_PREFIX}/{app_config.site['icons']['sprite']}"
     )
 
-    files_by_theme = {
-        theme["id"]: theme_files(app_config.themes, theme) for theme in app_config.themes["themes"]
-    }
-    for files in files_by_theme.values():
+    themes = []
+    for theme in app_config.themes["themes"]:
+        files = theme_files(app_config.themes, theme)
         for file in (files["stylesheet"], *files["preload_images"]):
             if not (Path(static_dir) / file).is_file():
                 raise ValueError(f"Missing theme file: {file}")
-    theme = active_theme(app_config.themes, today or now.date())
-    active_files = files_by_theme[theme["id"]] if theme else {}
+        stylesheet = (Path(static_dir) / files["stylesheet"]).read_text(encoding="utf-8")
+        if theme_selector(theme) not in stylesheet:
+            raise ValueError(f"Theme stylesheet without its selector: {files['stylesheet']}")
+        if theme["enabled"]:
+            themes.append({**theme, "stylesheet": files["stylesheet"]})
+    seasonal_theme = active_theme(app_config.themes, today or now.date())
 
     section_files = {section.id: section.file for section in app_config.sections if section.file}
     env.globals.update(
         generated_iso=now.isoformat(timespec="seconds"),
-        theme_id=theme["id"] if theme else "",
-        theme_stylesheet=active_files.get("stylesheet", ""),
-        theme_preload_images=active_files.get("preload_images", []),
+        themes=themes,
+        theme_choices=app_config.themes["choices"],
+        seasonal_theme=seasonal_theme,
         section_files=section_files,
         programs=app_config.programs,
         category_tones={

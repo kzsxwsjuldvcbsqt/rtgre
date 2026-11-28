@@ -55,7 +55,8 @@ select:disabled {
   button:hover:not(:disabled):not(
       .heading-toggle-btn,
       .picker-back,
-      .segmented button
+      .segmented button,
+      .theme-choice
     ),
   select:hover:not(:disabled):not(:focus):not([aria-invalid="true"]),
   input:hover:not(:disabled):not(:focus):not([aria-invalid="true"]),
@@ -67,8 +68,12 @@ select:disabled {
     background: var(--color-surface-hover);
     text-decoration: none;
   }
-  .segmented .segmented-option:not([aria-pressed="true"]):hover {
+  .segmented .segmented-option:not([aria-pressed="true"]):hover,
+  .theme-choice:not([aria-pressed="true"]):hover {
     color: var(--color-text);
+  }
+  .theme-choice:not([aria-pressed="true"]):hover .theme-swatch {
+    border-color: var(--color-text-faint);
   }
   [data-shortcut]:hover::after,
   [data-shortcut]:focus-visible::after {

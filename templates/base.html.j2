@@ -1,6 +1,6 @@
 {% from "_icons.html.j2" import icon %}
 <!DOCTYPE html>
-<html lang="{{ site.language }}"{% if theme_id %} data-theme="{{ theme_id }}"{% endif %}>
+<html lang="{{ site.language }}"{% if seasonal_theme %} data-theme="{{ seasonal_theme.id }}"{% endif %}>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,14 +13,11 @@
 {% for font in site.preload_fonts %}
 <link rel="preload" as="font" type="font/woff2" href="{{ url_for('static/' ~ font) }}" crossorigin>
 {% endfor %}
-{% for image in theme_preload_images %}
-<link rel="preload" as="image" href="{{ url_for('static/' ~ image) }}">
-{% endfor %}
 <link rel="stylesheet" href="{{ url_for('static/' ~ site.stylesheet) }}">
-{% if theme_stylesheet %}
-<link rel="stylesheet" href="{{ url_for('static/' ~ theme_stylesheet) }}">
-{% endif %}
-<script src="{{ url_for('static/js/boot.js') }}"></script>
+{% for theme in themes %}
+<link rel="stylesheet" href="{{ url_for('static/' ~ theme.stylesheet) }}" data-theme-id="{{ theme.id }}" data-preload-images='{{ theme.preload_images | tojson }}'>
+{% endfor %}
+<script src="{{ url_for('static/js/boot.js') }}" data-theme-seasonal="{{ theme_choices.seasonal }}" data-theme-classic="{{ theme_choices.classic }}"></script>
 {% if class_config is defined and class_config %}
 <script src="{{ url_for('static/js/remember-class.js') }}" data-remember-class="{{ class_config.id }}"></script>
 {% endif %}

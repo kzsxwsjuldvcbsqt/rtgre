@@ -31,7 +31,30 @@
         var(--vice-violet),
         var(--vice-blue)
       );
-
+      --vice-glow: linear-gradient(
+        to top,
+        var(--vice-orange) 0,
+        var(--vice-coral) calc(0.5 * var(--vice-horizon)),
+        var(--vice-rose) var(--vice-horizon),
+        var(--vice-pink) calc(4 * var(--vice-horizon)),
+        rgba(216, 44, 208, 0.82) 30%,
+        rgba(150, 77, 210, 0.62) 46%,
+        rgba(150, 77, 210, 0.4) 58%,
+        rgba(77, 98, 213, 0.24) 72%,
+        rgba(77, 98, 213, 0.1) 86%,
+        rgba(77, 98, 213, 0) 100%
+      );
+    }
+    .theme-swatch[data-swatch="vice"] {
+      --swatch-highlight: var(--vice-pink);
+    }
+    .theme-swatch[data-swatch="vice"]::before {
+      background:
+        var(--vice-glow) bottom / 100% var(--vice-glow-height) no-repeat,
+        var(--vice-cover) top / 100% auto no-repeat,
+        var(--classic-navbar);
+    }
+    :root[data-theme="vice"] {
       --color-highlight: var(--vice-pink);
       --color-accent: #a3216e;
       --color-accent-emphasis: #7a1552;
@@ -40,29 +63,16 @@
       --color-navbar-muted: rgba(255, 255, 255, 0.86);
       --color-navbar-faint: rgba(255, 255, 255, 0.72);
     }
-    :root[data-color-scheme="dark"] {
+    :root[data-theme="vice"][data-color-scheme="dark"] {
       --color-accent: #ff8fc0;
       --color-accent-emphasis: #ffb3d4;
     }
-    .app-sidebar {
+    [data-theme="vice"] .app-sidebar {
       background:
-        linear-gradient(
-            to top,
-            var(--vice-orange) 0,
-            var(--vice-coral) calc(0.5 * var(--vice-horizon)),
-            var(--vice-rose) var(--vice-horizon),
-            var(--vice-pink) calc(4 * var(--vice-horizon)),
-            rgba(216, 44, 208, 0.82) 30%,
-            rgba(150, 77, 210, 0.62) 46%,
-            rgba(150, 77, 210, 0.4) 58%,
-            rgba(77, 98, 213, 0.24) 72%,
-            rgba(77, 98, 213, 0.1) 86%,
-            rgba(77, 98, 213, 0) 100%
-          )
-          bottom / 100% var(--vice-glow-height) no-repeat,
+        var(--vice-glow) bottom / 100% var(--vice-glow-height) no-repeat,
         var(--color-navbar);
     }
-    .app-sidebar::before {
+    [data-theme="vice"] .app-sidebar::before {
       content: "";
       flex: none;
       aspect-ratio: var(--vice-cover-ratio);
@@ -77,16 +87,16 @@
         var(--vice-cover) var(--vice-cover-focus) / cover no-repeat
           var(--vice-cover-tint);
     }
-    .app-nav a {
+    [data-theme="vice"] .app-nav a {
       text-shadow: var(--vice-ink-shadow);
     }
-    .app-nav-classes a[aria-current="page"] {
+    [data-theme="vice"] .app-nav-classes a[aria-current="page"] {
       color: var(--color-navbar-text);
     }
-    .app-sidebar-head {
+    [data-theme="vice"] .app-sidebar-head {
       position: relative;
     }
-    .app-brand {
+    [data-theme="vice"] .app-brand {
       background: var(--vice-sunset) 0 0 / 200% 100%;
       background-clip: text;
       color: transparent;
@@ -99,7 +109,7 @@
     }
   }
   @media screen and (max-width: 74.99em) {
-    .app-topbar-main {
+    [data-theme="vice"] .app-topbar-main {
       background:
         var(--vice-sunset) bottom / 100% var(--vice-line) no-repeat,
         var(--color-navbar);

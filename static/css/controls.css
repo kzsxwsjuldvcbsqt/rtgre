@@ -206,6 +206,62 @@ kbd {
   box-shadow: 0 0 0 var(--rule-width) var(--color-border);
   color: var(--color-text);
 }
+.theme-choices {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+}
+.theme-choice {
+  display: grid;
+  gap: var(--space-2xs);
+  width: var(--width-theme-choice);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  text-align: center;
+}
+.theme-choice[aria-pressed="true"] {
+  color: var(--color-text);
+}
+.theme-swatch {
+  --swatch-highlight: var(--classic-highlight);
+  position: relative;
+  display: block;
+  aspect-ratio: var(--ratio-theme-swatch);
+  overflow: hidden;
+  border: var(--rule-width) solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+}
+.theme-swatch::before,
+.theme-swatch::after {
+  content: "";
+  position: absolute;
+}
+.theme-swatch::before {
+  inset: 0 auto 0 0;
+  width: var(--width-swatch-nav);
+  background: var(--classic-navbar);
+}
+.theme-swatch::after {
+  inset: var(--inset-swatch-lines);
+  height: var(--height-swatch-lines);
+  background:
+    linear-gradient(var(--swatch-highlight) 0 0) 0 0 / 60%
+      var(--size-swatch-line) no-repeat,
+    linear-gradient(var(--color-border) 0 0) 0 50% / 100%
+      var(--size-swatch-line) no-repeat,
+    linear-gradient(var(--color-border) 0 0) 0 100% / 75%
+      var(--size-swatch-line) no-repeat;
+}
+.theme-choice[aria-pressed="true"] .theme-swatch {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 var(--rule-width) var(--color-accent);
+}
 .has-filter-bar .filter-group-item {
   position: relative;
 }

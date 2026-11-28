@@ -1,6 +1,10 @@
 {
   "directory": "themes",
   "stylesheet": "theme.css",
+  "choices": {
+    "seasonal": "auto",
+    "classic": "classic"
+  },
   "themes": [
     {
       "id": "vice",
