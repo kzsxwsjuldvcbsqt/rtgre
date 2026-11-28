@@ -5,7 +5,7 @@
 {% block title %}{% for s in sections %}{% if s.id == 'evaluations' %}{{ s.label }}{% endif %}{% endfor %} - {{ class_config.label }} - {{ site.title }}{% endblock %}
 {% block sidebar %}{{ app_sidebar(sections, 'evaluations', class_config, section_files.evaluations, url_for, labels, site) }}{% endblock %}
 {% block topbar %}{% call app_topbar([(class_config.label, url_for('classes/' ~ class_config.id ~ '/' ~ section_files.calendar))], (sections | selectattr('id', 'equalto', 'evaluations') | first).label, labels, url_for, site, class_config.label) %}
-{{ feed_entry(url_for('classes/' ~ class_config.id ~ '/' ~ section_files.notice) ~ '#agenda', labels, site) }}
+{{ feed_entry(url_for('classes/' ~ class_config.id ~ '/' ~ section_files.settings) ~ '#agenda', labels, site) }}
 {% endcall %}{% endblock %}
 {% block head_scripts %}
 <script defer src="{{ url_for('static/js/filters.js') }}"></script>

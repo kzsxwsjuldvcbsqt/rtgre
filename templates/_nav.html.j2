@@ -35,7 +35,7 @@
 </ul>
 <ul class="app-nav-foot">
 {% if class_config %}
-<li class="nav-agenda"><a href="{{ url_for('classes/' ~ class_config.id ~ '/' ~ section_files.notice) }}#agenda">{{ icon('plus', site.icons) }}<span>{{ labels.feeds.add_btn }}</span></a></li>
+<li class="nav-agenda"><a href="{{ url_for('classes/' ~ class_config.id ~ '/' ~ section_files.settings) }}#agenda">{{ icon('plus', site.icons) }}<span>{{ labels.feeds.add_btn }}</span></a></li>
 {% endif %}
 {% for sec in sections %}
 {% if sec.kind == 'global' %}

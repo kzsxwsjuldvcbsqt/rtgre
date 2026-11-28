@@ -1,5 +1,6 @@
 .data-box {
   margin-block-end: var(--space-xl);
+  scroll-margin-block-start: calc(var(--topbar-height) + var(--space-lg));
 }
 .data-box > :not(.data-box-head) {
   border: var(--rule-width) solid var(--color-border);

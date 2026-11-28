@@ -705,18 +705,23 @@ class ScheduleTests(unittest.TestCase):
                         self.assertIn(f'data-tracker="{audience["tracker"]}"', found.group())
                         self.assertIn(f'data-website-id="{audience["website_id"]}"', found.group())
                         self.assertIn(f'data-domain="{audience["domain"]}"', found.group())
-                notices = [
-                    html
-                    for html in (page.read_text() for page in Path(directory).rglob("*.html"))
-                    if "data-color-scheme-choice" in html
-                ]
-                self.assertTrue(notices)
-                for notice in notices:
-                    self.assertEqual("data-audience-choice" in notice, configured)
+                files = {section.id: section.file for section in config.sections}
+                settings = list(Path(directory).rglob(files["settings"]))
+                notices = list(Path(directory).rglob(files["notice"]))
+                self.assertEqual(len(settings), len(self.classes) + 1)
+                self.assertEqual(len(notices), len(settings))
+                for page in settings:
+                    html = page.read_text()
+                    self.assertIn("data-color-scheme-choice", html)
+                    self.assertEqual("data-audience-choice" in html, configured)
+                for page in notices:
+                    html = page.read_text()
+                    self.assertNotIn("data-color-scheme-choice", html)
                     self.assertEqual(
-                        str(escape(self.config.labels["notice"]["p6_audience"])) in notice,
+                        str(escape(self.config.labels["notice"]["p6_audience"])) in html,
                         configured,
                     )
+                    self.assertEqual(f'{files["settings"]}#audience"' in html, configured)
 
     def test_audience_only_talks_to_the_site_itself(self):
         policy = self.config.site["content_security_policy"]

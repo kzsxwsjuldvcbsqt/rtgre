@@ -56,6 +56,13 @@
       "url": "https://iut1r-ltdln.univ-grenoble-alpes.fr/"
     },
     {
+      "id": "settings",
+      "icon": "gear",
+      "label": "Réglages",
+      "file": "reglages.html",
+      "kind": "global"
+    },
+    {
       "id": "notice",
       "icon": "info",
       "label": "À savoir",
