@@ -42,6 +42,18 @@
   .shortcuts-box {
     display: none;
   }
+  .theme-choices {
+    display: grid;
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(var(--width-theme-choice-min), 1fr)
+    );
+    flex-basis: 100%;
+    gap: var(--space-xs);
+  }
+  .theme-choice {
+    width: auto;
+  }
   .order-slot {
     flex-wrap: wrap;
     gap: var(--space-2xs) var(--space-sm);

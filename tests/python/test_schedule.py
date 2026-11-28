@@ -406,6 +406,7 @@ class ScheduleTests(unittest.TestCase):
         themes = {
             "directory": "themes",
             "stylesheet": "theme.css",
+            "choices": {"seasonal": "auto", "classic": "classic"},
             "themes": [
                 {
                     "id": "first",
@@ -438,6 +439,8 @@ class ScheduleTests(unittest.TestCase):
         for change in (
             {"id": "Bad Id"},
             {"id": "first"},
+            {"id": "auto"},
+            {"id": "classic"},
             {"enabled": "yes"},
             {"label": " "},
             {"preload_images": ["../cover.webp"]},
@@ -449,17 +452,23 @@ class ScheduleTests(unittest.TestCase):
                 broken["themes"][1].update(change)
                 with self.assertRaises(ValueError):
                     validate_themes_config(broken)
-        for key, value in (("directory", "../themes"), ("stylesheet", "/theme.css")):
+        for key, value in (
+            ("directory", "../themes"),
+            ("stylesheet", "/theme.css"),
+            ("choices", {"seasonal": "same", "classic": "same"}),
+            ("choices", {"seasonal": "auto"}),
+        ):
             with self.subTest(key=key):
                 broken = copy.deepcopy(themes)
                 broken[key] = value
                 with self.assertRaises(ValueError):
                     validate_themes_config(broken)
 
-    def test_pages_load_the_stylesheet_of_the_active_theme_only(self):
+    def test_pages_load_every_enabled_theme_and_start_on_the_seasonal_one(self):
         themes = {
             "directory": "themes",
             "stylesheet": "theme.css",
+            "choices": {"seasonal": "auto", "classic": "classic"},
             "themes": [
                 {
                     "id": "sample",
@@ -468,11 +477,22 @@ class ScheduleTests(unittest.TestCase):
                     "preload_images": ["cover.webp"],
                     "first_date": "2026-11-10",
                     "last_date": "2026-11-20",
-                }
+                },
+                {
+                    "id": "retired",
+                    "label": "Retired",
+                    "enabled": False,
+                    "preload_images": [],
+                    "first_date": "2026-11-10",
+                    "last_date": "2026-11-20",
+                },
             ],
         }
         config = replace(self.config, themes=themes)
-        link = 'static/themes/sample/theme.css"'
+        link = (
+            'static/themes/sample/theme.css" data-theme-id="sample"'
+            " data-preload-images='[\"cover.webp\"]'"
+        )
         with (
             tempfile.TemporaryDirectory() as static,
             tempfile.TemporaryDirectory() as directory,
@@ -480,10 +500,15 @@ class ScheduleTests(unittest.TestCase):
             shutil.copytree("static/icons", Path(static) / "icons")
             stylesheet = Path(static) / "themes" / "sample" / "theme.css"
             stylesheet.parent.mkdir(parents=True)
-            stylesheet.touch()
+            stylesheet.write_text('[data-theme="sample"] {}')
             cover = stylesheet.with_name("cover.webp")
             cover.touch()
-            page = Path(directory) / "classes" / self.classes[0].id / "index.html"
+            retired = Path(static) / "themes" / "retired" / "theme.css"
+            retired.parent.mkdir()
+            retired.write_text('[data-theme="retired"] {}')
+            root = Path(directory) / "classes" / self.classes[0].id
+            page = root / "index.html"
+            settings = root / next(s.file for s in config.sections if s.id == "settings")
 
             def render(day):
                 render_site(
@@ -496,13 +521,24 @@ class ScheduleTests(unittest.TestCase):
                 return page.read_text()
 
             themed = render("2026-11-20")
-            self.assertIn('data-theme="sample"', themed)
+            self.assertIn('<html lang="fr" data-theme="sample">', themed)
             self.assertIn(link, themed)
-            self.assertIn('as="image" href="../../static/themes/sample/cover.webp"', themed)
+            self.assertIn('data-swatch="sample"></span>De saison', settings.read_text())
             plain = render("2026-11-21")
-            self.assertNotIn("data-theme", plain)
-            self.assertNotIn(link, plain)
-            self.assertNotIn('as="image"', plain)
+            self.assertIn('<html lang="fr">', plain)
+            self.assertIn(link, plain)
+            self.assertIn('data-swatch="classic"></span>De saison', settings.read_text())
+            for html in (plain, settings.read_text()):
+                self.assertNotIn("retired", html)
+            self.assertEqual(
+                re.findall(
+                    r'data-value="([^"]+)"[^>]*data-umami-event="Thème"', settings.read_text()
+                ),
+                ["auto", "classic", "sample"],
+            )
+            stylesheet.write_text(".app-sidebar {}")
+            with self.assertRaises(ValueError):
+                render("2026-11-20")
             cover.unlink()
             with self.assertRaises(ValueError):
                 render("2026-11-21")

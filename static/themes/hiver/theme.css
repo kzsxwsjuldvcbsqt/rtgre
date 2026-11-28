@@ -29,7 +29,25 @@
         var(--hiver-twilight) 78%,
         var(--hiver-night)
       );
-
+      --hiver-dusk-glow: linear-gradient(
+        to top,
+        var(--hiver-glow) 0,
+        var(--hiver-twilight) var(--hiver-horizon),
+        var(--hiver-dusk) 46%,
+        var(--hiver-dusk-soft) 74%,
+        var(--hiver-dusk-clear) 100%
+      );
+    }
+    .theme-swatch[data-swatch="hiver"] {
+      --swatch-highlight: var(--hiver-glacier);
+    }
+    .theme-swatch[data-swatch="hiver"]::before {
+      background:
+        var(--hiver-dusk-glow) bottom / 100% var(--hiver-dusk-height) no-repeat,
+        var(--hiver-cover) top / 100% auto no-repeat,
+        var(--hiver-night);
+    }
+    :root[data-theme="hiver"] {
       --color-navbar: var(--hiver-night);
       --color-highlight: var(--hiver-glacier);
       --color-accent: #1b6aa5;
@@ -44,7 +62,7 @@
       --color-sae-5: #f6d5dc;
       --color-sae-6: #eee5c2;
     }
-    :root[data-color-scheme="dark"] {
+    :root[data-theme="hiver"][data-color-scheme="dark"] {
       --color-accent: #8ccbf5;
       --color-accent-emphasis: #b9e0fb;
       --color-accent-soft: rgba(93, 179, 230, 0.18);
@@ -56,20 +74,13 @@
       --color-sae-5: #3f2530;
       --color-sae-6: #34311d;
     }
-    .app-sidebar {
+    [data-theme="hiver"] .app-sidebar {
       background:
-        linear-gradient(
-            to top,
-            var(--hiver-glow) 0,
-            var(--hiver-twilight) var(--hiver-horizon),
-            var(--hiver-dusk) 46%,
-            var(--hiver-dusk-soft) 74%,
-            var(--hiver-dusk-clear) 100%
-          )
-          bottom / 100% var(--hiver-dusk-height) no-repeat local,
+        var(--hiver-dusk-glow) bottom / 100% var(--hiver-dusk-height) no-repeat
+          local,
         var(--color-navbar);
     }
-    .app-sidebar::before {
+    [data-theme="hiver"] .app-sidebar::before {
       content: "";
       flex: none;
       aspect-ratio: var(--hiver-cover-ratio);
@@ -83,7 +94,7 @@
         ),
         var(--hiver-cover) center / cover no-repeat var(--hiver-dusk);
     }
-    .app-sidebar::after {
+    [data-theme="hiver"] .app-sidebar::after {
       content: "";
       position: absolute;
       inset: 0 0 auto;
@@ -96,20 +107,20 @@
         transparent
       );
     }
-    .app-nav a {
+    [data-theme="hiver"] .app-nav a {
       text-shadow: var(--hiver-ink-shadow);
     }
-    .app-nav-classes a[aria-current="page"] {
+    [data-theme="hiver"] .app-nav-classes a[aria-current="page"] {
       color: var(--color-navbar-text);
     }
   }
   @media screen and (prefers-reduced-motion: reduce) {
-    .app-sidebar::after {
+    [data-theme="hiver"] .app-sidebar::after {
       display: none;
     }
   }
   @media screen and (max-width: 74.99em) {
-    .app-topbar-main {
+    [data-theme="hiver"] .app-topbar-main {
       background:
         var(--hiver-skyline) bottom / 100% var(--hiver-line) no-repeat,
         var(--color-navbar);

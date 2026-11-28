@@ -1,11 +1,14 @@
 AppUtils.onDOMReady(function () {
-  document
-    .querySelectorAll("[data-color-scheme-choice]")
-    .forEach(function (group) {
+  [
+    ["[data-color-scheme-choice]", ColorScheme],
+    ["[data-theme-choice]", Theme],
+  ].forEach(function (entry) {
+    const setting = entry[1];
+    document.querySelectorAll(entry[0]).forEach(function (group) {
       const options = Array.from(group.querySelectorAll("[data-value]"));
 
       function sync() {
-        const choice = ColorScheme.choice();
+        const choice = setting.choice();
         options.forEach(function (option) {
           option.setAttribute(
             "aria-pressed",
@@ -17,9 +20,10 @@ AppUtils.onDOMReady(function () {
       group.addEventListener("click", function (event) {
         const option = event.target.closest("[data-value]");
         if (!option) return;
-        ColorScheme.choose(option.dataset.value);
+        setting.choose(option.dataset.value);
         sync();
       });
       sync();
     });
+  });
 });
