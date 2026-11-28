@@ -327,16 +327,19 @@ flowchart LR
         A --> P[Workflow de déploiement]
     end
     subgraph rtgre-platform
-        C --> D[Renovate propose<br>la nouvelle empreinte]
-        D --> E[Pull request fusionnée]
-        E --> F[ArgoCD synchronise<br>le cluster]
+        B -. lance .-> D[Workflow Promote<br>lit l'empreinte, vérifie la signature]
+        C --> D
+        D --> E[Pull request contrôlée<br>puis fusionnée]
+        E --> F[ArgoCD synchronise le cluster<br>et génère le site]
     end
     P --> G[GitHub Pages<br>en secours]
     F --> H[rtgre.fr]
     G -. retour arrière .-> H
 ```
 
-rtgre.fr est servi par le cluster de rtgre-platform : le générateur y tourne chaque heure, et un serveur web distribue le volume qu'il remplit. GitHub Pages reste déployé chaque heure, en secours : la zone DNS peut y revenir en changeant une valeur ([runbook](https://github.com/kzsxwsjuldvcbsqt/rtgre-platform/blob/main/docs/runbooks/basculer-rtgre-fr.md)).
+rtgre.fr est servi par le cluster de rtgre-platform : le générateur y tourne chaque heure, et un serveur web distribue le volume qu'il remplit.
+
+Une modification fusionnée sur `main` est en ligne une dizaine de minutes plus tard, sans intervention. Une fois l'image publiée et signée, le workflow `Image` lance le workflow `Promote` de rtgre-platform et attend son résultat : celui-ci propose la nouvelle empreinte, la fusionne une fois ses contrôles passés, puis le cluster déploie et génère le site aussitôt. Le workflow `Image` n'est donc vert que si la mise en ligne a abouti. Suivre une mise en ligne, ou comprendre pourquoi elle n'arrive pas : [runbook de rtgre-platform](https://github.com/kzsxwsjuldvcbsqt/rtgre-platform/blob/main/docs/runbooks/suivre-une-mise-en-ligne-du-site.md). GitHub Pages reste déployé chaque heure, en secours : la zone DNS peut y revenir en changeant une valeur ([runbook](https://github.com/kzsxwsjuldvcbsqt/rtgre-platform/blob/main/docs/runbooks/basculer-rtgre-fr.md)).
 
 ### Image du générateur
 
@@ -346,6 +349,7 @@ Le workflow `.github/workflows/image.yml` construit l'image du générateur à p
 - Le générateur tourne sous un utilisateur sans privilège (65532), avec un système de fichiers en lecture seule. Il publie le site dans `$SCHEDULE_OUTPUT_ROOT/dist`, `/srv/site/dist` par défaut, puis s'arrête.
 - Chaque pull request construit l'image pour les deux architectures, la passe à Trivy et lui fait générer le site. Une vulnérabilité HIGH ou CRITICAL fait échouer le workflow.
 - L'image publiée est signée par cosign, sans clé, avec l'identité OIDC du workflow. Elle porte un SBOM et une attestation de provenance.
+- Le travail « Image (promote to the platform) » lance ensuite la promotion. Il ne transmet rien : la plateforme lit elle-même l'empreinte dans le registre et vérifie sa signature. Il passe par une application GitHub qui n'a qu'un droit, lancer des workflows de rtgre-platform, et dont la clé n'est lisible que depuis `main`, par l'environnement `platform`. Sans la variable `PLATFORM_REPOSITORY`, ce travail est ignoré : l'image est publiée, et sa mise en ligne reste manuelle.
 
 Vérifier une image avant de l'utiliser :
 
